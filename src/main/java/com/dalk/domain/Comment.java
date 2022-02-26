@@ -2,6 +2,7 @@ package com.dalk.domain;
 
 import com.dalk.domain.wl.Likes;
 import com.dalk.domain.wl.WarnComment;
+import com.dalk.dto.requestDto.CommentRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,9 +32,20 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "board_id")
     private Board board;
 
+    @JoinColumn(name = "userId")
+    @ManyToOne
+    private User user;
+
     @OneToMany(mappedBy = "comment", orphanRemoval = true)
     private List<WarnComment> warnComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "comment", orphanRemoval = true)
     private List<Likes> likeses = new ArrayList<>();
+
+
+    public Comment(CommentRequestDto commentRequestDto, User user, Board board) {
+        this.comment = commentRequestDto.getComment();
+        this.board = board;
+        this.user = user;
+    }
 }
