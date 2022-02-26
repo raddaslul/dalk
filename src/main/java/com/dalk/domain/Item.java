@@ -1,5 +1,6 @@
 package com.dalk.domain;
 
+import com.dalk.dto.responseDto.ItemResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,4 +29,11 @@ public class Item extends Timestamped {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public ItemResponseDto toResponseDto() {
+        return ItemResponseDto.builder()
+                .bold(this.bold)
+                .color(this.color)
+                .build();
+    }
 }
