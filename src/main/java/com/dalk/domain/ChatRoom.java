@@ -1,6 +1,5 @@
 package com.dalk.domain;
 
-import com.dalk.Timestamped;
 import com.dalk.domain.wl.WarnChatRoom;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

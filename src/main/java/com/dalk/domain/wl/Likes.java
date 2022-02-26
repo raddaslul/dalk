@@ -1,7 +1,7 @@
 package com.dalk.domain.wl;
 
-import com.dalk.Timestamped;
 import com.dalk.domain.Comment;
+import com.dalk.domain.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name = "likes")
-public class Likes extends Timestamped {
+public class Likes extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

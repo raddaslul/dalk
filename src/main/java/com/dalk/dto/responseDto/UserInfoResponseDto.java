@@ -16,4 +16,16 @@ public class UserInfoResponseDto {
     private Integer level;
     private User.Role role;
     private ItemResponseDto item;
+
+
+    public UserInfoResponseDto(String username, String nickname) {
+        this.username =username;
+        this.nickname=nickname;
+        this.point = point;
+        this.level = level;
+        this.role  = role;
+        this.item = item;
+
+
+    }
 }

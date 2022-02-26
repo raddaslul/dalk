@@ -1,6 +1,5 @@
 package com.dalk.domain;
 
-import com.dalk.Timestamped;
 import com.dalk.domain.wl.Likes;
 import com.dalk.domain.wl.WarnComment;
 import lombok.AllArgsConstructor;

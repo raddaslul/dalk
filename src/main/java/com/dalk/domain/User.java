@@ -1,6 +1,5 @@
 package com.dalk.domain;
 
-import com.dalk.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +14,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user")
 public class User extends Timestamped {
+
 
     public enum Role {
         ADMIN, USER
@@ -34,15 +34,23 @@ public class User extends Timestamped {
     @Column(name = "nickname", nullable = false, unique = true)
     private String nickname;
 
-    @Column(name = "point", nullable = false)
+    @Column(name = "point")
     private Long point;
 
-    @Column(name = "level", nullable = false)
+    @Column(name = "level")
     private Integer level;
 
-    @Column(name = "role", nullable = false)
+    @Column(name = "role")
     private Role role;
 
     @OneToOne(mappedBy = "user", orphanRemoval = true)
     private Item item;
+
+
+    public User(String username, String password, String nickname) {
+
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+    }
 }

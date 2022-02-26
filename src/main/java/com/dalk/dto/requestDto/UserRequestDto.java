@@ -2,7 +2,7 @@ package com.dalk.dto.requestDto;
 
 import lombok.Data;
 
-import java.io.Serializable;
+
 
 @Data
 public class UserRequestDto {
