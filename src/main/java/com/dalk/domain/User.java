@@ -1,5 +1,7 @@
 package com.dalk.domain;
 
+import com.dalk.dto.responseDto.ItemResponseDto;
+import com.dalk.dto.responseDto.UserInfoResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -47,10 +49,15 @@ public class User extends Timestamped {
     private Item item;
 
 
-    public User(String username, String password, String nickname) {
-
-        this.username = username;
-        this.password = password;
-        this.nickname = nickname;
+    public UserInfoResponseDto toResponseDto(ItemResponseDto item) {
+        return UserInfoResponseDto.builder()
+                .id(this.id)
+                .username(this.username)
+                .nickname(this.nickname)
+                .point(this.point)
+                .level(this.level)
+                .role(this.role)
+                .item(item)
+                .build();
     }
 }
