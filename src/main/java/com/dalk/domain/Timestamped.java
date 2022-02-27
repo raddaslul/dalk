@@ -1,4 +1,4 @@
-package com.dalk;
+package com.dalk.domain;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

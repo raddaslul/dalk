@@ -1,6 +1,5 @@
 package com.dalk.domain;
 
-import com.dalk.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,8 +20,8 @@ public class User extends Timestamped {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true)
@@ -34,13 +33,15 @@ public class User extends Timestamped {
     @Column(name = "nickname", nullable = false, unique = true)
     private String nickname;
 
-    @Column(name = "point", nullable = false)
+    @Column(name = "point")
     private Long point;
 
-    @Column(name = "level", nullable = false)
+    @Column(name = "level")
     private Integer level;
 
-    @Column(name = "role", nullable = false)
+    @Column
+    @Enumerated(value = EnumType.STRING) // 정보를 받을 때는 Enum 값으로 받지만
+    // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
     private Role role;
 
     @OneToOne(mappedBy = "user", orphanRemoval = true)

@@ -1,7 +1,7 @@
 package com.dalk.domain.wl;
 
-import com.dalk.Timestamped;
 import com.dalk.domain.Board;
+import com.dalk.domain.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
