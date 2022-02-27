@@ -90,11 +90,11 @@ public class UserService {
         // 토큰 정보 생성
         String token = jwtAuthenticationProvider.createToken(userEntity.getUsername(), userEntity.getNickname());
 
-        Cookie cookie = new Cookie("X-AUTH-TOKEN", token);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        response.addCookie(cookie);
+        Cookie cookie = new Cookie("Authorization", token);
+        cookie.setPath("/"); // 모든 페이지에서 토큰 사용
+        cookie.setHttpOnly(true); // 프론트에서 따로 못 꺼내 쓸 수 있게 만드는 코드
+//        cookie.setSecure(true); // https 사용시 활성화
+        response.addCookie(cookie); // 토큰을 헤더에 담아줌
 
         User user = userRepository.findByUsername(loginRequestDto.getUsername()).orElseThrow(
                 () -> new UsernameNotFoundException("가입되지 않은 아이디입니다.")

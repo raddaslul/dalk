@@ -22,7 +22,7 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/users/signup")
-    @ApiOperation(value = "회원가입", hidden = true)
+    @ApiOperation(value = "회원가입")
     public UserInfoResponseDto signup(@RequestBody @Valid SignupRequestDto signupRequestDto,
                                       HttpServletResponse response) {
         return userService.signup(signupRequestDto, response);
