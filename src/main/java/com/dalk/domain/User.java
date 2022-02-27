@@ -1,7 +1,5 @@
 package com.dalk.domain;
 
-import com.dalk.dto.responseDto.ItemResponseDto;
-import com.dalk.dto.responseDto.UserInfoResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,14 +15,13 @@ import javax.persistence.*;
 @Table(name = "user")
 public class User extends Timestamped {
 
-
     public enum Role {
         ADMIN, USER
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true)
@@ -42,22 +39,11 @@ public class User extends Timestamped {
     @Column(name = "level")
     private Integer level;
 
-    @Column(name = "role")
+    @Column
+    @Enumerated(value = EnumType.STRING) // 정보를 받을 때는 Enum 값으로 받지만
+    // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
     private Role role;
 
     @OneToOne(mappedBy = "user", orphanRemoval = true)
     private Item item;
-
-
-    public UserInfoResponseDto toResponseDto(ItemResponseDto item) {
-        return UserInfoResponseDto.builder()
-                .id(this.id)
-                .username(this.username)
-                .nickname(this.nickname)
-                .point(this.point)
-                .level(this.level)
-                .role(this.role)
-                .item(item)
-                .build();
-    }
 }

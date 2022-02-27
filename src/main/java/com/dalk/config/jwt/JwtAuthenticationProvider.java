@@ -20,17 +20,17 @@ public class JwtAuthenticationProvider {
 
     private String secretKey = "sparta";
 
-    private Long tokenValidTime = 1000L * 60 * 120; // 1시간
+    private Long tokenValidTime = 1000L * 60 * 120; // 2시간
 
     private final UserDetailsImplService userDetailsImplService;
 
     // JWT 토큰 생성
-    public String createToken(String userPk, String userEmail) {
+    public String createToken(String userPk, String nickname) {
         // 비공개 클레임(사용자가 정의한 클레임으로 서버와 클라이언트 사이에 임의로 지정한 정보)을 payload 정보에 저장
         // payload 에는 토큰에 담을 Claim 정보를 포함하고 있다.
         Claims claims = Jwts.claims().setSubject(userPk); // payload에  정보 저장
         claims.put("username", userPk); // 정보를 저장할 데이터 넣어주기
-        claims.put("userEmail",userEmail);
+        claims.put("nickname",nickname);
 
         Date now = new Date();
         return Jwts.builder()
@@ -44,13 +44,13 @@ public class JwtAuthenticationProvider {
     }
 
     // 토큰에서 회원 정보 추출
-    public String getUserEmail(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("userEmail").toString();
+    public String getUsername(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("username").toString();
     } // 추출하면 username, email등 유저의 정보가 나오게 됨.
 
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsImplService.loadUserByUsername(this.getUserEmail(token));
+        UserDetails userDetails = userDetailsImplService.loadUserByUsername(this.getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 

@@ -2,7 +2,8 @@ package com.dalk.controller;
 
 
 
-import com.dalk.dto.requestDto.UserRequestDto;
+import com.dalk.dto.requestDto.LoginRequestDto;
+import com.dalk.dto.requestDto.SignupRequestDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -21,15 +22,17 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/users/signup")
-    public UserInfoResponseDto signup(@RequestBody @Valid UserRequestDto requestDto,
-                                                   HttpServletResponse response) {
-        return userService.signup(requestDto, response);
+    @ApiOperation(value = "회원가입", hidden = true)
+    public UserInfoResponseDto signup(@RequestBody @Valid SignupRequestDto signupRequestDto,
+                                      HttpServletResponse response) {
+        return userService.signup(signupRequestDto, response);
     }
 
     // 로그인
     @PostMapping("/users/login")
-    public UserInfoResponseDto login(@RequestBody @Valid UserRequestDto requestDto,
-                                                  HttpServletResponse response) {
-        return userService.login(requestDto, response);
+    @ApiOperation(value = "로그인")
+    public UserInfoResponseDto login(@RequestBody @Valid LoginRequestDto loginRequestDto,
+                                     HttpServletResponse response) {
+        return userService.login(loginRequestDto, response);
     }
 }
