@@ -46,4 +46,17 @@ public class Board extends Timestamped {
 
     @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    public Board(
+            String topicA,
+            String topicB,
+            String winner,
+            String content,
+            String category){
+        this.topicA = topicA;
+        this.topicB = topicB;
+        this.winner = winner;
+        this.content = content;
+        this.category = category;
+    }
 }
