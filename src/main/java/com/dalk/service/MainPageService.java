@@ -44,9 +44,7 @@ public class MainPageService {
 
 
         for (Board boards : boardList) {
-
             UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(boards.getUser());
-
             MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(
                     userInfoResponseDto,
                     boards.getId(),

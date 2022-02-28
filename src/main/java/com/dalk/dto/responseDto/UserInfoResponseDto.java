@@ -31,5 +31,4 @@ public class UserInfoResponseDto {
         this.role = user.getRole();
         this.item = itemResponseDto;
     }
-
 }
