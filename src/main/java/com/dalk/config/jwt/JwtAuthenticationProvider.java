@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
@@ -25,12 +26,12 @@ public class JwtAuthenticationProvider {
     private final UserDetailsImplService userDetailsImplService;
 
     // JWT 토큰 생성
-    public String createToken(String userPk, String nickname) {
+    public String createToken(String userPk, String username) {
         // 비공개 클레임(사용자가 정의한 클레임으로 서버와 클라이언트 사이에 임의로 지정한 정보)을 payload 정보에 저장
         // payload 에는 토큰에 담을 Claim 정보를 포함하고 있다.
         Claims claims = Jwts.claims().setSubject(userPk); // payload에  정보 저장
-        claims.put("username", userPk); // 정보를 저장할 데이터 넣어주기
-        claims.put("nickname",nickname);
+        claims.put("nickname", userPk); // 정보를 저장할 데이터 넣어주기
+        claims.put("username", username);
 
         Date now = new Date();
         return Jwts.builder()
@@ -56,7 +57,15 @@ public class JwtAuthenticationProvider {
 
     // Request의 Header에서 token 값을 가져온다. 헤더에 "Authorization" : "TOKEN값" 형식으로 있다.
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("Authorization");
+        Cookie[] cookies = request.getCookies();
+        if ( cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("Authorization")) {
+                    return cookie.getValue();
+                }
+            }
+        } return null;
+//        return request.getHeader("Authorization");
     }
 
     // 토큰의 유효성 + 만료일자 확인  // -> 토큰이 expire되지 않았는지 True/False로 반환해줌.

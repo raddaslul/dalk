@@ -88,7 +88,7 @@ public class UserService {
 
 
         // 토큰 정보 생성
-        String token = jwtAuthenticationProvider.createToken(userEntity.getUsername(), userEntity.getNickname());
+        String token = jwtAuthenticationProvider.createToken(userEntity.getNickname(), userEntity.getUsername());
 
         Cookie cookie = new Cookie("Authorization", token);
         cookie.setPath("/"); // 모든 페이지에서 토큰 사용
@@ -101,8 +101,10 @@ public class UserService {
         );
 
         Item item = itemRepository.findByUser(user);
-        ItemResponseDto itemResponseDto = new ItemResponseDto(item);
-
+        ItemResponseDto itemResponseDto = new ItemResponseDto();
+        if(item != null) {
+            itemResponseDto = new ItemResponseDto(item);
+        }
         return new UserInfoResponseDto(user, itemResponseDto);
     }
 

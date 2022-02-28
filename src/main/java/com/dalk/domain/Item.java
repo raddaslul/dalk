@@ -1,6 +1,5 @@
 package com.dalk.domain;
 
-import com.dalk.dto.responseDto.ItemResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
