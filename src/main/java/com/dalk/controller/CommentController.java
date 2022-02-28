@@ -1,38 +1,41 @@
-//package com.dalk.controller;
-//
-//import com.dalk.domain.User;
-//import com.dalk.dto.requestDto.CommentRequestDto;
-//import com.dalk.security.UserDetailsImpl;
-//import com.dalk.service.CommentService;
-//import org.springframework.security.core.annotation.AuthenticationPrincipal;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.RestController;
-//
-//import java.util.HashMap;
-//
-//@RestController
-//public class CommentController {
-//
-//    private final CommentService commentService;
-//
-//    public CommentController(CommentService commentService) {
-//        this.commentService = commentService;
-//    }
-//
-//    //댓글 작성
-//    //게시글 ID로 댓글 작성
-//    @PostMapping("/comments/{boardId}")
-//    public HashMap<String, Object> createComment(
-//            @PathVariable Long boardId,
-//            @RequestBody CommentRequestDto commentRequestDto,
-//            @AuthenticationPrincipal UserDetailsImpl UserDetails)
-//    {
-//        User user = UserDetails.getUser();
-//        commentService.createComment(boardId, commentRequestDto, user);
-//        HashMap<String, Object> result = new HashMap<>();
-//        result.put("result", "true");
-//        return result;
-//    }
-//}
+package com.dalk.controller;
+
+import com.dalk.config.auth.UserDetailsImpl;
+import com.dalk.domain.User;
+import com.dalk.dto.requestDto.CommentRequestDto;
+import com.dalk.dto.responseDto.CommentResponseDto;
+import com.dalk.service.CommentService;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+public class CommentController {
+
+    private final CommentService commentService;
+
+    @PostMapping("/comments/{boardId}")
+    @ApiOperation(value = "게시글 작성")
+    public HashMap<String, Object> createComment(
+            @PathVariable Long boardId,
+            @RequestBody CommentRequestDto commentRequestDto,
+            @AuthenticationPrincipal UserDetailsImpl UserDetails)
+    {
+        User user = UserDetails.getUser();
+        commentService.createComment(boardId, commentRequestDto, user);
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("result", "true");
+        return result;
+    }
+
+    @GetMapping("/api/comments/{boardId}")
+    @ApiOperation(value = "댓글 조회")
+    public List<CommentResponseDto> getComment(@PathVariable Long boardId) {
+        return commentService.getComment(boardId);
+    }
+}
