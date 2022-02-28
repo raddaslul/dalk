@@ -47,6 +47,12 @@ public class User extends Timestamped {
     @OneToOne(mappedBy = "user", orphanRemoval = true)
     private Item item;
 
+    public User(String username, String password, String nickname) {
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+    }
+
     public User(
             String username,
             String password,

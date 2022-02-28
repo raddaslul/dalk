@@ -1,6 +1,5 @@
 package com.dalk.service;
 
-import com.dalk.config.auth.UserDetailsImpl;
 import com.dalk.domain.Board;
 import com.dalk.domain.Comment;
 import com.dalk.domain.User;
@@ -8,6 +7,7 @@ import com.dalk.dto.requestDto.CommentRequestDto;
 import com.dalk.dto.responseDto.CommentResponseDto;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CommentRepository;
+import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

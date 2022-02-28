@@ -1,9 +1,9 @@
 package com.dalk.controller;
 
-import com.dalk.config.auth.UserDetailsImpl;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.CommentRequestDto;
 import com.dalk.dto.responseDto.CommentResponseDto;
+import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.CommentService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
