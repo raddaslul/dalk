@@ -1,5 +1,6 @@
 package com.dalk.domain;
 
+import com.dalk.config.auth.UserDetailsImpl;
 import com.dalk.domain.wl.Likes;
 import com.dalk.domain.wl.WarnComment;
 import com.dalk.dto.requestDto.CommentRequestDto;
@@ -52,5 +53,9 @@ public class Comment extends Timestamped {
         this.comment = comment;
         this.board = boardId;
         this.user = userId;
+    }
+
+    public void update(String comment) {
+        this.comment = comment;
     }
 }

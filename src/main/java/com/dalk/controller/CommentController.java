@@ -23,11 +23,10 @@ public class CommentController {
     @ApiOperation(value = "게시글 작성")
     public HashMap<String, Object> createComment(
             @PathVariable Long boardId,
-            @RequestBody CommentRequestDto commentRequestDto,
-            @AuthenticationPrincipal UserDetailsImpl UserDetails)
-    {
+            @RequestBody CommentRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl UserDetails) {
         User user = UserDetails.getUser();
-        commentService.createComment(boardId, commentRequestDto, user);
+        commentService.createComment(boardId, requestDto, user);
         HashMap<String, Object> result = new HashMap<>();
         result.put("result", "true");
         return result;
@@ -37,5 +36,20 @@ public class CommentController {
     @ApiOperation(value = "댓글 조회")
     public List<CommentResponseDto> getComment(@PathVariable Long boardId) {
         return commentService.getComment(boardId);
+    }
+
+    @PutMapping("/comments/{commentId}")
+    @ApiOperation(value = "댓글 수정")
+    public HashMap<String, Object> editComment(@PathVariable Long commentId,
+                                               @RequestBody CommentRequestDto requestDto,
+                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.editComment(commentId, requestDto, userDetails);
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    @ApiOperation(value = "댓글 삭제")
+    public HashMap<String, Object> deleteComment(@PathVariable Long commentId,
+                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.deleteComment(commentId, userDetails);
     }
 }

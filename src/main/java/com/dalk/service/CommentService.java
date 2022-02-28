@@ -1,5 +1,6 @@
 package com.dalk.service;
 
+import com.dalk.config.auth.UserDetailsImpl;
 import com.dalk.domain.Board;
 import com.dalk.domain.Comment;
 import com.dalk.domain.User;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -23,9 +25,9 @@ public class CommentService {
 
     //댓글 작성
     @Transactional
-    public void createComment(Long boardId, CommentRequestDto commentRequestDto, User user) {
+    public void createComment(Long boardId, CommentRequestDto requestDto, User user) {
         Board board = boardRepository.findById(boardId).orElseGet(null);
-        Comment comment = new Comment(commentRequestDto, user, board);
+        Comment comment = new Comment(requestDto, user, board);
         commentRepository.save(comment);
     }
 
@@ -46,5 +48,41 @@ public class CommentService {
             commentResponseDtoList.add(commentResponseDto);
         }
         return commentResponseDtoList;
+    }
+
+    //댓글 수정
+    @Transactional
+    public HashMap<String, Object> editComment(Long commentId, CommentRequestDto requestDto, UserDetailsImpl userDetails) {
+        Comment comments = commentRepository.findById(commentId).orElseThrow(
+                ()-> new NullPointerException("해당 댓글이 없습니다")
+        );
+        if (comments.getUser().getId().equals(userDetails.getUser().getId())) {
+            comments.update(requestDto.getComment());
+            HashMap<String, Object> result = new HashMap<>();
+            result.put("result", "true");
+            return result;
+        } else {
+            HashMap<String, Object> result = new HashMap<>();
+            result.put("result", "사용자가 다릅니다");
+            return result;
+        }
+    }
+
+    //댓글 삭제
+    @Transactional
+    public HashMap<String, Object> deleteComment(Long commentId, UserDetailsImpl userDetails) {
+        Comment comments = commentRepository.findById(commentId).orElseThrow(
+                ()-> new NullPointerException("해당 댓글이 없습니다")
+        );
+        if (comments.getUser().getId().equals(userDetails.getUser().getId())) {
+            commentRepository.deleteById(comments.getId());
+            HashMap<String, Object> result = new HashMap<>();
+            result.put("result", "true");
+            return result;
+        } else {
+            HashMap<String, Object> result = new HashMap<>();
+            result.put("result", "사용자가 다릅니다");
+            return result;
+        }
     }
 }
