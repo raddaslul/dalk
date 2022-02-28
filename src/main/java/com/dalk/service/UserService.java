@@ -2,9 +2,7 @@ package com.dalk.service;
 
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.SignupRequestDto;
-import com.dalk.repository.BoardRepository;
 import com.dalk.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +10,8 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
+    private  PasswordEncoder passwordEncoder;
+    private  UserRepository userRepository;
 
     //회원가입
     public void signup(SignupRequestDto requestDto) {
