@@ -73,7 +73,7 @@ public class UserService {
 
         itemRepository.save(item);
 
-        LoginRequestDto loginRequestDto = new LoginRequestDto(username, rawPassword, nickname);
+        LoginRequestDto loginRequestDto = new LoginRequestDto(username, rawPassword);
         return login(loginRequestDto, response);
     }
 

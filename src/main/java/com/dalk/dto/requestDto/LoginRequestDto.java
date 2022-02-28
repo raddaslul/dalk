@@ -19,13 +19,8 @@ public class LoginRequestDto {
     @ApiModelProperty(value = "비밀번호")
     private String password;
 
-    @NotBlank(message = "닉네임을 입력해주세요.")
-    @ApiModelProperty(value = "닉네임")
-    private String nickname;
-
-    public LoginRequestDto (String username, String password, String nickname){
+    public LoginRequestDto (String username, String password){
         this.username = username;
         this.password = password;
-        this.nickname = nickname;
     }
 }
