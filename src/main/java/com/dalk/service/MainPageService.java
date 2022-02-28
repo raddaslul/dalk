@@ -1,18 +1,15 @@
 package com.dalk.service;
 
-import com.dalk.config.auth.UserDetailsImpl;
 import com.dalk.domain.Board;
-import com.dalk.domain.User;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardDetailResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageTop6ResponseDto;
-import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.repository.BoardRepository;
+import com.dalk.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 

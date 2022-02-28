@@ -1,10 +1,10 @@
 package com.dalk.controller;
 
-import com.dalk.config.auth.UserDetailsImpl;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardDetailResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageTop6ResponseDto;
+import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.MainPageService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

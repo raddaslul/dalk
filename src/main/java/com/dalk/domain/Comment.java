@@ -1,6 +1,5 @@
 package com.dalk.domain;
 
-import com.dalk.config.auth.UserDetailsImpl;
 import com.dalk.domain.wl.Likes;
 import com.dalk.domain.wl.WarnComment;
 import com.dalk.dto.requestDto.CommentRequestDto;
