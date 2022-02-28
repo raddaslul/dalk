@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MainPageBoardResponseDto {
-//    private UserInfoResponseDto userInfo;
+    private UserInfoResponseDto userInfo;
     private Long boardId;
     private String topicA;
     private String topicB;
@@ -22,4 +22,5 @@ public class MainPageBoardResponseDto {
     private LocalDateTime createdAt;
     private Integer commentCnt;
     private Integer warnCnt;
+
 }

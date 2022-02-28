@@ -2,9 +2,11 @@ package com.dalk;
 
 import com.dalk.domain.Board;
 import com.dalk.domain.Comment;
+import com.dalk.domain.Item;
 import com.dalk.domain.User;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CommentRepository;
+import com.dalk.repository.ItemRepository;
 import com.dalk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
@@ -20,6 +22,7 @@ public class InitialData implements ApplicationRunner {
     private final BCryptPasswordEncoder passwordEncoder;
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
+    private final ItemRepository itemRepository;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -47,21 +50,24 @@ public class InitialData implements ApplicationRunner {
                 "짬뽕",
                 "승자",
                 "내용",
-                "카테고리"
+                "카테고리",
+                user1
         );
         Board board2 = new Board(
                 "짬뽕",
                 "짜장",
                 "승자2",
                 "내용2",
-                "카테고리2"
+                "카테고리2",
+                user1
         );
         Board board3 = new Board(
                 "신동석",
                 "김영민",
                 "김영민",
                 "내용2",
-                "카테고리2"
+                "카테고리2",
+                user1
         );
         boardRepository.save(board1);
         boardRepository.save(board2);
@@ -78,7 +84,13 @@ public class InitialData implements ApplicationRunner {
         );
         commentRepository.save(comment1);
         commentRepository.save(comment2);
-    }
 
+        Item item1 = new Item(
+                true,
+                "black",
+                user1
+        );
+        itemRepository.save(item1);
+    }
 
 }

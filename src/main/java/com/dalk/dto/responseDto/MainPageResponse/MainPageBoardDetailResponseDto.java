@@ -1,5 +1,7 @@
 package com.dalk.dto.responseDto.MainPageResponse;
 
+import com.dalk.domain.User;
+import com.dalk.dto.responseDto.UserInfoResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MainPageBoardDetailResponseDto {
-    //    private UserInfoResponseDto userInfo;
+    private UserInfoResponseDto userInfo;
     private Long boardId;
     private String topicA;
     private String topicB;
@@ -20,4 +22,5 @@ public class MainPageBoardDetailResponseDto {
     private LocalDateTime createdAt;
     private Integer commentCnt;
     private Integer warnCnt;
+
 }

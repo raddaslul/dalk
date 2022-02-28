@@ -1,10 +1,7 @@
 package com.dalk.domain;
 
 import com.dalk.domain.wl.WarnBoard;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,7 +10,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Data
 @Entity
 @Table(name = "board")
 public class Board extends Timestamped {
@@ -37,6 +34,10 @@ public class Board extends Timestamped {
     @Column(name = "category", nullable = false)
     private String category;
 
+    @ManyToOne
+    @JoinColumn(name = "user_Id")
+    private User user;
+
     @OneToOne
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
@@ -52,11 +53,13 @@ public class Board extends Timestamped {
             String topicB,
             String winner,
             String content,
-            String category){
+            String category,
+            User userId){
         this.topicA = topicA;
         this.topicB = topicB;
         this.winner = winner;
         this.content = content;
         this.category = category;
+        this.user = userId;
     }
 }
