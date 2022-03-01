@@ -6,6 +6,7 @@ import com.dalk.security.filter.JwtAuthFilter;
 import com.dalk.security.jwt.HeaderTokenExtractor;
 import com.dalk.security.provider.FormLoginAuthProvider;
 import com.dalk.security.provider.JWTAuthProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -33,13 +35,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JWTAuthProvider jwtAuthProvider;
     private final HeaderTokenExtractor headerTokenExtractor;
 
-    public WebSecurityConfig(
-            JWTAuthProvider jwtAuthProvider,
-            HeaderTokenExtractor headerTokenExtractor
-    ) {
-        this.jwtAuthProvider = jwtAuthProvider;
-        this.headerTokenExtractor = headerTokenExtractor;
-    }
 
     // 암호화에 필요한 PasswordEncoder 를 Bean 등록합니다.
     @Bean
@@ -68,9 +63,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http
-                .csrf()
-                .disable();
+        http.csrf().disable()
+                .headers()
+                .frameOptions().sameOrigin(); // SockJS는 기본적으로 HTML iframe 요소를 통한 전송을 허용하지 않도록 설정되는데 해당 내용을 해제한다.
 
         // 서버에서 인증은 JWT로 인증하기 때문에 Session의 생성을 막습니다.
         http    .cors()
@@ -96,6 +91,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/**").permitAll()
+                .antMatchers("/chatting/**").permitAll()
+                .antMatchers("/chatting").permitAll()
+                .antMatchers("/api/chat/message").permitAll()
                 // 전부 허용
                 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 추가
                 .antMatchers("*").permitAll()
@@ -109,9 +107,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/user/logout")
                 .permitAll()
                 .and()
-                .exceptionHandling()
-                // "접근 불가" 페이지 URL 설정
-                .accessDeniedPage("/forbidden.html");
+                .exceptionHandling();
 
     }
 
@@ -137,23 +133,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtAuthFilter jwtFilter() throws Exception {
         List<String> skipPathList = new ArrayList<>();
 
-        // Static 정보 접근 허용
-        skipPathList.add("GET,/images/**");
-        skipPathList.add("GET,/css/**");
-
-        // h2-console 허용
         skipPathList.add("GET,/h2-console/**");
         skipPathList.add("POST,/h2-console/**");
         // 회원 관리 API 허용
 //        skipPathList.add("GET,/user/**");
         skipPathList.add("POST,/users/signup");
-
         //메인페이지 스킵!
         skipPathList.add("GET,/users/**");
         skipPathList.add("GET,/api/**");
 
-        skipPathList.add("GET,/");
-        skipPathList.add("GET,/basic.js");
+        // 채팅
+        skipPathList.add("GET,/webjars/**");
+        skipPathList.add("GET,/ws-stomp/**");
+        skipPathList.add("GET,/ws-alarm/**");
+        skipPathList.add("GET,/chat/room");
+        skipPathList.add("GET,/chat/user");
 
 //        skipPathList.add("GET,/favicon.ico");
 
@@ -183,10 +177,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("https://raddaslul.s3.ap-northeast-2.amazonaws.com/");
 //        configuration.addAllowedOrigin("http://woo-jin.shop.s3-website.ap-northeast-2.amazonaws.com/");
+        configuration.setAllowCredentials(true); // 클라이언트의 쿠키를 전달하고 받을 것이기 때문에 allowCredentials를 true로 설정한다.
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
-        configuration.addExposedHeader("*");
-        configuration.setAllowCredentials(true); // 클라이언트의 쿠키를 전달하고 받을 것이기 때문에 allowCredentials를 true로 설정한다.
+//        configuration.addExposedHeader("*");
+        configuration.addExposedHeader("Authorization");
         configuration.validateAllowCredentials();
         configuration.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

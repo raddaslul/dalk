@@ -10,6 +10,7 @@ import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.repository.BoardRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
