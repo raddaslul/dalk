@@ -38,9 +38,10 @@ public class ChatMessageController {
 
     // 채팅 메시지를 @MessageMapping 형태로 받는다
     // 웹소켓으로 publish 된 메시지를 받는 곳이다
-    @MessageMapping("/api/chat/message")
-    public void message(@RequestBody ChatMessageRequestDto messageRequestDto, @Header("token") String token) {
+    @MessageMapping("/chat/message")
+    public void message(@RequestBody ChatMessageRequestDto messageRequestDto, @Header("Authorization") String token) {
 
+        token = token.substring(7);
         // 로그인 회원 정보를 들어온 메시지에 값 세팅
 //        User user = jwtTokenProvider.getAuthenticationUser(token);
         User user = jwtDecoder.getAuthenticationUser(token);

@@ -36,7 +36,7 @@ public class StompHandler implements ChannelInterceptor {
             log.info("CONNECT {}", jwtToken);
             // Header의 jwt token 검증
 //            jwtTokenProvider.validateToken(jwtToken); 바꾼거 토큰 검증부분
-            jwtDecoder.decodeUsername(jwtToken);
+            jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
         }
 
         else if (StompCommand.SUBSCRIBE == accessor.getCommand()) { // 채팅룸 구독요청
@@ -52,7 +52,7 @@ public class StompHandler implements ChannelInterceptor {
             // 클라이언트 입장 메시지를 채팅방에 발송한다.(redis publish)
             String token = Optional.ofNullable(accessor.getFirstNativeHeader("token")).orElse("UnknownUser");
 //            String name = jwtTokenProvider.getAuthenticationUsername(token);  토큰에서 유저네임 뽑아오는 부분
-            String name = jwtDecoder.decodeUsername(token);
+            String name = jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
             chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).build());
 
             log.info("SUBSCRIBED {}, {}", name, roomId);
@@ -69,7 +69,7 @@ public class StompHandler implements ChannelInterceptor {
 
             if(accessor.getFirstNativeHeader("token") != null) {
 //                String name = jwtTokenProvider.getAuthenticationUsername(token);  토큰에서 유저네임 뽑아오는 부분
-                String name = jwtDecoder.decodeUsername(token);
+                String name = jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
                 chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.QUIT).roomId(roomId).sender(name).build());
             }
 
