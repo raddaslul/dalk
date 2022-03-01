@@ -12,8 +12,8 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class UserService {
-    private final PasswordEncoder passwordEncoder;
-    private final UserRepository userRepository;
+    private  PasswordEncoder passwordEncoder;
+    private  UserRepository userRepository;
 
     //회원가입
     public void signup(SignupRequestDto requestDto) {
