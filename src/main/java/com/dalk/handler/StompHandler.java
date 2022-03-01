@@ -32,8 +32,8 @@ public class StompHandler implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
         if (StompCommand.CONNECT == accessor.getCommand()) { // websocket 연결요청
-            String jwtToken = accessor.getFirstNativeHeader("token");
-            log.info("CONNECT {}", jwtToken);
+//            String jwtToken = accessor.getFirstNativeHeader("token");
+//            log.info("CONNECT {}", jwtToken);
             // Header의 jwt token 검증
 //            jwtTokenProvider.validateToken(jwtToken); 바꾼거 토큰 검증부분
             jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
@@ -44,13 +44,14 @@ public class StompHandler implements ChannelInterceptor {
             // roomId를 URL로 전송해주고 있어 추출 필요
             String roomId = chatService.getRoomId(Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
 
+
             // 채팅방에 들어온 클라이언트 sessionId를 roomId와 맵핑해 놓는다.(나중에 특정 세션이 어떤 채팅방에 들어가 있는지 알기 위함)
             // sessionId는 정상적으로 들어가고있음
             String sessionId = (String) message.getHeaders().get("simpSessionId");
             chatRoomService.setUserEnterInfo(sessionId, roomId);
 
             // 클라이언트 입장 메시지를 채팅방에 발송한다.(redis publish)
-            String token = Optional.ofNullable(accessor.getFirstNativeHeader("token")).orElse("UnknownUser");
+//            String token = Optional.ofNullable(accessor.getFirstNativeHeader("token")).orElse("UnknownUser");
 //            String name = jwtTokenProvider.getAuthenticationUsername(token);  토큰에서 유저네임 뽑아오는 부분
             String name = jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
             chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).build());
@@ -65,7 +66,7 @@ public class StompHandler implements ChannelInterceptor {
             String roomId = chatRoomService.getUserEnterRoomId(sessionId);
 
             // 클라이언트 퇴장 메시지를 채팅방에 발송한다.(redis publish)
-            String token = Optional.ofNullable(accessor.getFirstNativeHeader("token")).orElse("UnknownUser");
+//            String token = Optional.ofNullable(accessor.getFirstNativeHeader("token")).orElse("UnknownUser");
 
             if(accessor.getFirstNativeHeader("token") != null) {
 //                String name = jwtTokenProvider.getAuthenticationUsername(token);  토큰에서 유저네임 뽑아오는 부분
