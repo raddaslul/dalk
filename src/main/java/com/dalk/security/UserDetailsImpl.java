@@ -1,44 +1,46 @@
-package com.dalk.config.auth;
+package com.dalk.security;
+
 
 import com.dalk.domain.User;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter
-@Slf4j
 public class UserDetailsImpl implements UserDetails {
 
     private final User user;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
+    public UserDetailsImpl(User user) {
 
-        authorities.add(() -> {
-            return user.getRole().toString(); // ROLE_USER
-        });
-
-        return authorities;
+        this.user = user;
     }
 
-    public UserDetailsImpl(User user) {
-        this.user = user;
+    public User getUser() {
+
+        return user;
+    }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 
     @Override
     public String getPassword() {
+
         return user.getPassword();
     }
 
     @Override
     public String getUsername() {
+
         return user.getUsername();
     }
+
 
     @Override
     public boolean isAccountNonExpired() {
@@ -59,4 +61,7 @@ public class UserDetailsImpl implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+
 }

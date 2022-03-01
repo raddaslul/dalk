@@ -1,16 +1,13 @@
 package com.dalk.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Data
 @Entity
 @Table(name = "user")
 public class User extends Timestamped {
@@ -20,7 +17,7 @@ public class User extends Timestamped {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -46,4 +43,25 @@ public class User extends Timestamped {
 
     @OneToOne(mappedBy = "user", orphanRemoval = true)
     private Item item;
+
+    public User(String username, String password, String nickname) {
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+    }
+
+    public User(
+            String username,
+            String password,
+            String nickname,
+            Long point,
+            Integer leve,
+            Role role) {
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+        this.point = point;
+        this.level = leve;
+        this.role = role;
+    }
 }

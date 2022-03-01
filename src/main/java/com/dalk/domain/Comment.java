@@ -3,10 +3,7 @@ package com.dalk.domain;
 import com.dalk.domain.wl.Likes;
 import com.dalk.domain.wl.WarnComment;
 import com.dalk.dto.requestDto.CommentRequestDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 @Table(name = "comment")
 public class Comment extends Timestamped {
@@ -47,5 +45,16 @@ public class Comment extends Timestamped {
         this.comment = commentRequestDto.getComment();
         this.board = board;
         this.user = user;
+    }
+    public Comment(String comment,
+                   Board boardId,
+                   User userId) {
+        this.comment = comment;
+        this.board = boardId;
+        this.user = userId;
+    }
+
+    public void update(String comment) {
+        this.comment = comment;
     }
 }

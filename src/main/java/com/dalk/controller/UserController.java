@@ -2,16 +2,17 @@ package com.dalk.controller;
 
 
 
-import com.dalk.dto.requestDto.LoginRequestDto;
 import com.dalk.dto.requestDto.SignupRequestDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.HashMap;
 
 
 @RestController
@@ -22,17 +23,20 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/users/signup")
-    @ApiOperation(value = "회원가입", hidden = true)
-    public UserInfoResponseDto signup(@RequestBody @Valid SignupRequestDto signupRequestDto,
-                                      HttpServletResponse response) {
-        return userService.signup(signupRequestDto, response);
+    @ApiOperation(value = "회원가입")
+    public HashMap<String, Object> signup(@RequestBody @Valid SignupRequestDto requestDto) {
+        userService.signup(requestDto);
+
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("result", "true");
+        return result;
     }
 
-    // 로그인
-    @PostMapping("/users/login")
-    @ApiOperation(value = "로그인")
-    public UserInfoResponseDto login(@RequestBody @Valid LoginRequestDto loginRequestDto,
-                                     HttpServletResponse response) {
-        return userService.login(loginRequestDto, response);
+    //로그인 확인
+    @GetMapping("/loginCheck")
+    @ApiOperation(value = "로그인확인")
+    public UserInfoResponseDto userInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(userDetails.getUser());
+        return userInfoResponseDto;
     }
 }

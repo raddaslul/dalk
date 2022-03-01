@@ -1,125 +1,48 @@
 package com.dalk.service;
 
-
-import com.dalk.config.jwt.JwtAuthenticationProvider;
-import com.dalk.domain.Item;
 import com.dalk.domain.User;
-import com.dalk.dto.requestDto.LoginRequestDto;
 import com.dalk.dto.requestDto.SignupRequestDto;
-import com.dalk.dto.responseDto.ItemResponseDto;
-import com.dalk.dto.responseDto.UserInfoResponseDto;
-import com.dalk.handler.ex.*;
-import com.dalk.repository.ItemRepository;
 import com.dalk.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
-@RequiredArgsConstructor
 @Service
+@AllArgsConstructor
 public class UserService {
+    private  PasswordEncoder passwordEncoder;
+    private  UserRepository userRepository;
 
-    private final UserRepository userRepository;
-    private final ItemRepository itemRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
-    private final JwtAuthenticationProvider jwtAuthenticationProvider;
+    //회원가입
+    public void signup(SignupRequestDto requestDto) {
 
-    public UserInfoResponseDto signup(SignupRequestDto signupRequestDto, HttpServletResponse response) {
-
-        String username = signupRequestDto.getUsername(); // 아이디
-        String rawPassword = signupRequestDto.getPassword();
-        String pwCheck = signupRequestDto.getPasswordCheck();
-        String nickname = signupRequestDto.getNickname();
-
-        // 유효성 체크
-        if (!isPasswordMatched(username, rawPassword))
-            throw new PasswordContainsUsernameException("비밀번호에 아이디가 들어갈 수 없습니다.");
-
-        if (!isExistUsername(username))
-            throw new DuplicateUsernameException("이미 존재하는 아이디 입니다.");
-
-        if (!isExistNickname(nickname))
-            throw new DuplicationNicknameException("이미 존재하는 닉네임 입니다.");
-
-        if (!isDuplicatePassword(rawPassword, pwCheck)) {
-            throw new PasswordNotCollectException("비밀번호가 일치하지 않습니다.");
+        String username = requestDto.getUsername();
+        Optional<User> found = userRepository.findByUsername(username);
+        if (found.isPresent()) {
+            throw new IllegalArgumentException("중복된 사용자 ID 가 존재합니다.");
         }
 
-        // 비밀번호 암호화
-        String encPassword = passwordEncoder.encode(rawPassword);
+        String nickname = requestDto.getNickname();
+        Optional<User> found1 = userRepository.findByNickname(nickname);
+        if (found1.isPresent()) {
+            throw new IllegalArgumentException("중복된 사용자 닉네임이 존재합니다.");
+        }
 
-        // User 객체 생성
-        User user = User.builder()
-                .username(signupRequestDto.getUsername())
-                .password(encPassword)
-                .nickname(signupRequestDto.getNickname())
-                .point(200L)
-                .level(0)
-                .role(User.Role.USER)
-                .build();
+        String password = passwordEncoder.encode(requestDto.getPassword());//비번 인코딩
 
-        // user 저장
+        User user = new User(username, password, nickname);
         userRepository.save(user);
-
-        Item item = Item.builder()
-                .bold(false)
-                .color("black")
-                .user(user)
-                .build();
-
-        itemRepository.save(item);
-
-        LoginRequestDto loginRequestDto = new LoginRequestDto(username, rawPassword, nickname);
-        return login(loginRequestDto, response);
     }
 
-    public UserInfoResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
-
-        User userEntity = userRepository.findByUsername(loginRequestDto.getUsername()).orElseThrow(
-                () -> new UsernameNotFoundException("가입되지 않은 아이디입니다.")
+    // 채팅방에서 유저 확인하기
+    public User findById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(
+                ()-> new IllegalArgumentException("찾는 유저가 없습니다")
         );
-
-        if (!passwordEncoder.matches(loginRequestDto.getPassword(), userEntity.getPassword()))
-            throw new PasswordNotCollectException("비밀번호가 일치하지 않습니다.");
-
-
-        // 토큰 정보 생성
-        String token = jwtAuthenticationProvider.createToken(userEntity.getUsername(), userEntity.getNickname());
-
-        Cookie cookie = new Cookie("X-AUTH-TOKEN", token);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        response.addCookie(cookie);
-
-        User user = userRepository.findByUsername(loginRequestDto.getUsername()).orElseThrow(
-                () -> new UsernameNotFoundException("가입되지 않은 아이디입니다.")
-        );
-
-        Item item = itemRepository.findByUser(user);
-        ItemResponseDto itemResponseDto = new ItemResponseDto(item);
-
-        return new UserInfoResponseDto(user, itemResponseDto);
+        return user;
     }
 
-    private boolean isDuplicatePassword(String rawPassword, String pwCheck) {
-        return rawPassword.equals(pwCheck);
-    }
-
-    public boolean isExistUsername(String username) {
-        return !userRepository.findByUsername(username).isPresent();
-    }
-
-    public boolean isExistNickname(String nickname) {
-        return !userRepository.findByNickname(nickname).isPresent();
-    }
-
-    private boolean isPasswordMatched(String username, String rawPassword) {
-        return !rawPassword.contains(username);
-    }
 }
 
