@@ -63,9 +63,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http
-                .csrf()
-                .disable();
+        http.csrf().disable()
+                .headers()
+                .frameOptions().sameOrigin(); // SockJS는 기본적으로 HTML iframe 요소를 통한 전송을 허용하지 않도록 설정되는데 해당 내용을 해제한다.
 
         // 서버에서 인증은 JWT로 인증하기 때문에 Session의 생성을 막습니다.
         http    .cors()
@@ -91,6 +91,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/**").permitAll()
+                .antMatchers("/chatting/**").permitAll()
+                .antMatchers("/chatting").permitAll()
+                .antMatchers("/api/chat/message").permitAll()
                 // 전부 허용
                 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 추가
                 .antMatchers("*").permitAll()
@@ -104,9 +107,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutUrl("/user/logout")
                 .permitAll()
                 .and()
-                .exceptionHandling()
-                // "접근 불가" 페이지 URL 설정
-                .accessDeniedPage("/forbidden.html");
+                .exceptionHandling();
 
     }
 
@@ -141,9 +142,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         skipPathList.add("GET,/users/**");
         skipPathList.add("GET,/api/**");
 
-        skipPathList.add("GET,/");
-        //채팅
-        skipPathList.add("GET,/chatting");
+        // 채팅
+        skipPathList.add("GET,/webjars/**");
+        skipPathList.add("GET,/ws-stomp/**");
+        skipPathList.add("GET,/ws-alarm/**");
+        skipPathList.add("GET,/chat/room");
+        skipPathList.add("GET,/chat/user");
 
 //        skipPathList.add("GET,/favicon.ico");
 
