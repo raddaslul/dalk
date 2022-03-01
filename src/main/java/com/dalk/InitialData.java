@@ -69,9 +69,27 @@ public class InitialData implements ApplicationRunner {
                 "카테고리2",
                 user1
         );
+        Board board4 = new Board(
+                "aBc",
+                "aaaAAA",
+                "aBc",
+                "내용3",
+                "카테고리",
+                user1
+        );
+        Board board5 = new Board(
+                "AAAaaa",
+                "AbC",
+                "aBc",
+                "내용3",
+                "카테고리",
+                user1
+        );
         boardRepository.save(board1);
         boardRepository.save(board2);
         boardRepository.save(board3);
+        boardRepository.save(board4);
+        boardRepository.save(board5);
         Comment comment1 = new Comment(
                 "안녕하세요1",
                 board1,

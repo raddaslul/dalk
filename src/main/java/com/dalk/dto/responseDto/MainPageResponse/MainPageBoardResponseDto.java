@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class MainPageBoardResponseDto {
     private String winner;
     private String content;
     private String category;
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
     private Integer commentCnt;
     private Integer warnCnt;
 

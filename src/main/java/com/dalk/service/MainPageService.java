@@ -85,8 +85,8 @@ public class MainPageService {
 
     //게시글 검색
     public List<MainPageBoardResponseDto> getSearchWord(String keyword) {
-        List<Board> boardList = boardRepository.findBoard(keyword);
-
+//        List<Board> boardList = boardRepository.findSearch(keyword);
+        List<Board> boardList = boardRepository.findAllByTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(keyword, keyword);
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
         for (Board boards : boardList) {
