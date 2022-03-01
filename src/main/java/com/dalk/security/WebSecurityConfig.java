@@ -6,6 +6,7 @@ import com.dalk.security.filter.JwtAuthFilter;
 import com.dalk.security.jwt.HeaderTokenExtractor;
 import com.dalk.security.provider.FormLoginAuthProvider;
 import com.dalk.security.provider.JWTAuthProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -33,13 +35,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JWTAuthProvider jwtAuthProvider;
     private final HeaderTokenExtractor headerTokenExtractor;
 
-    public WebSecurityConfig(
-            JWTAuthProvider jwtAuthProvider,
-            HeaderTokenExtractor headerTokenExtractor
-    ) {
-        this.jwtAuthProvider = jwtAuthProvider;
-        this.headerTokenExtractor = headerTokenExtractor;
-    }
 
     // 암호화에 필요한 PasswordEncoder 를 Bean 등록합니다.
     @Bean
@@ -137,23 +132,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private JwtAuthFilter jwtFilter() throws Exception {
         List<String> skipPathList = new ArrayList<>();
 
-        // Static 정보 접근 허용
-        skipPathList.add("GET,/images/**");
-        skipPathList.add("GET,/css/**");
-
-        // h2-console 허용
         skipPathList.add("GET,/h2-console/**");
         skipPathList.add("POST,/h2-console/**");
         // 회원 관리 API 허용
 //        skipPathList.add("GET,/user/**");
         skipPathList.add("POST,/users/signup");
-
         //메인페이지 스킵!
         skipPathList.add("GET,/users/**");
         skipPathList.add("GET,/api/**");
 
         skipPathList.add("GET,/");
-        skipPathList.add("GET,/basic.js");
+        //채팅
+        skipPathList.add("GET,/chatting");
 
 //        skipPathList.add("GET,/favicon.ico");
 
@@ -183,10 +173,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("https://raddaslul.s3.ap-northeast-2.amazonaws.com/");
 //        configuration.addAllowedOrigin("http://woo-jin.shop.s3-website.ap-northeast-2.amazonaws.com/");
+        configuration.setAllowCredentials(true); // 클라이언트의 쿠키를 전달하고 받을 것이기 때문에 allowCredentials를 true로 설정한다.
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
-        configuration.addExposedHeader("*");
-        configuration.setAllowCredentials(true); // 클라이언트의 쿠키를 전달하고 받을 것이기 때문에 allowCredentials를 true로 설정한다.
+//        configuration.addExposedHeader("*");
+        configuration.addExposedHeader("Authorization");
         configuration.validateAllowCredentials();
         configuration.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
