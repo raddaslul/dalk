@@ -1,5 +1,6 @@
 package com.dalk.controller;
 
+import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardDetailResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
@@ -8,6 +9,7 @@ import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.MainPageService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -20,8 +22,8 @@ public class MainPageController {
 
     @PostMapping("/rooms")
     @ApiOperation(value = "토론방 생성")
-    public HashMap<String, Object> createChatRoom(UserDetailsImpl userDetails) {
-        mainPageService.createChatRoom(userDetails);
+    public HashMap<String, Object> createChatRoom(@RequestBody CreateChatRoomRequestDto requestDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        mainPageService.createChatRoom(userDetails, requestDto);
 
         HashMap<String, Object> result = new HashMap<>();
         result.put("result", "true");
@@ -30,13 +32,13 @@ public class MainPageController {
 
     @GetMapping("/api/main/rooms")
     @ApiOperation(value = "토론방 리스트 조회 top6")
-    public MainPageTop6ResponseDto getMainPageTop6() {
+    public List<MainPageTop6ResponseDto> getMainPageTop6() {
         return mainPageService.getMainPageTop6();
     }
 
     @GetMapping("/api/rooms")
     @ApiOperation(value = "토론방 리스트 전체 조회")
-    public MainPageAllResponseDto getMainPageAll() {
+    public List<MainPageAllResponseDto> getMainPageAll() {
         return mainPageService.getMainPageAll();
     }
 
