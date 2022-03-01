@@ -1,7 +1,9 @@
 package com.dalk.service;
 
+import com.dalk.domain.Item;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.SignupRequestDto;
+import com.dalk.repository.ItemRepository;
 import com.dalk.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +16,7 @@ import java.util.Optional;
 public class UserService {
     private  PasswordEncoder passwordEncoder;
     private  UserRepository userRepository;
+    private ItemRepository itemRepository;
 
     //회원가입
     public void signup(SignupRequestDto requestDto) {
@@ -34,6 +37,9 @@ public class UserService {
 
         User user = new User(username, password, nickname);
         userRepository.save(user);
+
+        Item item = new Item(false, "black", user);
+        itemRepository.save(item);
     }
 
     // 채팅방에서 유저 확인하기

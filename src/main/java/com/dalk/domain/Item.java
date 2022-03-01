@@ -20,10 +20,10 @@ public class Item extends Timestamped {
     private Long id;
 
     @Column(name = "bold", nullable = true)
-    private Boolean bold;
+    private Boolean bold = false;
 
     @Column(name = "color", nullable = true)
-    private String color;
+    private String color = "black";
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
