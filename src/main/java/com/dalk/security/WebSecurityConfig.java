@@ -92,6 +92,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //ㅡㅡㅡㅡㅡㅡㅡㅡ
                 // 메인페이지 접근허용
                 .antMatchers("/api/mains").permitAll()
+                .antMatchers("/chatting/**").permitAll()
+                .antMatchers("/api/chat/message").permitAll()
                 // api 요청 접근허용
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/").permitAll()
@@ -154,6 +156,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         skipPathList.add("GET,/");
         skipPathList.add("GET,/basic.js");
+
+        skipPathList.add("GET,/api/chat/message");
+        skipPathList.add("POST,/api/chat/message");
 
 //        skipPathList.add("GET,/favicon.ico");
 
