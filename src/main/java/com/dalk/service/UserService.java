@@ -36,5 +36,13 @@ public class UserService {
         userRepository.save(user);
     }
 
+    // 채팅방에서 유저 확인하기
+    public User findById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(
+                ()-> new IllegalArgumentException("찾는 유저가 없습니다")
+        );
+        return user;
+    }
+
 }
 
