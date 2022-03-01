@@ -33,7 +33,7 @@ public class UserController {
     }
 
     //로그인 확인
-    @GetMapping("/login")
+    @GetMapping("/loginCheck")
     @ApiOperation(value = "로그인확인")
     public UserInfoResponseDto userInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(userDetails.getUser());
