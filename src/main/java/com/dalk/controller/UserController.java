@@ -3,9 +3,12 @@ package com.dalk.controller;
 
 
 import com.dalk.dto.requestDto.SignupRequestDto;
+import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,4 +32,11 @@ public class UserController {
         return result;
     }
 
+    //로그인 확인
+    @GetMapping("/loginCheck")
+    @ApiOperation(value = "로그인확인")
+    public UserInfoResponseDto userInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(userDetails.getUser());
+        return userInfoResponseDto;
+    }
 }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,14 +13,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MainPageBoardResponseDto {
-//    private UserInfoResponseDto userInfo;
+    private UserInfoResponseDto userInfo;
     private Long boardId;
     private String topicA;
     private String topicB;
     private String winner;
     private String content;
     private String category;
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
     private Integer commentCnt;
     private Integer warnCnt;
+
 }

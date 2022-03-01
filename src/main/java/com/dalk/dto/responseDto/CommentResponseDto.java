@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentResponseDto {
-//    private UserInfoResponseDto userInfo;
+    private UserInfoResponseDto userInfo;
     private String Comment;
     private Integer likeCnt;
     private Boolean isLike;

@@ -3,12 +3,14 @@ package com.dalk.service;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.SignupRequestDto;
 import com.dalk.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@AllArgsConstructor
 public class UserService {
     private  PasswordEncoder passwordEncoder;
     private  UserRepository userRepository;
