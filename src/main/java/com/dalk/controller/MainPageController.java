@@ -49,7 +49,7 @@ public class MainPageController {
     @GetMapping("/api/boards/{boardId}")
     @ApiOperation(value = "게시글 상세 조회")
     public MainPageBoardDetailResponseDto getMainPageBoardDetail(@PathVariable Long boardId) {
-        return mainPageService.getMainPageBoardDetail(boardId);
+        return mainPageService.getMainPageBoardDetail(boardId );
     }
 
     @GetMapping("/api/keywords/{keyword}")
