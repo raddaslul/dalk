@@ -1,6 +1,7 @@
 package com.dalk.handler;
 
 import com.dalk.domain.ChatMessage;
+import com.dalk.security.jwt.JwtDecoder;
 import com.dalk.security.provider.JWTAuthProvider;
 import com.dalk.service.ChatMessageService;
 import com.dalk.service.ChatRoomService;
@@ -24,6 +25,7 @@ public class StompHandler implements ChannelInterceptor {
     private final JWTAuthProvider jwtAuthProvider;
     private final ChatRoomService chatRoomService;
     private final ChatMessageService chatService;
+    private final JwtDecoder jwtDecoder;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -33,8 +35,8 @@ public class StompHandler implements ChannelInterceptor {
             String jwtToken = accessor.getFirstNativeHeader("token");
             log.info("CONNECT {}", jwtToken);
             // Header의 jwt token 검증
-//            jwtTokenProvider.validateToken(jwtToken);
-            jwtAuthProvider.authenticate(jwtToken);
+//            jwtTokenProvider.validateToken(jwtToken); 바꾼거 토큰 검증부분
+            jwtDecoder.decodeUsername(jwtToken);
         }
 
         else if (StompCommand.SUBSCRIBE == accessor.getCommand()) { // 채팅룸 구독요청
@@ -49,7 +51,8 @@ public class StompHandler implements ChannelInterceptor {
 
             // 클라이언트 입장 메시지를 채팅방에 발송한다.(redis publish)
             String token = Optional.ofNullable(accessor.getFirstNativeHeader("token")).orElse("UnknownUser");
-            String name = jwtTokenProvider.getAuthenticationUsername(token);
+//            String name = jwtTokenProvider.getAuthenticationUsername(token);  토큰에서 유저네임 뽑아오는 부분
+            String name = jwtDecoder.decodeUsername(token);
             chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).sender(name).build());
 
             log.info("SUBSCRIBED {}, {}", name, roomId);
@@ -65,7 +68,8 @@ public class StompHandler implements ChannelInterceptor {
             String token = Optional.ofNullable(accessor.getFirstNativeHeader("token")).orElse("UnknownUser");
 
             if(accessor.getFirstNativeHeader("token") != null) {
-                String name = jwtTokenProvider.getAuthenticationUsername(token);
+//                String name = jwtTokenProvider.getAuthenticationUsername(token);  토큰에서 유저네임 뽑아오는 부분
+                String name = jwtDecoder.decodeUsername(token);
                 chatService.sendChatMessage(ChatMessage.builder().type(ChatMessage.MessageType.QUIT).roomId(roomId).sender(name).build());
             }
 
