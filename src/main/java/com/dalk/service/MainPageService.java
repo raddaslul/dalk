@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,10 +38,9 @@ public class MainPageService {
     //토론방리스트 탑6 조회
     public List<MainPageTop6ResponseDto> getMainPageTop6() {
         //board 전체를 가져옴
-        List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByOrderByCreatedAtTimeDesc();
+        List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByOrderByCreatedAtDesc();
         //리턴할 값의 리스트를 정의
         List<MainPageTop6ResponseDto> mainPageTop6ResponseDtoList = new ArrayList<>();
-
 
         for (ChatRoom chatRoom : chatRoomList) {
             UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoom.getUser());

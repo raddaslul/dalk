@@ -44,9 +44,8 @@ public class ChatMessageController {
         token = token.substring(7);
         // 로그인 회원 정보를 들어온 메시지에 값 세팅
 //        User user = jwtTokenProvider.getAuthenticationUser(token);
-        User user = jwtDecoder.getAuthenticationUser(token);
-        messageRequestDto.setUserId(user.getId());
-        messageRequestDto.setSender(user.getUsername());
+        messageRequestDto.setUserId(Long.parseLong(jwtDecoder.decodeUID(token)));
+        messageRequestDto.setSender(jwtDecoder.decodeUsername(token));
 
         // 메시지 생성 시간 삽입
         SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm");
