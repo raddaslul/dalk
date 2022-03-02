@@ -1,8 +1,10 @@
 package com.dalk.handler;
 
+import com.dalk.domain.ChatMessage;
 import com.dalk.repository.RedisRepository;
 import com.dalk.security.jwt.JwtDecoder;
 import com.dalk.service.ChatMessageService;
+import com.dalk.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -11,12 +13,13 @@ import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@Slf4j
 @RequiredArgsConstructor
 @Component
+@Transactional
 public class StompHandler implements ChannelInterceptor {
     private final JwtDecoder jwtDecoder;
     private final ChatMessageService chatMessageService;
@@ -26,11 +29,12 @@ public class StompHandler implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        System.out.println("웹소켓 연결 전 JWT 검증");
         // websocket 연결시 헤더의 jwt token 검증
         if (StompCommand.CONNECT == accessor.getCommand()) {
             jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
-        } else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
+        }
+
+        else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
             Long roomId = chatMessageService.getRoomId(
                     Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId")
             );

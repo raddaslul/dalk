@@ -2,12 +2,15 @@ package com.dalk.config.socket;
 
 import com.dalk.handler.StompHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
 
 @RequiredArgsConstructor
 @Configuration
@@ -30,14 +33,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // 여러가지 Endpoint 설정
         registry.addEndpoint("/ws-stomp", "/ws-alarm")
                 .setAllowedOriginPatterns("*")
-                .withSockJS(); // sock.js를 통하여 낮은 버전의 브라우저에서도 websocket 이 동작할수 있게 한다
+                .withSockJS();
     }
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         // StompHandler 가 Websocket 앞단에서 token 을 체크할 수 있도록 인터셉터로 설정
         registration.interceptors(stompHandler);
-        System.out.println("웹 소켓 연결 전에 인터셉터 작동(스톰프 핸들러)");
     }
 }
-

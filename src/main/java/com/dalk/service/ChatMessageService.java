@@ -23,10 +23,12 @@ public class ChatMessageService {
     public Long getRoomId(String destination) {
         int lastIndex = destination.lastIndexOf('/');
         System.out.println("룸 아이디 destination" + destination);
-        if (lastIndex != -1)
+
+        if (lastIndex != -1) {
             return Long.parseLong(destination.substring(lastIndex + 1));
-        else
+        } else {
             return null;
+        }
     }
 
     // 채팅방에 메시지 발송

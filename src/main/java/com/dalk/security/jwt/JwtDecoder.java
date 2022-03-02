@@ -24,11 +24,9 @@ import static com.dalk.security.jwt.JwtTokenUtils.*;
 
 @Component
 public class JwtDecoder {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final UserDetailsServiceImpl userDetailsServiceImpl;
-
-
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     public JwtDecoder(UserDetailsServiceImpl userDetailsServiceImpl) {
         this.userDetailsServiceImpl = userDetailsServiceImpl;
