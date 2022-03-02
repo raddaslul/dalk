@@ -3,6 +3,7 @@ package com.dalk.service;
 import com.dalk.domain.Board;
 import com.dalk.domain.ChatRoom;
 import com.dalk.domain.User;
+import com.dalk.domain.time.TimeConversion;
 import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardDetailResponseDto;
@@ -49,8 +50,8 @@ public class MainPageService {
                     chatRoom.getTopicB(),
                     chatRoom.getContent(),
                     chatRoom.getCategory(),
-                    "time",
-                    chatRoom.getCreatedAt()
+                    TimeConversion.timePostConversion(chatRoom.getCreatedAt()),
+                    TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt())
             );
             mainPageTop6ResponseDtoList.add(mainPageTop6ResponseDto);
         }
@@ -61,7 +62,7 @@ public class MainPageService {
     public List<MainPageAllResponseDto> getMainPageAll() {
 
         //board 전체를 가져옴
-        List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
+        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc();
         //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
 
@@ -74,8 +75,8 @@ public class MainPageService {
                     chatRoom.getTopicB(),
                     chatRoom.getContent(),
                     chatRoom.getCategory(),
-                    "time",
-                    chatRoom.getCreatedAt()
+                    TimeConversion.timePostConversion(chatRoom.getCreatedAt()),
+                    TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt())
             );
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
@@ -100,7 +101,7 @@ public class MainPageService {
                     boards.getWinner(),
                     boards.getContent(),
                     boards.getCategory(),
-                    boards.getCreatedAt(),
+                    TimeConversion.timeCreatedConversion(boards.getCreatedAt()),
                     boards.getComments().size(),
                     boards.getWarnBoards().size()
             );
@@ -123,7 +124,7 @@ public class MainPageService {
                 boards.getWinner(),
                 boards.getContent(),
                 boards.getCategory(),
-                boards.getCreatedAt(),
+                TimeConversion.timeCreatedConversion(boards.getCreatedAt()),
                 boards.getComments().size(),
                 boards.getWarnBoards().size()
         );
@@ -146,7 +147,7 @@ public class MainPageService {
                     boards.getWinner(),
                     boards.getContent(),
                     boards.getCategory(),
-                    boards.getCreatedAt(),
+                    TimeConversion.timeCreatedConversion(boards.getCreatedAt()),
                     boards.getComments().size(),
                     boards.getWarnBoards().size()
             );

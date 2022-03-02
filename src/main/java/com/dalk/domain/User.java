@@ -1,5 +1,6 @@
 package com.dalk.domain;
 
+import com.dalk.domain.time.Timestamped;
 import lombok.*;
 
 import javax.persistence.*;

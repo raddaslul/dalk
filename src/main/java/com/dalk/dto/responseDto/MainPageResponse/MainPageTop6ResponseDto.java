@@ -18,7 +18,7 @@ public class MainPageTop6ResponseDto {
     private String content;
     private String category;
     private String restTime;
-    private LocalDateTime createdAt;
+    private String createdAt;
 
 //    private LocalDateTime now = LocalDateTime.now();
 

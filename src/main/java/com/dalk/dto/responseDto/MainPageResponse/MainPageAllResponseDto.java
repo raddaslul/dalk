@@ -18,5 +18,5 @@ public class MainPageAllResponseDto {
     private String content;
     private String category;
     private String restTime;
-    private LocalDateTime createdAt;
+    private String createdAt;
 }

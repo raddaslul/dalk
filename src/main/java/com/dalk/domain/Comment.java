@@ -1,5 +1,6 @@
 package com.dalk.domain;
 
+import com.dalk.domain.time.Timestamped;
 import com.dalk.domain.wl.Likes;
 import com.dalk.domain.wl.WarnComment;
 import com.dalk.dto.requestDto.CommentRequestDto;
