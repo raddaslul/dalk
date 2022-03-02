@@ -70,7 +70,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .csrf()
-                .disable();
+                .disable()
+                .headers()
+                .frameOptions().sameOrigin();
 
         // 서버에서 인증은 JWT로 인증하기 때문에 Session의 생성을 막습니다.
         http    .cors()
@@ -88,10 +90,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(formLoginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
+
         http.authorizeRequests()
                 //ㅡㅡㅡㅡㅡㅡㅡㅡ
                 // 메인페이지 접근허용
                 .antMatchers("/api/mains").permitAll()
+                .antMatchers("/chatting/**").permitAll()
+                .antMatchers("/api/chat/message").permitAll()
+                .antMatchers("/pub/order/**","/secured/**/**").permitAll()
                 // api 요청 접근허용
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/").permitAll()
@@ -100,7 +106,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 추가
                 .antMatchers("*").permitAll()
                 .anyRequest()
-                .permitAll()
+                .denyAll()
+//                .permitAll()
                 .and()
 
                 // [로그아웃 기능]
@@ -154,6 +161,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         skipPathList.add("GET,/");
         skipPathList.add("GET,/basic.js");
+
+        skipPathList.add("GET,/ws-alarm/**");
+        skipPathList.add("GET,/ws-stomp/**");
+        skipPathList.add("GET,/webjars/**");
+        skipPathList.add("GET,/chat/room");
+        skipPathList.add("GET,/chat/user");
 
 //        skipPathList.add("GET,/favicon.ico");
 
