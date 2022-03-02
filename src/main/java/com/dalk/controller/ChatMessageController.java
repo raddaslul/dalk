@@ -4,14 +4,12 @@ package com.dalk.controller;
 import com.dalk.domain.ChatMessage;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.ChatMessageRequestDto;
-import com.dalk.security.UserDetailsImpl;
 import com.dalk.security.jwt.JwtDecoder;
 import com.dalk.service.ChatMessageService;
 import com.dalk.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,16 +38,13 @@ public class ChatMessageController {
 
     // 채팅 메시지를 @MessageMapping 형태로 받는다
     // 웹소켓으로 publish 된 메시지를 받는 곳이다
-    @MessageMapping("/api/chat/message")
-    public void message(
-            @RequestBody ChatMessageRequestDto messageRequestDto,
-//            @Header("token") String token
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @MessageMapping("/chat/message")
+    public void message(@RequestBody ChatMessageRequestDto messageRequestDto, @Header("Authorization") String token) {
 
+        token = token.substring(7);
         // 로그인 회원 정보를 들어온 메시지에 값 세팅
 //        User user = jwtTokenProvider.getAuthenticationUser(token);
-//        User user = jwtDecoder.getAuthenticationUser(token);
-        User user = userDetails.getUser();
+        User user = jwtDecoder.getAuthenticationUser(token);
         messageRequestDto.setUserId(user.getId());
         messageRequestDto.setSender(user.getUsername());
 
