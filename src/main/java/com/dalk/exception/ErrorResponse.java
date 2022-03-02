@@ -1,4 +1,4 @@
-package com.dalk.handler;
+package com.dalk.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
