@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -18,5 +18,5 @@ public class MainPageAllResponseDto {
     private String content;
     private String category;
     private String restTime;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 }

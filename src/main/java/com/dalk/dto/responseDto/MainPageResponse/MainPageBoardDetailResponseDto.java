@@ -20,7 +20,7 @@ public class MainPageBoardDetailResponseDto {
     private String winner;
     private String content;
     private String category;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
     private Integer commentCnt;
     private Integer warnCnt;
 
