@@ -1,13 +1,21 @@
 package com.dalk.dto.responseDto;
 
+import com.dalk.domain.User;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-import java.io.Serializable;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
-@Getter
-public class ItemResponseDto implements Serializable {
-    private final Boolean bold;
-    private final String color;
+@NoArgsConstructor
+@Data
+@Builder
+public class ItemResponseDto {
+    private Boolean bold;
+    private String color;
+
+    public ItemResponseDto(User user) {
+        this.bold = user.getItem().getBold();
+        this.color = user.getItem().getColor();
+    }
 }
