@@ -2,6 +2,8 @@ package com.dalk.domain;
 
 import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
+import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
+import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -53,5 +55,14 @@ public class ChatRoom extends Timestamped {
         this.category = requestDto.getCategory();
         this.time = requestDto.getTime();
         this.user = userService.findById(requestDto.getUserId());
+    }
+
+    public ChatRoom(UserDetailsImpl userDetails, CreateChatRoomRequestDto requestDto) {
+        this.topicA = requestDto.getTopicA();
+        this.topicB = requestDto.getTopicB();
+        this.content = requestDto.getContent();
+        this.category = requestDto.getCategory();
+        this.time = requestDto.getTime();
+        this.user = userDetails.getUser();
     }
 }
