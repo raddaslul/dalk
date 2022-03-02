@@ -28,8 +28,10 @@ public class RedisSubscriber {
         try {
             // ChatMessage 객채로 맵핑
             ChatMessage chatMessage = objectMapper.readValue(publishMessage, ChatMessage.class);
+            System.out.println("구독자 chatMessage : " + chatMessage);
             // 채팅방을 구독한 클라이언트에게 메시지 발송
             messagingTemplate.convertAndSend("/sub/api/chat/rooms/" + chatMessage.getRoomId(), chatMessage);
+            System.out.println("");
         } catch (Exception e) {
             log.error("Exception {}", e);
         }

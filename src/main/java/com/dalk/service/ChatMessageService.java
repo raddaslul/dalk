@@ -20,12 +20,13 @@ public class ChatMessageService {
     private final UserService userService;
 
     // destination 정보에서 roomId 추출
-    public String getRoomId(String destination) {
+    public Long getRoomId(String destination) {
         int lastIndex = destination.lastIndexOf('/');
+        System.out.println("룸 아이디 destination" + destination);
         if (lastIndex != -1)
-            return destination.substring(lastIndex + 1);
+            return Long.parseLong(destination.substring(lastIndex + 1));
         else
-            return "";
+            return null;
     }
 
     // 채팅방에 메시지 발송

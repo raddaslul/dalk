@@ -38,13 +38,16 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
             HttpServletRequest request,
             HttpServletResponse response
     ) throws AuthenticationException, IOException {
+        System.out.println("헤더 토큰 request : " + request);
+        System.out.println("헤더 토큰 response : " + response);
 
         // JWT 값을 담아주는 변수 TokenPayload
         String tokenPayload = request.getHeader("Authorization");
         System.out.println("tokenPayload = "+tokenPayload);
         if (tokenPayload == null) {
-            response.sendRedirect("/user/loginView");
-            return null;
+//            response.sendRedirect("/user/loginView");
+//            return null;
+            throw new IllegalArgumentException("로그인 정보가 없습니다.");
         }
 
         JwtPreProcessingToken jwtToken = new JwtPreProcessingToken(

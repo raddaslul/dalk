@@ -21,7 +21,8 @@ public class HeaderTokenExtractor {
          * 이셉션을(예외)를 던져주어야 합니다.
          */
         if (header == null || header.equals("") || header.length() < HEADER_PREFIX.length()) {
-            System.out.println("error request : " + request.getRequestURI());
+            System.out.println("헤더토큰 : " + request.getRequestURI());
+            System.out.println(header);
             throw new NoSuchElementException("올바른 JWT 정보가 아닙니다.");
         }
 
