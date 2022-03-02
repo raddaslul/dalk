@@ -156,4 +156,26 @@ public class MainPageService {
         return mainPageBoardResponseDtoList;
     }
 
+    //카테고리별 채팅방 조회
+    public List<MainPageAllResponseDto> getSearchCategory(String category) {
+        List<ChatRoom> chatRoomList = chatRoomRepository.findByCategory(category);
+        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
+
+        for (ChatRoom chatRoom : chatRoomList) {
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoom.getUser());
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(
+                    userInfoResponseDto,
+                    chatRoom.getId(),
+                    chatRoom.getTopicA(),
+                    chatRoom.getTopicB(),
+                    chatRoom.getContent(),
+                    chatRoom.getCategory(),
+                    TimeConversion.timePostConversion(chatRoom.getCreatedAt()),
+                    TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt())
+            );
+            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+        }
+        return mainPageAllResponseDtoList;
+    }
+
 }

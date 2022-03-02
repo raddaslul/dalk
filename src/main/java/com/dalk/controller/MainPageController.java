@@ -59,4 +59,10 @@ public class MainPageController {
     public List<MainPageBoardResponseDto> getSearchWord(@PathVariable String keyword) {
         return mainPageService.getSearchWord(keyword);
     }
+
+    @GetMapping("api/main/{category}")
+    @ApiOperation(value = "카테고리 클릭시 검색")
+    public List<MainPageAllResponseDto> getSerarchCategory(@PathVariable String category) {
+        return mainPageService.getSearchCategory(category);
+    }
 }
