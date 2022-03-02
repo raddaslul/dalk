@@ -4,19 +4,19 @@ import com.dalk.domain.Board;
 import com.dalk.domain.ChatRoom;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
+import com.dalk.dto.responseDto.ItemResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardDetailResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageTop6ResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.ChatRoomRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +29,12 @@ public class MainPageService {
 
     //채팅방 생성
     public Long createChatRoom(UserDetailsImpl userDetails, CreateChatRoomRequestDto requestDto) {
-        ChatRoom chatRoom = new ChatRoom(userDetails, requestDto);
-        chatRoom = chatRoomRepository.save(chatRoom);
-        Long chatRoomId = chatRoom.getId();
-        return chatRoomId;
+        User user = userDetails.getUser();
+        if(user != null) {
+            ChatRoom chatRoom = new ChatRoom(requestDto, user);
+            chatRoomRepository.save(chatRoom);
+            return chatRoom.getId();
+        } throw new LoginUserNotFoundException("로그인 후 이용해 주시기 바랍니다.");
     }
 
     //토론방리스트 탑6 조회
@@ -43,7 +45,8 @@ public class MainPageService {
         List<MainPageTop6ResponseDto> mainPageTop6ResponseDtoList = new ArrayList<>();
 
         for (ChatRoom chatRoom : chatRoomList) {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoom.getUser());
+            ItemResponseDto itemResponseDto = new ItemResponseDto(chatRoom.getUser());
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoom.getUser(), itemResponseDto);
             MainPageTop6ResponseDto mainPageTop6ResponseDto = new MainPageTop6ResponseDto(
                     userInfoResponseDto,
                     chatRoom.getId(),
@@ -52,7 +55,7 @@ public class MainPageService {
                     chatRoom.getContent(),
                     chatRoom.getCategory(),
                     "time",
-                    chatRoom.getCreatedAt()
+                    chatRoom.getCreatedAt().toString()
             );
             mainPageTop6ResponseDtoList.add(mainPageTop6ResponseDto);
         }
@@ -68,7 +71,8 @@ public class MainPageService {
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
 
         for (ChatRoom chatRoom : chatRoomList) {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoom.getUser());
+            ItemResponseDto itemResponseDto = new ItemResponseDto(chatRoom.getUser());
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoom.getUser(), itemResponseDto);
             MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(
                     userInfoResponseDto,
                     chatRoom.getId(),
@@ -77,7 +81,7 @@ public class MainPageService {
                     chatRoom.getContent(),
                     chatRoom.getCategory(),
                     "time",
-                    chatRoom.getCreatedAt()
+                    chatRoom.getCreatedAt().toString()
             );
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
@@ -92,8 +96,9 @@ public class MainPageService {
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
 
-        for (Board boards : boardList) {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(boards.getUser());
+        for (Board boards: boardList) {
+            ItemResponseDto itemResponseDto = new ItemResponseDto(boards.getUser());
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(boards.getUser(), itemResponseDto);
             MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(
                     userInfoResponseDto,
                     boards.getId(),
@@ -102,7 +107,7 @@ public class MainPageService {
                     boards.getWinner(),
                     boards.getContent(),
                     boards.getCategory(),
-                    boards.getCreatedAt(),
+                    boards.getCreatedAt().toString(),
                     boards.getComments().size(),
                     boards.getWarnBoards().size()
             );
@@ -113,21 +118,22 @@ public class MainPageService {
 
     //게시글 상세 조회
     public MainPageBoardDetailResponseDto getMainPageBoardDetail(Long boardId) {
-        Board boards = boardRepository.findById(boardId).orElseThrow(
+        Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new NullPointerException("게시글이 없습니다")
         );
-        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(boards.getUser());
+        ItemResponseDto itemResponseDto = new ItemResponseDto(board.getUser());
+        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(board.getUser(), itemResponseDto);
         MainPageBoardDetailResponseDto mainPageBoardDetailResponseDto = new MainPageBoardDetailResponseDto(
                 userInfoResponseDto,
-                boards.getId(),
-                boards.getTopicA(),
-                boards.getTopicB(),
-                boards.getWinner(),
-                boards.getContent(),
-                boards.getCategory(),
-                boards.getCreatedAt(),
-                boards.getComments().size(),
-                boards.getWarnBoards().size()
+                board.getId(),
+                board.getTopicA(),
+                board.getTopicB(),
+                board.getWinner(),
+                board.getContent(),
+                board.getCategory(),
+                board.getCreatedAt().toString(),
+                board.getComments().size(),
+                board.getWarnBoards().size()
         );
         return mainPageBoardDetailResponseDto;
     }
@@ -139,7 +145,8 @@ public class MainPageService {
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
         for (Board boards : boardList) {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(boards.getUser());
+            ItemResponseDto itemResponseDto = new ItemResponseDto(boards.getUser());
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(boards.getUser(), itemResponseDto);
             MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(
                     userInfoResponseDto,
                     boards.getId(),
@@ -148,7 +155,7 @@ public class MainPageService {
                     boards.getWinner(),
                     boards.getContent(),
                     boards.getCategory(),
-                    boards.getCreatedAt(),
+                    boards.getCreatedAt().toString(),
                     boards.getComments().size(),
                     boards.getWarnBoards().size()
             );

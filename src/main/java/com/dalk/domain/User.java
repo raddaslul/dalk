@@ -1,5 +1,6 @@
 package com.dalk.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -7,7 +8,7 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
 @Entity
 @Table(name = "user")
 public class User extends Timestamped {
@@ -42,6 +43,7 @@ public class User extends Timestamped {
     private Role role;
 
     @OneToOne(mappedBy = "user", orphanRemoval = true)
+    @JsonManagedReference
     private Item item;
 
     public User(String username, String password, String nickname) {
