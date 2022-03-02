@@ -40,7 +40,7 @@ public class ChatMessageController {
     // 웹소켓으로 publish 된 메시지를 받는 곳이다
     @MessageMapping("/chat/message")
     public void message(@RequestBody ChatMessageRequestDto messageRequestDto, @Header("Authorization") String token) {
-
+        System.out.println("채팅 메세지 : " + messageRequestDto);
         token = token.substring(7);
         // 로그인 회원 정보를 들어온 메시지에 값 세팅
 //        User user = jwtTokenProvider.getAuthenticationUser(token);

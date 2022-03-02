@@ -27,9 +27,11 @@ public class MainPageService {
     private final ChatRoomRepository chatRoomRepository;
 
     //채팅방 생성
-    public void createChatRoom(UserDetailsImpl userDetails, CreateChatRoomRequestDto requestDto) {
+    public Long createChatRoom(UserDetailsImpl userDetails, CreateChatRoomRequestDto requestDto) {
         ChatRoom chatRoom = new ChatRoom(userDetails, requestDto);
-        chatRoomRepository.save(chatRoom);
+        chatRoom = chatRoomRepository.save(chatRoom);
+        Long chatRoomId = chatRoom.getId();
+        return chatRoomId;
     }
 
     //토론방리스트 탑6 조회
