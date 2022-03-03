@@ -12,24 +12,57 @@ public class TimeConversion {
         return resultConversion;
     }
 
-    public static String timePostConversion(LocalDateTime createdAt) {
+    public static Long restTime(LocalDateTime createdAt, Boolean time) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        Long timeDiff = Duration.between(createdAt, currentTime).getSeconds(); //현재시간 계산
+        Long resultConversion;
+        if (time) {
+            resultConversion = 1200 - timeDiff;
+            if((timeDiff) > 1200){
+                resultConversion = 0L;
+            }
+        } else {
+            resultConversion = 3600 - timeDiff;
+            if ((timeDiff) > 3600) {
+                resultConversion = 0L;
+            }
+        }
+        return resultConversion;
+    }
+
+    public static String timePostConversion(LocalDateTime createdAt, Boolean time) {
         LocalDateTime currentTime = LocalDateTime.now();
 
         Long timeDiff = Duration.between(createdAt, currentTime).getSeconds(); //현재시간 계산
-
         String resultConversion = "";
-
-        if ((timeDiff / 86400) > 1) {
-            resultConversion = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        } else if ((timeDiff / 86400) > 0) { // 1 일
-            resultConversion = timeDiff / 86400 + "일 전";
-        } else if ((timeDiff / 3600) > 0) { // 시간
-            resultConversion = timeDiff / 3600 + "시간 전";
-        } else if ((timeDiff / 60) > 0) { // 분
-            resultConversion = timeDiff / 60 + "분 전";
-        } else {
-            resultConversion = "1분 전";
+        Long limitTime;
+        if(time){
+            if ((timeDiff / 86400) > 1) {
+                resultConversion = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            }
+            else if ((timeDiff / 60) > 0) { // 분
+                resultConversion = 20 - (timeDiff / 60) + "분 남았습니다";
+                if((timeDiff / 60) > 20){
+                    resultConversion = "0분 남았습니다";
+                }
+            }else{
+                resultConversion =  "방금 생성됐습니다";
+            }
+        } else{
+            if ((timeDiff / 86400) > 1) {
+                resultConversion = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            }
+            else if ((timeDiff / 60) > 0) { // 분
+                resultConversion = 60 - (timeDiff / 60) + "분 남았습니다";
+                if((timeDiff / 60) > 60){
+                    resultConversion = "0분 남았습니다";
+                }
+            } else {
+                resultConversion =  "방금 생성됐습니다";
+            }
         }
+
+
 
         return resultConversion;
     }
@@ -49,3 +82,8 @@ public class TimeConversion {
     }
 }
 
+//        }
+//        else if ((timeDiff / 86400) > 0) { // 1 일
+//            resultConversion = timeDiff / 86400 + "일 전";
+//        } else if ((timeDiff / 3600) > 0) { // 시간
+//            resultConversion = timeDiff / 3600 + "시간 전";
