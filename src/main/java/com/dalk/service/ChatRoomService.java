@@ -1,9 +1,12 @@
 package com.dalk.service;
 
 import com.dalk.domain.ChatRoom;
+import com.dalk.domain.User;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
+import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
 import com.dalk.repository.ChatRoomRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.dalk.security.UserDetailsImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 
@@ -11,24 +14,19 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ChatRoomService {
 
     @Resource(name = "redisTemplate")
     private HashOperations<String, String, String> hashOpsEnterInfo;
 
     private final ChatRoomRepository chatRoomRepository;
-    private final UserService userService;
     public static final String ENTER_INFO = "ENTER_INFO"; // 채팅룸에 입장한 클라이언트의 sessionId 와 채팅룸 id 를 맵핑한 정보 저장
 
-    @Autowired
-    public ChatRoomService(ChatRoomRepository chatRoomRepository, UserService userService) {
-        this.chatRoomRepository = chatRoomRepository;
-        this.userService = userService;
-    }
-
     // 채팅방 생성
-    public ChatRoom createChatRoom(ChatRoomRequestDto requestDto) {
-        ChatRoom chatRoom = new ChatRoom(requestDto, userService);
+    public ChatRoom createChatRoom(CreateChatRoomRequestDto requestDto, UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        ChatRoom chatRoom = new ChatRoom(requestDto, user);
         chatRoomRepository.save(chatRoom);
         return chatRoom;
     }

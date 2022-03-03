@@ -5,6 +5,7 @@ import com.dalk.domain.Comment;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.CommentRequestDto;
 import com.dalk.dto.responseDto.CommentResponseDto;
+import com.dalk.dto.responseDto.ItemResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CommentRepository;
@@ -42,7 +43,8 @@ public class CommentService {
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
         for (Comment comment : comments) {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(comment.getUser());
+            ItemResponseDto itemResponseDto = new ItemResponseDto(comment.getUser());
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(comment.getUser(), itemResponseDto);
             CommentResponseDto commentResponseDto = new CommentResponseDto(
                     userInfoResponseDto,
                     comment.getComment(),

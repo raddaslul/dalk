@@ -4,8 +4,6 @@ import com.dalk.domain.time.Timestamped;
 import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
-import com.dalk.security.UserDetailsImpl;
-import com.dalk.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,28 +40,28 @@ public class ChatRoom extends Timestamped {
     @Column(name = "time", nullable = false)
     private Boolean time = false;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
     private List<WarnChatRoom> warnChatRooms = new ArrayList<>();
 
-    public ChatRoom(ChatRoomRequestDto requestDto, UserService userService) {
+    public ChatRoom(ChatRoomRequestDto requestDto, User user) {
         this.topicA = requestDto.getTopicA();
         this.topicB = requestDto.getTopicB();
         this.content = requestDto.getContent();
         this.category = requestDto.getCategory();
         this.time = requestDto.getTime();
-        this.user = userService.findById(requestDto.getUserId());
+        this.user = user;
     }
 
-    public ChatRoom(UserDetailsImpl userDetails, CreateChatRoomRequestDto requestDto) {
+    public ChatRoom(CreateChatRoomRequestDto requestDto, User user) {
         this.topicA = requestDto.getTopicA();
         this.topicB = requestDto.getTopicB();
         this.content = requestDto.getContent();
         this.category = requestDto.getCategory();
         this.time = requestDto.getTime();
-        this.user = userDetails.getUser();
+        this.user = user;
     }
 }

@@ -1,12 +1,10 @@
-package com.dalk.handler;
+package com.dalk.config.socket;
 
-import com.dalk.domain.ChatMessage;
+import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.RedisRepository;
 import com.dalk.security.jwt.JwtDecoder;
 import com.dalk.service.ChatMessageService;
-import com.dalk.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
@@ -31,7 +29,11 @@ public class StompHandler implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         // websocket 연결시 헤더의 jwt token 검증
         if (StompCommand.CONNECT == accessor.getCommand()) {
-            jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
+            String token = jwtDecoder.decodeUsername(accessor.getFirstNativeHeader("Authorization").substring(7));
+
+            if(token == null) {
+                throw new LoginUserNotFoundException("로그인을 해주시기 바랍니다.");
+            }
         }
 
         else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
@@ -47,6 +49,7 @@ public class StompHandler implements ChannelInterceptor {
                 System.out.println("SUBSCRIBE 클라이언트 세션 아이디" + sessionId);
                 System.out.println("SUBSCRIBE 클라이언트 유저 이름: " + name);
             }
+
         } else if (StompCommand.DISCONNECT == accessor.getCommand()) {
             String sessionId = (String) message.getHeaders().get("simpSessionId");
             String findInOutKey = redisRepository.getSessionUserInfo(sessionId);
@@ -59,7 +62,6 @@ public class StompHandler implements ChannelInterceptor {
 
             redisRepository.removeUserEnterInfo(sessionId);
         }
-
         return message;
     }
 }

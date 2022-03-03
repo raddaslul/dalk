@@ -21,9 +21,9 @@ public class MainPageController {
     @PostMapping("/rooms")
     @ApiOperation(value = "토론방 생성")
     public HashMap<String, Object> createChatRoom(@RequestBody CreateChatRoomRequestDto requestDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        mainPageService.createChatRoom(userDetails, requestDto);
+        Long chatRoomId = mainPageService.createChatRoom(userDetails, requestDto);
         HashMap<String, Object> result = new HashMap<>();
-        result.put("result", "true");
+        result.put("roomId", chatRoomId);
         return result;
     }
 
