@@ -1,9 +1,8 @@
 package com.dalk.dto.responseDto;
 
 import com.dalk.domain.ChatMessage;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 @Data
 @NoArgsConstructor
