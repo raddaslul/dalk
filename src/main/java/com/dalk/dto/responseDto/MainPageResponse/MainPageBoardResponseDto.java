@@ -1,7 +1,11 @@
 package com.dalk.dto.responseDto.MainPageResponse;
 
 import com.dalk.domain.Board;
+
+import com.dalk.domain.User;
 import com.dalk.domain.time.TimeConversion;
+import com.dalk.dto.responseDto.ItemResponseDto;
+
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;

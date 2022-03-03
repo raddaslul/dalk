@@ -1,10 +1,9 @@
 package com.dalk.domain;
 
 import com.dalk.dto.requestDto.ChatMessageRequestDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import lombok.*;
+
 
 import javax.persistence.*;
 

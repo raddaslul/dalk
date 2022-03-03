@@ -1,5 +1,7 @@
 package com.dalk.pubsub;
 
+
+import com.dalk.domain.ChatMessage;
 import com.dalk.dto.responseDto.ChatMessageResponseDto;
 import com.dalk.repository.ChatMessageRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;

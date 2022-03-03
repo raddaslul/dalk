@@ -1,10 +1,10 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import com.dalk.domain.wl.WarnComment;
+import lombok.*;
+
 
 import javax.persistence.*;
 import java.util.ArrayList;

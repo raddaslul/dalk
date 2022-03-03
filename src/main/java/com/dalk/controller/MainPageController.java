@@ -1,5 +1,6 @@
 package com.dalk.controller;
 
+import com.dalk.domain.User;
 import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;

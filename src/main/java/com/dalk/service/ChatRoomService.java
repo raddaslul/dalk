@@ -2,6 +2,8 @@ package com.dalk.service;
 
 import com.dalk.domain.ChatRoom;
 import com.dalk.domain.User;
+
+import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
 import com.dalk.repository.ChatRoomRepository;
 import com.dalk.security.UserDetailsImpl;
