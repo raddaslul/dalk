@@ -83,11 +83,11 @@ public class AdminService {
 
             List<User> users = userRepository.findAll();
             List<UserInfoResponseDto> allUsers =new ArrayList<>();
-            for (User user : users){
-                allUsers.add(new UserInfoResponseDto(
-                        user.getId(),
-                        user.getNickname()
-                ));
+            Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId());
+
+            for (UserInfoResponseDto userInfo : allUsers){
+
+                allUsers.add(new UserInfoResponseDto(user, point));
             }
             return allUsers;
         }

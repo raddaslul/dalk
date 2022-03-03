@@ -62,6 +62,14 @@ public class MainPageService {
         return mainPageAllResponseDtoList;
     }
 
+    //채팅방 클릭시 넘어감
+    public MainPageAllResponseDto getMainPageOne(Long roomId) {
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(
+                () -> new NullPointerException("게시글이 없습니다")
+        );
+        return mainPageAllResponse(chatRoom);
+    }
+
     //게시글 전체 조회
     public List<MainPageBoardResponseDto> getMainPageBoard() {
         //board 전체를 가져옴
