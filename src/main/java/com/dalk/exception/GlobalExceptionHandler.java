@@ -1,6 +1,6 @@
-package com.dalk.handler;
+package com.dalk.exception;
 
-import com.dalk.handler.ex.*;
+import com.dalk.exception.ex.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,8 +33,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse("U004", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(PasswordNotCollectException.class)
-    public ResponseEntity<ErrorResponse> handlePasswordNotCollectException(PasswordNotCollectException e) {
+    @ExceptionHandler(PasswordNotEqualException.class)
+    public ResponseEntity<ErrorResponse> handlePasswordNotEqualException(PasswordNotEqualException e) {
         return new ResponseEntity<>(new ErrorResponse("U005", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
