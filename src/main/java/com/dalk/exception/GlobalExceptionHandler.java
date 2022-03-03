@@ -43,13 +43,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse("U006", e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(PostNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handlePostNotFoundException(PostNotFoundException e) {
+    @ExceptionHandler(BoardNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleBoardNotFoundException(BoardNotFoundException e) {
         return new ResponseEntity<>(new ErrorResponse("P001", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(IllegalPostUpdateUserException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalPostUpdateUserException(IllegalPostUpdateUserException e) {
+    @ExceptionHandler(IllegalBoardUpdateUserException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalBoardUpdateUserException(IllegalBoardUpdateUserException e) {
         return new ResponseEntity<>(new ErrorResponse("P002", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 

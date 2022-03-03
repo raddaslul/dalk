@@ -1,12 +1,16 @@
 package com.dalk.service;
 
 import com.dalk.domain.ChatMessage;
+import com.dalk.domain.Item;
+import com.dalk.domain.Point;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.ChatMessageRequestDto;
 import com.dalk.dto.responseDto.ChatMessageResponseDto;
 import com.dalk.dto.responseDto.ItemResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.repository.ChatMessageRepository;
+import com.dalk.repository.ItemRepository;
+import com.dalk.repository.PointRepository;
 import com.dalk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,9 +21,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -28,6 +30,8 @@ public class ChatMessageService {
     private final ChannelTopic channelTopic;
     private final RedisTemplate redisTemplate;
     private final UserRepository userRepository;
+    private final PointRepository pointRepository;
+    private final ItemRepository itemRepository;
     private final ChatMessageRepository chatMessageRepository;
 
     // destination 정보에서 roomId 추출
@@ -72,8 +76,16 @@ public class ChatMessageService {
         User user = userRepository.findById(chatMessage.getUser().getId())
                 .orElseThrow(IllegalAccessError::new);
 
-        ItemResponseDto itemResponseDto = new ItemResponseDto(user);
-        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user, itemResponseDto);
+        Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId());
+        List<ItemResponseDto> items = new ArrayList<>();
+        for (ItemResponseDto itemResponseDto : items) {
+            Item item = itemRepository.findByUser(user);
+            String itemName = item.getItemName();
+            Integer quantity = item.getQuantity();
+            itemResponseDto = new ItemResponseDto(itemName, quantity);
+            items.add(itemResponseDto);
+        }
+        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user, point, items);
         ChatMessageResponseDto chatMessageResponseDto = new ChatMessageResponseDto(chatMessage, userInfoResponseDto);
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageResponseDto);
     }

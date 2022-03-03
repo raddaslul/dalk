@@ -42,8 +42,8 @@ public class User extends Timestamped {
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
     private Role role;
 
-    @OneToOne(mappedBy = "user", orphanRemoval = true)
-    private Item item;
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<Item> items;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Point> points = new ArrayList<>();
