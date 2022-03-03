@@ -1,8 +1,6 @@
 package com.dalk.config.socket;
 
-import com.dalk.handler.StompHandler;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -11,36 +9,33 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 
+@RequiredArgsConstructor
 @Configuration
-@EnableWebSocketMessageBroker
-@Slf4j
+@EnableWebSocketMessageBroker   //웹 소켓 관련 설정 작동
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private final StompHandler stompHandler;
 
-    @Autowired
-    public WebSocketConfig (StompHandler stompHandler) {
-        this.stompHandler = stompHandler;
-    }
-
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/sub"); // prefix /sub 로 수신 메시지 구분
-        config.setApplicationDestinationPrefixes("/pub"); // prefix /pub 로 발행 요청
+        // 메모리 기반 메시지 브로커가 해당 api 구독하는 클라에게 메시지 전달
+        config.enableSimpleBroker("/sub");
+
+        // 서버에서 클라이언트로부터의 메시지를 받을 api 의 prefix
+        config.setApplicationDestinationPrefixes("/pub");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/chatting") // url/chatting 웹 소켓 연결 주소
-                .setAllowedOriginPatterns("*://*")
-                .withSockJS(); // sock.js를 통하여 낮은 버전의 브라우저에서도 websocket 이 동작할수 있게 한다
+        // 여러가지 Endpoint 설정
+        registry.addEndpoint("/ws-stomp", "/ws-alarm")
+                .setAllowedOriginPatterns("*")
+                .withSockJS();
     }
 
-    // StompHandler 인터셉터 설정
-    // StompHandler 가 Websocket 앞단에서 token 및 메시지 TYPE 등을 체크할 수 있도록 다음과 같이 인터셉터로 설정한다
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
+        // StompHandler 가 Websocket 앞단에서 token 을 체크할 수 있도록 인터셉터로 설정
         registration.interceptors(stompHandler);
     }
-
 }
