@@ -1,6 +1,6 @@
 package com.dalk.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.dalk.domain.time.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
