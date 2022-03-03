@@ -22,7 +22,6 @@ public class MainPageController {
     @ApiOperation(value = "토론방 생성")
     public HashMap<String, Object> createChatRoom(@RequestBody CreateChatRoomRequestDto requestDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
         mainPageService.createChatRoom(userDetails, requestDto);
-
         HashMap<String, Object> result = new HashMap<>();
         result.put("result", "true");
         return result;
