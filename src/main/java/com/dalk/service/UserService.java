@@ -46,7 +46,9 @@ public class UserService {
 
         String password = passwordEncoder.encode(requestDto.getPassword());//비번 인코딩
 
-        User user = new User(username, password, nickname);
+        User user = new User(username, password, nickname,1,User.Role.USER);
+//        user.setLevel(1);
+//        user.setRole(User.Role.USER);
         userRepository.save(user);
 
         Point point = new Point("signUp", 1000L, 1000L, user);

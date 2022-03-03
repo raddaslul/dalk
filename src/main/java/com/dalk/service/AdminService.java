@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -68,7 +67,6 @@ public class AdminService {
                 List<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc();
                 //리턴할 값의 리스트를 정의
                 List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
-
                 for (ChatRoom chatRoom : chatRoomList) {
                     MainPageAllResponseDto mainPageAllResponseDto = mainPageAllResponse(chatRoom);
                     mainPageAllResponseDtoList.add(mainPageAllResponseDto);
@@ -84,9 +82,7 @@ public class AdminService {
         if (userDetails.getUser().getRole().equals(User.Role.ADMIN)) {
 
             List<User> users = userRepository.findAll();
-
             List<UserInfoResponseDto> allUsers =new ArrayList<>();
-
             for (User user : users){
                 allUsers.add(new UserInfoResponseDto(
                         user.getId(),
