@@ -18,6 +18,8 @@ import java.util.List;
 @Table(name = "user")
 public class User extends Timestamped {
 
+
+
     public enum Role {
         ADMIN, USER
     }

@@ -19,13 +19,13 @@ public class Point extends Timestamped {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "content", nullable = false, unique = true)
+    @Column(name = "content", nullable = false)
     private String content;
 
     @Column(name = "changePoint", nullable = false)
     private Long changePoint;
 
-    @Column(name = "resultPoint", nullable = false, unique = true)
+    @Column(name = "resultPoint", nullable = false)
     private Long resultPoint;
 
     @JoinColumn(name = "userId")
