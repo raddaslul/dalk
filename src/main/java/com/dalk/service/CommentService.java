@@ -1,13 +1,15 @@
 package com.dalk.service;
 
-import com.dalk.domain.Board;
-import com.dalk.domain.Comment;
-import com.dalk.domain.User;
+import com.dalk.domain.*;
 import com.dalk.dto.requestDto.CommentRequestDto;
 import com.dalk.dto.responseDto.CommentResponseDto;
+import com.dalk.dto.responseDto.ItemResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CommentRepository;
+import com.dalk.repository.ItemRepository;
+import com.dalk.repository.PointRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,11 +25,14 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
+    private final PointRepository pointRepository;
+    private final ItemRepository itemRepository;
 
     //댓글 작성
     @Transactional
     public void createComment(Long boardId, CommentRequestDto requestDto, User user) {
-        Board board = boardRepository.findById(boardId).orElseGet(null);
+        Board board = boardRepository.findById(boardId)
+            .orElseThrow(() -> new BoardNotFoundException("해당 게시글은 없습니다."));
         Comment comment = new Comment(requestDto, user, board);
         commentRepository.save(comment);
     }
@@ -36,13 +41,24 @@ public class CommentService {
     @Transactional
     public List<CommentResponseDto> getComment(Long boardId) {
         Board boards = boardRepository.findById(boardId).orElseThrow(
-                ()-> new NullPointerException("해당 게시글이 없습니다")
+                ()-> new BoardNotFoundException("해당 게시글이 없습니다")
         );
         List<Comment> comments = commentRepository.findAllByBoard(boards);
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
         for (Comment comment : comments) {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(comment.getUser());
+            User user = comment.getUser();
+            Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId());
+
+            List<ItemResponseDto> items = new ArrayList<>();
+            for (ItemResponseDto itemResponseDto : items) {
+                Item item = itemRepository.findByUser(user);
+                String itemName = item.getItemName();
+                Integer quantity = item.getQuantity();
+                itemResponseDto = new ItemResponseDto(itemName, quantity);
+                items.add(itemResponseDto);
+            }
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user, point, items);
             CommentResponseDto commentResponseDto = new CommentResponseDto(
                     userInfoResponseDto,
                     comment.getComment(),

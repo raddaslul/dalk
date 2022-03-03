@@ -1,11 +1,13 @@
 package com.dalk.domain;
 
+import com.dalk.domain.time.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -14,7 +16,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "user")
-public class User {
+public class User extends Timestamped {
 
     public enum Role {
         ADMIN, USER
@@ -34,9 +36,6 @@ public class User {
     @Column(name = "nickname", nullable = false, unique = true)
     private String nickname;
 
-//    @Column(name = "point")
-//    private Long point;
-
     @Column(name = "level")
     private Integer level;
 
@@ -45,31 +44,28 @@ public class User {
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
     private Role role;
 
-    @OneToOne(mappedBy = "user", orphanRemoval = true)
-    private Item item;
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<Item> items;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private List<Points> points;
+    private List<Point> points = new ArrayList<>();
 
     public User(String username, String password, String nickname) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
     }
-//유저안에는 포인트칼럼이 잇으면안되고, 포인트안에 유저칼럼이있어ㅑㅇ한다.
 
     public User(
             String username,
             String password,
             String nickname,
-            Integer level,
-//            Long point,
+            Integer leve,
             Role role) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
-        this.level = level;
+        this.level = leve;
         this.role = role;
-//        this.point = point;
     }
 }

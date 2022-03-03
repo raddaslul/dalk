@@ -1,16 +1,10 @@
 package com.dalk.service;
 
 import com.dalk.domain.User;
-import com.dalk.dto.responseDto.PointsResponseDto;
 import com.dalk.repository.UserRepository;
-import com.dalk.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.net.URLDecoder;
-import java.util.List;
 
 @Service
 @AllArgsConstructor

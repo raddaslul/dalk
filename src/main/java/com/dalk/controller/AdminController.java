@@ -1,7 +1,6 @@
 package com.dalk.controller;
 
 
-import com.dalk.domain.User;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
@@ -24,12 +23,8 @@ public class AdminController {
 
 
 //블라인드 게시글 조회
-
-
     @GetMapping("/admin/boards")
     public List<MainPageBoardResponseDto> getAdminBoard(@AuthenticationPrincipal UserDetailsImpl userDetails){
-
-
         return adminService.getAdminMainPageBoard(userDetails);
     }
 
@@ -39,7 +34,6 @@ public class AdminController {
             @PathVariable Long boardId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
-
         adminService.deleteAdminBoard(boardId,userDetails);
     }
 

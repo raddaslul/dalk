@@ -1,5 +1,6 @@
 package com.dalk.domain;
 
+import com.dalk.domain.time.Timestamped;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,25 +14,24 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name = "item")
-public class Item {
+public class Item extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "bold", nullable = true)
-    private Boolean bold;
+    @Column(name = "itemName", nullable = false)
+    private String itemName;
 
-    @Column(name = "color", nullable = true)
-    private String color;
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Item(boolean b, String black, User user1) {
-        this.bold = b;
-        this.color = black;
-        this.user = user1;
+    public Item(String itemName, Integer quantity) {
+        this.itemName = itemName;
+        this.quantity = quantity;
     }
 }

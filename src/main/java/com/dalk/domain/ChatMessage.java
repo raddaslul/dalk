@@ -1,18 +1,19 @@
 package com.dalk.domain;
 
+import com.dalk.dto.requestDto.ChatMessageRequestDto;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "chat_message")
 public class ChatMessage {
 
     public enum MessageType {
@@ -20,16 +21,34 @@ public class ChatMessage {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue( strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
 
-    @Column(name = "sender", nullable = false)
-    private String sender;
+    @Column
+    private MessageType type;
 
-    @Column(name = "message", nullable = false)
+    @Column
+    private String roomId;
+
+    @Column
     private String message;
 
-    @Column(name = "type", nullable = false)
-    private MessageType type;
+    @Column
+    private String createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public ChatMessage(
+            ChatMessageRequestDto chatMessageRequestDto,
+            User user
+    ) {
+        this.type = chatMessageRequestDto.getType();
+        this.roomId = chatMessageRequestDto.getRoomId();
+        this.message = chatMessageRequestDto.getMessage();
+        this.createdAt = chatMessageRequestDto.getCreatedAt();
+        this.user = user;
+    }
 }

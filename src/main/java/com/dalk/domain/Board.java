@@ -1,5 +1,6 @@
 package com.dalk.domain;
 
+import com.dalk.domain.time.Timestamped;
 import com.dalk.domain.wl.WarnBoard;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +17,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "board")
-public class Board extends Timestamped{
+public class Board extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
