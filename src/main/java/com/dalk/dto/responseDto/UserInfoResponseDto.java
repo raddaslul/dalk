@@ -19,20 +19,21 @@ public class UserInfoResponseDto {
     private Long point;
     private Integer ex;
     private User.Role role;
-    private List<ItemResponseDto> items;
+    private List<ItemResponseDto> item;
 
-    public UserInfoResponseDto(User user, Point point, List<ItemResponseDto> items) {
+    public UserInfoResponseDto(User user, Point point, List<ItemResponseDto> item) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.nickname = user.getNickname();
         this.point = point.getResultPoint();
         this.ex = user.getLevel();
         this.role = user.getRole();
-        this.items = items;
-
-    public UserInfoResponseDto(Long id, String nickname) {
-        this.id = id;
-        this.nickname = nickname;
-
+        this.item = item;
     }
+    public UserInfoResponseDto(Long id, String nickname) {
+            this.id = id;
+            this.nickname = nickname;
+
+        }
+
 }

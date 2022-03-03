@@ -97,13 +97,15 @@ public class InitialData implements ApplicationRunner {
         commentRepository.save(comment2);
 
         Item item1 = new Item(
+                "onlyMe",
+               10,
                user1
         );
         itemRepository.save(item1);
-        Item item2 = new Item(
-                admin
-        );
-        itemRepository.save(item2);
+//        Item item2 = new Item(
+//                admin
+//        );
+//        itemRepository.save(item2);
 //
 //        Item item2 = new Item(
 //                "BIGFONT",
