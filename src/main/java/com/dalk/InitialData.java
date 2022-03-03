@@ -1,13 +1,7 @@
 package com.dalk;
 
-import com.dalk.domain.Board;
-import com.dalk.domain.Comment;
-import com.dalk.domain.Item;
-import com.dalk.domain.User;
-import com.dalk.repository.BoardRepository;
-import com.dalk.repository.CommentRepository;
-import com.dalk.repository.ItemRepository;
-import com.dalk.repository.UserRepository;
+import com.dalk.domain.*;
+import com.dalk.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -23,7 +17,7 @@ public class InitialData implements ApplicationRunner {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final ItemRepository itemRepository;
-    private final PointRepository pointRespository;
+    private final PointRepository pointRepository;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -110,10 +104,6 @@ public class InitialData implements ApplicationRunner {
         );
         itemRepository.save(item1);
         itemRepository.save(item2);
-        Item item2 = new Item(
-                admin
-        );
-        itemRepository.save(item2);
 
         Point point1 = new Point(
                 "회원가입",
@@ -121,7 +111,7 @@ public class InitialData implements ApplicationRunner {
                 500L,
                 user1
         );
-        pointRespository.save(point1);
+        pointRepository.save(point1);
 
         Point point2 = new Point(
                 "회원가입",
@@ -129,7 +119,7 @@ public class InitialData implements ApplicationRunner {
                 50000L,
                 admin
         );
-        pointRespository.save(point2);
+        pointRepository.save(point2);
 
     }
 
