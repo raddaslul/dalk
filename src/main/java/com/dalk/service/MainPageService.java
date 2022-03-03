@@ -42,23 +42,8 @@ public class MainPageService {
         //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
 
-
         for (ChatRoom chatRoom : chatRoomList) {
-            User user = chatRoom.getUser();
-            Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId());
-            ItemResponseDto itemResponseDto = new ItemResponseDto(user);
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoom.getUser(), point, itemResponseDto);
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(
-                    userInfoResponseDto,
-                    chatRoom.getId(),
-                    chatRoom.getTopicA(),
-                    chatRoom.getTopicB(),
-                    chatRoom.getContent(),
-                    chatRoom.getCategory(),
-                    TimeConversion.restTime(chatRoom.getCreatedAt(), chatRoom.getTime()),
-                    TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt()),
-                    chatRoom.getTime()
-            );
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
@@ -73,18 +58,7 @@ public class MainPageService {
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
 
         for (ChatRoom chatRoom : chatRoomList) {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoom.getUser());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(
-                    userInfoResponseDto,
-                    chatRoom.getId(),
-                    chatRoom.getTopicA(),
-                    chatRoom.getTopicB(),
-                    chatRoom.getContent(),
-                    chatRoom.getCategory(),
-                    TimeConversion.restTime(chatRoom.getCreatedAt(), chatRoom.getTime()),
-                    TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt()),
-                    chatRoom.getTime()
-            );
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
@@ -97,21 +71,8 @@ public class MainPageService {
         //리턴할 값의 리스트를 정의
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
-
-        for (Board boards : boardList) {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(boards.getUser());
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(
-                    userInfoResponseDto,
-                    boards.getId(),
-                    boards.getTopicA(),
-                    boards.getTopicB(),
-                    boards.getWinner(),
-                    boards.getContent(),
-                    boards.getCategory(),
-                    TimeConversion.timeCreatedConversion(boards.getCreatedAt()),
-                    boards.getComments().size(),
-                    boards.getWarnBoards().size()
-            );
+        for (Board board : boardList) {
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;
@@ -123,18 +84,7 @@ public class MainPageService {
                 () -> new NullPointerException("게시글이 없습니다")
         );
         UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(boards.getUser());
-        MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(
-                userInfoResponseDto,
-                boards.getId(),
-                boards.getTopicA(),
-                boards.getTopicB(),
-                boards.getWinner(),
-                boards.getContent(),
-                boards.getCategory(),
-                TimeConversion.timeCreatedConversion(boards.getCreatedAt()),
-                boards.getComments().size(),
-                boards.getWarnBoards().size()
-        );
+        MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards);
         return mainPageBoardResponseDto;
     }
 
@@ -145,19 +95,7 @@ public class MainPageService {
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
         for (Board boards : boardList) {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(boards.getUser());
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(
-                    userInfoResponseDto,
-                    boards.getId(),
-                    boards.getTopicA(),
-                    boards.getTopicB(),
-                    boards.getWinner(),
-                    boards.getContent(),
-                    boards.getCategory(),
-                    TimeConversion.timeCreatedConversion(boards.getCreatedAt()),
-                    boards.getComments().size(),
-                    boards.getWarnBoards().size()
-            );
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;
@@ -169,18 +107,7 @@ public class MainPageService {
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
 
         for (ChatRoom chatRoom : chatRoomList) {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoom.getUser());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(
-                    userInfoResponseDto,
-                    chatRoom.getId(),
-                    chatRoom.getTopicA(),
-                    chatRoom.getTopicB(),
-                    chatRoom.getContent(),
-                    chatRoom.getCategory(),
-                    TimeConversion.restTime(chatRoom.getCreatedAt(), chatRoom.getTime()),
-                    TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt()),
-                    chatRoom.getTime()
-            );
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
