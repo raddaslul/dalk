@@ -1,13 +1,7 @@
 package com.dalk;
 
-import com.dalk.domain.Board;
-import com.dalk.domain.Comment;
-import com.dalk.domain.Item;
-import com.dalk.domain.User;
-import com.dalk.repository.BoardRepository;
-import com.dalk.repository.CommentRepository;
-import com.dalk.repository.ItemRepository;
-import com.dalk.repository.UserRepository;
+import com.dalk.domain.*;
+import com.dalk.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -23,6 +17,7 @@ public class InitialData implements ApplicationRunner {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final ItemRepository itemRepository;
+    private final PointsRepository pointsRepository;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -31,8 +26,8 @@ public class InitialData implements ApplicationRunner {
                 "adminUser",
                 encPassword,
                 "adminNick",
-                1000L,
                 100,
+//                100L,
                 User.Role.ADMIN);
         userRepository.save(admin);
 
@@ -40,8 +35,8 @@ public class InitialData implements ApplicationRunner {
                 "user1",
                 encPassword,
                 "user1",
-                1000L,
                 100,
+//                100L,
                 User.Role.USER);
         userRepository.save(user1);
 
@@ -109,6 +104,14 @@ public class InitialData implements ApplicationRunner {
                 user1
         );
         itemRepository.save(item1);
+
+
+        Points points1 = new Points(
+                100L,
+                "회원가입",
+                user1
+        );
+        pointsRepository.save(points1);
     }
 
 }

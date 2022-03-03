@@ -1,2 +1,7 @@
-package com.dalk.repository;public class AdminRepository {
-}
+//package com.dalk.repository;
+//
+//
+//import org.springframework.data.jpa.repository.JpaRepository;
+//
+//public interface AdminRepository extends JpaRepository {
+//}

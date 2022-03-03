@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name = "carousel")
-public class Carousel extends Timestamped {
+public class Carousel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

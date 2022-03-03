@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name = "chat_message")
-public class ChatMessage extends Timestamped {
+public class ChatMessage {
 
     public enum MessageType {
         ENTER, TALK, QUIT

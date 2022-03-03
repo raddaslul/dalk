@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "board")
-public class Board extends Timestamped {
+public class Board extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

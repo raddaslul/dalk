@@ -1,2 +1,4 @@
-package com.dalk.repository;public class MyPageRepository {
+package com.dalk.repository;
+
+public class MyPageRepository {
 }

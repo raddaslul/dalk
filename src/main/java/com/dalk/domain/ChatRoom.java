@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = "chat_room")
-public class ChatRoom extends Timestamped {
+public class ChatRoom extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

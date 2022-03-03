@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "user")
-public class User extends Timestamped {
+public class User {
 
     public enum Role {
         ADMIN, USER
@@ -33,8 +34,8 @@ public class User extends Timestamped {
     @Column(name = "nickname", nullable = false, unique = true)
     private String nickname;
 
-    @Column(name = "point")
-    private Long point;
+//    @Column(name = "point")
+//    private Long point;
 
     @Column(name = "level")
     private Integer level;
@@ -47,24 +48,28 @@ public class User extends Timestamped {
     @OneToOne(mappedBy = "user", orphanRemoval = true)
     private Item item;
 
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<Points> points;
+
     public User(String username, String password, String nickname) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
     }
+//유저안에는 포인트칼럼이 잇으면안되고, 포인트안에 유저칼럼이있어ㅑㅇ한다.
 
     public User(
             String username,
             String password,
             String nickname,
-            Long point,
-            Integer leve,
+            Integer level,
+//            Long point,
             Role role) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
-        this.point = point;
-        this.level = leve;
+        this.level = level;
         this.role = role;
+//        this.point = point;
     }
 }
