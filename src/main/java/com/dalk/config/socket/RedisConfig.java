@@ -47,5 +47,4 @@ public class RedisConfig {
     public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
         return new MessageListenerAdapter(subscriber, "sendMessage");
     }
-
 }

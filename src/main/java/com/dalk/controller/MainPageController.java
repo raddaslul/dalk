@@ -1,5 +1,6 @@
 package com.dalk.controller;
 
+import com.dalk.domain.User;
 import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
@@ -21,9 +22,9 @@ public class MainPageController {
     @PostMapping("/rooms")
     @ApiOperation(value = "토론방 생성")
     public HashMap<String, Object> createChatRoom(@RequestBody CreateChatRoomRequestDto requestDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        mainPageService.createChatRoom(userDetails, requestDto);
+        Long roomId = mainPageService.createChatRoom(userDetails, requestDto);
         HashMap<String, Object> result = new HashMap<>();
-        result.put("result", "true");
+        result.put("roomId", roomId);
         return result;
     }
 

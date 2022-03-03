@@ -1,6 +1,5 @@
 package com.dalk.dto.responseDto.MainPageResponse;
 
-import com.dalk.domain.Board;
 import com.dalk.domain.ChatRoom;
 import com.dalk.domain.time.TimeConversion;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
@@ -8,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -24,8 +22,8 @@ public class MainPageAllResponseDto {
     private String createdAt;
     private Boolean time;
 
-    public MainPageAllResponseDto(ChatRoom chatRoom) {
-        this.userInfo = new UserInfoResponseDto(chatRoom.getUser());
+    public MainPageAllResponseDto(ChatRoom chatRoom, UserInfoResponseDto userInfoResponseDto) {
+        this.userInfo = userInfoResponseDto;
         this.roomId = chatRoom.getId();
         this.topicA = chatRoom.getTopicA();
         this.topicB = chatRoom.getTopicB();
