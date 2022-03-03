@@ -2,9 +2,7 @@ package com.dalk.controller;
 
 import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
-import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardDetailResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
-import com.dalk.dto.responseDto.MainPageResponse.MainPageTop6ResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.MainPageService;
 import io.swagger.annotations.ApiOperation;
@@ -32,7 +30,7 @@ public class MainPageController {
 
     @GetMapping("/api/main/rooms")
     @ApiOperation(value = "토론방 리스트 조회 top6")
-    public List<MainPageTop6ResponseDto> getMainPageTop6() {
+    public List<MainPageAllResponseDto> getMainPageTop6() {
         return mainPageService.getMainPageTop6();
     }
 
@@ -50,7 +48,7 @@ public class MainPageController {
 
     @GetMapping("/api/boards/{boardId}")
     @ApiOperation(value = "게시글 상세 조회")
-    public MainPageBoardDetailResponseDto getMainPageBoardDetail(@PathVariable Long boardId) {
+    public MainPageBoardResponseDto getMainPageBoardDetail(@PathVariable Long boardId) {
         return mainPageService.getMainPageBoardDetail(boardId );
     }
 
@@ -58,5 +56,11 @@ public class MainPageController {
     @ApiOperation(value = "게시글 검색")
     public List<MainPageBoardResponseDto> getSearchWord(@PathVariable String keyword) {
         return mainPageService.getSearchWord(keyword);
+    }
+
+    @GetMapping("api/main/{category}")
+    @ApiOperation(value = "카테고리 클릭시 검색") //카테고리 클릭 시 넘어가는 것
+    public List<MainPageAllResponseDto> getSerarchCategory(@PathVariable String category) {
+        return mainPageService.getSearchCategory(category);
     }
 }

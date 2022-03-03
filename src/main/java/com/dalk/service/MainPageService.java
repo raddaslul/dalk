@@ -2,21 +2,17 @@ package com.dalk.service;
 
 import com.dalk.domain.Board;
 import com.dalk.domain.ChatRoom;
-import com.dalk.domain.User;
+import com.dalk.domain.time.TimeConversion;
 import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
-import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardDetailResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
-import com.dalk.dto.responseDto.MainPageResponse.MainPageTop6ResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.ChatRoomRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,34 +30,9 @@ public class MainPageService {
     }
 
     //토론방리스트 탑6 조회
-    public List<MainPageTop6ResponseDto> getMainPageTop6() {
+    public List<MainPageAllResponseDto> getMainPageTop6() {
         //board 전체를 가져옴
         List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByOrderByCreatedAtDesc();
-        //리턴할 값의 리스트를 정의
-        List<MainPageTop6ResponseDto> mainPageTop6ResponseDtoList = new ArrayList<>();
-
-        for (ChatRoom chatRoom : chatRoomList) {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoom.getUser());
-            MainPageTop6ResponseDto mainPageTop6ResponseDto = new MainPageTop6ResponseDto(
-                    userInfoResponseDto,
-                    chatRoom.getId(),
-                    chatRoom.getTopicA(),
-                    chatRoom.getTopicB(),
-                    chatRoom.getContent(),
-                    chatRoom.getCategory(),
-                    "time",
-                    chatRoom.getCreatedAt()
-            );
-            mainPageTop6ResponseDtoList.add(mainPageTop6ResponseDto);
-        }
-        return mainPageTop6ResponseDtoList;
-    }
-
-    //토론방리스트 전체조회
-    public List<MainPageAllResponseDto> getMainPageAll() {
-
-        //board 전체를 가져옴
-        List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
         //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
 
@@ -74,8 +45,35 @@ public class MainPageService {
                     chatRoom.getTopicB(),
                     chatRoom.getContent(),
                     chatRoom.getCategory(),
-                    "time",
-                    chatRoom.getCreatedAt()
+                    TimeConversion.restTime(chatRoom.getCreatedAt(), chatRoom.getTime()),
+                    TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt()),
+                    chatRoom.getTime()
+            );
+            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+        }
+        return mainPageAllResponseDtoList;
+    }
+
+    //토론방리스트 전체조회
+    public List<MainPageAllResponseDto> getMainPageAll() {
+
+        //board 전체를 가져옴
+        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc();
+        //리턴할 값의 리스트를 정의
+        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
+
+        for (ChatRoom chatRoom : chatRoomList) {
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoom.getUser());
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(
+                    userInfoResponseDto,
+                    chatRoom.getId(),
+                    chatRoom.getTopicA(),
+                    chatRoom.getTopicB(),
+                    chatRoom.getContent(),
+                    chatRoom.getCategory(),
+                    TimeConversion.restTime(chatRoom.getCreatedAt(), chatRoom.getTime()),
+                    TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt()),
+                    chatRoom.getTime()
             );
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
@@ -100,7 +98,7 @@ public class MainPageService {
                     boards.getWinner(),
                     boards.getContent(),
                     boards.getCategory(),
-                    boards.getCreatedAt(),
+                    TimeConversion.timeCreatedConversion(boards.getCreatedAt()),
                     boards.getComments().size(),
                     boards.getWarnBoards().size()
             );
@@ -110,12 +108,12 @@ public class MainPageService {
     }
 
     //게시글 상세 조회
-    public MainPageBoardDetailResponseDto getMainPageBoardDetail(Long boardId) {
+    public MainPageBoardResponseDto getMainPageBoardDetail(Long boardId) {
         Board boards = boardRepository.findById(boardId).orElseThrow(
                 () -> new NullPointerException("게시글이 없습니다")
         );
         UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(boards.getUser());
-        MainPageBoardDetailResponseDto mainPageBoardDetailResponseDto = new MainPageBoardDetailResponseDto(
+        MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(
                 userInfoResponseDto,
                 boards.getId(),
                 boards.getTopicA(),
@@ -123,11 +121,11 @@ public class MainPageService {
                 boards.getWinner(),
                 boards.getContent(),
                 boards.getCategory(),
-                boards.getCreatedAt(),
+                TimeConversion.timeCreatedConversion(boards.getCreatedAt()),
                 boards.getComments().size(),
                 boards.getWarnBoards().size()
         );
-        return mainPageBoardDetailResponseDto;
+        return mainPageBoardResponseDto;
     }
 
     //게시글 검색
@@ -146,13 +144,36 @@ public class MainPageService {
                     boards.getWinner(),
                     boards.getContent(),
                     boards.getCategory(),
-                    boards.getCreatedAt(),
+                    TimeConversion.timeCreatedConversion(boards.getCreatedAt()),
                     boards.getComments().size(),
                     boards.getWarnBoards().size()
             );
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;
+    }
+
+    //카테고리별 채팅방 조회
+    public List<MainPageAllResponseDto> getSearchCategory(String category) {
+        List<ChatRoom> chatRoomList = chatRoomRepository.findByCategory(category);
+        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
+
+        for (ChatRoom chatRoom : chatRoomList) {
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoom.getUser());
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(
+                    userInfoResponseDto,
+                    chatRoom.getId(),
+                    chatRoom.getTopicA(),
+                    chatRoom.getTopicB(),
+                    chatRoom.getContent(),
+                    chatRoom.getCategory(),
+                    TimeConversion.restTime(chatRoom.getCreatedAt(), chatRoom.getTime()),
+                    TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt()),
+                    chatRoom.getTime()
+            );
+            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+        }
+        return mainPageAllResponseDtoList;
     }
 
 }
