@@ -1,8 +1,10 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
+
 import com.dalk.domain.wl.WarnComment;
 import lombok.*;
+
 
 import javax.persistence.*;
 import java.util.ArrayList;

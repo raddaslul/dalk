@@ -2,7 +2,9 @@ package com.dalk.dto.responseDto;
 
 import com.dalk.domain.Point;
 import com.dalk.domain.User;
+
 import lombok.*;
+
 
 import java.util.List;
 
@@ -27,5 +29,10 @@ public class UserInfoResponseDto {
         this.ex = user.getLevel();
         this.role = user.getRole();
         this.items = items;
+
+    public UserInfoResponseDto(Long id, String nickname) {
+        this.id = id;
+        this.nickname = nickname;
+
     }
 }
