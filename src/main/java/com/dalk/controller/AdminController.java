@@ -39,7 +39,7 @@ public class AdminController {
 
 //    토론방 리스트 전체 조회 - 관리자
     @GetMapping("/admin/rooms")
-    public MainPageAllResponseDto getAdminMainPageAll(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public List<MainPageAllResponseDto> getAdminMainPageAll(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return adminService.getAdminMainPageAll(userDetails);
     }
 
