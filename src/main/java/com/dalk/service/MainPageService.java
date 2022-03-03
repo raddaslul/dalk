@@ -2,13 +2,17 @@ package com.dalk.service;
 
 import com.dalk.domain.Board;
 import com.dalk.domain.ChatRoom;
+import com.dalk.domain.Point;
+import com.dalk.domain.User;
 import com.dalk.domain.time.TimeConversion;
 import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
+import com.dalk.dto.responseDto.ItemResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.ChatRoomRepository;
+import com.dalk.repository.PointRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,11 +26,13 @@ public class MainPageService {
 
     private final BoardRepository boardRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final PointRepository pointRepository;
 
     //채팅방 생성
-    public void createChatRoom(UserDetailsImpl userDetails, CreateChatRoomRequestDto requestDto) {
-        ChatRoom chatRoom = new ChatRoom(userDetails, requestDto);
-        chatRoomRepository.save(chatRoom);
+    public Long createChatRoom(UserDetailsImpl userDetails, CreateChatRoomRequestDto requestDto) {
+        User user = userDetails.getUser();
+        ChatRoom chatRoom = new ChatRoom(requestDto, user);
+        return chatRoomRepository.save(chatRoom).getId();
     }
 
     //토론방리스트 탑6 조회
@@ -36,8 +42,12 @@ public class MainPageService {
         //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
 
+
         for (ChatRoom chatRoom : chatRoomList) {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoom.getUser());
+            User user = chatRoom.getUser();
+            Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId());
+            ItemResponseDto itemResponseDto = new ItemResponseDto(user);
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoom.getUser(), point, itemResponseDto);
             MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(
                     userInfoResponseDto,
                     chatRoom.getId(),

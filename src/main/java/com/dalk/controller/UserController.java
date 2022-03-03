@@ -2,10 +2,12 @@ package com.dalk.controller;
 
 
 
+import com.dalk.domain.Point;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.SignupRequestDto;
 import com.dalk.dto.responseDto.ItemResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.repository.PointRepository;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +24,7 @@ import java.util.HashMap;
 public class UserController {
 
     private final UserService userService;
+    private final PointRepository pointRepository;
 
     // 회원가입
     @PostMapping("/users/signup")
@@ -38,8 +41,8 @@ public class UserController {
     @ApiOperation(value = "로그인확인")
     public UserInfoResponseDto userInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
+        Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId());
         ItemResponseDto itemResponseDto = new ItemResponseDto(user);
-        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(userDetails.getUser(), itemResponseDto);
-        return userInfoResponseDto;
+        return new UserInfoResponseDto(userDetails.getUser(), point, itemResponseDto);
     }
 }

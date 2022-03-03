@@ -1,8 +1,12 @@
 package com.dalk.domain;
 
+import com.dalk.domain.time.Timestamped;
+import com.dalk.domain.wl.WarnComment;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -30,9 +34,6 @@ public class User extends Timestamped {
     @Column(name = "nickname", nullable = false, unique = true)
     private String nickname;
 
-    @Column(name = "point")
-    private Long point;
-
     @Column(name = "level")
     private Integer level;
 
@@ -44,6 +45,9 @@ public class User extends Timestamped {
     @OneToOne(mappedBy = "user", orphanRemoval = true)
     private Item item;
 
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<Point> points = new ArrayList<>();
+
     public User(String username, String password, String nickname) {
         this.username = username;
         this.password = password;
@@ -54,13 +58,11 @@ public class User extends Timestamped {
             String username,
             String password,
             String nickname,
-            Long point,
             Integer leve,
             Role role) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
-        this.point = point;
         this.level = leve;
         this.role = role;
     }
