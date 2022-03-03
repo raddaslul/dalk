@@ -20,15 +20,13 @@ public class UserInfoResponseDto {
     private ItemResponseDto item;
 
 
-
     public UserInfoResponseDto(User user) {
-        ItemResponseDto itemResponseDto= new ItemResponseDto(user);
         this.id = user.getId();
         this.username = user.getUsername();
         this.nickname = user.getNickname();
         this.point = user.getPoint();
         this.ex = user.getLevel();
         this.role = user.getRole();
-        this.item = itemResponseDto;
+        this.item = new ItemResponseDto(user);
     }
 }

@@ -77,9 +77,7 @@ public class MainPageService {
         Board boards = boardRepository.findById(boardId).orElseThrow(
                 () -> new NullPointerException("게시글이 없습니다")
         );
-        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(boards.getUser());
-        MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards);
-        return mainPageBoardResponseDto;
+        return new MainPageBoardResponseDto(boards);
     }
 
     //게시글 검색
