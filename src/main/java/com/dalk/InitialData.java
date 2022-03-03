@@ -1,7 +1,13 @@
 package com.dalk;
 
-import com.dalk.domain.*;
-import com.dalk.repository.*;
+import com.dalk.domain.Board;
+import com.dalk.domain.Comment;
+import com.dalk.domain.Item;
+import com.dalk.domain.User;
+import com.dalk.repository.BoardRepository;
+import com.dalk.repository.CommentRepository;
+import com.dalk.repository.ItemRepository;
+import com.dalk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -17,7 +23,7 @@ public class InitialData implements ApplicationRunner {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final ItemRepository itemRepository;
-    private final PointRepository pointRepository;
+    private final PointRepository pointRespository;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -26,12 +32,9 @@ public class InitialData implements ApplicationRunner {
                 "adminUser",
                 encPassword,
                 "adminNick",
-                1,
+                100,
                 User.Role.ADMIN);
         userRepository.save(admin);
-
-        Point point1 = new Point("signUp", 1000L, 1000L, admin);
-        pointRepository.save(point1);
 
         User user1 = new User( //유저추가
                 "user1",
@@ -40,9 +43,6 @@ public class InitialData implements ApplicationRunner {
                 10,
                 User.Role.USER);
         userRepository.save(user1);
-
-        Point point2 = new Point("signUp", 1000L, 1000L, user1);
-        pointRepository.save(point2);
 
         Board board1 = new Board( //게시글 추가
                 "짜장",
@@ -110,6 +110,27 @@ public class InitialData implements ApplicationRunner {
         );
         itemRepository.save(item1);
         itemRepository.save(item2);
+        Item item2 = new Item(
+                admin
+        );
+        itemRepository.save(item2);
+
+        Point point1 = new Point(
+                "회원가입",
+                500L,
+                500L,
+                user1
+        );
+        pointRespository.save(point1);
+
+        Point point2 = new Point(
+                "회원가입",
+                50000L,
+                50000L,
+                admin
+        );
+        pointRespository.save(point2);
+
     }
 
 }

@@ -1,8 +1,10 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
+
 import com.dalk.domain.wl.WarnComment;
 import lombok.*;
+
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 public class User extends Timestamped {
+
+
 
     public enum Role {
         ADMIN, USER

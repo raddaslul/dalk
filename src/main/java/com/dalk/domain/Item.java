@@ -20,10 +20,10 @@ public class Item extends Timestamped {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "itemName", nullable = true)
+    @Column(name = "itemName")
     private String itemName;
 
-    @Column(name = "quantity", nullable = true)
+    @Column(name = "quantity")
     private Integer quantity;
 
     @ManyToOne
@@ -34,7 +34,6 @@ public class Item extends Timestamped {
         this.itemName = itemName;
         this.quantity = quantity;
     }
-
     public Item(User user) {
         this.user = user;
     }
