@@ -1,4 +1,4 @@
-package com.dalk.domain;
+package com.dalk.domain.time;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

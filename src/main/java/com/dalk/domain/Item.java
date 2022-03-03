@@ -20,20 +20,19 @@ public class Item extends Timestamped {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "bold", nullable = false)
+    @Column(name = "bold", nullable = true)
     private Boolean bold = false;
 
-    @Column(name = "color", nullable = false)
+    @Column(name = "color", nullable = true)
     private String color = "black";
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
     private User user;
 
-    public Item(Boolean bold, String color, User user) {
-        this.bold = bold;
-        this.color = color;
-        this.user = user;
+    public Item(boolean b, String black, User user1) {
+        this.bold = b;
+        this.color = black;
+        this.user = user1;
     }
 }

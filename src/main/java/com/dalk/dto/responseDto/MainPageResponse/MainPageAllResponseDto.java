@@ -5,18 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class MainPageAllResponseDto {
     private UserInfoResponseDto userInfo;
-    private Long chatRoomId;
+    private Long roomId;
     private String topicA;
     private String topicB;
     private String content;
     private String category;
-    private String restTime;
+    private Long restTime;
     private String createdAt;
+    private Boolean time;
 }
