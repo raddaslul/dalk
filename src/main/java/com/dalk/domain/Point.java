@@ -2,14 +2,14 @@ package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
 @Entity
 @Table(name = "point")
 public class Point extends Timestamped {
@@ -19,17 +19,17 @@ public class Point extends Timestamped {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "content", nullable = false, unique = true)
+    @Column(name = "content", nullable = false)
     private String content;
 
     @Column(name = "changePoint", nullable = false)
     private Long changePoint;
 
-    @Column(name = "resultPoint", nullable = false, unique = true)
+    @Column(name = "resultPoint", nullable = false)
     private Long resultPoint;
 
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
-    @ManyToOne
     private User user;
 
     public Point(

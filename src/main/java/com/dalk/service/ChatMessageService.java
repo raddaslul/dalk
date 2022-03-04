@@ -13,9 +13,7 @@ import com.dalk.repository.ItemRepository;
 import com.dalk.repository.PointRepository;
 import com.dalk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
@@ -24,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class ChatMessageService {
 
@@ -35,12 +34,12 @@ public class ChatMessageService {
     private final ChatMessageRepository chatMessageRepository;
 
     // destination 정보에서 roomId 추출
-    public Long getRoomId(String destination) {
+    public String getRoomId(String destination) {
         int lastIndex = destination.lastIndexOf('/');
         System.out.println("룸 아이디 destination" + destination);
 
         if (lastIndex != -1) {
-            return Long.parseLong(destination.substring(lastIndex + 1));
+            return destination.substring(lastIndex + 1);
         } else {
             return null;
         }
@@ -59,21 +58,32 @@ public class ChatMessageService {
         User user = userRepository.findById(chatMessageRequestDto.getUserId())
                 .orElseThrow(IllegalAccessError::new);
 
-        if (ChatMessage.MessageType.ENTER.equals(chatMessageRequestDto.getType())) {
-            chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에 입장했습니다.");
-//            chatMessage.setSender("[알림]");
-        } else if (ChatMessage.MessageType.QUIT.equals(chatMessageRequestDto.getType())) {
-            chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에서 나갔습니다.");
-//            chatMessage.setSender("[알림]");
-        }
-
         ChatMessage chatMessage = new ChatMessage(chatMessageRequestDto, user);
         return chatMessageRepository.save(chatMessage);
     }
 
     // 채팅방에 메시지 발송
-    public void sendChatMessage(ChatMessage chatMessage) {
-        User user = userRepository.findById(chatMessage.getUser().getId())
+    public void enterChatMessage(ChatMessageRequestDto chatMessageRequestDto) {
+        User user = userRepository.findById(chatMessageRequestDto.getUserId())
+                .orElseThrow(IllegalAccessError::new);
+        log.info("service 넘어 왔을 때 user = {}", user);
+        if (ChatMessage.MessageType.ENTER.equals(chatMessageRequestDto.getType())) {
+            chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에 입장했습니다.");
+            System.out.println("타입 Enter 일 때 ID : " + chatMessageRequestDto.getUserId());
+            System.out.println("타입 Enter 일 때 roomId : " + chatMessageRequestDto.getRoomId());
+            System.out.println("타입 Enter 일 때 type : " + chatMessageRequestDto.getType());
+            System.out.println("타입 Enter 일 때 message : " + chatMessageRequestDto.getMessage());
+            System.out.println("타입 Enter 일 때 createdAt : " + chatMessageRequestDto.getCreatedAt());
+//            chatMessageRequestDto.set("[알림]");
+        } else if (ChatMessage.MessageType.QUIT.equals(chatMessageRequestDto.getType())) {
+            chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에서 나갔습니다.");
+//            chatMessage.setSender("[알림]");
+        }
+        redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageRequestDto);
+    }
+
+    public void sendChatMessage(ChatMessageRequestDto chatMessageRequestDto) {
+        User user = userRepository.findById(chatMessageRequestDto.getUserId())
                 .orElseThrow(IllegalAccessError::new);
 
         Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId());
@@ -85,15 +95,23 @@ public class ChatMessageService {
             itemResponseDto = new ItemResponseDto(itemName, quantity);
             items.add(itemResponseDto);
         }
+        ChatMessage chatMessage = chatMessageRepository.findByRoomId(chatMessageRequestDto.getRoomId());
         UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user, point, items);
-        ChatMessageResponseDto chatMessageResponseDto = new ChatMessageResponseDto(chatMessage, userInfoResponseDto);
+        Boolean bigFont = chatMessageRequestDto.getBigFont();
+        ChatMessageResponseDto chatMessageResponseDto = new ChatMessageResponseDto(chatMessage, bigFont, userInfoResponseDto);
+        log.info("ResponseDto message = {}", chatMessageResponseDto.getMessage());
+        log.info("ResponseDto bigFont = {}", chatMessageResponseDto.getBigFont());
+        log.info("ResponseDto createdAt = {}", chatMessageResponseDto.getCreatedAt());
+        log.info("ResponseDto userInfo = {}", chatMessageResponseDto.getUserInfo());
+        log.info("ResponseDto roomId = {}", chatMessageResponseDto.getRoomId());
+        log.info("ResponseDto type = {}", chatMessageResponseDto.getType());
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageResponseDto);
     }
 
-    public Page<ChatMessage> getChatMessageByRoomId(String roomId, Pageable pageable) {
-        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() -1);
-        pageable = PageRequest.of(page, 150);
-        return chatMessageRepository.findByRoomId(roomId, pageable);
-    }
+//    public Page<ChatMessage> getChatMessageByRoomId(String roomId, Pageable pageable) {
+//        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() -1);
+//        pageable = PageRequest.of(page, 150);
+//        return chatMessageRepository.findByRoomId(roomId, pageable);
+//    }
 
 }

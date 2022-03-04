@@ -46,7 +46,7 @@ public class User extends Timestamped {
     private List<Item> items;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private List<Point> points = new ArrayList<>();
+    private List<Point> point;
 
     public User(String username, String password, String nickname) {
         this.username = username;

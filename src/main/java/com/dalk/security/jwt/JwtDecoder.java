@@ -45,7 +45,7 @@ public class JwtDecoder {
 
         return username;
     }
-    public String decodeUID(String token) {
+    public String decodeUserId(String token) {
         DecodedJWT decodedJWT = isValidToken(token)
                 .orElseThrow(() -> new IllegalArgumentException("유효한 토큰이 아닙니다."));
 
@@ -58,11 +58,11 @@ public class JwtDecoder {
             throw new IllegalArgumentException("유효한 토큰이 아닙니다.");
         }
 
-        String uId = decodedJWT
+        String userId = decodedJWT
                 .getClaim(UID)
                 .asString();
 
-        return uId;
+        return userId;
     }
 
     private Optional<DecodedJWT> isValidToken(String token) {

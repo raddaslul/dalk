@@ -37,7 +37,7 @@ public class RedisRepository {
     }
 
     // sessionId로 inOutKey 등록
-    public void setSessionUserInfo(String sessionId, Long roomId, String name) {
+    public void setSessionUserInfo(String sessionId, String roomId, String name) {
         stringHashOpsEnterInfo.put(ENTER_INFO, sessionId, roomId + "_" + name);
     }
 
