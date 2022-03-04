@@ -99,11 +99,13 @@ public class InitialData implements ApplicationRunner {
         Item item1 = new Item(
                 admin
         );
+
         Item item2 = new Item(
                 user1
         );
         itemRepository.save(item1);
         itemRepository.save(item2);
+
 
         Point point1 = new Point(
                 "회원가입",

@@ -8,6 +8,7 @@ import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.repository.*;
 import com.dalk.security.UserDetailsImpl;
+import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -80,14 +81,25 @@ public class AdminService {
     public List<UserInfoResponseDto> getUserList(UserDetailsImpl userDetails) {
 
         if (userDetails.getUser().getRole().equals(User.Role.ADMIN)) {
-
+            User user = userDetails.getUser();
             List<User> users = userRepository.findAll();
             List<UserInfoResponseDto> allUsers =new ArrayList<>();
-            Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId());
 
-            for (UserInfoResponseDto userInfo : allUsers){
+            List<ItemResponseDto> items = new ArrayList<>();
+            for (ItemResponseDto itemResponseDto : items) {
+                Item item = itemRepository.findByUser(user);
+                String itemName = item.getItemName();
+                Integer quantity = item.getQuantity();
+                itemResponseDto = new ItemResponseDto(itemName,quantity );
+                items.add(itemResponseDto);
+            }
 
-                allUsers.add(new UserInfoResponseDto(user, point));
+            Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId()  );
+            for (User user1 : users){
+                allUsers.add(new UserInfoResponseDto(
+                        user1,point,items
+                ));
+
             }
             return allUsers;
         }
