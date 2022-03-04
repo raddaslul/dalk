@@ -1,22 +1,20 @@
 package com.dalk.dto.responseDto;
 
-import com.dalk.domain.Item;
 import com.dalk.domain.User;
-import com.dalk.security.UserDetailsImpl;
 import lombok.*;
 
-import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Builder
 public class ItemResponseDto {
-    private Boolean bold;
-    private String color;
+    private Integer bigFont;
+    private Integer onlyMe;
+    private Integer myName;
 
     public ItemResponseDto(User user) {
-        this.bold = user.getItem().getBold();
-        this.color = user.getItem().getColor();
+        this.bigFont=user.getItem().getBigFont();
+        this.onlyMe=user.getItem().getOnlyMe();
+        this.myName=user.getItem().getOnlyMe();
     }
 }

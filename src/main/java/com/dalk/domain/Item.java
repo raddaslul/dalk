@@ -20,19 +20,21 @@ public class Item extends Timestamped {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "bold", nullable = true)
-    private Boolean bold = false;
+    @Column(name = "bigFont")
+    private Integer bigFont;
 
-    @Column(name = "color", nullable = true)
-    private String color = "black";
+    @Column(name = "onlyMe")
+    private Integer onlyMe;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "myName")
+    private Integer myName;
 
-    public Item(boolean b, String black, User user1) {
-        this.bold = b;
-        this.color = black;
-        this.user = user1;
+    //    @OneToOne
+//    @JoinColumn(name = "user_id", nullable = false)
+//    private User user;
+    public Item(Integer bigFont, Integer onlyMe, Integer myName) {
+        this.bigFont = bigFont;
+        this.onlyMe = onlyMe;
+        this.myName = myName;
     }
 }

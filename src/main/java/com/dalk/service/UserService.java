@@ -35,11 +35,15 @@ public class UserService {
 
         String password = passwordEncoder.encode(requestDto.getPassword());//비번 인코딩
 
-        User user = new User(username, password, nickname);
+        Item item = new Item(0,0,0);
+        itemRepository.save(item);
+
+//        Point point = new Point()
+
+        User user = new User(username, password, nickname,0L,1, User.Role.USER, item);
         userRepository.save(user);
 
-        Item item = new Item(false, "black", user);
-        itemRepository.save(item);
+
     }
 
     // 채팅방에서 유저 확인하기

@@ -4,6 +4,7 @@ import com.dalk.domain.time.Timestamped;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -42,27 +43,19 @@ public class User extends Timestamped {
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
     private Role role;
 
-    @OneToOne(mappedBy = "user", orphanRemoval = true)
+    @OneToOne
     private Item item;
 
-    public User(String username, String password, String nickname) {
-        this.username = username;
-        this.password = password;
-        this.nickname = nickname;
-    }
+    @OneToMany
+    private List<Point> points;
 
-    public User(
-            String username,
-            String password,
-            String nickname,
-            Long point,
-            Integer leve,
-            Role role) {
+    public User(String username, String password, String nickname,Long point,Integer level, Role role, Item item) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.point = point;
-        this.level = leve;
+        this.level = level;
         this.role = role;
+        this.item = item;
     }
 }

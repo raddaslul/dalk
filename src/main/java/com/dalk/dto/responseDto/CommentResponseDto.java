@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentResponseDto {
     private UserInfoResponseDto userInfo;
+    private Long commentId;
     private String Comment;
     private Integer likeCnt;
     private Boolean isLike;

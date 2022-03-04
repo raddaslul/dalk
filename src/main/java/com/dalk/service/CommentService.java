@@ -45,6 +45,7 @@ public class CommentService {
             UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(comment.getUser());
             CommentResponseDto commentResponseDto = new CommentResponseDto(
                     userInfoResponseDto,
+                    comment.getId(),
                     comment.getComment(),
                     comment.getLikeses().size(),
                     false
