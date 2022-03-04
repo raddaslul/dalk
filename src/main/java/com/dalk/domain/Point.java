@@ -2,6 +2,7 @@ package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,7 @@ import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Data
 @Entity
 @Table(name = "point")
 public class Point extends Timestamped {
@@ -27,5 +28,12 @@ public class Point extends Timestamped {
     @Column
     private Long toTalPoint;
 
+    @ManyToOne
+    private User user;
 
+    public Point(String content, Long changePoint, Long toTalPoint) {
+        this.content = content;
+        this.changePoint = changePoint;
+        this.toTalPoint = toTalPoint;
+    }
 }

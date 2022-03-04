@@ -1,13 +1,7 @@
 package com.dalk;
 
-import com.dalk.domain.Board;
-import com.dalk.domain.Comment;
-import com.dalk.domain.Item;
-import com.dalk.domain.User;
-import com.dalk.repository.BoardRepository;
-import com.dalk.repository.CommentRepository;
-import com.dalk.repository.ItemRepository;
-import com.dalk.repository.UserRepository;
+import com.dalk.domain.*;
+import com.dalk.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -23,34 +17,41 @@ public class InitialData implements ApplicationRunner {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final ItemRepository itemRepository;
+    private final PointRepository pointRepository;
 
     @Override
     public void run(ApplicationArguments args) {
         String encPassword = passwordEncoder.encode("adminPass");
 
+        Point point1 = new Point("회원가입",500L,500L);
         Item item1 = new Item(0, 0, 0);
         itemRepository.save(item1);
         User admin = new User(
                 "adminUser",
                 encPassword,
                 "adminNick",
-                1000L,
+                point1.getToTalPoint(),
                 100,
                 User.Role.ADMIN,
                 item1);
         userRepository.save(admin);
+        point1.setUser(admin);
+        pointRepository.save(point1);
 
+        Point point2 = new Point("회원가입",500L,500L);
         Item item2 = new Item(0,0,0);
         itemRepository.save(item2);
         User user1 = new User( //유저추가
                 "user1",
                 encPassword,
                 "user1",
-                1000L,
+                point2.getToTalPoint(),
                 100,
                 User.Role.USER,
                 item2);
         userRepository.save(user1);
+        point2.setUser(user1);
+        pointRepository.save(point2);
 
         Board board1 = new Board( //게시글 추가
                 "짜장",
