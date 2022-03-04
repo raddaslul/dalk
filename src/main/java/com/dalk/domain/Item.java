@@ -34,9 +34,7 @@ public class Item extends Timestamped {
         this.itemName = itemName;
         this.quantity = quantity;
     }
-    public Item(String itemName, Integer quantity,User user) {
-        this.itemName = itemName;
-        this.quantity = quantity;
+    public Item(User user) {
         this.user = user;
     }
 }

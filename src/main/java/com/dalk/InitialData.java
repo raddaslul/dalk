@@ -97,8 +97,6 @@ public class InitialData implements ApplicationRunner {
         commentRepository.save(comment2);
 
         Item item1 = new Item(
-                "onlyMe",
-               10,
                user1
         );
         itemRepository.save(item1);
