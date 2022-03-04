@@ -26,15 +26,18 @@ public class Item extends Timestamped {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    public Item(String itemName, Integer quantity) {
+    public Item(String itemName, Integer quantity,User user) {
         this.itemName = itemName;
         this.quantity = quantity;
+        this.user = user;
     }
     public Item(User user) {
         this.user = user;
     }
+
+
 }

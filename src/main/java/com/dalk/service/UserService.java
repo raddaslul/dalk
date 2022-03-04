@@ -1,5 +1,6 @@
 package com.dalk.service;
 
+
 import com.dalk.domain.Item;
 import com.dalk.domain.Point;
 import com.dalk.domain.User;
@@ -7,6 +8,7 @@ import com.dalk.dto.requestDto.SignupRequestDto;
 import com.dalk.exception.ex.DuplicateUsernameException;
 import com.dalk.exception.ex.DuplicationNicknameException;
 import com.dalk.exception.ex.PasswordNotEqualException;
+
 import com.dalk.repository.ItemRepository;
 import com.dalk.repository.PointRepository;
 import com.dalk.repository.UserRepository;
@@ -23,6 +25,7 @@ public class UserService {
     private  UserRepository userRepository;
     private PointRepository pointRepository;
     private ItemRepository itemRepository;
+
 
     //회원가입
     public void signup(SignupRequestDto requestDto) {
@@ -45,14 +48,21 @@ public class UserService {
 
         String password = passwordEncoder.encode(requestDto.getPassword());//비번 인코딩
 
-        User user = new User(username, password, nickname, 1, User.Role.USER);
+
+        User user = new User(username, password, nickname,1L,User.Role.USER);
+//        user.setLevel(1);
+//        user.setRole(User.Role.USER);
         userRepository.save(user);
+
+        String itemName= "아이템";
+        Integer quantity = 0;
+        Item item = new Item(itemName,quantity,user);
+        itemRepository.save(item);
+
+//        Item item = new Item();
 
         Point point = new Point("signUp", 1000L, 1000L, user);
         pointRepository.save(point);
-
-        Item item = new Item(user);
-        itemRepository.save(item);
     }
 
     // 채팅방에서 유저 확인하기
