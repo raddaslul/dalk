@@ -1,6 +1,7 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -46,7 +47,8 @@ public class User extends Timestamped {
     @OneToOne
     private Item item;
 
-    @OneToMany
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Point> points;
 
     public User(String username, String password, String nickname,Long point,Integer level, Role role, Item item) {

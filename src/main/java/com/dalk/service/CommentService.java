@@ -1,13 +1,19 @@
 package com.dalk.service;
 
+import com.dalk.domain.Agree;
 import com.dalk.domain.Board;
 import com.dalk.domain.Comment;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.CommentRequestDto;
+import com.dalk.dto.responseDto.AgreeResponseDto;
 import com.dalk.dto.responseDto.CommentResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.handler.ex.CommentNotFoundException;
+import com.dalk.handler.ex.LoginUserNotFoundException;
+import com.dalk.repository.AgreeRepository;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CommentRepository;
+import com.dalk.repository.UserRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +29,8 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
+    private final AgreeRepository agreeRepository;
 
     //댓글 작성
     @Transactional
@@ -89,5 +97,43 @@ public class CommentService {
             result.put("result", "사용자가 다릅니다");
             return result;
         }
+    }
+
+    @Transactional
+    public AgreeResponseDto agreeCheck(Long commentId, UserDetailsImpl userDetails) {
+
+        AgreeResponseDto agreeResponseDto = new AgreeResponseDto();
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
+        );
+        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
+        );
+//        agree 자체가 null이 됨.
+        Agree agreeCheck = agreeRepository.findByUserAndComment(userDetails.getUser(),comment).orElse(null);
+
+        if (agreeCheck == null){
+            Agree agree = new Agree(comment,user,true);
+            agreeRepository.save(agree);
+
+            agreeResponseDto.setIsAgree(true);
+            agree.setAgreeCnt(agree.getAgreeCnt()+1);
+            agreeResponseDto.setAgreeCnt(agree.getAgreeCnt());
+        }else {
+            if(agreeCheck.getIsAgree() == true){
+                agreeCheck.setIsAgree(false);
+                agreeResponseDto.setIsAgree(false);
+                agreeCheck.setAgreeCnt(agreeCheck.getAgreeCnt()-1);
+                agreeResponseDto.setAgreeCnt(agreeCheck.getAgreeCnt());
+
+            }else if(agreeCheck.getIsAgree() == false){
+                agreeCheck.setIsAgree(true);
+                agreeResponseDto.setIsAgree(true);
+                agreeCheck.setAgreeCnt(agreeCheck.getAgreeCnt()+1);
+                agreeResponseDto.setAgreeCnt(agreeCheck.getAgreeCnt());
+            }
+        }
+        return agreeResponseDto;
     }
 }

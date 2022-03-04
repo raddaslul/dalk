@@ -23,34 +23,34 @@ public class InitialData implements ApplicationRunner {
     public void run(ApplicationArguments args) {
         String encPassword = passwordEncoder.encode("adminPass");
 
-        Point point1 = new Point("회원가입",500L,500L);
+
         Item item1 = new Item(0, 0, 0);
         itemRepository.save(item1);
         User admin = new User(
                 "adminUser",
                 encPassword,
                 "adminNick",
-                point1.getToTalPoint(),
+                500L,
                 100,
                 User.Role.ADMIN,
                 item1);
         userRepository.save(admin);
-        point1.setUser(admin);
+        Point point1 = new Point("회원가입",500L,500L,admin);
         pointRepository.save(point1);
 
-        Point point2 = new Point("회원가입",500L,500L);
+
         Item item2 = new Item(0,0,0);
         itemRepository.save(item2);
         User user1 = new User( //유저추가
                 "user1",
                 encPassword,
                 "user1",
-                point2.getToTalPoint(),
+                500L,
                 100,
                 User.Role.USER,
                 item2);
         userRepository.save(user1);
-        point2.setUser(user1);
+        Point point2 = new Point("회원가입",500L,500L,user1);
         pointRepository.save(point2);
 
         Board board1 = new Board( //게시글 추가
