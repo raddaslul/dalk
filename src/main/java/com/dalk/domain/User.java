@@ -3,6 +3,7 @@ package com.dalk.domain;
 import com.dalk.domain.time.Timestamped;
 
 import com.dalk.domain.wl.WarnComment;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 
@@ -39,16 +40,20 @@ public class User extends Timestamped {
     private String nickname;
 
     @Column(name = "level")
-    private Integer level;
+    private Long ex;
 
     @Column
     @Enumerated(value = EnumType.STRING) // 정보를 받을 때는 Enum 값으로 받지만
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
     private Role role;
 
+
+    @JsonIgnoreProperties("user")
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Item> items;
 
+
+    @JsonIgnoreProperties("user")
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<Point> points = new ArrayList<>();
 
@@ -62,12 +67,12 @@ public class User extends Timestamped {
             String username,
             String password,
             String nickname,
-            Integer leve,
+            Long ex,
             Role role) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
-        this.level = leve;
+        this.ex = ex;
         this.role = role;
     }
 }

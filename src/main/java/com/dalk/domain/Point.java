@@ -29,7 +29,7 @@ public class Point extends Timestamped {
     private Long resultPoint;
 
     @JoinColumn(name = "userId")
-    @ManyToOne
+    @ManyToOne(fetch =FetchType.LAZY )
     private User user;
 
     public Point(
