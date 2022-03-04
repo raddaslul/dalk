@@ -2,7 +2,6 @@ package com.dalk.service;
 
 
 import com.dalk.domain.Item;
-//import com.dalk.domain.ItemList;
 import com.dalk.domain.Point;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.SignupRequestDto;
@@ -14,7 +13,6 @@ import com.dalk.repository.ItemRepository;
 import com.dalk.repository.PointRepository;
 import com.dalk.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
