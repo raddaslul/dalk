@@ -17,7 +17,7 @@ public class InitialData implements ApplicationRunner {
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
     private final ItemRepository itemRepository;
-    private final PointRepository pointRespository;
+    private final PointRepository pointRepository;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -34,7 +34,7 @@ public class InitialData implements ApplicationRunner {
                 "user1",
                 encPassword,
                 "user1",
-                100,
+                10,
                 User.Role.USER);
         userRepository.save(user1);
 
@@ -97,33 +97,23 @@ public class InitialData implements ApplicationRunner {
         commentRepository.save(comment2);
 
         Item item1 = new Item(
-               user1
+                admin
+        );
+
+        Item item2 = new Item(
+                user1
         );
         itemRepository.save(item1);
-//        Item item2 = new Item(
-//                admin
-//        );
-//        itemRepository.save(item2);
-//
-//        Item item2 = new Item(
-//                "BIGFONT",
-//                1
-//        );
-//        itemRepository.save(item2);
-//
-//        Item item3 = new Item(
-//                "MYNAME",
-//                1
-//        );
-//        itemRepository.save(item3);
-//
+        itemRepository.save(item2);
+
+
         Point point1 = new Point(
                 "회원가입",
                 500L,
                 500L,
                 user1
         );
-        pointRespository.save(point1);
+        pointRepository.save(point1);
 
         Point point2 = new Point(
                 "회원가입",
@@ -131,19 +121,8 @@ public class InitialData implements ApplicationRunner {
                 50000L,
                 admin
         );
-        pointRespository.save(point2);
-
-//        Point point2 = new Point(
-//                "출첵",
-//                500L,
-//                500L,
-//                user1
-//        );
-//        pointRespository.save(point2);
-
-
+        pointRepository.save(point2);
 
     }
 
 }
-

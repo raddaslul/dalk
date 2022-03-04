@@ -30,10 +30,7 @@ public class UserInfoResponseDto {
         this.role = user.getRole();
         this.item = item;
     }
-    public UserInfoResponseDto(Long id, String nickname) {
-            this.id = id;
-            this.nickname = nickname;
 
-        }
+
 
 }

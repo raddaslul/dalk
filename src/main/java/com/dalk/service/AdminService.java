@@ -84,6 +84,7 @@ public class AdminService {
             User user = userDetails.getUser();
             List<User> users = userRepository.findAll();
             List<UserInfoResponseDto> allUsers =new ArrayList<>();
+
             List<ItemResponseDto> items = new ArrayList<>();
             for (ItemResponseDto itemResponseDto : items) {
                 Item item = itemRepository.findByUser(user);
@@ -98,6 +99,7 @@ public class AdminService {
                 allUsers.add(new UserInfoResponseDto(
                         user1,point,items
                 ));
+
             }
             return allUsers;
         }
