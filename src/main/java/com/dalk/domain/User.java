@@ -10,7 +10,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "user")
 public class User extends Timestamped {
@@ -33,8 +34,8 @@ public class User extends Timestamped {
     @Column(name = "nickname", nullable = false, unique = true)
     private String nickname;
 
-    @Column(name = "point")
-    private Long point;
+    @Column(name = "totalpoint")
+    private Long totalPoint;
 
     @Column(name = "level")
     private Integer level;
@@ -51,11 +52,11 @@ public class User extends Timestamped {
     @OneToMany(fetch = FetchType.EAGER)
     private List<Point> points;
 
-    public User(String username, String password, String nickname,Long point,Integer level, Role role, Item item) {
+    public User(String username, String password, String nickname,Long totalPoint,Integer level, Role role, Item item) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
-        this.point = point;
+        this.totalPoint = totalPoint;
         this.level = level;
         this.role = role;
         this.item = item;
