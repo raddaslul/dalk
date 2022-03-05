@@ -6,10 +6,7 @@ import com.dalk.domain.User;
 import com.dalk.dto.requestDto.SignupRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
-import com.dalk.exception.ex.DuplicateUsernameException;
-import com.dalk.exception.ex.DuplicationNicknameException;
-import com.dalk.exception.ex.ItemNotFoundException;
-import com.dalk.exception.ex.LoginUserNotFoundException;
+import com.dalk.exception.ex.*;
 import com.dalk.repository.ItemRepository;
 import com.dalk.repository.PointRepository;
 import com.dalk.repository.UserRepository;
@@ -75,16 +72,26 @@ public class UserService {
                 ()-> new ItemNotFoundException("아이템이 없습니다")
         );
 //        Point recentPoint = pointRepository.findTopByUserIdOrderByCreatedAt(user.getId()); //얘는 왜 예외처리 안뜸?
-        if (item.equals("{onlyMe}")) {
-            buyitem.setOnlyMe(buyitem.getOnlyMe()+1);
-            pointUpdate(user);
-        } else if (item.equals("{bigFont}")) {
-            buyitem.setBigFont(buyitem.getBigFont()+1);
-            pointUpdate(user);
-        } else if (item.equals("{myName}")) {
-            buyitem.setMyName(buyitem.getMyName() + 1);
-            pointUpdate(user);
+        if(user.getTotalPoint()>=100L){
+            switch (item) {
+                case "{onlyMe}":
+                    buyitem.setOnlyMe(buyitem.getOnlyMe() + 1);
+                    pointUpdate(user);
+                    break;
+                case "{bigFont}":
+                    buyitem.setBigFont(buyitem.getBigFont() + 1);
+                    pointUpdate(user);
+                    break;
+                case "{myName}":
+                    buyitem.setMyName(buyitem.getMyName() + 1);
+                    pointUpdate(user);
+                    break;
+            }
         }
+        else{
+            throw new LackPointException("보유한 포인트가 부족합니다");
+        }
+
     }
 
     private void pointUpdate(User user) {  //추후 아이템 가격 변동여부에 따라 변화할 수 있음
