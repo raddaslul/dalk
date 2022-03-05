@@ -13,7 +13,10 @@ public class ChatMessageRequestDto {
     private ChatMessage.MessageType type;
     private String roomId;
     private String message;
+    private String item;
     private Boolean bigFont;
+    private String onlyMe;
+    private String myName;
     private Long userId;
     private String createdAt;
 }

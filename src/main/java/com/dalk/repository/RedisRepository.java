@@ -20,6 +20,9 @@ public class RedisRepository {
     private HashOperations<String, String, String> stringHashOpsEnterInfo;
 
     @Resource(name = "redisTemplate")
+    private HashOperations<String, String, String> stringHashOpsItemInfo;
+
+    @Resource(name = "redisTemplate")
     private ValueOperations<String, Integer> longOperations;
 
     @Resource(name = "redisTemplate")
@@ -59,5 +62,18 @@ public class RedisRepository {
     // inOutKey로 현재 유저가 접속 중인지 가져오기
     public Boolean getUserChatRoomInOut(Long roomId, String name) {
         return Optional.ofNullable(userInOutOperations.get(USER_INOUT + "_" + roomId + "_" + name)).orElse(false);
+    }
+
+    // 채팅방에서 아이템 사용시 등록
+    public void setItem(String roomId, String item) {
+        stringHashOpsItemInfo.put(ENTER_INFO, roomId, item);
+    }
+
+    public String getItem(String roomId) {
+        return stringHashOpsItemInfo.get(ENTER_INFO, roomId);
+    }
+
+    public void removeItem(String roomId) {
+        stringHashOpsItemInfo.delete(ENTER_INFO, roomId);
     }
 }
