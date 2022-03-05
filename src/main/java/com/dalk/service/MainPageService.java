@@ -8,6 +8,8 @@ import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.exception.ex.BoardNotFoundException;
+import com.dalk.exception.ex.ChatRoomNotFoundException;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.ChatRoomRepository;
 import com.dalk.repository.PointRepository;
@@ -82,7 +84,7 @@ public class MainPageService {
     //게시글 상세 조회
     public MainPageBoardResponseDto getMainPageBoardDetail(Long boardId) {
         Board boards = boardRepository.findById(boardId).orElseThrow(
-                () -> new NullPointerException("게시글이 없습니다")
+                () -> new BoardNotFoundException("게시글이 없습니다")
         );
         return new MainPageBoardResponseDto(boards);
     }
@@ -114,7 +116,7 @@ public class MainPageService {
 
     public MainPageAllResponseDto getMainPageOne(Long roomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(
-                ()-> new NullPointerException("채팅방이 없습니다.")
+                ()-> new ChatRoomNotFoundException("채팅방이 없습니다.")
         );
         return new MainPageAllResponseDto(chatRoom);
     }

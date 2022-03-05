@@ -46,14 +46,14 @@ public class UserController {
         return MinkiService.userInfo(userDetails.getUser());
     }
 
-//    @PostMapping("/mypage/{item}")
-//    @ApiOperation(value = "아이템 구매")
-//    public HashMap<String, Object> buyItem(@PathVariable String item, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        User user = userDetails.getUser();
-//        userService.buyItem(item, user);
-//
-//        HashMap<String, Object> result = new HashMap<>();
-//        result.put("result", "true");
-//        return result;
-//    }
+    @GetMapping("/mypage/{item}")
+    @ApiOperation(value = "아이템 구매")
+    public HashMap<String, Object> buyItem(@PathVariable String item, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        userService.buyItem(item, user);
+
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("result", "true");
+        return result;
+    }
 }

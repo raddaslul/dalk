@@ -6,6 +6,7 @@ import com.dalk.dto.responseDto.ItemResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.repository.*;
 import com.dalk.security.UserDetailsImpl;
 import io.swagger.models.auth.In;
@@ -51,7 +52,7 @@ public class AdminService {
     public void deleteAdminBoard(Long boardId, UserDetailsImpl userDetails) {
         if (userDetails.getUser().getRole().equals(User.Role.ADMIN)) {
             Board board = boardRepository.findById(boardId).orElseThrow(
-                    () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다. ")
+                    () -> new BoardNotFoundException("해당 게시글이 존재하지 않습니다. ")
             );
             boardRepository.deleteById(board.getId());
         }
