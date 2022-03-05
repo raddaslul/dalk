@@ -112,4 +112,11 @@ public class MainPageService {
         return mainPageAllResponseDtoList;
     }
 
+    public MainPageAllResponseDto getMainPageOne(Long roomId) {
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(
+                ()-> new NullPointerException("채팅방이 없습니다.")
+        );
+        return new MainPageAllResponseDto(chatRoom);
+    }
+
 }

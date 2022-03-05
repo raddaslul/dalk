@@ -2,6 +2,7 @@ package com.dalk.controller;
 
 
 
+import com.dalk.domain.User;
 import com.dalk.dto.requestDto.SignupRequestDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.repository.PointRepository;
