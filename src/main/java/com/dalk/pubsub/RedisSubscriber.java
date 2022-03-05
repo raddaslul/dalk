@@ -48,10 +48,10 @@ public class RedisSubscriber {
                 messagingTemplate.convertAndSend("/sub/api/chat/rooms/" + chatMessageItemResponseDto.getRoomId(), chatMessageItemResponseDto);
             }
 
-//            else if(publishMessage.startsWith("DELETE", 9)){
-//                ChatMessageItemResponseDto chatMessageItemResponseDto = objectMapper.readValue(publishMessage, ChatMessageItemResponseDto.class);
-//                messagingTemplate.convertAndSend("/sub/api/chat/rooms/" + chatMessageItemResponseDto.getRoomId(), chatMessageItemResponseDto);
-//            }
+            else if(publishMessage.startsWith("ITEMTIMEOUT", 9)){
+                ChatMessageItemResponseDto chatMessageItemResponseDto = objectMapper.readValue(publishMessage, ChatMessageItemResponseDto.class);
+                messagingTemplate.convertAndSend("/sub/api/chat/rooms/" + chatMessageItemResponseDto.getRoomId(), chatMessageItemResponseDto);
+            }
 
         } catch (Exception e) {
             log.error("Exception = {}", e);
