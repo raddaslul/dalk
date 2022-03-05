@@ -4,6 +4,7 @@ import com.dalk.domain.Item;
 import com.dalk.domain.Point;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.SignupRequestDto;
+import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.repository.ItemRepository;
 import com.dalk.repository.PointRepository;
@@ -44,8 +45,6 @@ public class UserService {
         String password = passwordEncoder.encode(requestDto.getPassword());//비번 인코딩
 
 
-
-
         Item item = new Item(0,0,0);
         itemRepository.save(item);
 
@@ -64,8 +63,9 @@ public class UserService {
         return user;
     }
 
+
 //    public void buyItem(String item, User user) {
-//
+//        Item item = itemRepository.findById(user.getItem().getId());
 //    }
 
 }
