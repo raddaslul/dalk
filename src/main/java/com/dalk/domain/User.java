@@ -3,7 +3,9 @@ package com.dalk.domain;
 import com.dalk.domain.time.Timestamped;
 
 import com.dalk.domain.wl.WarnComment;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 
@@ -48,13 +50,15 @@ public class User extends Timestamped {
     private Role role;
 
 
-    @JsonIgnoreProperties("user")
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+//    @JsonIgnoreProperties("user")
+@JsonManagedReference
+    @OneToMany(mappedBy = "user", orphanRemoval = true,cascade = CascadeType.PERSIST)
     private List<Item> items;
 
 
-    @JsonIgnoreProperties("user")
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
+//    @JsonIgnoreProperties("user")
+@JsonManagedReference
+@OneToMany(mappedBy = "user", orphanRemoval = true,cascade = CascadeType.PERSIST)
     private List<Point> points = new ArrayList<>();
 
     public User(String username, String password, String nickname) {

@@ -51,16 +51,7 @@ public class UserController {
     public UserInfoResponseDto userInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId());
-//        Long userId = userDetails.getUser().getId();
-//        List<Item> itemList = itemRepository.findAllById(Collections.singleton(user.getId()));
-//        List<ItemResponseDto> items = new ArrayList<>();
-//
-//        for (Item item1 : itemList) {
-//            String itemName = item1.getItemName();
-//            Integer quantity = item1.getQuantity();
-//            ItemResponseDto itemResponseDto = new ItemResponseDto(itemName, quantity);
-//            items.add(itemResponseDto);
-//        }
+
         List<ItemResponseDto> items = new ArrayList<>();
         for (ItemResponseDto itemResponseDto : items) {
             Item item = itemRepository.findByUser(user);

@@ -1,6 +1,7 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,8 +27,9 @@ public class Item extends Timestamped {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY )
+    @ManyToOne(fetch =FetchType.LAZY ,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     public Item(String itemName, Integer quantity,User user) {
