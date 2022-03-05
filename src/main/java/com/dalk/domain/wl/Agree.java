@@ -1,6 +1,10 @@
-package com.dalk.domain;
+package com.dalk.domain.wl;
 
 
+import com.dalk.domain.Comment;
+import com.dalk.domain.User;
+import com.dalk.dto.responseDto.AgreeResponseDto;
+import com.dalk.dto.responseDto.DisAgreeResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -33,10 +37,16 @@ public class Agree {
 
 
 
-    public Agree(Comment comment, User user,boolean requestDto) {
+    public Agree(Comment comment, User user, boolean isAgree,boolean isDisAgree) {
         this.comment = comment;
         this.user = user;
-        this.isAgree=requestDto;
+        this.isAgree=isAgree;
+        this.isDisAgree=isDisAgree;
+
+//        this.isAgree=isAgree;
+//        this.isDisAgree=isDisAgree;
     }
+
+
 
 }

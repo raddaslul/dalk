@@ -4,6 +4,7 @@ import com.dalk.domain.User;
 import com.dalk.dto.requestDto.CommentRequestDto;
 import com.dalk.dto.responseDto.AgreeResponseDto;
 import com.dalk.dto.responseDto.CommentResponseDto;
+import com.dalk.dto.responseDto.DAgreeResponseDto;
 import com.dalk.dto.responseDto.DisAgreeResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.CommentService;
@@ -73,6 +74,9 @@ public class CommentController {
     ){
         return commentService.disAgreeCheck(commentId,userDetails);
     }
+
+//    @GetMapping("/dagree/{commentId}")
+//    public DAgreeResponseDto
 
 
 
