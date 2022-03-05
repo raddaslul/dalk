@@ -5,6 +5,7 @@ import com.dalk.domain.User;
 
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
+import com.dalk.exception.ex.ChatRoomNotFoundException;
 import com.dalk.repository.ChatRoomRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +46,7 @@ public class ChatRoomService {
     // 개별 채팅방 조회
     public ChatRoom getEachChatRoom(Long id) {
         ChatRoom chatRoom = chatRoomRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("찾는 채팅방이 존재하지 않습니다.")
+                () -> new ChatRoomNotFoundException("찾는 채팅방이 존재하지 않습니다.")
         );
         return chatRoom;
     }

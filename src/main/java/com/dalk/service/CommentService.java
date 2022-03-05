@@ -9,6 +9,7 @@ import com.dalk.dto.responseDto.AgreeResponseDto;
 import com.dalk.dto.responseDto.CommentResponseDto;
 import com.dalk.dto.responseDto.DisAgreeResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.exception.ex.CommentNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.AgreeRepository;
@@ -45,7 +46,7 @@ public class CommentService {
     @Transactional
     public List<CommentResponseDto> getComment(Long boardId) {
         Board boards = boardRepository.findById(boardId).orElseThrow(
-                ()-> new NullPointerException("해당 게시글이 없습니다")
+                ()-> new BoardNotFoundException("해당 게시글이 없습니다")
         );
         List<Comment> comments = commentRepository.findAllByBoard(boards);
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
@@ -68,7 +69,7 @@ public class CommentService {
     @Transactional
     public HashMap<String, Object> editComment(Long commentId, CommentRequestDto requestDto, UserDetailsImpl userDetails) {
         Comment comments = commentRepository.findById(commentId).orElseThrow(
-                ()-> new NullPointerException("해당 댓글이 없습니다")
+                ()-> new CommentNotFoundException("해당 댓글이 없습니다")
         );
         if (comments.getUser().getId().equals(userDetails.getUser().getId())) {
             comments.update(requestDto.getComment());
@@ -86,7 +87,7 @@ public class CommentService {
     @Transactional
     public HashMap<String, Object> deleteComment(Long commentId, UserDetailsImpl userDetails) {
         Comment comments = commentRepository.findById(commentId).orElseThrow(
-                ()-> new NullPointerException("해당 댓글이 없습니다")
+                ()-> new CommentNotFoundException("해당 댓글이 없습니다")
         );
         if (comments.getUser().getId().equals(userDetails.getUser().getId())) {
             commentRepository.deleteById(comments.getId());
