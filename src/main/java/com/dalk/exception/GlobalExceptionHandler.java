@@ -1,6 +1,6 @@
-package com.dalk.handler;
+package com.dalk.exception;
 
-import com.dalk.handler.ex.*;
+import com.dalk.exception.ex.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,8 +33,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse("U004", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(PasswordNotCollectException.class)
-    public ResponseEntity<ErrorResponse> handlePasswordNotCollectException(PasswordNotCollectException e) {
+    @ExceptionHandler(PasswordNotEqualException.class)
+    public ResponseEntity<ErrorResponse> handlePasswordNotEqualException(PasswordNotEqualException e) {
         return new ResponseEntity<>(new ErrorResponse("U005", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
@@ -43,13 +43,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse("U006", e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(PostNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handlePostNotFoundException(PostNotFoundException e) {
+    @ExceptionHandler(BoardNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleBoardNotFoundException(BoardNotFoundException e) {
         return new ResponseEntity<>(new ErrorResponse("P001", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(IllegalPostUpdateUserException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalPostUpdateUserException(IllegalPostUpdateUserException e) {
+    @ExceptionHandler(IllegalBoardUpdateUserException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalBoardUpdateUserException(IllegalBoardUpdateUserException e) {
         return new ResponseEntity<>(new ErrorResponse("P002", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 

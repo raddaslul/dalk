@@ -3,8 +3,6 @@ package com.dalk.dto.requestDto;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
-
 @Getter
 @Setter
 public class ChatRoomRequestDto {

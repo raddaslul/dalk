@@ -1,6 +1,8 @@
 package com.dalk.pubsub;
 
+
 import com.dalk.domain.ChatMessage;
+import com.dalk.dto.responseDto.ChatMessageResponseDto;
 import com.dalk.repository.ChatMessageRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +29,10 @@ public class RedisSubscriber {
     public void sendMessage(String publishMessage) {
         try {
             // ChatMessage 객채로 맵핑
-            ChatMessage chatMessage = objectMapper.readValue(publishMessage, ChatMessage.class);
+            ChatMessageResponseDto chatMessageResponseDto = objectMapper.readValue(publishMessage, ChatMessageResponseDto.class);
+            System.out.println("구독자 chatMessage : " + chatMessageResponseDto);
             // 채팅방을 구독한 클라이언트에게 메시지 발송
-            messagingTemplate.convertAndSend("/sub/api/chat/rooms/" + chatMessage.getRoomId(), chatMessage);
+            messagingTemplate.convertAndSend("/sub/api/chat/rooms/" + chatMessageResponseDto.getRoomId(), chatMessageResponseDto);
         } catch (Exception e) {
             log.error("Exception {}", e);
         }
