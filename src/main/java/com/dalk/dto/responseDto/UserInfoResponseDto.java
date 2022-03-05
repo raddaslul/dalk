@@ -17,7 +17,7 @@ public class UserInfoResponseDto {
     private String username;
     private String nickname;
     private Long point;
-    private Integer ex;
+    private Long ex;
     private User.Role role;
     private List<ItemResponseDto> item;
 
@@ -26,7 +26,7 @@ public class UserInfoResponseDto {
         this.username = user.getUsername();
         this.nickname = user.getNickname();
         this.point = point.getResultPoint();
-        this.ex = user.getLevel();
+        this.ex = user.getEx();
         this.role = user.getRole();
         this.item = item;
     }

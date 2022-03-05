@@ -39,7 +39,7 @@ public class User extends Timestamped {
     private String nickname;
 
     @Column(name = "level")
-    private Integer level;
+    private Long ex;
 
     @Column
     @Enumerated(value = EnumType.STRING) // 정보를 받을 때는 Enum 값으로 받지만
@@ -62,12 +62,12 @@ public class User extends Timestamped {
             String username,
             String password,
             String nickname,
-            Integer leve,
+            Long ex,
             Role role) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
-        this.level = leve;
+        this.ex = ex;
         this.role = role;
     }
 }

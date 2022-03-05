@@ -37,11 +37,11 @@ public class UserController {
     // 회원가입
     @PostMapping("/users/signup")
     @ApiOperation(value = "회원가입")
-    public HashMap<String, Object> signup(@RequestBody @Valid SignupRequestDto requestDto) {
+    public String signup(@RequestBody @Valid SignupRequestDto requestDto) {
         userService.signup(requestDto);
         HashMap<String, Object> result = new HashMap<>();
         result.put("result", "true");
-        return result;
+        return "redirect:/users/login";
     }
 
     //로그인 확인
