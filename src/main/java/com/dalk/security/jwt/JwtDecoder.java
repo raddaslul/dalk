@@ -5,15 +5,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
-import com.dalk.domain.User;
-import com.dalk.security.UserDetailsImpl;
-import com.dalk.security.UserDetailsServiceImpl;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -45,7 +38,7 @@ public class JwtDecoder {
 
         return username;
     }
-    public String decodeUID(String token) {
+    public String decodeUserId(String token) {
         DecodedJWT decodedJWT = isValidToken(token)
                 .orElseThrow(() -> new IllegalArgumentException("유효한 토큰이 아닙니다."));
 
@@ -58,11 +51,11 @@ public class JwtDecoder {
             throw new IllegalArgumentException("유효한 토큰이 아닙니다.");
         }
 
-        String uId = decodedJWT
+        String userId = decodedJWT
                 .getClaim(UID)
                 .asString();
 
-        return uId;
+        return userId;
     }
 
     private Optional<DecodedJWT> isValidToken(String token) {

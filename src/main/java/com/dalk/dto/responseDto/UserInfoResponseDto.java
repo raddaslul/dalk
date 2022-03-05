@@ -2,12 +2,16 @@ package com.dalk.dto.responseDto;
 
 import com.dalk.domain.Point;
 import com.dalk.domain.User;
+import com.dalk.repository.PointRepository;
+import com.dalk.security.UserDetailsImpl;
 import lombok.*;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Data
 @Builder
 public class UserInfoResponseDto {
@@ -17,15 +21,16 @@ public class UserInfoResponseDto {
     private Long point;
     private Integer ex;
     private User.Role role;
-    private List<ItemResponseDto> items;
+    private ItemResponseDto item;
 
-    public UserInfoResponseDto(User user, Point point, List<ItemResponseDto> items) {
+
+    public UserInfoResponseDto(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.nickname = user.getNickname();
-        this.point = point.getResultPoint();
+        this.point = user.getPoint();
         this.ex = user.getLevel();
         this.role = user.getRole();
-        this.items = items;
+        this.item = new ItemResponseDto(user);
     }
 }

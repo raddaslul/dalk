@@ -1,53 +1,48 @@
 package com.dalk.domain;
 
 import com.dalk.dto.requestDto.ChatMessageRequestDto;
-
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-public class ChatMessage {
-
-    public enum MessageType {
-        ENTER, TALK, QUIT, ITEM, DELETE
-    }
-
+public class ChatMessageItem {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
 
     @Column
-    private MessageType type;
+    private ChatMessage.MessageType type;
 
     @Column
     private String roomId;
 
     @Column
+    private String item;
+
+    @Column
     private String message;
 
     @Column
-    private String createdAt;
+    private String onlyMe;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column
+    private String myName;
 
-    public ChatMessage(
-            ChatMessageRequestDto chatMessageRequestDto,
-            User user
-    ) {
+    public ChatMessageItem(ChatMessageRequestDto chatMessageRequestDto) {
         this.type = chatMessageRequestDto.getType();
         this.roomId = chatMessageRequestDto.getRoomId();
+        this.item = chatMessageRequestDto.getItem();
         this.message = chatMessageRequestDto.getMessage();
-        this.createdAt = chatMessageRequestDto.getCreatedAt();
-        this.user = user;
+        this.onlyMe = chatMessageRequestDto.getOnlyMe();
+        this.myName = chatMessageRequestDto.getMyName();
     }
 }
