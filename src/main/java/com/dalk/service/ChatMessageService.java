@@ -4,9 +4,7 @@ import com.dalk.domain.*;
 import com.dalk.dto.requestDto.ChatMessageRequestDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageItemResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageResponseDto;
-import com.dalk.dto.responseDto.ItemResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageAccessResponseDto;
-import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +23,6 @@ public class ChatMessageService {
     private final ChannelTopic channelTopic;
     private final RedisTemplate redisTemplate;
     private final UserRepository userRepository;
-    private final PointRepository pointRepository;
-    private final ItemRepository itemRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final ChatMessageItemRepository chatMessageItemRepository;
 
@@ -92,9 +88,8 @@ public class ChatMessageService {
         User user = userRepository.findById(chatMessage.getUser().getId())
                 .orElseThrow(IllegalAccessError::new);
         log.info("sendChatMessage user= {}", user);
-
-        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
-        ChatMessageResponseDto chatMessageResponseDto = new ChatMessageResponseDto(chatMessage, userInfoResponseDto);
+        Boolean bigFont = chatMessageRequestDto.getBigFont();
+        ChatMessageResponseDto chatMessageResponseDto = new ChatMessageResponseDto(chatMessage, bigFont);
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageResponseDto);
     }
 

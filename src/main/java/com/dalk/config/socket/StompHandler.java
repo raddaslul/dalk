@@ -1,11 +1,9 @@
 package com.dalk.config.socket;
 
 import com.dalk.domain.ChatMessage;
-import com.dalk.domain.User;
 import com.dalk.dto.requestDto.ChatMessageRequestDto;
 import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.RedisRepository;
-import com.dalk.repository.UserRepository;
 import com.dalk.security.jwt.JwtDecoder;
 import com.dalk.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;

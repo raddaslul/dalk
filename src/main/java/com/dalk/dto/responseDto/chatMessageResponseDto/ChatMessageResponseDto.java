@@ -3,6 +3,7 @@ package com.dalk.dto.responseDto.chatMessageResponseDto;
 import com.dalk.domain.ChatMessage;
 
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.service.MinkiService;
 import lombok.*;
 
 @Data
@@ -18,14 +19,13 @@ public class ChatMessageResponseDto {
 
     public ChatMessageResponseDto(
             ChatMessage chatMessage,
-            Boolean bigFont,
-            UserInfoResponseDto userInfoResponseDto
+            Boolean bigFont
     ) {
         this.type = chatMessage.getType();
         this.roomId = chatMessage.getRoomId();
         this.message = chatMessage.getMessage();
         this.bigFont = bigFont;
         this.createdAt = chatMessage.getCreatedAt();
-        this.userInfo = userInfoResponseDto;
+        this.userInfo = MinkiService.userInfo(chatMessage.getUser());
     }
 }
