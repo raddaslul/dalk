@@ -39,7 +39,7 @@ public class AdminService {
             List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
             for (Board board : boardList) {
-                MainPageBoardResponseDto mainPageBoardResponseDto = mainPageBoardResponse(board);
+                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board);
                 mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
             }
             return mainPageBoardResponseDtoList;
@@ -53,11 +53,7 @@ public class AdminService {
             Board board = boardRepository.findById(boardId).orElseThrow(
                     () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다. ")
             );
-
-//        if(!board.getUser().getRole().equals(User.Role.ADMIN)){
-//            throw new IllegalArgumentException("관리자만 삭제할 수 있습니다.");
-//        }
-            boardRepository.deleteById(boardId);
+            boardRepository.deleteById(board.getId());
         }
     }
         //    토론방 목록 조회 - 관리자
@@ -69,7 +65,7 @@ public class AdminService {
                 //리턴할 값의 리스트를 정의
                 List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
                 for (ChatRoom chatRoom : chatRoomList) {
-                    MainPageAllResponseDto mainPageAllResponseDto = mainPageAllResponse(chatRoom);
+                    MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom);
                     mainPageAllResponseDtoList.add(mainPageAllResponseDto);
                 }
                 return mainPageAllResponseDtoList;
@@ -81,25 +77,11 @@ public class AdminService {
     public List<UserInfoResponseDto> getUserList(UserDetailsImpl userDetails) {
 
         if (userDetails.getUser().getRole().equals(User.Role.ADMIN)) {
-            User user = userDetails.getUser();
-            List<User> users = userRepository.findAll();
+            List<User> userList = userRepository.findAll();
             List<UserInfoResponseDto> allUsers =new ArrayList<>();
-
-            List<ItemResponseDto> items = new ArrayList<>();
-            for (ItemResponseDto itemResponseDto : items) {
-                Item item = itemRepository.findByUser(user);
-                String itemName = item.getItemName();
-                Integer quantity = item.getQuantity();
-                itemResponseDto = new ItemResponseDto(itemName,quantity );
-                items.add(itemResponseDto);
-            }
-
-            Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId()  );
-            for (User user1 : users){
-                allUsers.add(new UserInfoResponseDto(
-                        user1,point,items
-                ));
-
+            for (User user : userList) {
+                UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
+                allUsers.add(userInfoResponseDto);
             }
             return allUsers;
         }
@@ -112,43 +94,6 @@ public class AdminService {
             userRepository.deleteById(userId);
         }
     }
-
-
-
-    private MainPageAllResponseDto mainPageAllResponse(ChatRoom chatRoom) {
-        User user = chatRoom.getUser();
-        Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId());
-
-        List<ItemResponseDto> items = new ArrayList<>();
-        for (ItemResponseDto itemResponseDto : items) {
-            Item item = itemRepository.findByUser(user);
-            String itemName = item.getItemName();
-            Integer quantity = item.getQuantity();
-            itemResponseDto = new ItemResponseDto(itemName, quantity);
-            items.add(itemResponseDto);
-        }
-        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user, point, items);
-        return new MainPageAllResponseDto(chatRoom, userInfoResponseDto);
-    }
-
-    private MainPageBoardResponseDto mainPageBoardResponse(Board board) {
-        User user = board.getUser();
-        Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId());
-        List<ItemResponseDto> items = new ArrayList<>();
-        for (ItemResponseDto itemResponseDto : items) {
-            Item item = itemRepository.findByUser(user);
-            String itemName = item.getItemName();
-            Integer quantity = item.getQuantity();
-            itemResponseDto = new ItemResponseDto(itemName, quantity);
-            items.add(itemResponseDto);
-        }
-        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user, point, items);
-        return new MainPageBoardResponseDto(board, userInfoResponseDto);
-    }
-
-
-
-
 
 //    채팅방 삭제
 //    public void deleteAdminChatRoom(UserDetailsImpl userDetails) {

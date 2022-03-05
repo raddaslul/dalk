@@ -3,6 +3,7 @@ package com.dalk.service;
 import com.dalk.domain.Point;
 import com.dalk.domain.User;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.repository.ItemRepository;
 import com.dalk.repository.PointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

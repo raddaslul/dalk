@@ -93,25 +93,8 @@ public class ChatMessageService {
                 .orElseThrow(IllegalAccessError::new);
         log.info("sendChatMessage user= {}", user);
 
-        Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId());
-        log.info("sendChatMessage point= {}", point);
-        List<ItemResponseDto> items = new ArrayList<>();
-        for (ItemResponseDto itemResponseDto : items) {
-            Item item = itemRepository.findByUser(user);
-            String itemName = item.getItemName();
-            Integer quantity = item.getQuantity();
-            itemResponseDto = new ItemResponseDto(itemName, quantity);
-            items.add(itemResponseDto);
-        }
-        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user, point, items);
-        Boolean bigFont = chatMessageRequestDto.getBigFont();
-        ChatMessageResponseDto chatMessageResponseDto = new ChatMessageResponseDto(chatMessage, bigFont, userInfoResponseDto);
-        log.info("ResponseDto message = {}", chatMessageResponseDto.getMessage());
-        log.info("ResponseDto bigFont = {}", chatMessageResponseDto.getBigFont());
-        log.info("ResponseDto createdAt = {}", chatMessageResponseDto.getCreatedAt());
-        log.info("ResponseDto userInfo = {}", chatMessageResponseDto.getUserInfo());
-        log.info("ResponseDto roomId = {}", chatMessageResponseDto.getRoomId());
-        log.info("ResponseDto type = {}", chatMessageResponseDto.getType());
+        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
+        ChatMessageResponseDto chatMessageResponseDto = new ChatMessageResponseDto(chatMessage, userInfoResponseDto);
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageResponseDto);
     }
 
