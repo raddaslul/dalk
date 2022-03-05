@@ -1,7 +1,6 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,29 +16,25 @@ import javax.persistence.*;
 @Table(name = "item")
 public class Item extends Timestamped {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "itemName")
-    private String itemName;
+    @Column(name = "bigFont")
+    private Integer bigFont;
 
-    @Column(name = "quantity")
-    private Integer quantity;
+    @Column(name = "onlyMe")
+    private Integer onlyMe;
 
-    @ManyToOne(fetch =FetchType.LAZY ,cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
-    private User user;
+    @Column(name = "myName")
+    private Integer myName;
 
-    public Item(String itemName, Integer quantity,User user) {
-        this.itemName = itemName;
-        this.quantity = quantity;
-        this.user = user;
+    //    @OneToOne
+//    @JoinColumn(name = "user_id", nullable = false)
+//    private User user;
+    public Item(Integer bigFont, Integer onlyMe, Integer myName) {
+        this.bigFont = bigFont;
+        this.onlyMe = onlyMe;
+        this.myName = myName;
     }
-    public Item(User user) {
-        this.user = user;
-    }
-
-
 }

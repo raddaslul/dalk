@@ -1,19 +1,17 @@
 package com.dalk.dto.responseDto.MainPageResponse;
 
 import com.dalk.domain.Board;
-
-import com.dalk.domain.User;
 import com.dalk.domain.time.TimeConversion;
-import com.dalk.dto.responseDto.ItemResponseDto;
-
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.service.MinkiService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class MainPageBoardResponseDto {
     private UserInfoResponseDto userInfo;
     private Long boardId;
@@ -26,8 +24,9 @@ public class MainPageBoardResponseDto {
     private Integer commentCnt;
     private Integer warnCnt;
 
-    public MainPageBoardResponseDto(Board board, UserInfoResponseDto userInfo) {
-        this.userInfo = userInfo;
+    public MainPageBoardResponseDto(Board board) {
+//        this.userInfo = new UserInfoResponseDto(board.getUser());
+        this.userInfo = MinkiService.userInfo(board.getUser());
         this.boardId = board.getId();
         this.topicA = board.getTopicA();
         this.topicB = board.getTopicB();

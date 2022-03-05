@@ -1,15 +1,19 @@
 package com.dalk.service;
 
-import com.dalk.domain.*;
+import com.dalk.domain.Agree;
+import com.dalk.domain.Board;
+import com.dalk.domain.Comment;
+import com.dalk.domain.User;
 import com.dalk.dto.requestDto.CommentRequestDto;
+import com.dalk.dto.responseDto.AgreeResponseDto;
 import com.dalk.dto.responseDto.CommentResponseDto;
-import com.dalk.dto.responseDto.ItemResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
-import com.dalk.exception.ex.BoardNotFoundException;
+import com.dalk.handler.ex.CommentNotFoundException;
+import com.dalk.handler.ex.LoginUserNotFoundException;
+import com.dalk.repository.AgreeRepository;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CommentRepository;
-import com.dalk.repository.ItemRepository;
-import com.dalk.repository.PointRepository;
+import com.dalk.repository.UserRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,14 +29,13 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
-    private final PointRepository pointRepository;
-    private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
+    private final AgreeRepository agreeRepository;
 
     //댓글 작성
     @Transactional
     public void createComment(Long boardId, CommentRequestDto requestDto, User user) {
-        Board board = boardRepository.findById(boardId)
-            .orElseThrow(() -> new BoardNotFoundException("해당 게시글은 없습니다."));
+        Board board = boardRepository.findById(boardId).orElseGet(null);
         Comment comment = new Comment(requestDto, user, board);
         commentRepository.save(comment);
     }
@@ -41,26 +44,16 @@ public class CommentService {
     @Transactional
     public List<CommentResponseDto> getComment(Long boardId) {
         Board boards = boardRepository.findById(boardId).orElseThrow(
-                ()-> new BoardNotFoundException("해당 게시글이 없습니다")
+                ()-> new NullPointerException("해당 게시글이 없습니다")
         );
         List<Comment> comments = commentRepository.findAllByBoard(boards);
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
         for (Comment comment : comments) {
-            User user = comment.getUser();
-            Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId());
-
-            List<ItemResponseDto> items = new ArrayList<>();
-            for (ItemResponseDto itemResponseDto : items) {
-                Item item = itemRepository.findByUser(user);
-                String itemName = item.getItemName();
-                Integer quantity = item.getQuantity();
-                itemResponseDto = new ItemResponseDto(itemName, quantity);
-                items.add(itemResponseDto);
-            }
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user, point, items);
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(comment.getUser());
             CommentResponseDto commentResponseDto = new CommentResponseDto(
                     userInfoResponseDto,
+                    comment.getId(),
                     comment.getComment(),
                     comment.getLikeses().size(),
                     false
@@ -104,5 +97,43 @@ public class CommentService {
             result.put("result", "사용자가 다릅니다");
             return result;
         }
+    }
+
+    @Transactional
+    public AgreeResponseDto agreeCheck(Long commentId, UserDetailsImpl userDetails) {
+
+        AgreeResponseDto agreeResponseDto = new AgreeResponseDto();
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
+        );
+        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
+        );
+//        agree 자체가 null이 됨.
+        Agree agreeCheck = agreeRepository.findByUserAndComment(userDetails.getUser(),comment).orElse(null);
+
+        if (agreeCheck == null){
+            Agree agree = new Agree(comment,user,true);
+            agreeRepository.save(agree);
+
+            agreeResponseDto.setIsAgree(true);
+            agree.setAgreeCnt(agree.getAgreeCnt()+1);
+            agreeResponseDto.setAgreeCnt(agree.getAgreeCnt());
+        }else {
+            if(agreeCheck.getIsAgree() == true){
+                agreeCheck.setIsAgree(false);
+                agreeResponseDto.setIsAgree(false);
+                agreeCheck.setAgreeCnt(agreeCheck.getAgreeCnt()-1);
+                agreeResponseDto.setAgreeCnt(agreeCheck.getAgreeCnt());
+
+            }else if(agreeCheck.getIsAgree() == false){
+                agreeCheck.setIsAgree(true);
+                agreeResponseDto.setIsAgree(true);
+                agreeCheck.setAgreeCnt(agreeCheck.getAgreeCnt()+1);
+                agreeResponseDto.setAgreeCnt(agreeCheck.getAgreeCnt());
+            }
+        }
+        return agreeResponseDto;
     }
 }
