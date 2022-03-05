@@ -16,25 +16,25 @@ import javax.persistence.*;
 @Table(name = "item")
 public class Item extends Timestamped {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "itemName")
-    private String itemName;
+    @Column(name = "bigFont")
+    private Integer bigFont;
 
-    @Column(name = "quantity")
-    private Integer quantity;
+    @Column(name = "onlyMe")
+    private Integer onlyMe;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "myName")
+    private Integer myName;
 
-    public Item(String itemName, Integer quantity) {
-        this.itemName = itemName;
-        this.quantity = quantity;
-    }
-    public Item(User user) {
-        this.user = user;
+    //    @OneToOne
+//    @JoinColumn(name = "user_id", nullable = false)
+//    private User user;
+    public Item(Integer bigFont, Integer onlyMe, Integer myName) {
+        this.bigFont = bigFont;
+        this.onlyMe = onlyMe;
+        this.myName = myName;
     }
 }

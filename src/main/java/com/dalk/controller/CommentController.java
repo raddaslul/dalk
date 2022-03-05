@@ -2,6 +2,7 @@ package com.dalk.controller;
 
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.CommentRequestDto;
+import com.dalk.dto.responseDto.AgreeResponseDto;
 import com.dalk.dto.responseDto.CommentResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.CommentService;
@@ -51,5 +52,15 @@ public class CommentController {
     public HashMap<String, Object> deleteComment(@PathVariable Long commentId,
                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.deleteComment(commentId, userDetails);
+    }
+
+    //    Agree 찬성하기
+    @GetMapping("/agree/{commentId}")
+    @ApiOperation(value = "찬성하기")
+    public AgreeResponseDto agreeCheck(
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        return commentService.agreeCheck(commentId,userDetails);
     }
 }

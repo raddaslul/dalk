@@ -1,13 +1,10 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
-
-import com.dalk.domain.wl.WarnComment;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
-
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -17,8 +14,6 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 public class User extends Timestamped {
-
-
 
     public enum Role {
         ADMIN, USER
@@ -38,6 +33,9 @@ public class User extends Timestamped {
     @Column(name = "nickname", nullable = false, unique = true)
     private String nickname;
 
+    @Column(name = "point")
+    private Long point;
+
     @Column(name = "level")
     private Integer level;
 
@@ -46,28 +44,20 @@ public class User extends Timestamped {
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
     private Role role;
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private List<Item> items;
+    @OneToOne
+    private Item item;
 
-    @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private List<Point> points = new ArrayList<>();
+    @JsonManagedReference
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Point> points;
 
-    public User(String username, String password, String nickname) {
+    public User(String username, String password, String nickname,Long point,Integer level, Role role, Item item) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
-    }
-
-    public User(
-            String username,
-            String password,
-            String nickname,
-            Integer leve,
-            Role role) {
-        this.username = username;
-        this.password = password;
-        this.nickname = nickname;
-        this.level = leve;
+        this.point = point;
+        this.level = level;
         this.role = role;
+        this.item = item;
     }
 }
