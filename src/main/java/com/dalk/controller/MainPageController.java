@@ -58,15 +58,21 @@ public class MainPageController {
         return mainPageService.getSearchWord(keyword);
     }
 
-    @GetMapping("/api/main/{category}")
-    @ApiOperation(value = "카테고리 클릭시 검색") //카테고리 클릭 시 넘어가는 것
-    public List<MainPageAllResponseDto> getSerarchCategory(@PathVariable String category) {
-        return mainPageService.getSearchCategory(category);
-    }
+//    @GetMapping("/api/main/{category}")
+//    @ApiOperation(value = "카테고리 클릭시 검색") //카테고리 클릭 시 넘어가는 것
+//    public List<MainPageAllResponseDto> getSerarchCategory(@PathVariable String category) {
+//        return mainPageService.getSearchCategory2(category);
+//    }
 
     @GetMapping("/rooms/{roomId}")
     @ApiOperation(value = "채팅방 클릭시 방 넘어가는 기능")
     public MainPageAllResponseDto getMainPageOne(@PathVariable Long roomId) {
         return mainPageService.getMainPageOne(roomId);
+    }
+
+    @GetMapping("/api/main/{category}")
+    @ApiOperation(value = "카테고리 태그 검색")
+    public List<MainPageAllResponseDto> getSerarchCategory(@PathVariable String category) {
+        return mainPageService.getSearchCategory(category);
     }
 }

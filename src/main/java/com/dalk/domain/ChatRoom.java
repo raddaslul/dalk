@@ -34,8 +34,8 @@ public class ChatRoom extends Timestamped {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "category", nullable = false)
-    private String category;
+    @OneToMany(mappedBy = "chatRoom")
+    private List<Category> categorys;
 
     @Column(name = "time", nullable = false)
     private Boolean time = false;
@@ -51,7 +51,6 @@ public class ChatRoom extends Timestamped {
         this.topicA = requestDto.getTopicA();
         this.topicB = requestDto.getTopicB();
         this.content = requestDto.getContent();
-        this.category = requestDto.getCategory();
         this.time = requestDto.getTime();
         this.user = user;
     }
@@ -60,7 +59,6 @@ public class ChatRoom extends Timestamped {
         this.topicA = requestDto.getTopicA();
         this.topicB = requestDto.getTopicB();
         this.content = requestDto.getContent();
-        this.category = requestDto.getCategory();
         this.time = requestDto.getTime();
         this.user = user;
     }

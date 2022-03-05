@@ -38,10 +38,10 @@ public class ChatRoomService {
         return chatRoomRepository.findAllByOrderByCreatedAtDesc();
     }
 
-    // 카테고리별 채팅방 조회
-    public List<ChatRoom> getAllChatRoomsByCategory(String category) {
-        return chatRoomRepository.findByCategory(category);
-    }
+//    // 카테고리별 채팅방 조회
+//    public List<ChatRoom> getAllChatRoomsByCategory(String category) {
+//        return chatRoomRepository.findByCategory(category);
+//    }
 
     // 개별 채팅방 조회
     public ChatRoom getEachChatRoom(Long id) {

@@ -35,8 +35,8 @@ public class Board extends Timestamped {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "category", nullable = false)
-    private String category;
+    @OneToMany(mappedBy = "board")
+    private List<Category> categorys;
 
     @ManyToOne
     @JoinColumn(name = "user_Id")
@@ -57,13 +57,11 @@ public class Board extends Timestamped {
             String topicB,
             String winner,
             String content,
-            String category,
             User userId){
         this.topicA = topicA;
         this.topicB = topicB;
         this.winner = winner;
         this.content = content;
-        this.category = category;
         this.user = userId;
     }
 }

@@ -8,28 +8,31 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
+import java.util.List;
+
+
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 public class MainPageAllResponseDto {
     private UserInfoResponseDto userInfo;
     private Long roomId;
     private String topicA;
     private String topicB;
     private String content;
-    private String category;
+    private List<String> categoryList;
     private Long restTime;
     private String createdAt;
     private Boolean time;
 
-    public MainPageAllResponseDto(ChatRoom chatRoom) {
+    public MainPageAllResponseDto(ChatRoom chatRoom, List<String> categoryList) {
 //        this.userInfo = new UserInfoResponseDto(chatRoom.getUser());
         this.userInfo = MinkiService.userInfo(chatRoom.getUser());
         this.roomId = chatRoom.getId();
         this.topicA = chatRoom.getTopicA();
         this.topicB = chatRoom.getTopicB();
         this.content = chatRoom.getContent();
-        this.category = chatRoom.getCategory();
+        this.categoryList = categoryList;
         this.restTime = TimeConversion.restTime(chatRoom.getCreatedAt(),chatRoom.getTime());
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
         this.time = chatRoom.getTime();

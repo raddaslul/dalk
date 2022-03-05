@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,12 +21,12 @@ public class MainPageBoardResponseDto {
     private String topicB;
     private String winner;
     private String content;
-    private String category;
+    private List<String> categoryList;
     private String createdAt;
     private Integer commentCnt;
     private Integer warnCnt;
 
-    public MainPageBoardResponseDto(Board board) {
+    public MainPageBoardResponseDto(Board board, List<String> categoryList) {
 //        this.userInfo = new UserInfoResponseDto(board.getUser());
         this.userInfo = MinkiService.userInfo(board.getUser());
         this.boardId = board.getId();
@@ -32,7 +34,7 @@ public class MainPageBoardResponseDto {
         this.topicB = board.getTopicB();
         this.winner = board.getWinner();
         this.content = board.getContent();
-        this.category = board.getCategory();
+        this.categoryList = categoryList;
         this.createdAt = TimeConversion.timeCreatedConversion(board.getCreatedAt());
         this.commentCnt = board.getComments().size();
         this.warnCnt = board.getWarnBoards().size();

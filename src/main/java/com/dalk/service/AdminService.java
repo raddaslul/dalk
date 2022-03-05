@@ -26,7 +26,7 @@ public class AdminService {
     private final PointRepository pointRepository;
     private final ItemRepository itemRepository;
     private final ChatRoomRepository chatRoomRepository;
-
+    private final CategoryRepository categoryRepository;
 
     //블라인드 게시글 전체 조회 - 관리자
 
@@ -40,7 +40,8 @@ public class AdminService {
             List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
             for (Board board : boardList) {
-                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board);
+                List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
+                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList));
                 mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
             }
             return mainPageBoardResponseDtoList;
@@ -66,7 +67,8 @@ public class AdminService {
                 //리턴할 값의 리스트를 정의
                 List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
                 for (ChatRoom chatRoom : chatRoomList) {
-                    MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom);
+                    List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
+                    MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList));
                     mainPageAllResponseDtoList.add(mainPageAllResponseDto);
                 }
                 return mainPageAllResponseDtoList;
