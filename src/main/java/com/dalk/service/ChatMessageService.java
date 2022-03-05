@@ -64,19 +64,21 @@ public class ChatMessageService {
         if (ChatMessage.MessageType.ENTER.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에 입장했습니다.");
 
-            ChatMessageItem chatMessageItem = chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId());
-            String item = chatMessageItem.getItem();
-            if (item.equals("onlyMe")) {
-                chatMessageRequestDto.setOnlyMe(user.getNickname());
-            }
-            else if (item.equals("myName")) {
-                chatMessageRequestDto.setMyName(user.getNickname());
+            if(chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId()) != null) {
+                ChatMessageItem chatMessageItem = chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId());
+                String item = chatMessageItem.getItem();
+                if (item.equals("onlyMe")) {
+                    chatMessageRequestDto.setOnlyMe(user.getNickname());
+                }
+                else if (item.equals("myName")) {
+                    chatMessageRequestDto.setMyName(user.getNickname());
+                }
             }
             ChatMessageAccessResponseDto chatMessageAccessResponseDto = new ChatMessageAccessResponseDto(chatMessageRequestDto);
 //            this.itemChatMessage(chatMessageRequestDto);
             redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageAccessResponseDto);
 
-        } else if (ChatMessage.MessageType.QUIT.equals(chatMessageRequestDto.getType())) {
+        } else if (ChatMessage.MessageType.EXIT.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에서 나갔습니다.");
             ChatMessageAccessResponseDto chatMessageAccessResponseDto = new ChatMessageAccessResponseDto(chatMessageRequestDto);
             redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageAccessResponseDto);

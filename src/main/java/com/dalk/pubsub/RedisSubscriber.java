@@ -26,7 +26,12 @@ public class RedisSubscriber {
         log.info("publishMessage 새롭게 자른거 = {}", publishMessage.startsWith("ITEM", 9));
         try {
             // 채팅방 입장시 메세지 보내기
-            if (publishMessage.startsWith("ENTER", 9) || publishMessage.startsWith("QUIT", 9)) {
+            if (publishMessage.startsWith("ENTER", 9)) {
+                ChatMessageAccessResponseDto chatMessageAccessResponseDto = objectMapper.readValue(publishMessage, ChatMessageAccessResponseDto.class);
+                messagingTemplate.convertAndSend("/sub/api/chat/rooms/" + chatMessageAccessResponseDto.getRoomId(), chatMessageAccessResponseDto);
+            }
+
+            else if (publishMessage.startsWith("EXIT", 9)) {
                 ChatMessageAccessResponseDto chatMessageAccessResponseDto = objectMapper.readValue(publishMessage, ChatMessageAccessResponseDto.class);
                 messagingTemplate.convertAndSend("/sub/api/chat/rooms/" + chatMessageAccessResponseDto.getRoomId(), chatMessageAccessResponseDto);
             }
