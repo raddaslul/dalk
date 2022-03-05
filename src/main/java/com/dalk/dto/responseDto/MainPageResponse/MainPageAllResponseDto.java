@@ -3,10 +3,10 @@ package com.dalk.dto.responseDto.MainPageResponse;
 import com.dalk.domain.ChatRoom;
 import com.dalk.domain.time.TimeConversion;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.service.MinkiService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 @Data
 @AllArgsConstructor
@@ -22,8 +22,9 @@ public class MainPageAllResponseDto {
     private String createdAt;
     private Boolean time;
 
-    public MainPageAllResponseDto(ChatRoom chatRoom, UserInfoResponseDto userInfoResponseDto) {
-        this.userInfo = userInfoResponseDto;
+    public MainPageAllResponseDto(ChatRoom chatRoom) {
+//        this.userInfo = new UserInfoResponseDto(chatRoom.getUser());
+        this.userInfo = MinkiService.userInfo(chatRoom.getUser());
         this.roomId = chatRoom.getId();
         this.topicA = chatRoom.getTopicA();
         this.topicB = chatRoom.getTopicB();
