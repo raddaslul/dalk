@@ -27,15 +27,9 @@ public class Agree {
 
     @Column
     private Boolean isAgree;
-    @Column
-    private Integer agreeCnt = 0;
 
-//    @Column
-//    private Boolean isDisAgree;
-//    @Column
-//    private Integer agreeCnt = 0;
-//    @Column
-//    private Integer disAgreeCnt = 0;
+    @Column
+    private Boolean isDisAgree;
 
 
 
@@ -44,6 +38,5 @@ public class Agree {
         this.user = user;
         this.isAgree=requestDto;
     }
-
 
 }

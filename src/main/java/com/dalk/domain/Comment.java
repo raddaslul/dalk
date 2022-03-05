@@ -1,7 +1,6 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
-import com.dalk.domain.wl.Likes;
 import com.dalk.domain.wl.WarnComment;
 import com.dalk.dto.requestDto.CommentRequestDto;
 import lombok.*;
@@ -27,6 +26,11 @@ public class Comment extends Timestamped {
     @Column(name = "comment", nullable = false)
     private String comment;
 
+    @Column
+    private Integer agreeCnt = 0;
+    @Column
+    private Integer disAgreeCnt = 0;
+
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
@@ -38,8 +42,7 @@ public class Comment extends Timestamped {
     @OneToMany(mappedBy = "comment", orphanRemoval = true)
     private List<WarnComment> warnComments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "comment", orphanRemoval = true)
-    private List<Likes> likeses = new ArrayList<>();
+
 
 
     public Comment(CommentRequestDto commentRequestDto, User user, Board board) {

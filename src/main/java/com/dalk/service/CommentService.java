@@ -7,6 +7,7 @@ import com.dalk.domain.User;
 import com.dalk.dto.requestDto.CommentRequestDto;
 import com.dalk.dto.responseDto.AgreeResponseDto;
 import com.dalk.dto.responseDto.CommentResponseDto;
+import com.dalk.dto.responseDto.DisAgreeResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.exception.ex.CommentNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
@@ -55,8 +56,8 @@ public class CommentService {
                     userInfoResponseDto,
                     comment.getId(),
                     comment.getComment(),
-                    comment.getLikeses().size(),
-                    false
+                    comment.getAgreeCnt(),
+                    comment.getDisAgreeCnt()
             );
             commentResponseDtoList.add(commentResponseDto);
         }
@@ -103,6 +104,7 @@ public class CommentService {
     public AgreeResponseDto agreeCheck(Long commentId, UserDetailsImpl userDetails) {
 
         AgreeResponseDto agreeResponseDto = new AgreeResponseDto();
+        CommentResponseDto commentResponseDto = new CommentResponseDto();
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
@@ -112,28 +114,68 @@ public class CommentService {
         );
 //        agree 자체가 null이 됨.
         Agree agreeCheck = agreeRepository.findByUserAndComment(userDetails.getUser(),comment).orElse(null);
+//        Agree agreeCheck =agreeRepository.findByComment(comment).orElse(null);
 
         if (agreeCheck == null){
             Agree agree = new Agree(comment,user,true);
             agreeRepository.save(agree);
-
             agreeResponseDto.setIsAgree(true);
-            agree.setAgreeCnt(agree.getAgreeCnt()+1);
-            agreeResponseDto.setAgreeCnt(agree.getAgreeCnt());
+            comment.setAgreeCnt(comment.getAgreeCnt()+1);
+           commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
         }else {
             if(agreeCheck.getIsAgree() == true){
                 agreeCheck.setIsAgree(false);
                 agreeResponseDto.setIsAgree(false);
-                agreeCheck.setAgreeCnt(agreeCheck.getAgreeCnt()-1);
-                agreeResponseDto.setAgreeCnt(agreeCheck.getAgreeCnt());
+                comment.setAgreeCnt(comment.getAgreeCnt()-1);
+                commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
 
             }else if(agreeCheck.getIsAgree() == false){
                 agreeCheck.setIsAgree(true);
                 agreeResponseDto.setIsAgree(true);
-                agreeCheck.setAgreeCnt(agreeCheck.getAgreeCnt()+1);
-                agreeResponseDto.setAgreeCnt(agreeCheck.getAgreeCnt());
+                comment.setAgreeCnt(comment.getAgreeCnt()+1);
+                commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
             }
         }
+
         return agreeResponseDto;
+    }
+
+    @Transactional
+    public DisAgreeResponseDto disAgreeCheck(Long commentId, UserDetailsImpl userDetails) {
+
+        DisAgreeResponseDto disAgreeResponseDto = new DisAgreeResponseDto();
+        CommentResponseDto commentResponseDto = new CommentResponseDto();
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
+        );
+        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
+        );
+        Agree disagreeCheck = agreeRepository.findByUserAndComment(userDetails.getUser(),comment).orElse(null);
+
+        if (disagreeCheck == null){
+            Agree agree = new Agree(comment,user,true);
+            agreeRepository.save(agree);
+
+            disAgreeResponseDto.setIsDisAgree(true);
+            comment.setDisAgreeCnt(comment.getDisAgreeCnt()+1);
+            commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
+        }else {
+            if(disagreeCheck.getIsDisAgree() == true){
+                disagreeCheck.setIsDisAgree(false);
+                disAgreeResponseDto.setIsDisAgree(false);
+                comment.setDisAgreeCnt(comment.getDisAgreeCnt()-1);
+                commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
+
+            }else if(disagreeCheck.getIsDisAgree() == false){
+                disagreeCheck.setIsDisAgree(true);
+                disAgreeResponseDto.setIsDisAgree(true);
+                comment.setDisAgreeCnt(comment.getAgreeCnt()+1);
+                commentResponseDto.setDisAgreeCnt(comment.getAgreeCnt());
+            }
+        }
+        return disAgreeResponseDto;
+
     }
 }
