@@ -29,11 +29,9 @@ public class MyPageService {
         return "회원탈퇴 되었습니다.";
     }
 
-    public List<PointResponseDto> getPoint(Long userId) {
-        Optional<User> user = userRepository.findByUsername(String.valueOf(userId));
-
-        List<Point> pointList = pointRepository.findById(user);
-
+    public List<PointResponseDto> getPoint(User userdetails) {
+        User user =userdetails;
+        List<Point> pointList = pointRepository.findAllByUser(user);
         List<PointResponseDto> pointResponseDtoList =new ArrayList<>();
 
         for (Point point : pointList ){
@@ -44,12 +42,8 @@ public class MyPageService {
     }
 
     private PointResponseDto pointResponse(Point point) {
-
-        User user = point.getUser();
-        point.getChangePoint();
-        point.getResultPoint();
         point.getContent();
-
+        point.getChangePoint();
         return new PointResponseDto(point);
     }
 

@@ -29,8 +29,8 @@ public class MyPageController {
     //포인트 내역 조회
     @GetMapping("/mypage/points")
     public List<PointResponseDto> getPoint(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        Long userId = userDetails.getUser().getId();
-        return myPageService.getPoint(userId);
+        User user = userDetails.getUser();
+        return myPageService.getPoint(user);
     }
 
 

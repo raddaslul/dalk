@@ -76,16 +76,7 @@ public class ChatMessageService {
         User user = userRepository.findById(chatMessage.getUser().getId())
                 .orElseThrow(IllegalAccessError::new);
 
-        Point point = pointRepository.findTopByUserIdOrderByCreatedAtDesc(user.getId());
-        List<ItemResponseDto> items = new ArrayList<>();
-        for (ItemResponseDto itemResponseDto : items) {
-            Item item = itemRepository.findByUser(user);
-            String itemName = item.getItemName();
-            Integer quantity = item.getQuantity();
-            itemResponseDto = new ItemResponseDto(itemName, quantity);
-            items.add(itemResponseDto);
-        }
-        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user, point, items);
+        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
         ChatMessageResponseDto chatMessageResponseDto = new ChatMessageResponseDto(chatMessage, userInfoResponseDto);
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageResponseDto);
     }

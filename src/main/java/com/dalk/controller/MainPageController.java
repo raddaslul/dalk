@@ -64,9 +64,9 @@ public class MainPageController {
         return mainPageService.getSearchCategory(category);
     }
 
-    @GetMapping("/rooms/{roomId}")
-    @ApiOperation(value = "채팅방 클릭시 방 넘어가는 기능")
-    public MainPageAllResponseDto getMainPageOne(@PathVariable Long roomId) {
-        return mainPageService.getMainPageOne(roomId);
-    }
+//    @GetMapping("/rooms/{roomId}")
+//    @ApiOperation(value = "채팅방 클릭시 방 넘어가는 기능")
+//    public MainPageAllResponseDto getMainPageOne(@PathVariable Long roomId) {
+//        return mainPageService.getMainPageOne(roomId);
+//    }
 }
