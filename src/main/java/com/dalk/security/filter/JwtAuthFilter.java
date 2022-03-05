@@ -1,6 +1,7 @@
 package com.dalk.security.filter;
 
 
+import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.security.jwt.HeaderTokenExtractor;
 import com.dalk.security.jwt.JwtPreProcessingToken;
 import org.springframework.security.core.Authentication;
@@ -37,7 +38,7 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
     public Authentication attemptAuthentication(
             HttpServletRequest request,
             HttpServletResponse response
-    ) throws AuthenticationException, IOException {
+    ) throws AuthenticationException {
         System.out.println("헤더 토큰 request : " + request);
         System.out.println("헤더 토큰 response : " + response);
 
@@ -47,7 +48,7 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
         if (tokenPayload == null) {
 //            response.sendRedirect("/signin");
 //            return null;
-            throw new IllegalArgumentException("로그인 정보가 없습니다.");
+            throw new LoginUserNotFoundException("로그인 정보가 없습니다.");
         }
 
         JwtPreProcessingToken jwtToken = new JwtPreProcessingToken(
