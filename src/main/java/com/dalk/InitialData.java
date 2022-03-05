@@ -22,21 +22,36 @@ public class InitialData implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         String encPassword = passwordEncoder.encode("adminPass");
+
+
+        Item item1 = new Item(0, 0, 0);
+        itemRepository.save(item1);
         User admin = new User(
                 "adminUser",
                 encPassword,
                 "adminNick",
-                100L,
-                User.Role.ADMIN);
+                500L,
+                100,
+                User.Role.ADMIN,
+                item1);
         userRepository.save(admin);
+        Point point1 = new Point("회원가입",500L,500L,admin);
+        pointRepository.save(point1);
 
+
+        Item item2 = new Item(0,0,0);
+        itemRepository.save(item2);
         User user1 = new User( //유저추가
                 "user1",
                 encPassword,
                 "user1",
-                10L,
-                User.Role.USER);
+                500L,
+                100,
+                User.Role.USER,
+                item2);
         userRepository.save(user1);
+        Point point2 = new Point("회원가입",500L,500L,user1);
+        pointRepository.save(point2);
 
         Board board1 = new Board( //게시글 추가
                 "짜장",
@@ -54,35 +69,10 @@ public class InitialData implements ApplicationRunner {
                 "카테고리2",
                 user1
         );
-        Board board3 = new Board(
-                "신동석",
-                "김영민",
-                "김영민",
-                "내용2",
-                "카테고리2",
-                user1
-        );
-        Board board4 = new Board(
-                "aBc",
-                "aaaAAA",
-                "aBc",
-                "내용3",
-                "카테고리",
-                user1
-        );
-        Board board5 = new Board(
-                "AAAaaa",
-                "AbC",
-                "aBc",
-                "내용3",
-                "카테고리",
-                user1
-        );
+
         boardRepository.save(board1);
         boardRepository.save(board2);
-        boardRepository.save(board3);
-        boardRepository.save(board4);
-        boardRepository.save(board5);
+
         Comment comment1 = new Comment(
                 "안녕하세요1",
                 board1,
@@ -95,34 +85,6 @@ public class InitialData implements ApplicationRunner {
         );
         commentRepository.save(comment1);
         commentRepository.save(comment2);
-
-        Item item1 = new Item(
-                admin
-        );
-
-        Item item2 = new Item(
-                user1
-        );
-        itemRepository.save(item1);
-        itemRepository.save(item2);
-
-
-        Point point1 = new Point(
-                "회원가입",
-                500L,
-                500L,
-                user1
-        );
-        pointRepository.save(point1);
-
-        Point point2 = new Point(
-                "회원가입",
-                50000L,
-                50000L,
-                admin
-        );
-        pointRepository.save(point2);
-
     }
 
 }

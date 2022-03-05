@@ -1,7 +1,10 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,37 +12,33 @@ import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Data
 @Entity
 @Table(name = "point")
 public class Point extends Timestamped {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "content", nullable = false)
+    @Column
     private String content;
 
-    @Column(name = "changePoint", nullable = false)
+    @Column
     private Long changePoint;
 
-    @Column(name = "resultPoint", nullable = false)
-    private Long resultPoint;
+    @Column
+    private Long toTalPoint;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
 
-    public Point(
-            String content,
-            Long changePoint,
-            Long resultPoint,
-            User user) {
+    public Point(String content, Long changePoint, Long toTalPoint, User user) {
         this.content = content;
         this.changePoint = changePoint;
-        this.resultPoint = resultPoint;
+        this.toTalPoint = toTalPoint;
         this.user = user;
     }
 }

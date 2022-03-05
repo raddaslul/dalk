@@ -1,18 +1,20 @@
 package com.dalk.dto.responseDto;
 
-
+import com.dalk.domain.User;
 import lombok.*;
 
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Builder
 public class ItemResponseDto {
-    private String itemName;
-    private Integer quantity;
+    private Integer bigFont;
+    private Integer onlyMe;
+    private Integer myName;
 
-    public ItemResponseDto(String itemName, Integer quantity) {
-        this.itemName = itemName;
-        this.quantity = quantity;
+    public ItemResponseDto(User user) {
+        this.bigFont=user.getItem().getBigFont();
+        this.onlyMe=user.getItem().getOnlyMe();
+        this.myName=user.getItem().getOnlyMe();
     }
 }
