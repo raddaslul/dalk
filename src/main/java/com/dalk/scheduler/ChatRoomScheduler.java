@@ -1,8 +1,8 @@
 package com.dalk.scheduler;
 
-import com.dalk.domain.ChatMessageItem;
-import com.dalk.repository.ChatMessageItemRepository;
-import com.dalk.service.ChatMessageService;
+import com.dalk.domain.ChatRoom;
+import com.dalk.repository.ChatRoomRepository;
+import com.dalk.service.MainPageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,14 +14,14 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ItemScheduler {
+public class ChatRoomScheduler {
 
-    private final ChatMessageItemRepository chatMessageItemRepository;
-    private final ChatMessageService chatMessageService;
+    private final ChatRoomRepository chatRoomRepository;
+    private final MainPageService mainPageService;
 
-    @Scheduled(cron = "0/1 * * * * *")
-    public void autoItemDelete() {
-        List<ChatMessageItem> chatMessageItemList = chatMessageItemRepository.findAll();
+    @Scheduled(cron = "0 0/1 * * * *")
+    public void autoRoomDelete() {
+        List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
         String now = String.valueOf(LocalDateTime.now());
         log.info("now = {}", now);
         String nowDate = now.split("T")[0];
@@ -52,11 +52,8 @@ public class ItemScheduler {
         Long resultNow = nowYear + nowMonth + nowDay + nowHour + nowMinute + nowSecond;
         log.info("지금 시간 = {}", resultNow);
 
-        for (ChatMessageItem chatMessageItem : chatMessageItemList) {
-            String roomId = chatMessageItem.getRoomId();
-            String item = chatMessageItem.getItem();
-
-            String createdAt = String.valueOf(chatMessageItem.getCreatedAt());
+        for (ChatRoom chatRoom : chatRoomList) {
+            String createdAt = String.valueOf(chatRoom.getCreatedAt());
             log.info("createdAt = {}", createdAt);
             String createdAtDate = createdAt.split("T")[0];
             log.info("createdAtDate = {}", createdAtDate);
@@ -85,11 +82,16 @@ public class ItemScheduler {
             log.info("createdAtSecond = {}", createdAtSecond);
             Long resultCreatedAt = createdAtYear + createdAtMonth + createdAtDay + createdHour + createdAtMinute + createdAtSecond;
             log.info("생성 시간 = {}", resultCreatedAt);
-            if(resultNow - resultCreatedAt >= 30) {
-                chatMessageItemRepository.delete(chatMessageItem);
-                chatMessageService.itemDeleteMessage(roomId, item);
+            if(chatRoom.getTime() == true) {
+                if (resultNow - resultCreatedAt >= 1200) {
+                    chatRoomRepository.delete(chatRoom);
+                }
             }
+            else {
+                if (resultNow - resultCreatedAt >= 3600)
+                    chatRoomRepository.delete(chatRoom);
+            }
+            mainPageService.createBoard(chatRoom);
         }
     }
-
 }
