@@ -1,6 +1,7 @@
 package com.dalk.service;
 
 import com.dalk.domain.*;
+import com.dalk.domain.vote.Vote;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
@@ -24,6 +25,7 @@ public class MainPageService {
     private final PointRepository pointRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final VoteRepository voteRepository;
 
     //채팅방 생성
     public Long createChatRoom(UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) {
@@ -31,11 +33,13 @@ public class MainPageService {
         Long userId = user.getId();
         ChatRoom chatRoom = new ChatRoom(requestDto, userId);
         List<String> categoryList = requestDto.getCategory();
+        Vote vote = new Vote(chatRoom);
         chatRoomRepository.save(chatRoom);
         for (String stringCategory : categoryList) {
             Category category = new Category(chatRoom, stringCategory);
             categoryRepository.save(category);
         }
+        voteRepository.save(vote);
         return chatRoom.getId();
     }
 

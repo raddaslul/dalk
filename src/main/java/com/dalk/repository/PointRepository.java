@@ -9,4 +9,6 @@ import java.util.List;
 public interface PointRepository extends JpaRepository<Point, Long> {
     Point findTopByUserIdOrderByCreatedAt(Long id);
     List<Point> findAllByUser(User user);
+
+    Point findByUser(User user);
 }

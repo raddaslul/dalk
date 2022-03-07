@@ -29,6 +29,7 @@ public class MyPageService {
         return "회원탈퇴 되었습니다.";
     }
 
+    //포인트 내역 조회
     public List<PointResponseDto> getPoint(User userdetails) {
         User user =userdetails;
         List<Point> pointList = pointRepository.findAllByUser(user);

@@ -1,5 +1,6 @@
 package com.dalk.dto.responseDto.MainPageResponse;
 
+import com.dalk.domain.Board;
 import com.dalk.domain.ChatRoom;
 import com.dalk.domain.User;
 import com.dalk.domain.time.TimeConversion;
