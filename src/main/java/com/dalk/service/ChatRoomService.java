@@ -1,6 +1,5 @@
 package com.dalk.service;
 
-import com.dalk.domain.Board;
 import com.dalk.domain.Category;
 import com.dalk.domain.ChatRoom;
 import com.dalk.domain.User;
@@ -10,7 +9,6 @@ import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnRoomResponseDto;
 import com.dalk.exception.ex.ChatRoomNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
-import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CategoryRepository;
 import com.dalk.repository.ChatRoomRepository;
 import com.dalk.repository.UserRepository;
@@ -115,7 +113,7 @@ public class ChatRoomService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user,chatRoomList.size());
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user, warnChatRoomList.size());
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
