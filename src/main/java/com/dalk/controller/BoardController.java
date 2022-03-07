@@ -1,9 +1,13 @@
 package com.dalk.controller;
 
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnCommentResponseDto;
+import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.BoardService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,4 +37,17 @@ public class BoardController {
     public List<MainPageBoardResponseDto> getSearchWord(@PathVariable String keyword) {
         return boardService.getSearchWord(keyword);
     }
+
+    @GetMapping("/warnings/boards/{boardId}")
+    @ApiOperation(value = "게시글 신고하기")
+    public WarnBoardResponseDto WarnBoard
+            (@PathVariable Long boardId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+
+        return boardService.warnBoard(boardId,userDetails);
+    }
+
+
+
+
 }

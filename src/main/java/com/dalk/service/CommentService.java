@@ -255,7 +255,7 @@ public class CommentService {
         WarnComment warnCommentCheck = warnCommentRepository.findByUserIdAndComment(userDetails.getUser().getId(),comment).orElse(null);
 
         if (warnCommentCheck == null){
-            WarnComment warnComment = new WarnComment(false, comment, user);
+            WarnComment warnComment = new WarnComment(true, comment, user);
             warnCommentRepository.save(warnComment);
         warnCommentResponseDto.setCommentId(warnComment.getComment().getId());
         warnCommentResponseDto.setWarn(warnComment.getIsWarn());

@@ -2,6 +2,7 @@ package com.dalk.controller;
 
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.ChatRoomService;
 import io.swagger.annotations.ApiOperation;
@@ -50,6 +51,9 @@ public class ChatRoomController {
     public List<MainPageAllResponseDto> getSerarchCategory(@PathVariable String category) {
         return chatRoomService.getSearchCategory(category);
     }
+
+
+
 
     //    @GetMapping("/api/main/{category}")
 //    @ApiOperation(value = "카테고리 클릭시 검색") //카테고리 클릭 시 넘어가는 것
