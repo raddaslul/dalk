@@ -32,9 +32,6 @@ public class Board extends Timestamped {
     @Column(name = "winner")
     private String winner;
 
-    @Column(name = "content", nullable = false)
-    private String content;
-
     @Column(nullable = false)
     private Long createUserId;
 
@@ -51,7 +48,6 @@ public class Board extends Timestamped {
         this.topicA = chatRoom.getTopicA();
         this.topicB = chatRoom.getTopicB();
 //        this.winner = vote.getWinner();
-        this.content = chatRoom.getContent();
         this.createUserId = chatRoom.getCreateUserId();
         this.categorys = chatRoom.getCategorys();
     }
@@ -60,12 +56,10 @@ public class Board extends Timestamped {
             String topicA,
             String topicB,
             String winner,
-            String content,
             Long userId){
         this.topicA = topicA;
         this.topicB = topicB;
         this.winner = winner;
-        this.content = content;
         this.createUserId = userId;
     }
 }

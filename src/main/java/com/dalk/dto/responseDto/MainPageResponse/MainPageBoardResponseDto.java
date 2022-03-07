@@ -21,7 +21,6 @@ public class MainPageBoardResponseDto {
     private String topicA;
     private String topicB;
     private String winner;
-    private String content;
     private List<String> category;
     private String createdAt;
     private Integer commentCnt;
@@ -34,7 +33,6 @@ public class MainPageBoardResponseDto {
         this.topicA = board.getTopicA();
         this.topicB = board.getTopicB();
         this.winner = board.getWinner();
-        this.content = board.getContent();
         this.category = categoryList;
         this.createdAt = TimeConversion.timeCreatedConversion(board.getCreatedAt());
         this.commentCnt = board.getComments().size();

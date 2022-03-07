@@ -28,7 +28,6 @@ public class ChatRoomService {
     private final CategoryRepository categoryRepository;
     private final ChatRoomScheduler chatRoomScheduler;
     private final UserRepository userRepository;
-    private final BoardRepository boardRepository;
 
     public Long createChatRoom(UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) {
         User user = userDetails.getUser();
@@ -52,36 +51,35 @@ public class ChatRoomService {
     //토론방리스트 탑6 조회
     public List<MainPageAllResponseDto> getMainPageTop6() {
         //board 전체를 가져옴
-        List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByOrderByCreatedAtDesc();
+        List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByStatusOrderByCreatedAtDesc(true);
         //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
 
         for (ChatRoom chatRoom : chatRoomList) {
-            List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
-            User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
-                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
-            );
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user);
-            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+                List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
+                User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                        () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+                );
+                MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user);
+                mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
     }
 
     //토론방리스트 전체조회
     public List<MainPageAllResponseDto> getMainPageAll() {
-
         //board 전체를 가져옴
-        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc();
+        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByStatusOrderByCreatedAtDesc(true);
         //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
 
         for (ChatRoom chatRoom : chatRoomList) {
-            List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
-            User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
-                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
-            );
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom,MinkiService.categoryStringList(categoryList), user);
-            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+                List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
+                User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                        () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+                );
+                MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom,MinkiService.categoryStringList(categoryList), user);
+                mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
     }

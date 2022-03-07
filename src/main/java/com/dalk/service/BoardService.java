@@ -9,6 +9,7 @@ import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CategoryRepository;
+import com.dalk.repository.ChatRoomRepository;
 import com.dalk.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,12 @@ public class BoardService {
 //        Vote vote = voteRepository.findByRoomId(chatRoom.getId());
         Board board = new Board(chatRoom);
         boardRepository.save(board);
+        List<Category> categoryList = categoryRepository.findAllByChatRoom(chatRoom);
+        for (Category categorys : categoryList) {
+            String stringCategory = categorys.getCategory();
+            Category category = new Category(board, stringCategory);
+            categoryRepository.save(category);
+        }
     }
 
     //게시글 전체 조회
