@@ -81,8 +81,7 @@ public class CommentController {
         return commentService.warnComment(commentId,userDetails);
     }
 
-//    @GetMapping("/dagree/{commentId}")
-//    public DAgreeResponseDto
+
 
 
 

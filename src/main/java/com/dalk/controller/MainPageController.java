@@ -3,6 +3,7 @@ package com.dalk.controller;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
+import com.dalk.dto.responseDto.WarnCommentResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.MainPageService;
 import io.swagger.annotations.ApiOperation;
@@ -74,4 +75,6 @@ public class MainPageController {
     public List<MainPageAllResponseDto> getSerarchCategory(@PathVariable String category) {
         return mainPageService.getSearchCategory(category);
     }
+
+
 }

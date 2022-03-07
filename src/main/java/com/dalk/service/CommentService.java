@@ -24,6 +24,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -43,17 +44,24 @@ public class CommentService {
         Comment comment = new Comment(requestDto,board, userId);
         commentRepository.save(comment);
     }
-
     //댓글 조회
     @Transactional
     public List<CommentResponseDto> getComment(Long boardId) {
         Board boards = boardRepository.findById(boardId).orElseThrow(
                 ()-> new BoardNotFoundException("해당 게시글이 없습니다")
         );
+//        Optional<Comment> comment = commentRepository.findById(boardId);
         List<Comment> comments = commentRepository.findAllByBoard(boards);
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
+//        Long commentId = comment.
+//        WarnComment warnComment = warnCommentRepository.findById(commentId);
+
+
+
         for (Comment comment : comments) {
+//            Optional<WarnComment> warnComment = warnCommentRepository.findById(commentId);
+            List<WarnComment> warnCommentList = warnCommentRepository.findByCommentId(comment.getId());
             User user = userRepository.findById(comment.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
@@ -63,8 +71,9 @@ public class CommentService {
                     comment.getId(),
                     comment.getComment(),
                     comment.getAgreeCnt(),
-                    comment.getDisAgreeCnt()
-            );
+                    comment.getDisAgreeCnt(),
+                    warnCommentList.size());
+
             commentResponseDtoList.add(commentResponseDto);
         }
         return commentResponseDtoList;
@@ -231,6 +240,7 @@ public class CommentService {
 
     }
 
+    @Transactional
     public WarnCommentResponseDto warnComment(Long commentId, UserDetailsImpl userDetails) {
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(
@@ -249,14 +259,16 @@ public class CommentService {
 //        for (WarnComment warnComment : warnComments) {
 //
 //        }
-        WarnComment warnComment = WarnComment.builder()
-                .comment(comment)
-                .isWarn(true)
+        WarnComment warnCommentCheck = warnCommentRepository.findByUserIdAndComment(userDetails.getUser().getId(),comment).orElse(null);
 
-                .build();
-        warnCommentRepository.save(warnComment);
-        warnCommentResponseDto.setCommentId(commentId);
+        if (warnCommentCheck == null){
+            WarnComment warnComment = new WarnComment(false, comment, user);
+            warnCommentRepository.save(warnComment);
+        warnCommentResponseDto.setCommentId(warnComment.getComment().getId());
         warnCommentResponseDto.setWarn(warnComment.getIsWarn());
-        return warnCommentResponseDto;
+            return warnCommentResponseDto;
+        }else {
+            return null;
+        }
     }
 }
