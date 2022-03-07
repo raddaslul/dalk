@@ -30,11 +30,8 @@ public class ChatRoom extends Timestamped {
     @Column(name = "topic_b", nullable = false)
     private String topicB;
 
-    @Column(name = "content", nullable = false)
-    private String content;
-
-    @OneToMany(mappedBy = "chatRoom")
-    private List<Category> categorys;
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.DETACH)
+    private List<Category> categorys = new ArrayList<>();
 
     @Column(name = "time", nullable = false)
     private Boolean time;
@@ -45,7 +42,7 @@ public class ChatRoom extends Timestamped {
     @Column(nullable = false)
     private Long createUserId;
 
-    @OneToMany(mappedBy = "chatRoom")
+    @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
     private List<ChatRoomUser> chatRoomUser;
 
     @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
@@ -54,7 +51,6 @@ public class ChatRoom extends Timestamped {
     public ChatRoom(ChatRoomRequestDto requestDto, Long userId) {
         this.topicA = requestDto.getTopicA();
         this.topicB = requestDto.getTopicB();
-        this.content = requestDto.getContent();
         this.time = requestDto.getTime();
         this.createUserId = userId;
     }

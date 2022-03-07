@@ -62,7 +62,6 @@ public class InitialData implements ApplicationRunner {
                 "짜장",
                 "짬뽕",
                 "승자",
-                "내용",
                 userId1
         );
         boardRepository.save(board1);
@@ -79,7 +78,6 @@ public class InitialData implements ApplicationRunner {
                 "짬뽕",
                 "짜장",
                 "승자2",
-                "내용2",
                 userId2
         );
         boardRepository.save(board2);

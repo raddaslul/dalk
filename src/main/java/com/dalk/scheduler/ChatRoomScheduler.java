@@ -2,6 +2,7 @@ package com.dalk.scheduler;
 
 import com.dalk.domain.ChatRoom;
 import com.dalk.repository.ChatRoomRepository;
+import com.dalk.repository.RedisRepository;
 import com.dalk.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,14 +83,15 @@ public class ChatRoomScheduler {
             log.info("createdAtSecond = {}", createdAtSecond);
             Long resultCreatedAt = createdAtYear + createdAtMonth + createdAtDay + createdHour + createdAtMinute + createdAtSecond;
             log.info("생성 시간 = {}", resultCreatedAt);
-            if(chatRoom.getTime() == true) {
-                if (resultNow - resultCreatedAt >= 1200) {
+            if(chatRoom.getTime()) {
+                if (resultNow - resultCreatedAt >= 30) {
                     chatRoom.setStatus(false);
                     chatRoomRepository.save(chatRoom);
                     boardService.createBoard(chatRoom);
+                    chatRoomRepository.delete(chatRoom);
                 }
             }
-            else if (chatRoom.getTime() == false){
+            else if (!chatRoom.getTime()){
                 if (resultNow - resultCreatedAt >= 3600) {
                     chatRoom.setStatus(false);
                     chatRoomRepository.save(chatRoom);
