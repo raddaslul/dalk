@@ -1,17 +1,24 @@
 package com.dalk.service;
 
 import com.dalk.domain.*;
+import com.dalk.domain.wl.WarnBoard;
+import com.dalk.domain.wl.WarnComment;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnCommentResponseDto;
 import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.exception.ex.ChatRoomNotFoundException;
+import com.dalk.exception.ex.CommentNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.*;
+import com.dalk.repository.wl.WarnBoardRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +31,7 @@ public class MainPageService {
     private final PointRepository pointRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final WarnBoardRepository warnBoardRepository;
 
     //채팅방 생성
     public Long createChatRoom(UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) {
@@ -80,12 +88,14 @@ public class MainPageService {
     public List<MainPageBoardResponseDto> getMainPageBoard() {
         List<Board> boardList = boardRepository.findAll();
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
+
         for (Board board : boardList) {
+            List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
             List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
             User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList),user);
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList), user, warnBoardList.size());
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;
@@ -100,7 +110,8 @@ public class MainPageService {
         User user = userRepository.findById(boards.getCreateUserId()).orElseThrow(
                 () -> new LoginUserNotFoundException("유저 정보가 없습니다")
         );
-        return new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user);
+        List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(boards.getId());
+        return new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user,warnBoardList.size());
     }
 
     //게시글 검색
@@ -111,10 +122,11 @@ public class MainPageService {
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
         for (Board boards : boardList) {
+            List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(boards.getId());
             User user = userRepository.findById(boards.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user);
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user,warnBoardList.size());
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;
@@ -159,6 +171,32 @@ public class MainPageService {
 
 
         return mainPageAllResponseDtoList;
+    }
+
+    @Transactional
+    public WarnBoardResponseDto warnBoard(Long boardId, UserDetailsImpl userDetails) {
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new BoardNotFoundException("게시글이 없습니다")
+        );
+        User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
+                () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+        );
+
+
+
+        WarnBoardResponseDto warnBoardResponseDto = new WarnBoardResponseDto();
+
+        WarnBoard warnBoardCheck = warnBoardRepository.findByUserIdAndBoard(userDetails.getUser().getId(),board).orElse(null);
+
+        if (warnBoardCheck == null){
+            WarnBoard warnBoard = new WarnBoard(false,board,user);
+            warnBoardRepository.save(warnBoard);
+            warnBoardResponseDto.setBoardId(warnBoard.getBoard().getId());
+            warnBoardResponseDto.setWarn(warnBoard.getIsWarn());
+            return warnBoardResponseDto;
+        }else {
+            return null;
+        }
     }
 
 }

@@ -1,9 +1,10 @@
 package com.dalk.controller;
 
+import com.dalk.domain.wl.WarnBoard;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
-import com.dalk.dto.responseDto.WarnCommentResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.MainPageService;
 import io.swagger.annotations.ApiOperation;
@@ -76,5 +77,13 @@ public class MainPageController {
         return mainPageService.getSearchCategory(category);
     }
 
+    @GetMapping("/warnings/boards/{boardId}")
+    @ApiOperation(value = "게시글 신고하기")
+    public WarnBoardResponseDto warnBoard(
+            @PathVariable Long boardId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        return mainPageService.warnBoard(boardId,userDetails);
+    }
 
 }

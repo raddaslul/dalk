@@ -8,10 +8,11 @@ import com.dalk.domain.User;
 import com.dalk.domain.wl.WarnComment;
 import com.dalk.dto.requestDto.CommentRequestDto;
 import com.dalk.dto.responseDto.*;
+import com.dalk.dto.responseDto.WarnResponse.WarnCommentResponseDto;
 import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.exception.ex.CommentNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
-import com.dalk.repository.AgreeRepository;
+import com.dalk.repository.wl.AgreeRepository;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CommentRepository;
 import com.dalk.repository.UserRepository;
@@ -24,7 +25,6 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -251,14 +251,7 @@ public class CommentService {
         );
 
         WarnCommentResponseDto warnCommentResponseDto = new WarnCommentResponseDto();
-//
-//        List<WarnComment> warnComments = WarnCommentRepository.findById(commentId).orElseThrow(
-//                () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
-//        );
-//
-//        for (WarnComment warnComment : warnComments) {
-//
-//        }
+
         WarnComment warnCommentCheck = warnCommentRepository.findByUserIdAndComment(userDetails.getUser().getId(),comment).orElse(null);
 
         if (warnCommentCheck == null){

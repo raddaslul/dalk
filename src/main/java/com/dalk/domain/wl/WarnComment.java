@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
-@Setter
+
 @Table(name = "warn_comment")
 public class WarnComment extends Timestamped {
     @Id
