@@ -2,10 +2,7 @@ package com.dalk.controller;
 
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.CommentRequestDto;
-import com.dalk.dto.responseDto.AgreeResponseDto;
-import com.dalk.dto.responseDto.CommentResponseDto;
-import com.dalk.dto.responseDto.DAgreeResponseDto;
-import com.dalk.dto.responseDto.DisAgreeResponseDto;
+import com.dalk.dto.responseDto.*;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.CommentService;
 import io.swagger.annotations.ApiOperation;
@@ -73,6 +70,15 @@ public class CommentController {
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
         return commentService.disAgreeCheck(commentId,userDetails);
+    }
+
+    @GetMapping("/warnings/{commentId}")
+    @ApiOperation(value = "댓글 신고하기")
+    public WarnCommentResponseDto warnComment(
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        return commentService.warnComment(commentId,userDetails);
     }
 
 //    @GetMapping("/dagree/{commentId}")

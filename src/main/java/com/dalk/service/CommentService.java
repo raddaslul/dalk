@@ -5,11 +5,9 @@ import com.dalk.domain.wl.Agree;
 import com.dalk.domain.Board;
 import com.dalk.domain.Comment;
 import com.dalk.domain.User;
+import com.dalk.domain.wl.WarnComment;
 import com.dalk.dto.requestDto.CommentRequestDto;
-import com.dalk.dto.responseDto.AgreeResponseDto;
-import com.dalk.dto.responseDto.CommentResponseDto;
-import com.dalk.dto.responseDto.DisAgreeResponseDto;
-import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.dto.responseDto.*;
 import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.exception.ex.CommentNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
@@ -17,6 +15,7 @@ import com.dalk.repository.AgreeRepository;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CommentRepository;
 import com.dalk.repository.UserRepository;
+import com.dalk.repository.wl.WarnCommentRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,6 +33,7 @@ public class CommentService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final AgreeRepository agreeRepository;
+    private final WarnCommentRepository warnCommentRepository;
 
     //댓글 작성
     @Transactional
@@ -102,6 +102,8 @@ public class CommentService {
         }
     }
 
+
+//  찬성하기 , 찬성하기 취소
     @Transactional
     public AgreeResponseDto agreeCheck(Long commentId, UserDetailsImpl userDetails) {
 
@@ -163,6 +165,7 @@ public class CommentService {
         return agreeResponseDto;
     }
 
+    // 반대하기 , 반대하기 취소
     @Transactional
     public DisAgreeResponseDto disAgreeCheck(Long commentId, UserDetailsImpl userDetails) {
 
@@ -222,5 +225,34 @@ public class CommentService {
 
         return disAgreeResponseDto;
 
+    }
+
+    public WarnCommentResponseDto warnComment(Long commentId, UserDetailsImpl userDetails) {
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
+        );
+        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
+        );
+
+        WarnCommentResponseDto warnCommentResponseDto = new WarnCommentResponseDto();
+//
+//        List<WarnComment> warnComments = WarnCommentRepository.findById(commentId).orElseThrow(
+//                () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
+//        );
+//
+//        for (WarnComment warnComment : warnComments) {
+//
+//        }
+        WarnComment warnComment = WarnComment.builder()
+                .comment(comment)
+                .isWarn(true)
+                .c
+                .build();
+        warnCommentRepository.save(warnComment);
+        warnCommentResponseDto.setCommentId(commentId);
+        warnCommentResponseDto.setWarn(warnComment.getIsWarn());
+        return warnCommentResponseDto;
     }
 }
