@@ -30,14 +30,11 @@ public class ChatRoom extends Timestamped {
     @Column(name = "topic_b", nullable = false)
     private String topicB;
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.DETACH)
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
     private List<Category> categorys = new ArrayList<>();
 
     @Column(name = "time", nullable = false)
     private Boolean time;
-
-    @Column(name = "status", nullable = false)
-    private Boolean status;
 
     @Column(nullable = false)
     private Long createUserId;
@@ -53,9 +50,5 @@ public class ChatRoom extends Timestamped {
         this.topicB = requestDto.getTopicB();
         this.time = requestDto.getTime();
         this.createUserId = userId;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
     }
 }

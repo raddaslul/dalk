@@ -2,7 +2,6 @@ package com.dalk.scheduler;
 
 import com.dalk.domain.ChatRoom;
 import com.dalk.repository.ChatRoomRepository;
-import com.dalk.repository.RedisRepository;
 import com.dalk.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +51,7 @@ public class ChatRoomScheduler {
         Long resultNow = nowYear + nowMonth + nowDay + nowHour + nowMinute + nowSecond;
         log.info("지금 시간 = {}", resultNow);
 
-        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByStatus(true);
+        List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
         for (ChatRoom chatRoom : chatRoomList) {
             String createdAt = String.valueOf(chatRoom.getCreatedAt());
             log.info("createdAt = {}", createdAt);
@@ -84,17 +83,12 @@ public class ChatRoomScheduler {
             Long resultCreatedAt = createdAtYear + createdAtMonth + createdAtDay + createdHour + createdAtMinute + createdAtSecond;
             log.info("생성 시간 = {}", resultCreatedAt);
             if(chatRoom.getTime()) {
-                if (resultNow - resultCreatedAt >= 30) {
-                    chatRoom.setStatus(false);
-                    chatRoomRepository.save(chatRoom);
+                if (resultNow - resultCreatedAt >= 1200) {
                     boardService.createBoard(chatRoom);
-                    chatRoomRepository.delete(chatRoom);
                 }
             }
             else if (!chatRoom.getTime()){
                 if (resultNow - resultCreatedAt >= 3600) {
-                    chatRoom.setStatus(false);
-                    chatRoomRepository.save(chatRoom);
                     boardService.createBoard(chatRoom);
                 }
             }

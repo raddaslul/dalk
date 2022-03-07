@@ -34,4 +34,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 //    List<Category> findSearch(String keyword);
 
     List<Category> findAllByChatRoom(ChatRoom chatRoom);
+
+    List<Category> findAllByChatRoomId(Long id);
 }
