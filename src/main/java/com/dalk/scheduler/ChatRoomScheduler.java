@@ -91,7 +91,7 @@ public class ChatRoomScheduler {
                 if (resultNow - resultCreatedAt >= 3600)
                     chatRoomRepository.delete(chatRoom);
             }
-            mainPageService.createBoard(chatRoom);
+//            mainPageService.createBoard(chatRoom);
         }
     }
 }
