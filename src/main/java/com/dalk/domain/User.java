@@ -40,6 +40,9 @@ public class User extends Timestamped {
     @Column(name = "level")
     private Integer level;
 
+    @OneToOne
+    private ChatRoomUser chatRoomUser;
+
     @Column
     @Enumerated(value = EnumType.STRING) // 정보를 받을 때는 Enum 값으로 받지만
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨

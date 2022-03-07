@@ -7,6 +7,7 @@ import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.exception.ex.BoardNotFoundException;
+import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.*;
 import com.dalk.security.UserDetailsImpl;
 import io.swagger.models.auth.In;
@@ -41,7 +42,10 @@ public class AdminService {
 
             for (Board board : boardList) {
                 List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
-                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList));
+                User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
+                        () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+                );
+                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList),user);
                 mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
             }
             return mainPageBoardResponseDtoList;
@@ -68,7 +72,10 @@ public class AdminService {
                 List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
                 for (ChatRoom chatRoom : chatRoomList) {
                     List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
-                    MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList));
+                    User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                            () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+                    );
+                    MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user);
                     mainPageAllResponseDtoList.add(mainPageAllResponseDto);
                 }
                 return mainPageAllResponseDtoList;

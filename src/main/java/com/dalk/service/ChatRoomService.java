@@ -1,10 +1,8 @@
 package com.dalk.service;
 
 import com.dalk.domain.ChatRoom;
-import com.dalk.domain.User;
 
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
-import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
 import com.dalk.exception.ex.ChatRoomNotFoundException;
 import com.dalk.repository.ChatRoomRepository;
 import com.dalk.security.UserDetailsImpl;
@@ -26,9 +24,9 @@ public class ChatRoomService {
     public static final String ENTER_INFO = "ENTER_INFO"; // 채팅룸에 입장한 클라이언트의 sessionId 와 채팅룸 id 를 맵핑한 정보 저장
 
     // 채팅방 생성
-    public ChatRoom createChatRoom(CreateChatRoomRequestDto requestDto, UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-        ChatRoom chatRoom = new ChatRoom(requestDto, user);
+    public ChatRoom createChatRoom(ChatRoomRequestDto requestDto, UserDetailsImpl userDetails) {
+        Long userId = userDetails.getUser().getId();
+        ChatRoom chatRoom = new ChatRoom(requestDto, userId);
         chatRoomRepository.save(chatRoom);
         return chatRoom;
     }

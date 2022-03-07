@@ -1,15 +1,13 @@
 package com.dalk.service;
 
 import com.dalk.domain.*;
-import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
+import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.exception.ex.ChatRoomNotFoundException;
-import com.dalk.repository.BoardRepository;
-import com.dalk.repository.CategoryRepository;
-import com.dalk.repository.ChatRoomRepository;
-import com.dalk.repository.PointRepository;
+import com.dalk.exception.ex.LoginUserNotFoundException;
+import com.dalk.repository.*;
 import com.dalk.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,11 +23,13 @@ public class MainPageService {
     private final ChatRoomRepository chatRoomRepository;
     private final PointRepository pointRepository;
     private final CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
 
     //채팅방 생성
-    public Long createChatRoom(UserDetailsImpl userDetails, CreateChatRoomRequestDto requestDto) {
+    public Long createChatRoom(UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) {
         User user = userDetails.getUser();
-        ChatRoom chatRoom = new ChatRoom(requestDto, user);
+        Long userId = user.getId();
+        ChatRoom chatRoom = new ChatRoom(requestDto, userId);
         List<String> categoryList = requestDto.getCategory();
         chatRoomRepository.save(chatRoom);
         for (String stringCategory : categoryList) {
@@ -48,7 +48,10 @@ public class MainPageService {
 
         for (ChatRoom chatRoom : chatRoomList) {
             List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList));
+            User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+            );
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
@@ -64,7 +67,10 @@ public class MainPageService {
 
         for (ChatRoom chatRoom : chatRoomList) {
             List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom,MinkiService.categoryStringList(categoryList));
+            User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+            );
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom,MinkiService.categoryStringList(categoryList), user);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
@@ -76,7 +82,10 @@ public class MainPageService {
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
         for (Board board : boardList) {
             List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList));
+            User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
+                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+            );
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList),user);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;
@@ -88,7 +97,10 @@ public class MainPageService {
                 () -> new BoardNotFoundException("게시글이 없습니다")
         );
         List<Category> categoryList = categoryRepository.findCategoryByBoard(boards);
-        return new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList));
+        User user = userRepository.findById(boards.getCreateUserId()).orElseThrow(
+                () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+        );
+        return new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user);
     }
 
     //게시글 검색
@@ -99,7 +111,10 @@ public class MainPageService {
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
         for (Board boards : boardList) {
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList));
+            User user = userRepository.findById(boards.getCreateUserId()).orElseThrow(
+                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+            );
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;
@@ -123,7 +138,10 @@ public class MainPageService {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(
                 ()-> new ChatRoomNotFoundException("채팅방이 없습니다.")
         );
-        return new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList));
+        User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+        );
+        return new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user);
     }
 
     //카테고리 검색
@@ -132,7 +150,10 @@ public class MainPageService {
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
         for (ChatRoom chatRoom : chatRoomList) {
             List<Category> categoryList = chatRoom.getCategorys();
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList));
+            User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+            );
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
 
