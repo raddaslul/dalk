@@ -65,17 +65,17 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BoardNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleBoardNotFoundException(BoardNotFoundException e) {
-        return new ResponseEntity<>(new ErrorResponse("P001", e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse("B001", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalBoardUpdateUserException.class)
     public ResponseEntity<ErrorResponse> handleIllegalBoardUpdateUserException(IllegalBoardUpdateUserException e) {
-        return new ResponseEntity<>(new ErrorResponse("P002", e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse("B002", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalPostDeleteUserException.class)
     public ResponseEntity<ErrorResponse> handleIllegalPostDeleteUserException(IllegalPostDeleteUserException e) {
-        return new ResponseEntity<>(new ErrorResponse("P003", e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse("B003", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(CommentNotFoundException.class)

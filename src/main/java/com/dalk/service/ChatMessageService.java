@@ -66,12 +66,14 @@ public class ChatMessageService {
 
             if(chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId()) != null) {
                 ChatMessageItem chatMessageItem = chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId());
+                User itemUser = userRepository.findById(chatMessageItem.getUserId())
+                        .orElseThrow(() -> new LoginUserNotFoundException("로그인 후 이용해 주시기 바랍니다."));
                 String item = chatMessageItem.getItem();
                 if (item.equals("onlyMe")) {
-                    chatMessageRequestDto.setOnlyMe(user.getNickname());
+                    chatMessageRequestDto.setOnlyMe(itemUser.getNickname());
                 }
                 else if (item.equals("myName")) {
-                    chatMessageRequestDto.setMyName(user.getNickname());
+                    chatMessageRequestDto.setMyName(itemUser.getNickname());
                 }
             }
             ChatMessageAccessResponseDto chatMessageAccessResponseDto = new ChatMessageAccessResponseDto(chatMessageRequestDto);

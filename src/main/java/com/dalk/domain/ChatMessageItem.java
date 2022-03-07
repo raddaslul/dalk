@@ -27,6 +27,9 @@ public class ChatMessageItem extends Timestamped {
     private String roomId;
 
     @Column
+    private Long userId;
+
+    @Column
     private String item;
 
     @Column
@@ -41,6 +44,7 @@ public class ChatMessageItem extends Timestamped {
     public ChatMessageItem(ChatMessageRequestDto chatMessageRequestDto) {
         this.type = chatMessageRequestDto.getType();
         this.roomId = chatMessageRequestDto.getRoomId();
+        this.userId = chatMessageRequestDto.getUserId();
         this.item = chatMessageRequestDto.getItem();
         this.message = chatMessageRequestDto.getMessage();
         this.onlyMe = chatMessageRequestDto.getOnlyMe();
