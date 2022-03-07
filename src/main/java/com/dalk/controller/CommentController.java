@@ -3,6 +3,7 @@ package com.dalk.controller;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.CommentRequestDto;
 import com.dalk.dto.responseDto.*;
+import com.dalk.dto.responseDto.WarnResponse.WarnCommentResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.CommentService;
 import io.swagger.annotations.ApiOperation;
@@ -72,7 +73,7 @@ public class CommentController {
         return commentService.disAgreeCheck(commentId,userDetails);
     }
 
-    @GetMapping("/warnings/{commentId}")
+    @GetMapping("/warnings/comments/{commentId}")
     @ApiOperation(value = "댓글 신고하기")
     public WarnCommentResponseDto warnComment(
             @PathVariable Long commentId,
@@ -81,8 +82,7 @@ public class CommentController {
         return commentService.warnComment(commentId,userDetails);
     }
 
-//    @GetMapping("/dagree/{commentId}")
-//    public DAgreeResponseDto
+
 
 
 
