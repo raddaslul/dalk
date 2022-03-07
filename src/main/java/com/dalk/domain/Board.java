@@ -35,16 +35,11 @@ public class Board extends Timestamped {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "category", nullable = false)
-    private String category;
+    @Column(nullable = false)
+    private Long createUserId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_Id")
-    private User user;
-
-    @OneToOne
-    @JoinColumn(name = "chat_room_id")
-    private ChatRoom chatRoom;
+    @OneToMany(mappedBy = "board")
+    private List<Category> categorys;
 
     @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<WarnBoard> warnBoards = new ArrayList<>();
@@ -57,13 +52,11 @@ public class Board extends Timestamped {
             String topicB,
             String winner,
             String content,
-            String category,
-            User userId){
+            Long userId){
         this.topicA = topicA;
         this.topicB = topicB;
         this.winner = winner;
         this.content = content;
-        this.category = category;
-        this.user = userId;
+        this.createUserId = userId;
     }
 }

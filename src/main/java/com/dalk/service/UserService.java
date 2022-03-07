@@ -6,10 +6,7 @@ import com.dalk.domain.User;
 import com.dalk.dto.requestDto.SignupRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
-import com.dalk.exception.ex.DuplicateUsernameException;
-import com.dalk.exception.ex.DuplicationNicknameException;
-import com.dalk.exception.ex.ItemNotFoundException;
-import com.dalk.exception.ex.LoginUserNotFoundException;
+import com.dalk.exception.ex.*;
 import com.dalk.repository.ItemRepository;
 import com.dalk.repository.PointRepository;
 import com.dalk.repository.UserRepository;
@@ -33,6 +30,10 @@ public class UserService {
     private final ItemRepository itemRepository;
     private final PointRepository pointRepository;
 
+    private final Long onlyMePrice = 100L;
+    private final Long bigFontPrice = 100L;
+    private final Long myNamePrice = 100L;
+
     //회원가입
     public void signup(SignupRequestDto requestDto) {
 
@@ -51,20 +52,20 @@ public class UserService {
         String password = passwordEncoder.encode(requestDto.getPassword());//비번 인코딩
 
 
-        Item item = new Item(0,0,0);
+        Item item = new Item(0, 0, 0);
         itemRepository.save(item);
 
-        User user = new User(username, password, nickname,500L,1, User.Role.USER, item);
+        User user = new User(username, password, nickname, 500L, 1, User.Role.USER, item);
         userRepository.save(user);
 
-        Point point = new Point("회원가입",500L,500L, user);
+        Point point = new Point("회원가입 지급", 500L, 500L, user);
         pointRepository.save(point);
     }
 
     // 채팅방에서 유저 확인하기
     public User findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(
-                ()-> new LoginUserNotFoundException("찾는 유저가 없습니다")
+                () -> new LoginUserNotFoundException("찾는 유저가 없습니다")
         );
         return user;
     }
@@ -72,29 +73,35 @@ public class UserService {
 
     public void buyItem(String item, User user) {
         Item buyitem = itemRepository.findById(user.getItem().getId()).orElseThrow(
-                ()-> new ItemNotFoundException("아이템이 없습니다")
+                () -> new ItemNotFoundException("아이템이 없습니다")
         );
 //        Point recentPoint = pointRepository.findTopByUserIdOrderByCreatedAt(user.getId()); //얘는 왜 예외처리 안뜸?
-        if (item.equals("{onlyMe}")) {
-            buyitem.setOnlyMe(buyitem.getOnlyMe()+1);
-            pointUpdate(user);
-        } else if (item.equals("{bigFont}")) {
-            buyitem.setBigFont(buyitem.getBigFont()+1);
-            pointUpdate(user);
-        } else if (item.equals("{myName}")) {
-            buyitem.setMyName(buyitem.getMyName() + 1);
-            pointUpdate(user);
+        switch (item) {
+            case "onlyMe":
+                buyitem.setOnlyMe(buyitem.getOnlyMe() + 1);
+                itemBuy(user, onlyMePrice, "나만 말하기");
+                break;
+            case "bigFont":
+                buyitem.setBigFont(buyitem.getBigFont() + 1);
+                itemBuy(user, bigFontPrice, "내글자 크게하기");
+                break;
+            case "myName":
+                buyitem.setMyName(buyitem.getMyName() + 1);
+                itemBuy(user, myNamePrice, "모두 내이름으로 바꾸기");
+                break;
         }
     }
 
-    private void pointUpdate(User user) {  //추후 아이템 가격 변동여부에 따라 변화할 수 있음
-        Long totalPoint = user.getTotalPoint();
-        Point point = new Point("아이템 구매", -100L, totalPoint-100L, user);
-        pointRepository.save(point);
-        user.setTotalPoint(totalPoint-100L);
-        userRepository.save(user);
-
+    private void itemBuy(User user, Long price, String item) {
+        if (user.getTotalPoint() >= price) {
+            Long totalPoint = user.getTotalPoint();
+            Point point = new Point(item + " 구매", -price, totalPoint - price, user);
+            pointRepository.save(point);
+            user.setTotalPoint(totalPoint - price);
+            userRepository.save(user);
+        } else {
+            throw new LackPointException("보유한 포인트가 부족합니다");
+        }
     }
-
 }
 
