@@ -25,8 +25,9 @@ public class MainPageAllResponseDto {
     private Long restTime;
     private String createdAt;
     private Boolean time;
+    private Integer warnCnt;
 
-    public MainPageAllResponseDto(ChatRoom chatRoom, List<String> categoryList, User user) {
+    public MainPageAllResponseDto(ChatRoom chatRoom, List<String> categoryList, User user,Integer warnChatRoom) {
 //        this.userInfo = new UserInfoResponseDto(chatRoom.getUser());
         this.userInfo = new UserInfoResponseDto(user);
         this.roomId = chatRoom.getId();
@@ -36,5 +37,6 @@ public class MainPageAllResponseDto {
         this.restTime = TimeConversion.restTime(chatRoom.getCreatedAt(),chatRoom.getTime());
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
         this.time = chatRoom.getTime();
+        this.warnCnt=warnChatRoom;
     }
 }

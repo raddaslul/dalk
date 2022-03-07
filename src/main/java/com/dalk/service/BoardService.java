@@ -1,19 +1,21 @@
 package com.dalk.service;
 
-import com.dalk.domain.Board;
-import com.dalk.domain.Category;
-import com.dalk.domain.ChatRoom;
-import com.dalk.domain.User;
+import com.dalk.domain.*;
+import com.dalk.domain.wl.WarnBoard;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
 import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CategoryRepository;
 import com.dalk.repository.ChatRoomRepository;
 import com.dalk.repository.UserRepository;
+import com.dalk.repository.wl.WarnBoardRepository;
+import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
+    private final WarnBoardRepository warnBoardRepository;
 
     // 토론방 종료 후 게시글 생성
     public void createBoard(ChatRoom chatRoom) {
@@ -47,7 +50,8 @@ public class BoardService {
             User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList),user);
+            List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList),user,warnBoardList.size());
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;
@@ -62,7 +66,9 @@ public class BoardService {
         User user = userRepository.findById(boards.getCreateUserId()).orElseThrow(
                 () -> new LoginUserNotFoundException("유저 정보가 없습니다")
         );
-        return new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user);
+        List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(boards.getId());
+
+        return new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user,warnBoardList.size());
     }
 
     //게시글 검색
@@ -76,9 +82,38 @@ public class BoardService {
             User user = userRepository.findById(boards.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user);
+            List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(boards.getId());
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user,warnBoardList.size());
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;
+    }
+
+    @Transactional
+    public WarnBoardResponseDto warnBoard(Long boardId, UserDetailsImpl userDetails) {
+
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new BoardNotFoundException("게시글이 없습니다")
+        );
+        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+                ()-> new LoginUserNotFoundException("유저 정보가 없습니다.")
+        );
+
+        WarnBoardResponseDto warnBoardResponseDto = new WarnBoardResponseDto();
+
+        WarnBoard warnBoardCheck = warnBoardRepository.findByUserIdAndBoard(userDetails.getUser().getId(),board).orElse(null);
+
+        if (warnBoardCheck==null){
+            WarnBoard warnBoard =new WarnBoard(true,board,user);
+            warnBoardRepository.save(warnBoard);
+            warnBoardResponseDto.setBoardId(warnBoard.getBoard().getId());
+            warnBoardResponseDto.setWarn(warnBoard.getIsWarn());
+            return warnBoardResponseDto;
+        }
+        return null;
+
+
+
+
     }
 }

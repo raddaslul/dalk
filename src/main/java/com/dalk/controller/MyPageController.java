@@ -3,6 +3,7 @@ package com.dalk.controller;
 import com.dalk.domain.Point;
 import com.dalk.domain.User;
 import com.dalk.dto.responseDto.PointResponseDto;
+import com.dalk.dto.responseDto.RankDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.MyPageService;
 import io.swagger.annotations.ApiOperation;
@@ -34,5 +35,8 @@ public class MyPageController {
         User user = userDetails.getUser();
         return myPageService.getPoint(user);
     }
+//    @GetMapping("/api/ranks")
+//    @ApiOperation(value = "유저 랭킹조회")
+//    public List<RankDto>
 
 }

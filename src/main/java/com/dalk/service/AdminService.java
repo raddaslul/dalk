@@ -2,6 +2,8 @@ package com.dalk.service;
 
 
 import com.dalk.domain.*;
+import com.dalk.domain.wl.WarnBoard;
+import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.dto.responseDto.ItemResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
@@ -9,6 +11,9 @@ import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.*;
+import com.dalk.repository.wl.WarnBoardRepository;
+import com.dalk.repository.wl.WarnChatRoomRepository;
+import com.dalk.repository.wl.WarnCommentRepository;
 import com.dalk.security.UserDetailsImpl;
 import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
@@ -28,6 +33,9 @@ public class AdminService {
     private final ItemRepository itemRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final CategoryRepository categoryRepository;
+    private final WarnBoardRepository warnBoardRepository;
+    private final WarnCommentRepository warnCommentRepository;
+    private final WarnChatRoomRepository warnChatRoomRepository;
 
     //블라인드 게시글 전체 조회 - 관리자
 
@@ -41,11 +49,12 @@ public class AdminService {
             List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
             for (Board board : boardList) {
+                List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
                 List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
                 User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
                         () -> new LoginUserNotFoundException("유저 정보가 없습니다")
                 );
-                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList),user);
+                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList),user,warnBoardList.size());
                 mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
             }
             return mainPageBoardResponseDtoList;
@@ -75,7 +84,8 @@ public class AdminService {
                     User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
                             () -> new LoginUserNotFoundException("유저 정보가 없습니다")
                     );
-                    MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user);
+                    List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
+                    MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user,warnChatRoomList.size());
                     mainPageAllResponseDtoList.add(mainPageAllResponseDto);
                 }
                 return mainPageAllResponseDtoList;

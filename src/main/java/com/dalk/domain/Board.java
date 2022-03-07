@@ -38,8 +38,8 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board")
     private List<Category> categorys;
 
-    @OneToMany(mappedBy = "board", orphanRemoval = true)
-    private List<WarnBoard> warnBoards = new ArrayList<>();
+//    @OneToMany(mappedBy = "board", orphanRemoval = true)
+//    private List<WarnBoard> warnBoards = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();

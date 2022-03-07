@@ -8,10 +8,11 @@ import com.dalk.domain.User;
 import com.dalk.domain.wl.WarnComment;
 import com.dalk.dto.requestDto.CommentRequestDto;
 import com.dalk.dto.responseDto.*;
+import com.dalk.dto.responseDto.WarnResponse.WarnCommentResponseDto;
 import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.exception.ex.CommentNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
-import com.dalk.repository.AgreeRepository;
+import com.dalk.repository.wl.AgreeRepository;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CommentRepository;
 import com.dalk.repository.UserRepository;
@@ -43,17 +44,24 @@ public class CommentService {
         Comment comment = new Comment(requestDto,board, userId);
         commentRepository.save(comment);
     }
-
     //댓글 조회
     @Transactional
     public List<CommentResponseDto> getComment(Long boardId) {
         Board boards = boardRepository.findById(boardId).orElseThrow(
                 ()-> new BoardNotFoundException("해당 게시글이 없습니다")
         );
+//        Optional<Comment> comment = commentRepository.findById(boardId);
         List<Comment> comments = commentRepository.findAllByBoard(boards);
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
+//        Long commentId = comment.
+//        WarnComment warnComment = warnCommentRepository.findById(commentId);
+
+
+
         for (Comment comment : comments) {
+//            Optional<WarnComment> warnComment = warnCommentRepository.findById(commentId);
+            List<WarnComment> warnCommentList = warnCommentRepository.findByCommentId(comment.getId());
             User user = userRepository.findById(comment.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
@@ -63,8 +71,9 @@ public class CommentService {
                     comment.getId(),
                     comment.getComment(),
                     comment.getAgreeCnt(),
-                    comment.getDisAgreeCnt()
-            );
+                    comment.getDisAgreeCnt(),
+                    warnCommentList.size());
+
             commentResponseDtoList.add(commentResponseDto);
         }
         return commentResponseDtoList;
@@ -231,6 +240,7 @@ public class CommentService {
 
     }
 
+    @Transactional
     public WarnCommentResponseDto warnComment(Long commentId, UserDetailsImpl userDetails) {
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(
@@ -241,22 +251,17 @@ public class CommentService {
         );
 
         WarnCommentResponseDto warnCommentResponseDto = new WarnCommentResponseDto();
-//
-//        List<WarnComment> warnComments = WarnCommentRepository.findById(commentId).orElseThrow(
-//                () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
-//        );
-//
-//        for (WarnComment warnComment : warnComments) {
-//
-//        }
-        WarnComment warnComment = WarnComment.builder()
-                .comment(comment)
-                .isWarn(true)
 
-                .build();
-        warnCommentRepository.save(warnComment);
-        warnCommentResponseDto.setCommentId(commentId);
+        WarnComment warnCommentCheck = warnCommentRepository.findByUserIdAndComment(userDetails.getUser().getId(),comment).orElse(null);
+
+        if (warnCommentCheck == null){
+            WarnComment warnComment = new WarnComment(true, comment, user);
+            warnCommentRepository.save(warnComment);
+        warnCommentResponseDto.setCommentId(warnComment.getComment().getId());
         warnCommentResponseDto.setWarn(warnComment.getIsWarn());
-        return warnCommentResponseDto;
+            return warnCommentResponseDto;
+        }else {
+            return null;
+        }
     }
 }
