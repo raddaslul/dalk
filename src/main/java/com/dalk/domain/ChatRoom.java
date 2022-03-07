@@ -37,7 +37,10 @@ public class ChatRoom extends Timestamped {
     private List<Category> categorys;
 
     @Column(name = "time", nullable = false)
-    private Boolean time = false;
+    private Boolean time;
+
+    @Column(name = "status", nullable = false)
+    private Boolean status;
 
     @Column(nullable = false)
     private Long createUserId;
@@ -54,5 +57,9 @@ public class ChatRoom extends Timestamped {
         this.content = requestDto.getContent();
         this.time = requestDto.getTime();
         this.createUserId = userId;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }
