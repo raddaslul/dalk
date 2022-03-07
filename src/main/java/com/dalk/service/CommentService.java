@@ -1,13 +1,13 @@
 package com.dalk.service;
 
-import com.dalk.domain.Agree;
+import com.dalk.domain.wl.Agree;
+
 import com.dalk.domain.Board;
 import com.dalk.domain.Comment;
 import com.dalk.domain.User;
+import com.dalk.domain.wl.WarnComment;
 import com.dalk.dto.requestDto.CommentRequestDto;
-import com.dalk.dto.responseDto.AgreeResponseDto;
-import com.dalk.dto.responseDto.CommentResponseDto;
-import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.dto.responseDto.*;
 import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.exception.ex.CommentNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
@@ -15,6 +15,7 @@ import com.dalk.repository.AgreeRepository;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CommentRepository;
 import com.dalk.repository.UserRepository;
+import com.dalk.repository.wl.WarnCommentRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class CommentService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final AgreeRepository agreeRepository;
+    private final WarnCommentRepository warnCommentRepository;
 
     //댓글 작성
     @Transactional
@@ -60,8 +62,8 @@ public class CommentService {
                     userInfoResponseDto,
                     comment.getId(),
                     comment.getComment(),
-                    comment.getLikeses().size(),
-                    false
+                    comment.getAgreeCnt(),
+                    comment.getDisAgreeCnt()
             );
             commentResponseDtoList.add(commentResponseDto);
         }
@@ -104,10 +106,75 @@ public class CommentService {
         }
     }
 
+
+//  찬성하기 , 찬성하기 취소
     @Transactional
     public AgreeResponseDto agreeCheck(Long commentId, UserDetailsImpl userDetails) {
 
         AgreeResponseDto agreeResponseDto = new AgreeResponseDto();
+        CommentResponseDto commentResponseDto = new CommentResponseDto();
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
+        );
+        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+                () -> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
+        );
+//        agree 자체가 null이 됨.
+        Agree agreeCheck = agreeRepository.findByUserAndComment(userDetails.getUser(), comment).orElse(null);
+//            if(agreeCheck.getIsDisAgree()==false||agreeCheck.getIsDisAgree()==null){
+//            agreeCheck.setAgreeId(true)
+//            }
+
+        if (agreeCheck == null) {
+            Agree agree = new Agree(comment, user, false, false);
+            agreeRepository.save(agree);
+            agree.setIsAgree(true);
+            agree.setIsDisAgree(false);
+            agreeResponseDto.setIsAgree(true);
+            comment.setAgreeCnt(comment.getAgreeCnt() + 1);
+            commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
+        } else {
+            //T T 일경우
+            if(agreeCheck.getIsDisAgree() && agreeCheck.getIsAgree()) {
+                comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
+                agreeCheck.setIsAgree(false);
+                agreeCheck.setIsDisAgree(false);
+                agreeResponseDto.setIsAgree(false);
+                comment.setAgreeCnt(comment.getAgreeCnt() - 1);
+                commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
+                // T F 일경우
+            }else if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
+                comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
+                agreeCheck.setIsAgree(true);
+                agreeCheck.setIsDisAgree(false);
+                agreeResponseDto.setIsAgree(true);
+                comment.setAgreeCnt(comment.getAgreeCnt() + 1);
+                commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
+                // F T 일 경우
+            }else if(!agreeCheck.getIsDisAgree() && agreeCheck.getIsAgree()) {
+                agreeCheck.setIsAgree(false);
+                agreeResponseDto.setIsAgree(false);
+                comment.setAgreeCnt(comment.getAgreeCnt() - 1);
+                commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
+                // F F 일 경우
+            }else if(!agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
+                agreeCheck.setIsAgree(true);
+                agreeResponseDto.setIsAgree(true);
+                comment.setAgreeCnt(comment.getAgreeCnt() + 1);
+                commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
+            }
+        }
+
+        return agreeResponseDto;
+    }
+
+    // 반대하기 , 반대하기 취소
+    @Transactional
+    public DisAgreeResponseDto disAgreeCheck(Long commentId, UserDetailsImpl userDetails) {
+
+        DisAgreeResponseDto disAgreeResponseDto = new DisAgreeResponseDto();
+        CommentResponseDto commentResponseDto = new CommentResponseDto();
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
@@ -115,30 +182,81 @@ public class CommentService {
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
         );
-//        agree 자체가 null이 됨.
+
         Agree agreeCheck = agreeRepository.findByUserAndComment(userDetails.getUser(),comment).orElse(null);
 
-        if (agreeCheck == null){
-            Agree agree = new Agree(comment,user,true);
+        if (agreeCheck == null) {
+            Agree agree = new Agree(comment, user, false, false);
             agreeRepository.save(agree);
+            agree.setIsAgree(false);
+            agree.setIsDisAgree(true);
+            disAgreeResponseDto.setIsDisAgree(true);
+            comment.setDisAgreeCnt(comment.getDisAgreeCnt() + 1);
+            commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
+        } else {
 
-            agreeResponseDto.setIsAgree(true);
-            agree.setAgreeCnt(agree.getAgreeCnt()+1);
-            agreeResponseDto.setAgreeCnt(agree.getAgreeCnt());
-        }else {
-            if(agreeCheck.getIsAgree() == true){
+            //T T 일경우
+            if(agreeCheck.getIsDisAgree() && agreeCheck.getIsAgree()) {
+                comment.setAgreeCnt(comment.getAgreeCnt() - 1);
                 agreeCheck.setIsAgree(false);
-                agreeResponseDto.setIsAgree(false);
-                agreeCheck.setAgreeCnt(agreeCheck.getAgreeCnt()-1);
-                agreeResponseDto.setAgreeCnt(agreeCheck.getAgreeCnt());
+                agreeCheck.setIsDisAgree(false);
+                disAgreeResponseDto.setIsDisAgree(false);
+                comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
+                commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
+                // T F 일경우
+            }else if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
 
-            }else if(agreeCheck.getIsAgree() == false){
-                agreeCheck.setIsAgree(true);
-                agreeResponseDto.setIsAgree(true);
-                agreeCheck.setAgreeCnt(agreeCheck.getAgreeCnt()+1);
-                agreeResponseDto.setAgreeCnt(agreeCheck.getAgreeCnt());
+                agreeCheck.setIsDisAgree(false);
+                disAgreeResponseDto.setIsDisAgree(false);
+                comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
+                commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
+                // F T 일 경우
+            }else if(!agreeCheck.getIsDisAgree() && agreeCheck.getIsAgree()) {
+                comment.setAgreeCnt(comment.getAgreeCnt() - 1);
+                agreeCheck.setIsAgree(false);
+                agreeCheck.setIsDisAgree(true);
+                disAgreeResponseDto.setIsDisAgree(true);
+                comment.setDisAgreeCnt(comment.getDisAgreeCnt() + 1);
+                commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
+                // F F 일 경우
+            }else if(!agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
+                agreeCheck.setIsDisAgree(true);
+                disAgreeResponseDto.setIsDisAgree(true);
+                comment.setDisAgreeCnt(comment.getDisAgreeCnt() + 1);
+                commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
             }
         }
-        return agreeResponseDto;
+
+        return disAgreeResponseDto;
+
+    }
+
+    public WarnCommentResponseDto warnComment(Long commentId, UserDetailsImpl userDetails) {
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
+        );
+        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
+        );
+
+        WarnCommentResponseDto warnCommentResponseDto = new WarnCommentResponseDto();
+//
+//        List<WarnComment> warnComments = WarnCommentRepository.findById(commentId).orElseThrow(
+//                () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
+//        );
+//
+//        for (WarnComment warnComment : warnComments) {
+//
+//        }
+        WarnComment warnComment = WarnComment.builder()
+                .comment(comment)
+                .isWarn(true)
+
+                .build();
+        warnCommentRepository.save(warnComment);
+        warnCommentResponseDto.setCommentId(commentId);
+        warnCommentResponseDto.setWarn(warnComment.getIsWarn());
+        return warnCommentResponseDto;
     }
 }

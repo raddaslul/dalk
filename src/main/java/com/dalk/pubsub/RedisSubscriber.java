@@ -26,27 +26,32 @@ public class RedisSubscriber {
         log.info("publishMessage 새롭게 자른거 = {}", publishMessage.startsWith("ITEM", 9));
         try {
             // 채팅방 입장시 메세지 보내기
-            if (publishMessage.startsWith("ENTER", 9) || publishMessage.startsWith("QUIT", 9)) {
+            if (publishMessage.startsWith("ENTER", 9)) {
                 ChatMessageAccessResponseDto chatMessageAccessResponseDto = objectMapper.readValue(publishMessage, ChatMessageAccessResponseDto.class);
-                messagingTemplate.convertAndSend("/sub/api/chat/rooms/" + chatMessageAccessResponseDto.getRoomId(), chatMessageAccessResponseDto);
+                messagingTemplate.convertAndSend("/sub/chat/rooms/" + chatMessageAccessResponseDto.getRoomId(), chatMessageAccessResponseDto);
+            }
+
+            else if (publishMessage.startsWith("EXIT", 9)) {
+                ChatMessageAccessResponseDto chatMessageAccessResponseDto = objectMapper.readValue(publishMessage, ChatMessageAccessResponseDto.class);
+                messagingTemplate.convertAndSend("/sub/chat/rooms/" + chatMessageAccessResponseDto.getRoomId(), chatMessageAccessResponseDto);
             }
 
             // 채팅방에서 채팅 시 메세지 보내기
             else if(publishMessage.startsWith("TALK", 9)){
                 ChatMessageResponseDto chatMessageResponseDto = objectMapper.readValue(publishMessage, ChatMessageResponseDto.class);
-                messagingTemplate.convertAndSend("/sub/api/chat/rooms/" + chatMessageResponseDto.getRoomId(), chatMessageResponseDto);
+                messagingTemplate.convertAndSend("/sub/chat/rooms/" + chatMessageResponseDto.getRoomId(), chatMessageResponseDto);
             }
 
             // 채팅방에서 아이템 사용시 메세지 보내기
             else if(publishMessage.startsWith("ITEM", 9)){
                 ChatMessageItemResponseDto chatMessageItemResponseDto = objectMapper.readValue(publishMessage, ChatMessageItemResponseDto.class);
-                messagingTemplate.convertAndSend("/sub/api/chat/rooms/" + chatMessageItemResponseDto.getRoomId(), chatMessageItemResponseDto);
+                messagingTemplate.convertAndSend("/sub/chat/rooms/" + chatMessageItemResponseDto.getRoomId(), chatMessageItemResponseDto);
             }
 
-//            else if(publishMessage.startsWith("DELETE", 9)){
-//                ChatMessageItemResponseDto chatMessageItemResponseDto = objectMapper.readValue(publishMessage, ChatMessageItemResponseDto.class);
-//                messagingTemplate.convertAndSend("/sub/api/chat/rooms/" + chatMessageItemResponseDto.getRoomId(), chatMessageItemResponseDto);
-//            }
+            else if(publishMessage.startsWith("ITEMTIMEOUT", 9)){
+                ChatMessageItemResponseDto chatMessageItemResponseDto = objectMapper.readValue(publishMessage, ChatMessageItemResponseDto.class);
+                messagingTemplate.convertAndSend("/sub/chat/rooms/" + chatMessageItemResponseDto.getRoomId(), chatMessageItemResponseDto);
+            }
 
         } catch (Exception e) {
             log.error("Exception = {}", e);

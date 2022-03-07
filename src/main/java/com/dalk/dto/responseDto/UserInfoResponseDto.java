@@ -23,7 +23,6 @@ public class UserInfoResponseDto {
     private User.Role role;
     private ItemResponseDto item;
 
-
     public UserInfoResponseDto(User user) {
         this.id = user.getId();
         this.username = user.getUsername();

@@ -1,5 +1,6 @@
 package com.dalk.domain;
 
+import com.dalk.domain.time.Timestamped;
 import com.dalk.dto.requestDto.ChatMessageRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Entity
-public class ChatMessageItem {
+public class ChatMessageItem extends Timestamped {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     @Column
@@ -24,6 +25,9 @@ public class ChatMessageItem {
 
     @Column
     private String roomId;
+
+    @Column
+    private Long userId;
 
     @Column
     private String item;
@@ -40,6 +44,7 @@ public class ChatMessageItem {
     public ChatMessageItem(ChatMessageRequestDto chatMessageRequestDto) {
         this.type = chatMessageRequestDto.getType();
         this.roomId = chatMessageRequestDto.getRoomId();
+        this.userId = chatMessageRequestDto.getUserId();
         this.item = chatMessageRequestDto.getItem();
         this.message = chatMessageRequestDto.getMessage();
         this.onlyMe = chatMessageRequestDto.getOnlyMe();
