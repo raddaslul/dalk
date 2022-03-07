@@ -240,6 +240,8 @@ public class CommentService {
 
     }
 
+
+//    댓글 신고하기
     @Transactional
     public WarnCommentResponseDto warnComment(Long commentId, UserDetailsImpl userDetails) {
 

@@ -30,6 +30,7 @@ public class ChatRoomService {
     private final CategoryRepository categoryRepository;
     private final ChatRoomScheduler chatRoomScheduler;
     private final UserRepository userRepository;
+    private final BoardRepository boardRepository;
     private final WarnChatRoomRepository warnChatRoomRepository;
 
     public Long createChatRoom(UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) {

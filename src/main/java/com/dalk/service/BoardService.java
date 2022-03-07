@@ -89,6 +89,7 @@ public class BoardService {
         return mainPageBoardResponseDtoList;
     }
 
+//    게시글 신고하기
     @Transactional
     public WarnBoardResponseDto warnBoard(Long boardId, UserDetailsImpl userDetails) {
 
