@@ -252,7 +252,7 @@ public class CommentService {
         WarnComment warnComment = WarnComment.builder()
                 .comment(comment)
                 .isWarn(true)
-                .c
+
                 .build();
         warnCommentRepository.save(warnComment);
         warnCommentResponseDto.setCommentId(commentId);
