@@ -146,7 +146,7 @@ public class MainPageService {
 
     //카테고리 검색
     public List<MainPageAllResponseDto> getSearchCategory(String category) {
-        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(category, category, category);
+        List<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(category, category, category);
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
         for (ChatRoom chatRoom : chatRoomList) {
             List<Category> categoryList = chatRoom.getCategorys();
