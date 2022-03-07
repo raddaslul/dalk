@@ -43,6 +43,26 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse("U006", e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(IllegalTokenUsernameException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalTokenUsernameException(IllegalTokenUsernameException e) {
+        return new ResponseEntity<>(new ErrorResponse("T001", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalTokenUsernameDateException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalTokenDateException(IllegalTokenUsernameDateException e) {
+        return new ResponseEntity<>(new ErrorResponse("T002", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalTokenUserIdException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalTokenUserIdException(IllegalTokenUserIdException e) {
+        return new ResponseEntity<>(new ErrorResponse("T003", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalTokenUserIdDateException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalTokenUserIdDateException(IllegalTokenUserIdDateException e) {
+        return new ResponseEntity<>(new ErrorResponse("T004", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(BoardNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleBoardNotFoundException(BoardNotFoundException e) {
         return new ResponseEntity<>(new ErrorResponse("P001", e.getMessage()), HttpStatus.BAD_REQUEST);
@@ -75,6 +95,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ItemNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleItemNotFoundException(ItemNotFoundException e) {
+        return new ResponseEntity<>(new ErrorResponse("I001", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(LackPointException.class)
+    public ResponseEntity<ErrorResponse> handleLackPointException(LackPointException e) {
         return new ResponseEntity<>(new ErrorResponse("I001", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 

@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class ChatMessage {
 
     public enum MessageType {
-        ENTER, TALK, QUIT, ITEM, DELETE
+        ENTER, TALK, EXIT, ITEM, ITEMTIMEOUT
     }
 
     @Id

@@ -86,7 +86,7 @@ public class StompHandler implements ChannelInterceptor {
                 redisRepository.setUserChatRoomInOut(findInOutKey, false);
             }
             redisRepository.removeUserEnterInfo(sessionId);
-            chatMessageService.accessChatMessage(ChatMessageRequestDto.builder().type(ChatMessage.MessageType.QUIT).roomId(roomId).userId(userId).build());
+            chatMessageService.accessChatMessage(ChatMessageRequestDto.builder().type(ChatMessage.MessageType.EXIT).roomId(roomId).userId(userId).build());
         }
         return message;
     }

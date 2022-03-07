@@ -8,6 +8,9 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class InitialData implements ApplicationRunner {
@@ -18,6 +21,7 @@ public class InitialData implements ApplicationRunner {
     private final CommentRepository commentRepository;
     private final ItemRepository itemRepository;
     private final PointRepository pointRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -53,35 +57,50 @@ public class InitialData implements ApplicationRunner {
         Point point2 = new Point("회원가입",500L,500L,user1);
         pointRepository.save(point2);
 
+        Long userId1 = admin.getId();
         Board board1 = new Board( //게시글 추가
                 "짜장",
                 "짬뽕",
                 "승자",
                 "내용",
-                "카테고리",
-                user1
+                userId1
         );
+        boardRepository.save(board1);
+        List<String> categoryList1 = new ArrayList<>();
+        categoryList1.add("연애");
+        categoryList1.add("오락");
+        for(String stringCategory : categoryList1){
+            Category category = new Category(board1, stringCategory);
+            categoryRepository.save(category);
+        }
+
+        Long userId2 = user1.getId();
         Board board2 = new Board(
                 "짬뽕",
                 "짜장",
                 "승자2",
                 "내용2",
-                "카테고리2",
-                user1
+                userId2
         );
-
-        boardRepository.save(board1);
         boardRepository.save(board2);
+        List<String> categoryList2 = new ArrayList<>();
+        categoryList2.add("도움");
+        categoryList2.add("사랑");
+        for(String stringCategory : categoryList2){
+            Category category = new Category(board2, stringCategory);
+            categoryRepository.save(category);
+        }
+
 
         Comment comment1 = new Comment(
                 "안녕하세요1",
                 board1,
-                user1
+                userId1
         );
         Comment comment2 = new Comment(
                 "안녕하세요2",
                 board1,
-                user1
+                userId2
         );
         commentRepository.save(comment1);
         commentRepository.save(comment2);

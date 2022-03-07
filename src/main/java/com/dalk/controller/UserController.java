@@ -23,7 +23,6 @@ import java.util.HashMap;
 public class UserController {
 
     private final UserService userService;
-    private final PointRepository pointRepository;
     // 회원가입
     @PostMapping("/users/signup")
     @ApiOperation(value = "회원가입")
@@ -39,10 +38,6 @@ public class UserController {
     @GetMapping("/loginCheck")
     @ApiOperation(value = "로그인확인")
     public UserInfoResponseDto userInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        User user = userDetails.getUser();
-//        Point point = pointRepository.findTopByUserId(user.getId());
-//        user.setPoint(point.getToTalPoint());
-//        return new UserInfoResponseDto(user);
         return MinkiService.userInfo(userDetails.getUser());
     }
 

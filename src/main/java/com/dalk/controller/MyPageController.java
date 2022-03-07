@@ -5,6 +5,7 @@ import com.dalk.domain.User;
 import com.dalk.dto.responseDto.PointResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.MyPageService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -26,19 +27,12 @@ public class MyPageController {
         User user = userDetails.getUser();
         return ResponseEntity.ok().body(myPageService.deleteUser(user));
     }
-    //포인트 내역 조회
+
     @GetMapping("/mypage/points")
-    public List<PointResponseDto> getPoint(@AuthenticationPrincipal UserDetailsImpl userDetails){
+    @ApiOperation(value = "포인트 내역 조회")
+    public List<PointResponseDto> getPoint(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         return myPageService.getPoint(user);
     }
-
-
-
-    //계정꾸미기
-//    @PostMapping("/mypage/item")
-//    public ItemResponseDto buyitem(@AuthenticationPrincipal UserDetailsImpl userDetails){
-//        return MyPageService.
-//    }
 
 }

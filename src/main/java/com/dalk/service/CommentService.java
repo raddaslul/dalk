@@ -39,7 +39,8 @@ public class CommentService {
     @Transactional
     public void createComment(Long boardId, CommentRequestDto requestDto, User user) {
         Board board = boardRepository.findById(boardId).orElseGet(null);
-        Comment comment = new Comment(requestDto, user, board);
+        Long userId = user.getId();
+        Comment comment = new Comment(requestDto,board, userId);
         commentRepository.save(comment);
     }
 
@@ -53,7 +54,10 @@ public class CommentService {
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
         for (Comment comment : comments) {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(comment.getUser());
+            User user = userRepository.findById(comment.getCreateUserId()).orElseThrow(
+                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+            );
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
             CommentResponseDto commentResponseDto = new CommentResponseDto(
                     userInfoResponseDto,
                     comment.getId(),
@@ -72,7 +76,7 @@ public class CommentService {
         Comment comments = commentRepository.findById(commentId).orElseThrow(
                 ()-> new CommentNotFoundException("해당 댓글이 없습니다")
         );
-        if (comments.getUser().getId().equals(userDetails.getUser().getId())) {
+        if (comments.getCreateUserId().equals(userDetails.getUser().getId())) {
             comments.update(requestDto.getComment());
             HashMap<String, Object> result = new HashMap<>();
             result.put("result", "true");
@@ -90,7 +94,7 @@ public class CommentService {
         Comment comments = commentRepository.findById(commentId).orElseThrow(
                 ()-> new CommentNotFoundException("해당 댓글이 없습니다")
         );
-        if (comments.getUser().getId().equals(userDetails.getUser().getId())) {
+        if (comments.getCreateUserId().equals(userDetails.getUser().getId())) {
             commentRepository.deleteById(comments.getId());
             HashMap<String, Object> result = new HashMap<>();
             result.put("result", "true");
