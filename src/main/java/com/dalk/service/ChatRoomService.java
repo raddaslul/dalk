@@ -1,67 +1,127 @@
 package com.dalk.service;
 
+import com.dalk.domain.Board;
+import com.dalk.domain.Category;
 import com.dalk.domain.ChatRoom;
-
+import com.dalk.domain.User;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
+import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.exception.ex.ChatRoomNotFoundException;
+import com.dalk.exception.ex.LoginUserNotFoundException;
+import com.dalk.repository.BoardRepository;
+import com.dalk.repository.CategoryRepository;
 import com.dalk.repository.ChatRoomRepository;
+import com.dalk.repository.UserRepository;
+import com.dalk.scheduler.ChatRoomScheduler;
 import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ChatRoomService {
 
-    @Resource(name = "redisTemplate")
-    private HashOperations<String, String, String> hashOpsEnterInfo;
-
     private final ChatRoomRepository chatRoomRepository;
-    public static final String ENTER_INFO = "ENTER_INFO"; // 채팅룸에 입장한 클라이언트의 sessionId 와 채팅룸 id 를 맵핑한 정보 저장
+    private final CategoryRepository categoryRepository;
+    private final ChatRoomScheduler chatRoomScheduler;
+    private final UserRepository userRepository;
+    private final BoardRepository boardRepository;
 
-    // 채팅방 생성
-    public ChatRoom createChatRoom(ChatRoomRequestDto requestDto, UserDetailsImpl userDetails) {
-        Long userId = userDetails.getUser().getId();
+    public Long createChatRoom(UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) {
+        User user = userDetails.getUser();
+        Long userId = user.getId();
         ChatRoom chatRoom = new ChatRoom(requestDto, userId);
+        chatRoom.setStatus(true);
         chatRoomRepository.save(chatRoom);
-        return chatRoom;
+        List<String> categoryList = requestDto.getCategory();
+        for (String stringCategory : categoryList) {
+            Category category = new Category(chatRoom, stringCategory);
+            categoryRepository.save(category);
+        }
+        try{
+            return chatRoom.getId();
+        } catch (IllegalArgumentException ignored){
+        } finally {
+            chatRoomScheduler.autoRoomFalse();
+        } return null;
     }
 
-    // 전체 채팅방 조회
-    public List<ChatRoom> getAllChatRooms() {
-        return chatRoomRepository.findAllByOrderByCreatedAtDesc();
+    //토론방리스트 탑6 조회
+    public List<MainPageAllResponseDto> getMainPageTop6() {
+        //board 전체를 가져옴
+        List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByOrderByCreatedAtDesc();
+        //리턴할 값의 리스트를 정의
+        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
+
+        for (ChatRoom chatRoom : chatRoomList) {
+            List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
+            User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+            );
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user);
+            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+        }
+        return mainPageAllResponseDtoList;
     }
 
-//    // 카테고리별 채팅방 조회
-//    public List<ChatRoom> getAllChatRoomsByCategory(String category) {
-//        return chatRoomRepository.findByCategory(category);
-//    }
+    //토론방리스트 전체조회
+    public List<MainPageAllResponseDto> getMainPageAll() {
 
-    // 개별 채팅방 조회
-    public ChatRoom getEachChatRoom(Long id) {
-        ChatRoom chatRoom = chatRoomRepository.findById(id).orElseThrow(
-                () -> new ChatRoomNotFoundException("찾는 채팅방이 존재하지 않습니다.")
+        //board 전체를 가져옴
+        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc();
+        //리턴할 값의 리스트를 정의
+        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
+
+        for (ChatRoom chatRoom : chatRoomList) {
+            List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
+            User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+            );
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom,MinkiService.categoryStringList(categoryList), user);
+            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+        }
+        return mainPageAllResponseDtoList;
+    }
+
+    //채팅방 하나 입장
+    public MainPageAllResponseDto getMainPageOne(Long roomId) {
+        List<Category> categoryList = categoryRepository.findCategoryByChatRoom_Id(roomId);
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(
+                ()-> new ChatRoomNotFoundException("채팅방이 없습니다.")
         );
-        return chatRoom;
+        User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+        );
+        return new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user);
     }
 
-    // 유저가 입장한 채팅방 ID 와 유저 세션 ID 맵핑 정보 저장
-    public void setUserEnterInfo(String sessionId, String roomId) {
-        hashOpsEnterInfo.put(ENTER_INFO, sessionId, roomId);
+    //카테고리 검색
+    public List<MainPageAllResponseDto> getSearchCategory(String category) {
+        List<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(category, category, category);
+        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
+        for (ChatRoom chatRoom : chatRoomList) {
+            List<Category> categoryList = chatRoom.getCategorys();
+            User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+            );
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user);
+            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+        }
+        return mainPageAllResponseDtoList;
     }
 
-    // 유저 세션으로 입장해 있는 채팅방 ID 조회
-    public String getUserEnterRoomId(String sessionId) {
-        return hashOpsEnterInfo.get(ENTER_INFO, sessionId);
-    }
-
-    // 유저 세션정보와 맵핑된 채팅방 ID 삭제
-    public void removeUserEnterInfo(String sessionId) {
-        hashOpsEnterInfo.delete(ENTER_INFO, sessionId);
-    }
-
+//        //카테고리별 채팅방 조회
+//    public List<MainPageAllResponseDto> getSearchCategory2(String category) {
+//        List<ChatRoom> chatRoomList = chatRoomRepository.findByCategory(category);
+//        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
+//
+//        for (ChatRoom chatRoom : chatRoomList) {
+//            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom);
+//            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+//        }
+//        return mainPageAllResponseDtoList;
+//    }
 }
