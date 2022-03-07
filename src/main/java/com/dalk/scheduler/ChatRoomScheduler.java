@@ -2,7 +2,7 @@ package com.dalk.scheduler;
 
 import com.dalk.domain.ChatRoom;
 import com.dalk.repository.ChatRoomRepository;
-import com.dalk.service.MainPageService;
+import com.dalk.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,11 +17,10 @@ import java.util.List;
 public class ChatRoomScheduler {
 
     private final ChatRoomRepository chatRoomRepository;
-    private final MainPageService mainPageService;
+    private final BoardService boardService;
 
-    @Scheduled(cron = "0 0/1 * * * *")
-    public void autoRoomDelete() {
-        List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
+    @Scheduled(cron = "0/1 * * * * *")
+    public void autoRoomFalse() {
         String now = String.valueOf(LocalDateTime.now());
         log.info("now = {}", now);
         String nowDate = now.split("T")[0];
@@ -52,6 +51,7 @@ public class ChatRoomScheduler {
         Long resultNow = nowYear + nowMonth + nowDay + nowHour + nowMinute + nowSecond;
         log.info("지금 시간 = {}", resultNow);
 
+        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByStatus(true);
         for (ChatRoom chatRoom : chatRoomList) {
             String createdAt = String.valueOf(chatRoom.getCreatedAt());
             log.info("createdAt = {}", createdAt);
@@ -84,14 +84,18 @@ public class ChatRoomScheduler {
             log.info("생성 시간 = {}", resultCreatedAt);
             if(chatRoom.getTime() == true) {
                 if (resultNow - resultCreatedAt >= 1200) {
-                    chatRoomRepository.delete(chatRoom);
+                    chatRoom.setStatus(false);
+                    chatRoomRepository.save(chatRoom);
+                    boardService.createBoard(chatRoom);
                 }
             }
-            else {
-                if (resultNow - resultCreatedAt >= 3600)
-                    chatRoomRepository.delete(chatRoom);
+            else if (chatRoom.getTime() == false){
+                if (resultNow - resultCreatedAt >= 3600) {
+                    chatRoom.setStatus(false);
+                    chatRoomRepository.save(chatRoom);
+                    boardService.createBoard(chatRoom);
+                }
             }
-//            mainPageService.createBoard(chatRoom);
         }
     }
 }
