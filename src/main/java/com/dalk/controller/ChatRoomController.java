@@ -1,8 +1,10 @@
 package com.dalk.controller;
 
+import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnRoomResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.ChatRoomService;
 import io.swagger.annotations.ApiOperation;
@@ -52,6 +54,14 @@ public class ChatRoomController {
         return chatRoomService.getSearchCategory(category);
     }
 
+    @GetMapping("/warnings/rooms/{roomId}")
+    @ApiOperation(value = "토론방 신고하기")
+    public WarnRoomResponseDto WarnChatRoom
+            (@PathVariable Long roomId,
+             @AuthenticationPrincipal UserDetailsImpl userDetails){
+
+        return chatRoomService.WarnChatRoom(roomId,userDetails);
+    }
 
 
 
