@@ -6,6 +6,8 @@ import com.dalk.dto.responseDto.ItemResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.exception.ex.BoardNotFoundException;
+import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.*;
 import com.dalk.security.UserDetailsImpl;
 import io.swagger.models.auth.In;
@@ -25,7 +27,7 @@ public class AdminService {
     private final PointRepository pointRepository;
     private final ItemRepository itemRepository;
     private final ChatRoomRepository chatRoomRepository;
-
+    private final CategoryRepository categoryRepository;
 
     //블라인드 게시글 전체 조회 - 관리자
 
@@ -39,7 +41,11 @@ public class AdminService {
             List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
             for (Board board : boardList) {
-                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board);
+                List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
+                User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
+                        () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+                );
+                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList),user);
                 mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
             }
             return mainPageBoardResponseDtoList;
@@ -51,7 +57,7 @@ public class AdminService {
     public void deleteAdminBoard(Long boardId, UserDetailsImpl userDetails) {
         if (userDetails.getUser().getRole().equals(User.Role.ADMIN)) {
             Board board = boardRepository.findById(boardId).orElseThrow(
-                    () -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다. ")
+                    () -> new BoardNotFoundException("해당 게시글이 존재하지 않습니다. ")
             );
             boardRepository.deleteById(board.getId());
         }
@@ -65,7 +71,11 @@ public class AdminService {
                 //리턴할 값의 리스트를 정의
                 List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
                 for (ChatRoom chatRoom : chatRoomList) {
-                    MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom);
+                    List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
+                    User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                            () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+                    );
+                    MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user);
                     mainPageAllResponseDtoList.add(mainPageAllResponseDto);
                 }
                 return mainPageAllResponseDtoList;

@@ -3,7 +3,6 @@ package com.dalk.domain;
 import com.dalk.domain.time.Timestamped;
 import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
-import com.dalk.dto.requestDto.MainPageRequest.CreateChatRoomRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,34 +33,26 @@ public class ChatRoom extends Timestamped {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "category", nullable = false)
-    private String category;
+    @OneToMany(mappedBy = "chatRoom")
+    private List<Category> categorys;
 
     @Column(name = "time", nullable = false)
     private Boolean time = false;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(nullable = false)
+    private Long createUserId;
+
+    @OneToMany(mappedBy = "chatRoom")
+    private List<ChatRoomUser> chatRoomUser;
 
     @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
     private List<WarnChatRoom> warnChatRooms = new ArrayList<>();
 
-    public ChatRoom(ChatRoomRequestDto requestDto, User user) {
+    public ChatRoom(ChatRoomRequestDto requestDto, Long userId) {
         this.topicA = requestDto.getTopicA();
         this.topicB = requestDto.getTopicB();
         this.content = requestDto.getContent();
-        this.category = requestDto.getCategory();
         this.time = requestDto.getTime();
-        this.user = user;
-    }
-
-    public ChatRoom(CreateChatRoomRequestDto requestDto, User user) {
-        this.topicA = requestDto.getTopicA();
-        this.topicB = requestDto.getTopicB();
-        this.content = requestDto.getContent();
-        this.category = requestDto.getCategory();
-        this.time = requestDto.getTime();
-        this.user = user;
+        this.createUserId = userId;
     }
 }

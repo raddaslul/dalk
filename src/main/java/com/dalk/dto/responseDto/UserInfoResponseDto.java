@@ -23,12 +23,11 @@ public class UserInfoResponseDto {
     private User.Role role;
     private ItemResponseDto item;
 
-
     public UserInfoResponseDto(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.nickname = user.getNickname();
-        this.point = user.getPoint();
+        this.point = user.getTotalPoint();
         this.ex = user.getLevel();
         this.role = user.getRole();
         this.item = new ItemResponseDto(user);
