@@ -28,7 +28,7 @@ public class UserInfoResponseDto {
         this.username = user.getUsername();
         this.nickname = user.getNickname();
         this.point = user.getTotalPoint();
-        this.ex = user.getLevel();
+        this.ex = user.getEx();
         this.role = user.getRole();
         this.item = new ItemResponseDto(user);
     }

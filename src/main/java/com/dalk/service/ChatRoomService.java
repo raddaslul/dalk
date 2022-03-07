@@ -118,13 +118,13 @@ public class ChatRoomService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user,chatRoomList.size());
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user,warnChatRoomList.size());
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
     }
 
-//    토론방 신고기능
+//    토론방 신고하기
     @Transactional
     public WarnRoomResponseDto WarnChatRoom(Long roomId, UserDetailsImpl userDetails) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(
