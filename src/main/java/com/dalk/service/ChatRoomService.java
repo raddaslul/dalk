@@ -53,7 +53,7 @@ public class ChatRoomService {
             return chatRoom.getId();
         } catch (IllegalArgumentException ignored){
         } finally {
-            chatRoomScheduler.autoRoomFalse();
+            chatRoomScheduler.autoRoomDelete();
         } return null;
     }
 

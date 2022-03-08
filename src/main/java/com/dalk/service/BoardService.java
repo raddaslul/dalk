@@ -1,7 +1,6 @@
 package com.dalk.service;
 
 import com.dalk.domain.*;
-import com.dalk.domain.vote.SaveVote;
 import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnBoard;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
@@ -29,7 +28,6 @@ public class BoardService {
     private final UserRepository userRepository;
     private final WarnBoardRepository warnBoardRepository;
     private final VoteRepository voteRepository;
-    private final SaveVoteRepository saveVoteRepository;
     private final VoteService voteService;
 
     // 토론방 종료 후 게시글 생성
@@ -39,14 +37,14 @@ public class BoardService {
         vote.setChatRoom(null);
         voteRepository.save(vote);
         Board board = new Board(chatRoom);
-        boardRepository.save(board);
         List<Category> categoryList = categoryRepository.findAllByChatRoom(chatRoom);
         for (Category categorys : categoryList) {
             String stringCategory = categorys.getCategory();
             Category category = new Category(board, stringCategory);
             categoryRepository.save(category);
         }
-//        chatRoomRepository.delete(chatRoom);
+        boardRepository.save(board);
+        chatRoomRepository.delete(chatRoom);
     }
 
     //게시글 전체 조회

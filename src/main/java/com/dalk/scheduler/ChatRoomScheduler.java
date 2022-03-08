@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class ChatRoomScheduler {
 
     private final ChatRoomRepository chatRoomRepository;
@@ -63,7 +65,7 @@ public class ChatRoomScheduler {
             Long createdAtSecond = Long.parseLong(createdAtTime.substring(6,8));
             Long resultCreatedAt = createdAtYear + createdAtMonth + createdAtDay + createdHour + createdAtMinute + createdAtSecond;
             if(chatRoom.getTime()) {
-                if (resultNow - resultCreatedAt >= 70) {
+                if (resultNow - resultCreatedAt >= 1200) {
                     boardService.createBoard(chatRoom);
                 }
             }

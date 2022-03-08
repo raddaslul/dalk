@@ -29,6 +29,7 @@ public class SaveVote {
     private Long point;
 
     @ManyToOne
+    @JoinColumn(name = "ChatRoomId")
     private ChatRoom chatRoom;
 
     @ManyToOne
