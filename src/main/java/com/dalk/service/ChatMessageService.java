@@ -13,12 +13,14 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RequiredArgsConstructor
 @Slf4j
 @Service
+@Transactional
 public class ChatMessageService {
 
     private final ChannelTopic channelTopic;

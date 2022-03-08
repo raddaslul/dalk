@@ -23,6 +23,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 @Slf4j
+@Transactional
 public class VoteService {
     private final ChatRoomRepository chatRoomRepository;
     private final VoteRepository voteRepository;

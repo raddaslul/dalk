@@ -30,7 +30,7 @@ public class ChatRoom extends Timestamped {
     @Column(name = "topic_b", nullable = false)
     private String topicB;
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "chatRoom")
     private List<Category> categorys = new ArrayList<>();
 
     @Column(name = "time", nullable = false)

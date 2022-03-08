@@ -20,11 +20,13 @@ import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class AdminService {
 
 
