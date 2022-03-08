@@ -51,15 +51,20 @@ public class BoardService {
     public List<MainPageBoardResponseDto> getMainPageBoard() {
         List<Board> boardList = boardRepository.findAll();
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
+
+
+
+
         for (Board board : boardList) {
             List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
             User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList),user,warnBoardList.size());
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList),user,warnBoardList.size(),null);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
+
         return mainPageBoardResponseDtoList;
     }
 
@@ -74,7 +79,15 @@ public class BoardService {
         );
         List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(boards.getId());
 
-        return new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user,warnBoardList.size());
+        List<Long> warnUserList = new ArrayList<>();
+
+        Long a;
+        for (WarnBoard warnBoard : warnBoardList){
+            a = warnBoard.getUser().getId();
+            warnUserList.add(a);
+        }
+
+        return new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user,warnBoardList.size(),warnUserList);
     }
 
     //게시글 검색
@@ -89,7 +102,7 @@ public class BoardService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(boards.getId());
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user,warnBoardList.size());
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user,warnBoardList.size(),null);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;

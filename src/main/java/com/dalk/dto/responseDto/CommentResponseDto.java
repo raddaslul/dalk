@@ -1,5 +1,6 @@
 package com.dalk.dto.responseDto;
 
+import com.dalk.domain.User;
 import com.dalk.domain.wl.WarnComment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +20,8 @@ public class CommentResponseDto {
     private Integer agreeCnt;
     private Integer disAgreeCnt;
     private Integer WarnCnts;
+    private List<Long> warnUserList;
+
 
 
 
