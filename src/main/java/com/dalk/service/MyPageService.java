@@ -29,7 +29,6 @@ public class MyPageService {
         return "회원탈퇴 되었습니다.";
     }
 
-    //포인트 내역 조회
     public List<PointResponseDto> getPoint(User user) {
         List<Point> pointList = pointRepository.findAllByUser(user);
         List<PointResponseDto> pointResponseDtoList =new ArrayList<>();
@@ -46,9 +45,18 @@ public class MyPageService {
         point.getChangePoint();
         return new PointResponseDto(point);
     }
+// 랭킹조회
+    public List<RankResponseDto> getRank() {
+        List<User> rankList = userRepository.findTop99ByOrderByExDesc();
+        List<RankResponseDto> rankResponseDtoList =new ArrayList<>();
 
-//    public ResponseEntity<PointsResponseDto> getPoint(User user) {
-//
-//
-//    }
+        for(User user1 :rankList ){
+            user1.setNickname(user1.getNickname());
+            user1.setEx(user1.getEx());
+            RankResponseDto rankResponseDto = new RankResponseDto(user1.getNickname(),user1.getEx());
+            rankResponseDtoList.add(rankResponseDto);
+        }
+        return rankResponseDtoList;
+    }
+
 }

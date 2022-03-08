@@ -8,7 +8,6 @@ import java.util.List;
 public class ChatRoomRequestDto {
     private String topicA;
     private String topicB;
-    private String content;
     private List<String> category;
     private Boolean time;
 }

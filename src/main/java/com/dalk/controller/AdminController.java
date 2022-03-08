@@ -8,10 +8,7 @@ import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -44,11 +41,13 @@ public class AdminController {
     }
 
 //    토론방 삭제 - 관리자
-//
-//    @DeleteMapping("")
-//    public void deleteAdminChatRoom(@AuthenticationPrincipal UserDetailsImpl userDetails){
-//        return adminService.deleteAdminChatRoom(userDetails);
-//    }
+
+    @DeleteMapping("/admin/rooms/{roomId}")
+    public void deleteAdminChatRoom(
+            @RequestBody Long roomId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        adminService.deleteAdminChatRoom(roomId,userDetails);
+    }
 
 
 //

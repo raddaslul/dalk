@@ -32,4 +32,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 //    @Modifying
 //    @Query("select p from Category p where p.category like %:keyword% or p.chatRoom.topicA like %:keyword% or p.chatRoom.topicB like %:keyword%")
 //    List<Category> findSearch(String keyword);
+
+    List<Category> findAllByChatRoom(ChatRoom chatRoom);
+
+    List<Category> findAllByChatRoomId(Long id);
 }

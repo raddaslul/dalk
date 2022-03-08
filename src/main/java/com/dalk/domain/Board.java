@@ -29,11 +29,8 @@ public class Board extends Timestamped {
     @Column(name = "topic_b", nullable = false)
     private String topicB;
 
-    @Column(name = "winner", nullable = false)
+    @Column(name = "winner")
     private String winner;
-
-    @Column(name = "content", nullable = false)
-    private String content;
 
     @Column(nullable = false)
     private Long createUserId;
@@ -41,22 +38,28 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board")
     private List<Category> categorys;
 
-    @OneToMany(mappedBy = "board", orphanRemoval = true)
-    private List<WarnBoard> warnBoards = new ArrayList<>();
+//    @OneToMany(mappedBy = "board", orphanRemoval = true)
+//    private List<WarnBoard> warnBoards = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    public Board(ChatRoom chatRoom) {
+        this.topicA = chatRoom.getTopicA();
+        this.topicB = chatRoom.getTopicB();
+//        this.winner = vote.getWinner();
+        this.createUserId = chatRoom.getCreateUserId();
+        this.categorys = chatRoom.getCategorys();
+    }
 
     public Board(
             String topicA,
             String topicB,
             String winner,
-            String content,
             Long userId){
         this.topicA = topicA;
         this.topicB = topicB;
         this.winner = winner;
-        this.content = content;
         this.createUserId = userId;
     }
 }

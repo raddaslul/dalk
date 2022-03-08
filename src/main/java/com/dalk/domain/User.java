@@ -38,8 +38,8 @@ public class User extends Timestamped {
     @Column(name = "totalpoint")
     private Long totalPoint;
 
-    @Column(name = "level")
-    private Integer level;
+    @Column(name = "ex")
+    private Integer ex;
 
     @OneToOne
     private ChatRoomUser chatRoomUser;
@@ -56,12 +56,12 @@ public class User extends Timestamped {
     @OneToMany(fetch = FetchType.EAGER)
     private List<Point> points;
 
-    public User(String username, String password, String nickname,Long totalPoint,Integer level, Role role, Item item) {
+    public User(String username, String password, String nickname,Long totalPoint,Integer ex, Role role, Item item) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.totalPoint = totalPoint;
-        this.level = level;
+        this.ex = ex;
         this.role = role;
         this.item = item;
     }

@@ -1,4 +1,4 @@
-package com.dalk.repository;
+package com.dalk.repository.wl;
 
 import com.dalk.domain.Comment;
 import com.dalk.domain.User;

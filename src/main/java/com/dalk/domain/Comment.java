@@ -38,8 +38,8 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @OneToMany(mappedBy = "comment", orphanRemoval = true)
-    private List<WarnComment> warnComments = new ArrayList<>();
+//    @OneToMany(mappedBy = "comment", orphanRemoval = true)
+//    private List<WarnComment> warnComments = new ArrayList<>();
 
 
     public Comment(CommentRequestDto commentRequestDto, Board board, Long userId) {
