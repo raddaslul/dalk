@@ -36,7 +36,6 @@ public class ChatRoomService {
         User user = userDetails.getUser();
         Long userId = user.getId();
         ChatRoom chatRoom = new ChatRoom(requestDto, userId);
-        chatRoom.setStatus(true);
         chatRoomRepository.save(chatRoom);
         List<String> categoryList = requestDto.getCategory();
         for (String stringCategory : categoryList) {
@@ -54,7 +53,7 @@ public class ChatRoomService {
     //토론방리스트 탑6 조회
     public List<MainPageAllResponseDto> getMainPageTop6() {
         //board 전체를 가져옴
-        List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByStatusOrderByCreatedAtDesc(true);
+        List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByOrderByCreatedAtDesc();
         //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
 
@@ -74,7 +73,7 @@ public class ChatRoomService {
     public List<MainPageAllResponseDto> getMainPageAll() {
 
         //board 전체를 가져옴
-        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByStatusOrderByCreatedAtDesc(true);
+        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc();
         //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
 

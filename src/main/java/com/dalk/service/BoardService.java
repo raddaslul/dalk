@@ -25,6 +25,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final CategoryRepository categoryRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
     private final WarnBoardRepository warnBoardRepository;
 
@@ -39,6 +40,7 @@ public class BoardService {
             Category category = new Category(board, stringCategory);
             categoryRepository.save(category);
         }
+        chatRoomRepository.delete(chatRoom);
     }
 
     //게시글 전체 조회
