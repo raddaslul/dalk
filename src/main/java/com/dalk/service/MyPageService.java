@@ -17,7 +17,6 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
-@Transactional
 public class MyPageService {
 
     private final UserRepository userRepository;

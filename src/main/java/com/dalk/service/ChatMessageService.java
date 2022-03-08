@@ -20,7 +20,6 @@ import java.util.*;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-@Transactional
 public class ChatMessageService {
 
     private final ChannelTopic channelTopic;
