@@ -43,9 +43,8 @@ public class AdminService {
 
     //블라인드 게시글 전체 조회 - 관리자
 
-    public List<MainPageBoardResponseDto> getAdminMainPageBoard(UserDetailsImpl userDetails) {
+    public List<MainPageBoardResponseDto> getAdminMainPageBoard() {
 
-        if (userDetails.getUser().getRole().equals(User.Role.ADMIN)) {
 
             //board 전체를 가져옴
             List<Board> boardList = boardRepository.findAll();
@@ -62,8 +61,6 @@ public class AdminService {
                 mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
             }
             return mainPageBoardResponseDtoList;
-        }
-        return null;
     }
 
     //  블라인드 or 게시글  삭제 - 관리자
