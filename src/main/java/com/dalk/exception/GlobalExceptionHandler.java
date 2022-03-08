@@ -43,19 +43,44 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse("U006", e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException e) {
+        return new ResponseEntity<>(new ErrorResponse("U006", e.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(IllegalTokenUsernameException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalTokenUsernameException(IllegalTokenUsernameException e) {
+        return new ResponseEntity<>(new ErrorResponse("T001", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalTokenUsernameDateException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalTokenDateException(IllegalTokenUsernameDateException e) {
+        return new ResponseEntity<>(new ErrorResponse("T002", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalTokenUserIdException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalTokenUserIdException(IllegalTokenUserIdException e) {
+        return new ResponseEntity<>(new ErrorResponse("T003", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalTokenUserIdDateException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalTokenUserIdDateException(IllegalTokenUserIdDateException e) {
+        return new ResponseEntity<>(new ErrorResponse("T004", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(BoardNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleBoardNotFoundException(BoardNotFoundException e) {
-        return new ResponseEntity<>(new ErrorResponse("P001", e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse("B001", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalBoardUpdateUserException.class)
     public ResponseEntity<ErrorResponse> handleIllegalBoardUpdateUserException(IllegalBoardUpdateUserException e) {
-        return new ResponseEntity<>(new ErrorResponse("P002", e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse("B002", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalPostDeleteUserException.class)
     public ResponseEntity<ErrorResponse> handleIllegalPostDeleteUserException(IllegalPostDeleteUserException e) {
-        return new ResponseEntity<>(new ErrorResponse("P003", e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse("B003", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(CommentNotFoundException.class)
@@ -73,10 +98,37 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse("C003", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ItemNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleItemNotFoundException(ItemNotFoundException e) {
+        return new ResponseEntity<>(new ErrorResponse("I001", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(LackPointException.class)
+    public ResponseEntity<ErrorResponse> handleLackPointException(LackPointException e) {
+        return new ResponseEntity<>(new ErrorResponse("P001", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ChatRoomNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleChatRoomNotFoundException(ChatRoomNotFoundException e) {
+        return new ResponseEntity<>(new ErrorResponse("CR001", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DuplicateVoteException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateVoteException(DuplicateVoteException e) {
+        return new ResponseEntity<>(new ErrorResponse("V001", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CarouselNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCarouselNotFoundException(CarouselNotFoundException e) {
+        return new ResponseEntity<>(new ErrorResponse("CS001", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.toString(), Objects.requireNonNull(e.getFieldError()).getDefaultMessage())
                 , HttpStatus.BAD_REQUEST);
     }
+
+
 
 }

@@ -10,13 +10,30 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "user")
 public class User extends Timestamped {
 
     public enum Role {
-        ADMIN, USER
+        USER(Authority.USER),  // 사용자 권한
+        ADMIN(Authority.ADMIN);  // 관리자 권한
+
+        private final String authority;
+
+        Role(String authority) {
+            this.authority = authority;
+        }
+
+        public String getAuthority() {
+            return this.authority;
+        }
+
+        public static class Authority {
+            public static final String USER = "ROLE_USER";
+            public static final String ADMIN = "ROLE_ADMIN";
+        }
     }
 
     @Id
@@ -33,11 +50,14 @@ public class User extends Timestamped {
     @Column(name = "nickname", nullable = false, unique = true)
     private String nickname;
 
-    @Column(name = "point")
-    private Long point;
+    @Column(name = "totalpoint")
+    private Long totalPoint;
 
-    @Column(name = "level")
-    private Integer level;
+    @Column(name = "ex")
+    private Integer ex;
+
+    @OneToOne
+    private ChatRoomUser chatRoomUser;
 
     @Column
     @Enumerated(value = EnumType.STRING) // 정보를 받을 때는 Enum 값으로 받지만
@@ -51,12 +71,12 @@ public class User extends Timestamped {
     @OneToMany(fetch = FetchType.EAGER)
     private List<Point> points;
 
-    public User(String username, String password, String nickname,Long point,Integer level, Role role, Item item) {
+    public User(String username, String password, String nickname,Long totalPoint,Integer ex, Role role, Item item) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
-        this.point = point;
-        this.level = level;
+        this.totalPoint = totalPoint;
+        this.ex = ex;
         this.role = role;
         this.item = item;
     }

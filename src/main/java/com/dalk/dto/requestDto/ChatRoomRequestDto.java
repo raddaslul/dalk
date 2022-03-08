@@ -1,16 +1,13 @@
 package com.dalk.dto.requestDto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+import java.util.List;
+
+@Data
 public class ChatRoomRequestDto {
-
     private String topicA;
     private String topicB;
-    private String content;
-    private String category;
+    private List<String> category;
     private Boolean time;
-    private Long userId;
 }

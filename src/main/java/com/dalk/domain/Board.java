@@ -29,41 +29,37 @@ public class Board extends Timestamped {
     @Column(name = "topic_b", nullable = false)
     private String topicB;
 
-    @Column(name = "winner", nullable = false)
+    @Column(name = "winner")
     private String winner;
 
-    @Column(name = "content", nullable = false)
-    private String content;
+    @Column(nullable = false)
+    private Long createUserId;
 
-    @Column(name = "category", nullable = false)
-    private String category;
+    @OneToMany(mappedBy = "board")
+    private List<Category> categorys;
 
-    @ManyToOne
-    @JoinColumn(name = "user_Id")
-    private User user;
-
-    @OneToOne
-    @JoinColumn(name = "chat_room_id")
-    private ChatRoom chatRoom;
-
-    @OneToMany(mappedBy = "board", orphanRemoval = true)
-    private List<WarnBoard> warnBoards = new ArrayList<>();
+//    @OneToMany(mappedBy = "board", orphanRemoval = true)
+//    private List<WarnBoard> warnBoards = new ArrayList<>();
 
     @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    public Board(ChatRoom chatRoom) {
+        this.topicA = chatRoom.getTopicA();
+        this.topicB = chatRoom.getTopicB();
+//        this.winner = vote.getWinner();
+        this.createUserId = chatRoom.getCreateUserId();
+        this.categorys = chatRoom.getCategorys();
+    }
 
     public Board(
             String topicA,
             String topicB,
             String winner,
-            String content,
-            String category,
-            User userId){
+            Long userId){
         this.topicA = topicA;
         this.topicB = topicB;
         this.winner = winner;
-        this.content = content;
-        this.category = category;
-        this.user = userId;
+        this.createUserId = userId;
     }
 }
