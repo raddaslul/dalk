@@ -100,11 +100,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(LackPointException.class)
     public ResponseEntity<ErrorResponse> handleLackPointException(LackPointException e) {
-        return new ResponseEntity<>(new ErrorResponse("I001", e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse("V001", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ChatRoomNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleChatRoomNotFoundException(ChatRoomNotFoundException e) {
+        return new ResponseEntity<>(new ErrorResponse("CR001", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DuplicateVoteException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateVoteException(DuplicateVoteException e) {
         return new ResponseEntity<>(new ErrorResponse("CR001", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
@@ -113,6 +118,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.toString(), Objects.requireNonNull(e.getFieldError()).getDefaultMessage())
                 , HttpStatus.BAD_REQUEST);
     }
+
 
 
 }

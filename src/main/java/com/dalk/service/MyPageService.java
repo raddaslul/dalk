@@ -7,11 +7,13 @@ import com.dalk.dto.responseDto.RankResponseDto;
 import com.dalk.repository.PointRepository;
 import com.dalk.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -19,6 +21,7 @@ public class MyPageService {
 
     private final UserRepository userRepository;
     private final PointRepository pointRepository;
+
 
     @Transactional
     public String deleteUser(User user) {

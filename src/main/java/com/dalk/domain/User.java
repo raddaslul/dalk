@@ -1,6 +1,7 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
+import com.dalk.domain.vote.SaveVote;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
