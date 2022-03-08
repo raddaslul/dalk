@@ -20,6 +20,14 @@ public class Carousel extends Timestamped {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "converted_name", nullable = false)
+    private String convertedName;
+
     @Column(name = "file_path", nullable = false)
     private String filePath;
+
+    public Carousel(String convertedName, String filePath) {
+        this.filePath = filePath;
+        this.convertedName = convertedName;
+    }
 }
