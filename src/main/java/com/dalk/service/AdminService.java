@@ -45,21 +45,28 @@ public class AdminService {
 
     public List<MainPageBoardResponseDto> getAdminMainPageBoard() {
 
-
             //board 전체를 가져옴
             List<Board> boardList = boardRepository.findAll();
             //리턴할 값의 리스트를 정의
             List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
             for (Board board : boardList) {
+
                 List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
                 List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
                 User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
                         () -> new LoginUserNotFoundException("유저 정보가 없습니다")
                 );
                 MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList), user, warnBoardList.size(),null);
-                mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
+
+                if(mainPageBoardResponseDto.getWarnCnt()>=5) {
+                    mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
+                }
+
+//                mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
             }
+
+
             return mainPageBoardResponseDtoList;
     }
 
