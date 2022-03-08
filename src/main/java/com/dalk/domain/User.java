@@ -1,6 +1,7 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
+//import com.dalk.domain.vote.SaveVote;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -17,7 +18,23 @@ import java.util.List;
 public class User extends Timestamped {
 
     public enum Role {
-        ADMIN, USER
+        USER(Authority.USER),  // 사용자 권한
+        ADMIN(Authority.ADMIN);  // 관리자 권한
+
+        private final String authority;
+
+        Role(String authority) {
+            this.authority = authority;
+        }
+
+        public String getAuthority() {
+            return this.authority;
+        }
+
+        public static class Authority {
+            public static final String USER = "ROLE_USER";
+            public static final String ADMIN = "ROLE_ADMIN";
+        }
     }
 
     @Id

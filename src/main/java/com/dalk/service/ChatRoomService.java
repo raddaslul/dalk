@@ -3,6 +3,7 @@ package com.dalk.service;
 import com.dalk.domain.Category;
 import com.dalk.domain.ChatRoom;
 import com.dalk.domain.User;
+import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
@@ -12,6 +13,7 @@ import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.CategoryRepository;
 import com.dalk.repository.ChatRoomRepository;
 import com.dalk.repository.UserRepository;
+import com.dalk.repository.VoteRepository;
 import com.dalk.repository.wl.WarnChatRoomRepository;
 import com.dalk.scheduler.ChatRoomScheduler;
 import com.dalk.security.UserDetailsImpl;
@@ -24,6 +26,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
@@ -31,12 +34,16 @@ public class ChatRoomService {
     private final ChatRoomScheduler chatRoomScheduler;
     private final UserRepository userRepository;
     private final WarnChatRoomRepository warnChatRoomRepository;
+    private final VoteRepository voteRepository;
+
 
     public Long createChatRoom(UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) {
         User user = userDetails.getUser();
         Long userId = user.getId();
         ChatRoom chatRoom = new ChatRoom(requestDto, userId);
         chatRoomRepository.save(chatRoom);
+        Vote vote = new Vote(chatRoom);
+        voteRepository.save(vote);
         List<String> categoryList = requestDto.getCategory();
         for (String stringCategory : categoryList) {
             Category category = new Category(chatRoom, stringCategory);
@@ -46,7 +53,7 @@ public class ChatRoomService {
             return chatRoom.getId();
         } catch (IllegalArgumentException ignored){
         } finally {
-            chatRoomScheduler.autoRoomFalse();
+            chatRoomScheduler.autoRoomDelete();
         } return null;
     }
 

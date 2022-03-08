@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Table(name = "point")
 public class Point extends Timestamped {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -39,4 +39,8 @@ public class Point extends Timestamped {
         this.toTalPoint = toTalPoint;
         this.user = user;
     }
+
+//    public Point(String 투표하기, long l, User user) {
+//        super();
+//    }
 }
