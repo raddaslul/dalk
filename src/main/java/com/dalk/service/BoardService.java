@@ -1,15 +1,13 @@
 package com.dalk.service;
 
 import com.dalk.domain.*;
+import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnBoard;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
 import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
-import com.dalk.repository.BoardRepository;
-import com.dalk.repository.CategoryRepository;
-import com.dalk.repository.ChatRoomRepository;
-import com.dalk.repository.UserRepository;
+import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnBoardRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class BoardService {
 
     private final BoardRepository boardRepository;
@@ -28,18 +27,23 @@ public class BoardService {
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
     private final WarnBoardRepository warnBoardRepository;
+    private final VoteRepository voteRepository;
+    private final VoteService voteService;
 
     // 토론방 종료 후 게시글 생성
     public void createBoard(ChatRoom chatRoom) {
-//        Vote vote = voteRepository.findByRoomId(chatRoom.getId());
+        voteService.winVote(chatRoom.getId());
+        Vote vote = voteRepository.findByChatRoom_Id(chatRoom.getId());
+        vote.setChatRoom(null);
+        voteRepository.save(vote);
         Board board = new Board(chatRoom);
-        boardRepository.save(board);
         List<Category> categoryList = categoryRepository.findAllByChatRoom(chatRoom);
         for (Category categorys : categoryList) {
             String stringCategory = categorys.getCategory();
             Category category = new Category(board, stringCategory);
             categoryRepository.save(category);
         }
+        boardRepository.save(board);
         chatRoomRepository.delete(chatRoom);
     }
 
@@ -92,7 +96,6 @@ public class BoardService {
     }
 
 //    게시글 신고하기
-    @Transactional
     public WarnBoardResponseDto warnBoard(Long boardId, UserDetailsImpl userDetails) {
 
         Board board = boardRepository.findById(boardId).orElseThrow(

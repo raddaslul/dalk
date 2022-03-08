@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,13 +15,14 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class ChatRoomScheduler {
 
     private final ChatRoomRepository chatRoomRepository;
     private final BoardService boardService;
 
     @Scheduled(cron = "0/1 * * * * *")
-    public void autoRoomFalse() {
+    public void autoRoomDelete() {
         String now = String.valueOf(LocalDateTime.now());
         log.info("now = {}", now);
         String nowDate = now.split("T")[0];
@@ -83,7 +85,7 @@ public class ChatRoomScheduler {
             Long resultCreatedAt = createdAtYear + createdAtMonth + createdAtDay + createdHour + createdAtMinute + createdAtSecond;
             log.info("생성 시간 = {}", resultCreatedAt);
             if(chatRoom.getTime()) {
-                if (resultNow - resultCreatedAt >= 1200) {
+                if (resultNow - resultCreatedAt >= 30) {
                     boardService.createBoard(chatRoom);
                 }
             }
