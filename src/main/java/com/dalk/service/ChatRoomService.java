@@ -107,14 +107,9 @@ public class ChatRoomService {
         );
         List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
         List<Long> warnUserList =new ArrayList<>();
-        long a;
         for (WarnChatRoom warnChatRoom : warnChatRoomList){
-            a = warnChatRoom.getUser().getId();
-            warnUserList.add(a);
+            warnUserList.add(warnChatRoom.getUser().getId());
         }
-
-
-
 
         return new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user,warnChatRoomList.size(),warnUserList);
     }
