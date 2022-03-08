@@ -33,7 +33,6 @@ public class MainPageAllResponseDto {
         this.roomId = chatRoom.getId();
         this.topicA = chatRoom.getTopicA();
         this.topicB = chatRoom.getTopicB();
-        this.content = chatRoom.getContent();
         this.category = categoryList;
         this.restTime = TimeConversion.restTime(chatRoom.getCreatedAt(),chatRoom.getTime());
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());

@@ -1,6 +1,5 @@
 package com.dalk.service;
 
-import com.dalk.domain.Board;
 import com.dalk.domain.Category;
 import com.dalk.domain.ChatRoom;
 import com.dalk.domain.User;
@@ -10,7 +9,6 @@ import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnRoomResponseDto;
 import com.dalk.exception.ex.ChatRoomNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
-import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CategoryRepository;
 import com.dalk.repository.ChatRoomRepository;
 import com.dalk.repository.UserRepository;
@@ -32,7 +30,6 @@ public class ChatRoomService {
     private final CategoryRepository categoryRepository;
     private final ChatRoomScheduler chatRoomScheduler;
     private final UserRepository userRepository;
-    private final BoardRepository boardRepository;
     private final WarnChatRoomRepository warnChatRoomRepository;
 
     public Long createChatRoom(UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) {
@@ -57,11 +54,9 @@ public class ChatRoomService {
     //토론방리스트 탑6 조회
     public List<MainPageAllResponseDto> getMainPageTop6() {
         //board 전체를 가져옴
-        List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByOrderByCreatedAtDesc();
+        List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByStatusOrderByCreatedAtDesc(true);
         //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
-
-
 
         for (ChatRoom chatRoom : chatRoomList) {
             List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
@@ -79,7 +74,7 @@ public class ChatRoomService {
     public List<MainPageAllResponseDto> getMainPageAll() {
 
         //board 전체를 가져옴
-        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc();
+        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByStatusOrderByCreatedAtDesc(true);
         //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
 
@@ -118,13 +113,13 @@ public class ChatRoomService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user,warnChatRoomList.size());
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user, warnChatRoomList.size());
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
     }
 
-//    토론방 신고하기
+//    토론방 신고기능
     @Transactional
     public WarnRoomResponseDto WarnChatRoom(Long roomId, UserDetailsImpl userDetails) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(
