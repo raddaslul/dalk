@@ -1,6 +1,7 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
+import com.dalk.domain.vote.SaveVote;
 import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import lombok.AllArgsConstructor;
@@ -41,6 +42,9 @@ public class ChatRoom extends Timestamped {
 
     @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
     private List<ChatRoomUser> chatRoomUser;
+
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
+    private List<SaveVote> saveVoteList;
 
     @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
     private List<WarnChatRoom> warnChatRooms = new ArrayList<>();

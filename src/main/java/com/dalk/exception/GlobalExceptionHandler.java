@@ -43,6 +43,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse("U006", e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException e) {
+        return new ResponseEntity<>(new ErrorResponse("U006", e.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(IllegalTokenUsernameException.class)
     public ResponseEntity<ErrorResponse> handleIllegalTokenUsernameException(IllegalTokenUsernameException e) {
         return new ResponseEntity<>(new ErrorResponse("T001", e.getMessage()), HttpStatus.BAD_REQUEST);

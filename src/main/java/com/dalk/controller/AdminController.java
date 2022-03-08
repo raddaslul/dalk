@@ -1,65 +1,91 @@
 package com.dalk.controller;
 
 
+import com.dalk.domain.User;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
-import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.AdminService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(value = "/admin")
 public class AdminController {
 
     private final AdminService adminService;
 
-
 //블라인드 게시글 조회
-    @GetMapping("/admin/boards")
-    public List<MainPageBoardResponseDto> getAdminBoard(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return adminService.getAdminMainPageBoard(userDetails);
+    @Secured(User.Role.Authority.ADMIN)
+    @GetMapping("/boards")
+    public List<MainPageBoardResponseDto> getAdminBoard(){
+        return adminService.getAdminMainPageBoard();
     }
 
 //    블라인드 게시글 삭제
-    @DeleteMapping("/admin/boards/{boardId}")
-    public void deleteAdminBoard(
-            @PathVariable Long boardId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails
-    ){
-        adminService.deleteAdminBoard(boardId,userDetails);
+    @Secured(User.Role.Authority.ADMIN)
+    @DeleteMapping("/boards/{boardId}")
+    public HashMap<String, Object> deleteAdminBoard(@PathVariable Long boardId){
+        adminService.deleteAdminBoard(boardId);
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("result", "true");
+        return result;
     }
 
 //    토론방 리스트 전체 조회 - 관리자
-    @GetMapping("/admin/rooms")
-    public List<MainPageAllResponseDto> getAdminMainPageAll(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return adminService.getAdminMainPageAll(userDetails);
+    @Secured(User.Role.Authority.ADMIN)
+    @GetMapping("/rooms")
+    public List<MainPageAllResponseDto> getAdminMainPageAll() {
+        return adminService.getAdminMainPageAll();
     }
 
 //    토론방 삭제 - 관리자
-
-    @DeleteMapping("/admin/rooms/{roomId}")
-    public void deleteAdminChatRoom(
-            @RequestBody Long roomId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails){
-        adminService.deleteAdminChatRoom(roomId,userDetails);
+    @Secured(User.Role.Authority.ADMIN)
+    @DeleteMapping("/rooms/{roomId}")
+    public HashMap<String, Object> deleteAdminChatRoom(@PathVariable Long roomId){
+        adminService.deleteAdminChatRoom(roomId);
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("result", "true");
+        return result;
     }
 
-
-//
 //    유저 목록 조회
-    @GetMapping("/admin/users")
-    public List<UserInfoResponseDto> getUserList(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return adminService.getUserList(userDetails);
+    @Secured(User.Role.Authority.ADMIN)
+    @GetMapping("/users")
+    public List<UserInfoResponseDto> getUserList(){
+        return adminService.getUserList();
     }
 
 //    유저 삭제 - 관리자 권한
-    @DeleteMapping("/admin/users/{userId}")
-    public void deleteUser(@PathVariable Long userId,@AuthenticationPrincipal UserDetailsImpl userDetails){
-        adminService.deleteUser(userId,userDetails);
+    @Secured(User.Role.Authority.ADMIN)
+    @DeleteMapping("/users/{userId}")
+    public HashMap<String, Object> deleteUser(@PathVariable Long userId){
+        adminService.deleteUser(userId);
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("result", "true");
+        return result;
     }
+
+    // 메인 배너 등록
+    @Secured(User.Role.Authority.ADMIN)
+    @PostMapping("/carousels")
+    public HashMap<String, Object> createBanner(
+            @RequestPart("image")MultipartFile multipartFile) throws IOException {
+        adminService.uploadFile(multipartFile);
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("result", "true");
+        return result;
+    }
+
+    // 메인 배너 목록
+//    @Secured(User.Role.Authority.ADMIN)
+//    @GetMapping("/carousels")
+//    public List<>
 }
