@@ -60,20 +60,33 @@ public class CommentService {
 
 
 
+
         for (Comment comment : comments) {
 //            Optional<WarnComment> warnComment = warnCommentRepository.findById(commentId);
-            List<WarnComment> warnCommentList = warnCommentRepository.findByCommentId(comment.getId());
             User user = userRepository.findById(comment.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
+
+
+            List<WarnComment> warnCommentList = warnCommentRepository.findByCommentId(comment.getId());
+            List<Long> warnUserList = new ArrayList<>();
+
+            for (WarnComment warnComment : warnCommentList) {
+                warnUserList.add(warnComment.getUser().getId());
+            }
+
             UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
+
             CommentResponseDto commentResponseDto = new CommentResponseDto(
                     userInfoResponseDto,
                     comment.getId(),
                     comment.getComment(),
                     comment.getAgreeCnt(),
                     comment.getDisAgreeCnt(),
-                    warnCommentList.size());
+                    warnCommentList.size(),
+                    warnUserList
+            );
+
 
             commentResponseDtoList.add(commentResponseDto);
         }
@@ -262,9 +275,16 @@ public class CommentService {
             warnCommentRepository.save(warnComment);
         warnCommentResponseDto.setCommentId(warnComment.getComment().getId());
         warnCommentResponseDto.setWarn(warnComment.getIsWarn());
+            System.out.println(warnCommentResponseDto);
             return warnCommentResponseDto;
         }else {
-            return null;
+//            WarnComment warnComment = new WarnComment(true, comment, user);
+//            warnCommentRepository.save(warnComment);
+//            warnCommentResponseDto.setCommentId(warnComment.getComment().getId());
+//            warnCommentResponseDto.setWarn(warnComment.getIsWarn());
+//            return warnCommentResponseDto;
+        return null;
+
         }
     }
 }

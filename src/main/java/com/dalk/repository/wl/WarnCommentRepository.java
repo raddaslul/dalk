@@ -13,4 +13,8 @@ public interface WarnCommentRepository extends JpaRepository<WarnComment, Long> 
 
 
     List<WarnComment> findByCommentId(Long commentId);
+
+    List<WarnComment> findByCommentIdAndUserId(Long id, Long id1);
+
+    List<WarnComment> findByUserId(Long id);
 }
