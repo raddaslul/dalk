@@ -105,7 +105,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(LackPointException.class)
     public ResponseEntity<ErrorResponse> handleLackPointException(LackPointException e) {
-        return new ResponseEntity<>(new ErrorResponse("V001", e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse("P001", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ChatRoomNotFoundException.class)
@@ -115,7 +115,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateVoteException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateVoteException(DuplicateVoteException e) {
-        return new ResponseEntity<>(new ErrorResponse("CR001", e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse("V001", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CarouselNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCarouselNotFoundException(CarouselNotFoundException e) {
+        return new ResponseEntity<>(new ErrorResponse("CS001", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
