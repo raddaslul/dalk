@@ -81,10 +81,8 @@ public class BoardService {
 
         List<Long> warnUserList = new ArrayList<>();
 
-        Long a;
         for (WarnBoard warnBoard : warnBoardList){
-            a = warnBoard.getUser().getId();
-            warnUserList.add(a);
+            warnUserList.add(warnBoard.getUser().getId());
         }
 
         return new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user,warnBoardList.size(),warnUserList);

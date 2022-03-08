@@ -70,7 +70,7 @@ public class ChatRoomService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user,warnChatRoomList.size());
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user,warnChatRoomList.size(),null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
@@ -90,7 +90,7 @@ public class ChatRoomService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom,MinkiService.categoryStringList(categoryList), user,warnChatRoomList.size());
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom,MinkiService.categoryStringList(categoryList), user,warnChatRoomList.size(),null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
@@ -106,7 +106,12 @@ public class ChatRoomService {
                 () -> new LoginUserNotFoundException("유저 정보가 없습니다")
         );
         List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-        return new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user,warnChatRoomList.size());
+        List<Long> warnUserList =new ArrayList<>();
+        for (WarnChatRoom warnChatRoom : warnChatRoomList){
+            warnUserList.add(warnChatRoom.getUser().getId());
+        }
+
+        return new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user,warnChatRoomList.size(),warnUserList);
     }
 
     //카테고리 검색
@@ -119,7 +124,7 @@ public class ChatRoomService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user, warnChatRoomList.size());
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;

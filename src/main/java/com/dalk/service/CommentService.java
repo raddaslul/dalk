@@ -70,10 +70,8 @@ public class CommentService {
             List<WarnComment> warnCommentList = warnCommentRepository.findByCommentId(comment.getId());
             List<Long> warnUserList = new ArrayList<>();
 
-            Long a;
             for (WarnComment warnComment : warnCommentList) {
-                a = warnComment.getUser().getId();
-                warnUserList.add(a);
+                warnUserList.add(warnComment.getUser().getId());
             }
 
             UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);

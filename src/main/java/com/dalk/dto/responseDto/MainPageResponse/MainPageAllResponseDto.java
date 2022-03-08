@@ -29,7 +29,7 @@ public class MainPageAllResponseDto {
     private Integer warnCnt;
     private List<Long> warnUserList;
 
-    public MainPageAllResponseDto(ChatRoom chatRoom, List<String> categoryList, User user,Integer warnChatRoom) {
+    public MainPageAllResponseDto(ChatRoom chatRoom, List<String> categoryList, User user,Integer warnChatRoom,List<Long> warnUserList) {
 //        this.userInfo = new UserInfoResponseDto(chatRoom.getUser());
         this.userInfo = new UserInfoResponseDto(user);
         this.roomId = chatRoom.getId();
@@ -40,5 +40,6 @@ public class MainPageAllResponseDto {
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
         this.time = chatRoom.getTime();
         this.warnCnt=warnChatRoom;
+        this.warnUserList=warnUserList;
     }
 }

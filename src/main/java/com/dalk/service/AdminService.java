@@ -83,7 +83,7 @@ public class AdminService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user, warnChatRoomList.size());
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
