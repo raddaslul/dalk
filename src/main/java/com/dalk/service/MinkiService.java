@@ -3,14 +3,12 @@ package com.dalk.service;
 import com.dalk.domain.Category;
 import com.dalk.domain.Point;
 import com.dalk.domain.User;
-import com.dalk.domain.wl.WarnBoard;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.repository.PointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 

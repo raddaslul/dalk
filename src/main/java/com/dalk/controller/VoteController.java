@@ -27,7 +27,7 @@ public class VoteController {
         voteService.saveVote(roomId, user, requestDto);
     }
 
-    @GetMapping("/vote/{roomId}")
+    @GetMapping("/vote/users/{roomId}")
     @ApiOperation(value = "투표자 명단")
     public List<VoteUserListResponseDto> voteUserList(@PathVariable Long roomId) {
         return voteService.voteUserList(roomId);

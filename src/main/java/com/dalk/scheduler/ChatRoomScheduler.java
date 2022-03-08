@@ -22,7 +22,7 @@ public class ChatRoomScheduler {
     private final BoardService boardService;
 
     @Scheduled(cron = "0/1 * * * * *")
-    public void autoRoomFalse() {
+    public void autoRoomDelete() {
         String now = String.valueOf(LocalDateTime.now());
         String nowDate = now.split("T")[0];
 
@@ -65,7 +65,7 @@ public class ChatRoomScheduler {
             Long createdAtSecond = Long.parseLong(createdAtTime.substring(6,8));
             Long resultCreatedAt = createdAtYear + createdAtMonth + createdAtDay + createdHour + createdAtMinute + createdAtSecond;
             if(chatRoom.getTime()) {
-                if (resultNow - resultCreatedAt >= 1200) {
+                if (resultNow - resultCreatedAt >= 200) {
                     boardService.createBoard(chatRoom);
                 }
             }
