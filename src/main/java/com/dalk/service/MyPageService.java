@@ -30,8 +30,7 @@ public class MyPageService {
     }
 
     //포인트 내역 조회
-    public List<PointResponseDto> getPoint(User userdetails) {
-        User user =userdetails;
+    public List<PointResponseDto> getPoint(User user) {
         List<Point> pointList = pointRepository.findAllByUser(user);
         List<PointResponseDto> pointResponseDtoList =new ArrayList<>();
 

@@ -25,6 +25,9 @@ public class SaveVote {
     @Column
     private Boolean pick;
 
+    @Column
+    private Long point;
+
     @ManyToOne
     private ChatRoom chatRoom;
 
@@ -34,8 +37,9 @@ public class SaveVote {
     @ManyToOne
     private User user;
 
-    public SaveVote(Boolean pick, ChatRoom chatRoom, Vote vote, User user) {
+    public SaveVote(Boolean pick, ChatRoom chatRoom, Long point, Vote vote, User user) {
         this.pick = pick;
+        this.point = point;
         this.chatRoom = chatRoom;
         this.vote = vote;
         this.user = user;
