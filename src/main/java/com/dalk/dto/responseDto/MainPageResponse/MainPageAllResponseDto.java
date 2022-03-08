@@ -26,6 +26,7 @@ public class MainPageAllResponseDto {
     private String createdAt;
     private Boolean time;
     private Integer warnCnt;
+    private List<Long> warnUserList;
 
     public MainPageAllResponseDto(ChatRoom chatRoom, List<String> categoryList, User user,Integer warnChatRoom) {
 //        this.userInfo = new UserInfoResponseDto(chatRoom.getUser());
