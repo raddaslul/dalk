@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class RankDto {
+public class RankResponseDto {
     private String nickname;
     private Integer ex;
 }
