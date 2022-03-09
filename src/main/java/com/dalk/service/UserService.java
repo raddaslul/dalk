@@ -1,6 +1,7 @@
 package com.dalk.service;
 
 import com.dalk.domain.Item;
+import com.dalk.domain.Lotto;
 import com.dalk.domain.Point;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.SignupRequestDto;
@@ -8,6 +9,7 @@ import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.exception.ex.*;
 import com.dalk.repository.ItemRepository;
+import com.dalk.repository.LottoRepository;
 import com.dalk.repository.PointRepository;
 import com.dalk.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final PointRepository pointRepository;
+    private final LottoRepository lottoRepository;
 
     private final Long onlyMePrice = 100L;
     private final Long bigFontPrice = 100L;
@@ -61,6 +64,9 @@ public class UserService {
 
         Point point = new Point("회원가입 지급", 500L, 500L, user);
         pointRepository.save(point);
+
+        Lotto lotto = new Lotto(0L, user);
+        lottoRepository.save(lotto);
     }
 
     // 채팅방에서 유저 확인하기

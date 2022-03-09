@@ -21,6 +21,7 @@ public class InitialData implements ApplicationRunner {
     private final CommentRepository commentRepository;
     private final ItemRepository itemRepository;
     private final PointRepository pointRepository;
+    private final LottoRepository lottoRepository;
     private final CategoryRepository categoryRepository;
 
     @Override
@@ -41,6 +42,8 @@ public class InitialData implements ApplicationRunner {
         userRepository.save(user1);
         Point point1 = new Point("회원가입",500L,500L,user1);
         pointRepository.save(point1);
+        Lotto lotto1 = new Lotto(0L, user1);
+        lottoRepository.save(lotto1);
 
 
         Item item2 = new Item(0,0,0);
@@ -56,6 +59,8 @@ public class InitialData implements ApplicationRunner {
         userRepository.save(user2);
         Point point2 = new Point("회원가입",500L,500L,user2);
         pointRepository.save(point2);
+        Lotto lotto2 = new Lotto(0L, user2);
+        lottoRepository.save(lotto2);
 
         Long userId1 = user1.getId();
         Board board1 = new Board( //게시글 추가
@@ -116,6 +121,8 @@ public class InitialData implements ApplicationRunner {
         userRepository.save(user3);
         Point point3 = new Point("회원가입",500L,500L,user3);
         pointRepository.save(point3);
+        Lotto lotto3 = new Lotto(0L, user3);
+        lottoRepository.save(lotto3);
 
         Item item4 = new Item(0,0,0);
         itemRepository.save(item4);
@@ -130,6 +137,8 @@ public class InitialData implements ApplicationRunner {
         userRepository.save(user4);
         Point point4 = new Point("회원가입",500L,500L,user4);
         pointRepository.save(point4);
+        Lotto lotto4 = new Lotto(0L, user4);
+        lottoRepository.save(lotto4);
 
         Item item5 = new Item(0,0,0);
         itemRepository.save(item5);
@@ -144,6 +153,8 @@ public class InitialData implements ApplicationRunner {
         userRepository.save(user5);
         Point point5 = new Point("회원가입",500L,500L,user5);
         pointRepository.save(point5);
+        Lotto lotto5 = new Lotto(0L, user5);
+        lottoRepository.save(lotto5);
 
         Item item6 = new Item(0,0,0);
         itemRepository.save(item6);
@@ -158,6 +169,8 @@ public class InitialData implements ApplicationRunner {
         userRepository.save(user6);
         Point point6 = new Point("회원가입",500L,500L,user6);
         pointRepository.save(point6);
+        Lotto lotto6 = new Lotto(0L, user6);
+        lottoRepository.save(lotto6);
 
         Item item7 = new Item(0,0,0);
         itemRepository.save(item7);
@@ -172,6 +185,8 @@ public class InitialData implements ApplicationRunner {
         userRepository.save(user7);
         Point point7 = new Point("회원가입",500L,500L,user7);
         pointRepository.save(point7);
+        Lotto lotto7 = new Lotto(0L, user7);
+        lottoRepository.save(lotto7);
     }
     }
 
