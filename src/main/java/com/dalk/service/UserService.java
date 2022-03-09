@@ -86,14 +86,17 @@ public class UserService {
         switch (item) {
             case "onlyMe":
                 buyitem.setOnlyMe(buyitem.getOnlyMe() + 1);
+                itemRepository.save(buyitem);
                 itemBuy(user, onlyMePrice, "나만 말하기");
                 break;
             case "bigFont":
                 buyitem.setBigFont(buyitem.getBigFont() + 1);
+                itemRepository.save(buyitem);
                 itemBuy(user, bigFontPrice, "내글자 크게하기");
                 break;
             case "myName":
                 buyitem.setMyName(buyitem.getMyName() + 1);
+                itemRepository.save(buyitem);
                 itemBuy(user, myNamePrice, "모두 내이름으로 바꾸기");
                 break;
         }
@@ -101,11 +104,10 @@ public class UserService {
 
     private void itemBuy(User user, Long price, String item) {
         if (user.getTotalPoint() >= price) {
-            Long totalPoint = user.getTotalPoint();
-            Point point = new Point(item + " 구매", -price, totalPoint - price, user);
-            pointRepository.save(point);
-            user.setTotalPoint(totalPoint - price);
+            user.setTotalPoint(user.getTotalPoint()-price);
             userRepository.save(user);
+            Point point = new Point(item + " 구매", -price, user.getTotalPoint(), user);
+            pointRepository.save(point);
         } else {
             throw new LackPointException("보유한 포인트가 부족합니다");
         }
