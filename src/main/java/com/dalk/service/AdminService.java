@@ -98,7 +98,7 @@ public class AdminService {
 
     //    토론방 삭제
     public void deleteAdminChatRoom(Long roomId) {
-        chatRoomRepository.findById(roomId).orElseThrow(()-> new ChatRoomNotFoundException("채팅방이 없습니다."));
+        chatRoomRepository.findById(roomId).orElseThrow(()-> new ChatRoomNotFoundException("토론방이 없습니다."));
         chatRoomRepository.deleteById(roomId);
     }
 
