@@ -24,8 +24,6 @@ public class MinkiService {
     }
 
     public static UserInfoResponseDto userInfo(User user) {
-        Point point = pointRepository.findTopByUserIdOrderByCreatedAt(user.getId());
-        user.setTotalPoint(point.getToTalPoint());
         return new UserInfoResponseDto(user);
     }
 
