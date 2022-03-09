@@ -91,11 +91,12 @@ public class BoardService {
     //게시글 검색
     public List<MainPageBoardResponseDto> getSearchWord(String keyword) {
 //        List<Board> boardList = boardRepository.findSearch(keyword);
-        List<Category> categoryList = categoryRepository.findAllByBoard_TopicAContainingIgnoreCaseOrBoard_TopicBContainingIgnoreCaseOrCategory(keyword,keyword, keyword);
-        List<Board> boardList = boardRepository.findAllByTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(keyword, keyword);
+        List<Board> boardList = boardRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(keyword,keyword,keyword);
+
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
         for (Board boards : boardList) {
+            List<Category> categoryList = categoryRepository.findCategoryByBoard(boards);
             User user = userRepository.findById(boards.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
