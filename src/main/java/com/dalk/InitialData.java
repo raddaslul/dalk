@@ -1,6 +1,7 @@
 package com.dalk;
 
 import com.dalk.domain.*;
+import com.dalk.domain.wl.WarnBoard;
 import com.dalk.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
@@ -24,6 +25,7 @@ public class InitialData implements ApplicationRunner {
     private final LottoRepository lottoRepository;
     private final CategoryRepository categoryRepository;
 
+
     @Override
     public void run(ApplicationArguments args) {
         String encPassword = passwordEncoder.encode("adminPass");
@@ -44,7 +46,6 @@ public class InitialData implements ApplicationRunner {
         pointRepository.save(point1);
         Lotto lotto1 = new Lotto(0L, user1);
         lottoRepository.save(lotto1);
-
 
         Item item2 = new Item(0,0,0);
         itemRepository.save(item2);
@@ -70,6 +71,9 @@ public class InitialData implements ApplicationRunner {
                 userId1
         );
         boardRepository.save(board1);
+
+
+
         List<String> categoryList1 = new ArrayList<>();
         categoryList1.add("연애");
         categoryList1.add("오락");
@@ -187,6 +191,7 @@ public class InitialData implements ApplicationRunner {
         pointRepository.save(point7);
         Lotto lotto7 = new Lotto(0L, user7);
         lottoRepository.save(lotto7);
+
     }
     }
 
