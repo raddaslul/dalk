@@ -30,8 +30,8 @@ public class PapagoService {
         requestHeaders.put("X-Naver-Client-Id", clientId);
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
         String responseBody = post(apiURL, requestHeaders, text); //74개 짜르기
-        String text1 = responseBody.substring(78);
-        return text1.substring(0, text1.indexOf(",")-1);
+        String text1 = responseBody.substring(responseBody.indexOf("translatedText")+17);
+        return text1.substring(0, text1.indexOf("engineType")-4); //뒤에 점찍히는거 뺄거면 -4 넣을거면 -3
     }
 
     private static String post(String apiUrl, Map<String, String> requestHeaders, String text) throws IOException, NoSuchAlgorithmException {
