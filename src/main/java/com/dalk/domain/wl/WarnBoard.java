@@ -35,4 +35,6 @@ public class WarnBoard extends Timestamped {
         this.board = board;
         this.user = user;
     }
+
+
 }

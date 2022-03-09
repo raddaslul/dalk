@@ -26,8 +26,9 @@ public class MainPageBoardResponseDto {
     private String createdAt;
     private Integer commentCnt;
     private Integer warnCnt;
+    private List<Long> warnUserList;
 
-    public MainPageBoardResponseDto(Board board, List<String> categoryList, User user, Integer warnBoard) {
+    public MainPageBoardResponseDto(Board board, List<String> categoryList, User user, Integer warnBoard,List<Long> warnUserList) {
 //        this.userInfo = new UserInfoResponseDto(board.getUser());
         this.userInfo = new UserInfoResponseDto(user);
         this.boardId = board.getId();
@@ -38,5 +39,6 @@ public class MainPageBoardResponseDto {
         this.createdAt = TimeConversion.timeCreatedConversion(board.getCreatedAt());
         this.commentCnt = board.getComments().size();
         this.warnCnt =warnBoard;
+        this.warnUserList=warnUserList;
     }
 }

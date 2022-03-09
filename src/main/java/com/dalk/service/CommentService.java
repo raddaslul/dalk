@@ -50,29 +50,50 @@ public class CommentService {
         Board boards = boardRepository.findById(boardId).orElseThrow(
                 ()-> new BoardNotFoundException("해당 게시글이 없습니다")
         );
-//        Optional<Comment> comment = commentRepository.findById(boardId);
         List<Comment> comments = commentRepository.findAllByBoard(boards);
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
-
-//        Long commentId = comment.
-//        WarnComment warnComment = warnCommentRepository.findById(commentId);
-
-
-
+//
         for (Comment comment : comments) {
-//            Optional<WarnComment> warnComment = warnCommentRepository.findById(commentId);
-            List<WarnComment> warnCommentList = warnCommentRepository.findByCommentId(comment.getId());
             User user = userRepository.findById(comment.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
+
+//            댓글 찬성 , 반대
+            List<Agree> agreeList = agreeRepository.findByCommentId(comment.getId());
+            List<Agree> disagreeList = agreeRepository.findByCommentId(comment.getId());
+            List<Long> agreeUserList = new ArrayList<>();
+            List<Long> disagreeUserList =new ArrayList<>();
+            for (Agree agree : agreeList){
+                if (agree.getIsAgree()){
+                    agreeUserList.add(agree.getUser().getId());
+                }
+            }
+            for (Agree agree : disagreeList){
+                if (agree.getIsDisAgree())
+                disagreeUserList.add(agree.getUser().getId());
+            }
+
+//           댓글 신고
+            List<WarnComment> warnCommentList = warnCommentRepository.findByCommentId(comment.getId());
+            List<Long> warnUserList = new ArrayList<>();
+
+            for (WarnComment warnComment : warnCommentList) {
+                warnUserList.add(warnComment.getUser().getId());
+            }
+
             UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
+
             CommentResponseDto commentResponseDto = new CommentResponseDto(
                     userInfoResponseDto,
                     comment.getId(),
                     comment.getComment(),
                     comment.getAgreeCnt(),
                     comment.getDisAgreeCnt(),
-                    warnCommentList.size());
+                    warnCommentList.size(),
+                    warnUserList,
+                    agreeUserList,
+                    disagreeUserList
+            );
 
             commentResponseDtoList.add(commentResponseDto);
         }
@@ -261,9 +282,16 @@ public class CommentService {
             warnCommentRepository.save(warnComment);
         warnCommentResponseDto.setCommentId(warnComment.getComment().getId());
         warnCommentResponseDto.setWarn(warnComment.getIsWarn());
+            System.out.println(warnCommentResponseDto);
             return warnCommentResponseDto;
         }else {
-            return null;
+//            WarnComment warnComment = new WarnComment(true, comment, user);
+//            warnCommentRepository.save(warnComment);
+//            warnCommentResponseDto.setCommentId(warnComment.getComment().getId());
+//            warnCommentResponseDto.setWarn(warnComment.getIsWarn());
+//            return warnCommentResponseDto;
+        return null;
+
         }
     }
 }

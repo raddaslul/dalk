@@ -1,12 +1,10 @@
 package com.dalk.dto.responseDto;
 
-import com.dalk.domain.wl.WarnComment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @AllArgsConstructor
@@ -19,6 +17,10 @@ public class CommentResponseDto {
     private Integer agreeCnt;
     private Integer disAgreeCnt;
     private Integer WarnCnts;
+    private List<Long> warnUserList;
+    private List<Long> agreeUserList;
+    private List<Long> disagreeUserList;
+
 
 
 

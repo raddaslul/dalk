@@ -45,21 +45,29 @@ public class AdminService {
 
     public List<MainPageBoardResponseDto> getAdminMainPageBoard() {
 
-        //board 전체를 가져옴
-        List<Board> boardList = boardRepository.findAll();
-        //리턴할 값의 리스트를 정의
-        List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
+            //board 전체를 가져옴
+            List<Board> boardList = boardRepository.findAll();
+            //리턴할 값의 리스트를 정의
+            List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
-        for (Board board : boardList) {
-            List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
-            List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
-            User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
-                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
-            );
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList), user, warnBoardList.size());
-            mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
-        }
-        return mainPageBoardResponseDtoList;
+            for (Board board : boardList) {
+
+                List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
+                List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
+                User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
+                        () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+                );
+                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList), user, warnBoardList.size(),null);
+
+                if(mainPageBoardResponseDto.getWarnCnt()>=5) {
+                    mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
+                }
+
+//                mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
+            }
+
+
+            return mainPageBoardResponseDtoList;
     }
 
     //  블라인드 or 게시글  삭제 - 관리자
@@ -82,7 +90,7 @@ public class AdminService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user, warnChatRoomList.size());
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
@@ -90,7 +98,7 @@ public class AdminService {
 
     //    토론방 삭제
     public void deleteAdminChatRoom(Long roomId) {
-        chatRoomRepository.findById(roomId).orElseThrow(()-> new ChatRoomNotFoundException("채팅방이 없습니다."));
+        chatRoomRepository.findById(roomId).orElseThrow(()-> new ChatRoomNotFoundException("토론방이 없습니다."));
         chatRoomRepository.deleteById(roomId);
     }
 
