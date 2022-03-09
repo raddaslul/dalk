@@ -34,7 +34,7 @@ public class InitialData implements ApplicationRunner {
                 "user1",
                 encPassword,
                 "user1",
-                500L,
+                50000000L,
                 100,
                 User.Role.ADMIN,
                 item1);
@@ -49,7 +49,7 @@ public class InitialData implements ApplicationRunner {
                 "user2",
                 encPassword,
                 "user2",
-                500L,
+                100000000L,
                 100,
                 User.Role.USER,
                 item2);
