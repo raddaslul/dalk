@@ -56,7 +56,7 @@ public class User extends Timestamped {
     @Column(name = "ex")
     private Integer ex;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private ChatRoomUser chatRoomUser;
 
     @Column
@@ -64,11 +64,11 @@ public class User extends Timestamped {
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
     private Role role;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Item item;
 
     @JsonManagedReference
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     private List<Point> points;
 
     public User(String username, String password, String nickname,Long totalPoint,Integer ex, Role role, Item item) {
