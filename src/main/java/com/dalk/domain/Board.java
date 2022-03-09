@@ -1,7 +1,6 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
-import com.dalk.domain.wl.WarnBoard;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +34,7 @@ public class Board extends Timestamped {
     @Column(nullable = false)
     private Long createUserId;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Category> categorys;
 
 //    @OneToMany(mappedBy = "board", orphanRemoval = true)
