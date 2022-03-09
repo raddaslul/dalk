@@ -128,9 +128,5 @@ public class BoardService {
             return warnBoardResponseDto;
         }
         return null;
-
-
-
-
     }
 }
