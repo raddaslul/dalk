@@ -55,42 +55,45 @@ public class ChatRoomScheduler {
 
         List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
         for (ChatRoom chatRoom : chatRoomList) {
-            String createdAt = String.valueOf(chatRoom.getCreatedAt());
-//            log.info("createdAt = {}", createdAt);
-            String createdAtDate = createdAt.split("T")[0];
+            Long resultCreatedAt = 0L;
+            if(chatRoom.getStatus()) {
+                String createdAt = String.valueOf(chatRoom.getCreatedAt());
+                // log.info("createdAt = {}", createdAt);
+                String createdAtDate = createdAt.split("T")[0];
 //            log.info("createdAtDate = {}", createdAtDate);
 
-            Long createdAtYear = Long.parseLong(createdAtDate.substring(0,4)) * 31536000;
+                Long createdAtYear = Long.parseLong(createdAtDate.substring(0,4)) * 31536000;
 //            log.info("createdAtYear = {}", createdAtYear);
 
-            Long createdAtMonth = Long.parseLong(createdAtDate.substring(5,7));
-            if (createdAtMonth == 1 || createdAtMonth == 3 || createdAtMonth == 5 || createdAtMonth == 7 || createdAtMonth == 8 || createdAtMonth == 10 || createdAtMonth == 12)
-                createdAtMonth *= 2678400;
-            else if (createdAtMonth == 4 || createdAtMonth == 6 || createdAtMonth == 9 || createdAtMonth == 11)
-                createdAtMonth *= 2592000;
-            else createdAtMonth *= 2419200;
+                Long createdAtMonth = Long.parseLong(createdAtDate.substring(5,7));
+                if (createdAtMonth == 1 || createdAtMonth == 3 || createdAtMonth == 5 || createdAtMonth == 7 || createdAtMonth == 8 || createdAtMonth == 10 || createdAtMonth == 12)
+                    createdAtMonth *= 2678400;
+                else if (createdAtMonth == 4 || createdAtMonth == 6 || createdAtMonth == 9 || createdAtMonth == 11)
+                    createdAtMonth *= 2592000;
+                else createdAtMonth *= 2419200;
 //            log.info("createdAtMonth = {}", createdAtMonth);
 
-            Long createdAtDay = Long.parseLong(createdAtDate.substring(8,10)) * 86400;
-            log.info("createdAtDay = {}", createdAtDay);
+                Long createdAtDay = Long.parseLong(createdAtDate.substring(8,10)) * 86400;
+                log.info("createdAtDay = {}", createdAtDay);
 
-            String createdAtTime = createdAt.split("T")[1].split("\\.")[0];
+                String createdAtTime = createdAt.split("T")[1].split("\\.")[0];
 //            log.info("createdAtTime = {}", createdAtTime);
-            Long createdHour = Long.parseLong(createdAtTime.substring(0,2)) * 3600;
+                Long createdHour = Long.parseLong(createdAtTime.substring(0,2)) * 3600;
 //            log.info("createdHour = {}", createdHour);
-            Long createdAtMinute = Long.parseLong(createdAtTime.substring(3,5)) * 60;
+                Long createdAtMinute = Long.parseLong(createdAtTime.substring(3,5)) * 60;
 //            log.info("createdAtMinute = {}", createdAtMinute);
-            Long createdAtSecond = Long.parseLong(createdAtTime.substring(6,8));
+                Long createdAtSecond = Long.parseLong(createdAtTime.substring(6,8));
 //            log.info("createdAtSecond = {}", createdAtSecond);
-            Long resultCreatedAt = createdAtYear + createdAtMonth + createdAtDay + createdHour + createdAtMinute + createdAtSecond;
+                resultCreatedAt = createdAtYear + createdAtMonth + createdAtDay + createdHour + createdAtMinute + createdAtSecond;
 //            log.info("생성 시간 = {}", resultCreatedAt);
+            }
             if(chatRoom.getTime()) {
-                if (resultNow - resultCreatedAt >= 300) {
+                if (resultNow - resultCreatedAt >= 30) {
                     boardService.createBoard(chatRoom);
                 }
             }
             else if (!chatRoom.getTime()){
-                if (resultNow - resultCreatedAt >= 3600) {
+                if (resultNow - resultCreatedAt >= 10800) {
                     boardService.createBoard(chatRoom);
                 }
             }
