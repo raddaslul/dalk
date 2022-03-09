@@ -112,5 +112,37 @@ public class UserService {
             throw new LackPointException("보유한 포인트가 부족합니다");
         }
     }
+
+    public void useItem(String item, User user) {
+        Item useitem = itemRepository.findById(user.getItem().getId()).orElseThrow(
+                () -> new ItemNotFoundException("아이템이 없습니다")
+        );
+        switch (item) {
+            case "onlyMe":
+                if(useitem.getOnlyMe()>=1) {
+                    useitem.setOnlyMe(useitem.getOnlyMe() - 1);
+                    itemRepository.save(useitem);
+                }else {
+                   throw  new ItemNotFoundException("아이템이 없습니다");
+                }
+                break;
+            case "bigFont":
+                if(useitem.getBigFont()>=1) {
+                    useitem.setBigFont(useitem.getBigFont() - 1);
+                    itemRepository.save(useitem);
+                }else {
+                    throw  new ItemNotFoundException("아이템이 없습니다");
+                }
+                break;
+            case "myName":
+                if(useitem.getMyName()>=1) {
+                    useitem.setMyName(useitem.getMyName() - 1);
+                    itemRepository.save(useitem);
+                }else {
+                    throw  new ItemNotFoundException("아이템이 없습니다");
+                }
+                break;
+        }
+    }
 }
 

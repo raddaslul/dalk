@@ -23,6 +23,7 @@ import java.util.HashMap;
 public class UserController {
 
     private final UserService userService;
+
     // 회원가입
     @PostMapping("/users/signup")
     @ApiOperation(value = "회원가입")
@@ -46,6 +47,17 @@ public class UserController {
     public HashMap<String, Object> buyItem(@PathVariable String item, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         userService.buyItem(item, user);
+
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("result", "true");
+        return result;
+    }
+
+    @GetMapping("/chat/rooms/{item}")
+    @ApiOperation(value = "아이템 사용")
+    public HashMap<String, Object> userItem(@PathVariable String item, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        userService.useItem(item, user);
 
         HashMap<String, Object> result = new HashMap<>();
         result.put("result", "true");

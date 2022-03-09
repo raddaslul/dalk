@@ -37,12 +37,12 @@ public class InitialData implements ApplicationRunner {
                 "user1",
                 encPassword,
                 "user1",
-                50000L,
+                50000000L,
                 100,
                 User.Role.ADMIN,
                 item1);
         userRepository.save(user1);
-        Point point1 = new Point("회원가입",500L,500L,user1);
+        Point point1 = new Point("회원가입",50000000L,50000000L,user1);
         pointRepository.save(point1);
         Lotto lotto1 = new Lotto(0L, user1);
         lottoRepository.save(lotto1);
@@ -53,12 +53,12 @@ public class InitialData implements ApplicationRunner {
                 "user2",
                 encPassword,
                 "user2",
-                500L,
+                100000000L,
                 100,
                 User.Role.USER,
                 item2);
         userRepository.save(user2);
-        Point point2 = new Point("회원가입",500L,500L,user2);
+        Point point2 = new Point("회원가입",100000000L,100000000L,user2);
         pointRepository.save(point2);
         Lotto lotto2 = new Lotto(0L, user2);
         lottoRepository.save(lotto2);

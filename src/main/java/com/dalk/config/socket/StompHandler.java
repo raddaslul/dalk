@@ -31,6 +31,8 @@ public class StompHandler implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+        String test = accessor.getFirstNativeHeader("Authorization");
+        log.info("웹소켓 들어올 때 가공 전 토큰 = {}", test);
         String token = accessor.getFirstNativeHeader("Authorization").substring(7);
         log.info("Web Socket 들어올 때 token 검증 = {}", token);
         // websocket 연결시 헤더의 jwt token 검증

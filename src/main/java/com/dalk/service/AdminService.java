@@ -4,7 +4,6 @@ package com.dalk.service;
 import com.dalk.domain.*;
 import com.dalk.domain.wl.WarnBoard;
 import com.dalk.domain.wl.WarnChatRoom;
-import com.dalk.dto.responseDto.ItemResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
@@ -15,18 +14,11 @@ import com.dalk.exception.ex.UserNotFoundException;
 import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnBoardRepository;
 import com.dalk.repository.wl.WarnChatRoomRepository;
-import com.dalk.repository.wl.WarnCommentRepository;
-import com.dalk.security.UserDetailsImpl;
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -39,7 +31,6 @@ public class AdminService {
     private final CategoryRepository categoryRepository;
     private final WarnBoardRepository warnBoardRepository;
     private final WarnChatRoomRepository warnChatRoomRepository;
-    private final S3Repository s3Repository;
 
     //블라인드 게시글 전체 조회 - 관리자
 
@@ -98,8 +89,9 @@ public class AdminService {
 
     //    토론방 삭제
     public void deleteAdminChatRoom(Long roomId) {
-        chatRoomRepository.findById(roomId).orElseThrow(()-> new ChatRoomNotFoundException("토론방이 없습니다."));
-        chatRoomRepository.deleteById(roomId);
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(()-> new ChatRoomNotFoundException("토론방이 없습니다."));
+        chatRoom.setStatus(false);
+        chatRoomRepository.save(chatRoom);
     }
 
     //유저 전체 조회 - 관리자

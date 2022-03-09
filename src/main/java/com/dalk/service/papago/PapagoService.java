@@ -4,14 +4,17 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.net.*;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 // 네이버 기계번역 (Papago SMT) API 예제
 @Service
 public class PapagoService {
 
-    public static String papago(String string) throws IOException {
+    public static String papago(String string) throws IOException, NoSuchAlgorithmException {
         String clientId = "8r31LT9MJMcXuUniJSm1";//애플리케이션 클라이언트 아이디값";
         String clientSecret = "lt8SRWXOgS";//애플리케이션 클라이언트 시크릿값";
 
@@ -27,13 +30,39 @@ public class PapagoService {
         requestHeaders.put("X-Naver-Client-Id", clientId);
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
         String responseBody = post(apiURL, requestHeaders, text); //74개 짜르기
-        String text1 = responseBody.substring(78);
-        return text1.substring(0, text1.indexOf(",")-1);
+        String text1 = responseBody.substring(responseBody.indexOf("translatedText")+17);
+        return text1.substring(0, text1.indexOf("engineType")-4); //뒤에 점찍히는거 뺄거면 -4 넣을거면 -3
     }
 
-    private static String post(String apiUrl, Map<String, String> requestHeaders, String text) throws IOException {
+    private static String post(String apiUrl, Map<String, String> requestHeaders, String text) throws IOException, NoSuchAlgorithmException {
         HttpURLConnection con = connect(apiUrl);
-        String postParams = "source=ko&target=en&text=" + text; //원본언어: 한국어 (ko) -> 목적언어: 영어 (en)
+        Random random = SecureRandom.getInstanceStrong();
+        int num = random.nextInt(11);
+        String postParams;
+        if (num == 1) {
+            postParams = "source=ko&target=en&text=" + text;
+        } else if(num==2) {
+            postParams = "source=ko&target=ja&text=" + text;
+        }else if(num==3) {
+            postParams = "source=ko&target=zh-CN&text=" + text;
+        }else if(num==4) {
+            postParams = "source=ko&target=vi&text=" + text;
+        }else if(num==5) {
+            postParams = "source=ko&target=id&text=" + text;
+        }else if(num==6) {
+            postParams = "source=ko&target=th&text=" + text;
+        }else if(num==7) {
+            postParams = "source=ko&target=de&text=" + text;
+        }else if(num==8) {
+            postParams = "source=ko&target=ru&text=" + text;
+        }else if(num==9) {
+            postParams = "source=ko&target=es&text=" + text;
+        }else if(num==10) {
+            postParams = "source=ko&target=it&text=" + text;
+        }else{
+            postParams = "source=ko&target=fr&text=" + text;
+        }
+//        postParams = "source=ko&target=en&text=" + text; //원본언어: 한국어 (ko) -> 목적언어: 영어 (en)
         try {
             con.setRequestMethod("POST");
             for(Map.Entry<String, String> header :requestHeaders.entrySet()) {
