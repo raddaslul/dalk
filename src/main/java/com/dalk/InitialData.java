@@ -39,7 +39,7 @@ public class InitialData implements ApplicationRunner {
                 User.Role.ADMIN,
                 item1);
         userRepository.save(user1);
-        Point point1 = new Point("회원가입",500L,500L,user1);
+        Point point1 = new Point("회원가입",50000000L,50000000L,user1);
         pointRepository.save(point1);
 
 
@@ -54,7 +54,7 @@ public class InitialData implements ApplicationRunner {
                 User.Role.USER,
                 item2);
         userRepository.save(user2);
-        Point point2 = new Point("회원가입",500L,500L,user2);
+        Point point2 = new Point("회원가입",100000000L,100000000L,user2);
         pointRepository.save(point2);
 
         Long userId1 = user1.getId();
