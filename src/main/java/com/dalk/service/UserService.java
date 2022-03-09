@@ -1,6 +1,7 @@
 package com.dalk.service;
 
 import com.dalk.domain.Item;
+import com.dalk.domain.Lotto;
 import com.dalk.domain.Point;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.SignupRequestDto;
@@ -8,6 +9,7 @@ import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.exception.ex.*;
 import com.dalk.repository.ItemRepository;
+import com.dalk.repository.LottoRepository;
 import com.dalk.repository.PointRepository;
 import com.dalk.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final PointRepository pointRepository;
+    private final LottoRepository lottoRepository;
 
     private final Long onlyMePrice = 100L;
     private final Long bigFontPrice = 100L;
@@ -61,6 +64,9 @@ public class UserService {
 
         Point point = new Point("회원가입 지급", 500L, 500L, user);
         pointRepository.save(point);
+
+        Lotto lotto = new Lotto(0L, user);
+        lottoRepository.save(lotto);
     }
 
     // 채팅방에서 유저 확인하기
@@ -80,14 +86,17 @@ public class UserService {
         switch (item) {
             case "onlyMe":
                 buyitem.setOnlyMe(buyitem.getOnlyMe() + 1);
+                itemRepository.save(buyitem);
                 itemBuy(user, onlyMePrice, "나만 말하기");
                 break;
             case "bigFont":
                 buyitem.setBigFont(buyitem.getBigFont() + 1);
+                itemRepository.save(buyitem);
                 itemBuy(user, bigFontPrice, "내글자 크게하기");
                 break;
             case "myName":
                 buyitem.setMyName(buyitem.getMyName() + 1);
+                itemRepository.save(buyitem);
                 itemBuy(user, myNamePrice, "모두 내이름으로 바꾸기");
                 break;
         }
@@ -95,11 +104,10 @@ public class UserService {
 
     private void itemBuy(User user, Long price, String item) {
         if (user.getTotalPoint() >= price) {
-            Long totalPoint = user.getTotalPoint();
-            Point point = new Point(item + " 구매", -price, totalPoint - price, user);
-            pointRepository.save(point);
-            user.setTotalPoint(totalPoint - price);
+            user.setTotalPoint(user.getTotalPoint()-price);
             userRepository.save(user);
+            Point point = new Point(item + " 구매", -price, user.getTotalPoint(), user);
+            pointRepository.save(point);
         } else {
             throw new LackPointException("보유한 포인트가 부족합니다");
         }
