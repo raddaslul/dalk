@@ -15,6 +15,6 @@ public class ItemResponseDto {
     public ItemResponseDto(User user) {
         this.bigFont=user.getItem().getBigFont();
         this.onlyMe=user.getItem().getOnlyMe();
-        this.myName=user.getItem().getOnlyMe();
+        this.myName=user.getItem().getMyName();
     }
 }
