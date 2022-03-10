@@ -30,6 +30,10 @@ public class Item extends Timestamped {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Item(Integer bigFont, Integer onlyMe, Integer myName) {
         this.bigFont = bigFont;
         this.onlyMe = onlyMe;

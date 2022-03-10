@@ -69,6 +69,9 @@ public class UserService {
         User user = new User(username, password, nickname, 500L, 1, User.Role.USER, item);
         userRepository.save(user);
 
+        item.setUser(user);
+        itemRepository.save(item);
+
         Point point = new Point("회원가입 지급", 500L, 500L, user);
         pointRepository.save(point);
 
