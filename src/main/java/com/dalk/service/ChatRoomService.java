@@ -36,7 +36,6 @@ public class ChatRoomService {
     private final WarnChatRoomRepository warnChatRoomRepository;
     private final VoteRepository voteRepository;
 
-
     public Long createChatRoom(UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) {
         User user = userDetails.getUser();
         Long userId = user.getId();
@@ -78,7 +77,6 @@ public class ChatRoomService {
 
     //토론방리스트 전체조회
     public List<MainPageAllResponseDto> getMainPageAll() {
-
         //board 전체를 가져옴
         List<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc();
         //리턴할 값의 리스트를 정의
@@ -110,7 +108,6 @@ public class ChatRoomService {
         for (WarnChatRoom warnChatRoom : warnChatRoomList){
             warnUserList.add(warnChatRoom.getUser().getId());
         }
-
         return new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user,warnChatRoomList.size(),warnUserList);
     }
 
@@ -151,16 +148,4 @@ public class ChatRoomService {
         }
         return null;
     }
-
-//        //카테고리별 채팅방 조회
-//    public List<MainPageAllResponseDto> getSearchCategory2(String category) {
-//        List<ChatRoom> chatRoomList = chatRoomRepository.findByCategory(category);
-//        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
-//
-//        for (ChatRoom chatRoom : chatRoomList) {
-//            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom);
-//            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
-//        }
-//        return mainPageAllResponseDtoList;
-//    }
 }

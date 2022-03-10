@@ -2,14 +2,11 @@ package com.dalk.dto.responseDto;
 
 
 import com.dalk.domain.Point;
-import com.dalk.domain.User;
 import com.dalk.domain.time.TimeConversion;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor

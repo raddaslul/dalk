@@ -37,8 +37,6 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "board_id")
     private Board board;
 
-//    @OneToMany(mappedBy = "comment", orphanRemoval = true)
-
     public void setAgreeCnt(Integer agreeCnt) {
         this.agreeCnt = agreeCnt;
     }
@@ -46,8 +44,6 @@ public class Comment extends Timestamped {
     public void setDisAgreeCnt(Integer disAgreeCnt) {
         this.disAgreeCnt = disAgreeCnt;
     }
-//    private List<WarnComment> warnComments = new ArrayList<>();
-
 
     public Comment(CommentRequestDto commentRequestDto, Board board, Long userId) {
         this.comment = commentRequestDto.getComment();

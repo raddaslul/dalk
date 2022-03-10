@@ -54,7 +54,6 @@ public class CommentController {
         return commentService.deleteComment(commentId, userDetails);
     }
 
-    //    Agree 찬성하기
     @GetMapping("/agree/{commentId}")
     @ApiOperation(value = "찬성하기")
     public AgreeResponseDto agreeCheck(
@@ -81,10 +80,4 @@ public class CommentController {
     ){
         return commentService.warnComment(commentId,userDetails);
     }
-
-
-
-
-
-
 }

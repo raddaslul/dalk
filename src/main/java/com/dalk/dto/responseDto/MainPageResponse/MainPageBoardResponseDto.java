@@ -3,9 +3,7 @@ package com.dalk.dto.responseDto.MainPageResponse;
 import com.dalk.domain.Board;
 import com.dalk.domain.User;
 import com.dalk.domain.time.TimeConversion;
-import com.dalk.domain.wl.WarnBoard;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
-import com.dalk.service.MinkiService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,7 +27,6 @@ public class MainPageBoardResponseDto {
     private List<Long> warnUserList;
 
     public MainPageBoardResponseDto(Board board, List<String> categoryList, User user, Integer warnBoard,List<Long> warnUserList) {
-//        this.userInfo = new UserInfoResponseDto(board.getUser());
         this.userInfo = new UserInfoResponseDto(user);
         this.boardId = board.getId();
         this.topicA = board.getTopicA();

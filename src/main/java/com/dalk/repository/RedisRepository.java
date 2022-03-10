@@ -63,17 +63,4 @@ public class RedisRepository {
     public Boolean getUserChatRoomInOut(Long roomId, String name) {
         return Optional.ofNullable(userInOutOperations.get(USER_INOUT + "_" + roomId + "_" + name)).orElse(false);
     }
-
-    // 채팅방에서 아이템 사용시 등록
-    public void setItem(String roomId, String item) {
-        stringHashOpsItemInfo.put(ENTER_INFO, roomId, item);
-    }
-
-    public String getItem(String roomId) {
-        return stringHashOpsItemInfo.get(ENTER_INFO, roomId);
-    }
-
-    public void removeItem(String roomId) {
-        stringHashOpsItemInfo.delete(ENTER_INFO, roomId);
-    }
 }

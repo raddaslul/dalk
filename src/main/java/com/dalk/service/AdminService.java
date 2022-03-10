@@ -50,14 +50,11 @@ public class AdminService {
                 );
                 MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList), user, warnBoardList.size(),null);
 
-                if(mainPageBoardResponseDto.getWarnCnt()>=1) {
-                    mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
-                }
-
+            if(mainPageBoardResponseDto.getWarnCnt()>=5) {
+                mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
             }
-
-
-            return mainPageBoardResponseDtoList;
+        }
+        return mainPageBoardResponseDtoList;
     }
 
     //  블라인드 or 게시글  삭제 - 관리자
@@ -90,14 +87,14 @@ public class AdminService {
         return mainPageAllResponseDtoList;
     }
 
-    //    토론방 삭제
+    // 토론방 삭제
     public void deleteAdminChatRoom(Long roomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(()-> new ChatRoomNotFoundException("토론방이 없습니다."));
         chatRoom.setStatus(false);
         chatRoomRepository.save(chatRoom);
     }
 
-    //유저 전체 조회 - 관리자
+    // 유저 전체 조회 - 관리자
     public List<UserInfoResponseDto> getUserList() {
 
         List<User> userList = userRepository.findAll();
@@ -109,7 +106,7 @@ public class AdminService {
         return allUsers;
     }
 
-    //    유저 삭제 - 관리자
+    // 유저 삭제 - 관리자
     public void deleteUser(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
         userRepository.deleteById(userId);

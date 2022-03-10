@@ -5,7 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -29,6 +28,10 @@ public class Item extends Timestamped {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Item(Integer bigFont, Integer onlyMe, Integer myName) {
         this.bigFont = bigFont;

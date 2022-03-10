@@ -3,6 +3,7 @@ package com.dalk.controller;
 import com.dalk.domain.User;
 import com.dalk.dto.responseDto.CarouselResponseDto;
 import com.dalk.service.CarouselService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,9 @@ public class CarouselController {
 
     private final CarouselService carouselService;
 
-    // Admin에서 배너 등록
     @Secured(User.Role.Authority.ADMIN)
     @PostMapping("/admin/carousels")
+    @ApiOperation(value = "Admin에서 배너 등록")
     public HashMap<String, Object> createBanner(@RequestPart("image") MultipartFile multipartFile) throws IOException {
         Long carouselId = carouselService.uploadFile(multipartFile);
         HashMap<String, Object> result = new HashMap<>();
@@ -28,16 +29,16 @@ public class CarouselController {
         return result;
     }
 
-    // Admin에서 배너 목록 조회
     @Secured(User.Role.Authority.ADMIN)
     @GetMapping("/admin/carousels")
+    @ApiOperation(value = "Admin에서 배너 목록 조회")
     public List<CarouselResponseDto> getAdminBanners() {
       return carouselService.getBanners();
     }
 
-    // Admin에서 배너 삭제
     @Secured(User.Role.Authority.ADMIN)
     @DeleteMapping("/admin/carousels/{carouselId}")
+    @ApiOperation(value = "Admin에서 배너 삭제")
     public HashMap<String, Object> deleteBanner(@PathVariable Long carouselId) {
         carouselService.deleteBanner(carouselId);
         HashMap<String, Object> result = new HashMap<>();
@@ -45,8 +46,8 @@ public class CarouselController {
         return result;
     }
 
-    // 메인페이지에서 배너 조회
     @GetMapping("/api/carousels")
+    @ApiOperation(value = "메인페이지에서 배너 조회")
     public List<CarouselResponseDto> getMainBanners() {
         return carouselService.getBanners();
     }

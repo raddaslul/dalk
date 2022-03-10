@@ -2,7 +2,6 @@ package com.dalk.controller;
 
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
-import com.dalk.dto.responseDto.WarnResponse.WarnCommentResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.BoardService;
 import io.swagger.annotations.ApiOperation;
@@ -46,8 +45,4 @@ public class BoardController {
 
         return boardService.warnBoard(boardId,userDetails);
     }
-
-
-
-
 }

@@ -40,9 +40,4 @@ public class Point extends Timestamped {
         this.toTalPoint = toTalPoint;
         this.user = user;
     }
-
-//    public Point(String 투표하기, long l, User user) {
-//        super();
-//    }
-
 }

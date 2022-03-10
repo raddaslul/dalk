@@ -58,7 +58,7 @@ public class CommentService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
 
-//            댓글 찬성 , 반대
+//          댓글 찬성 , 반대
             List<Agree> agreeList = agreeRepository.findByCommentId(comment.getId());
             List<Agree> disagreeList = agreeRepository.findByCommentId(comment.getId());
             List<Long> agreeUserList = new ArrayList<>();
@@ -73,7 +73,7 @@ public class CommentService {
                 disagreeUserList.add(agree.getUser().getId());
             }
 
-//           댓글 신고
+//          댓글 신고
             List<WarnComment> warnCommentList = warnCommentRepository.findByCommentId(comment.getId());
             List<Long> warnUserList = new ArrayList<>();
 
@@ -150,17 +150,13 @@ public class CommentService {
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 () -> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
         );
-//        agree 자체가 null이 됨.
+//      agree 자체가 null이 됨.
         Agree agreeCheck = agreeRepository.findByUserAndComment(userDetails.getUser(), comment).orElse(null);
-//            if(agreeCheck.getIsDisAgree()==false||agreeCheck.getIsDisAgree()==null){
-//            agreeCheck.setAgreeId(true)
-//            }
 
         if (agreeCheck == null) {
             Agree agree = new Agree(comment, user, false, false);
             agreeRepository.save(agree);
             agree.setIsAgree(true);
-            agree.setIsDisAgree(false);
             agreeResponseDto.setIsAgree(true);
             comment.setAgreeCnt(comment.getAgreeCnt() + 1);
             commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
@@ -195,7 +191,6 @@ public class CommentService {
                 commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
             }
         }
-
         return agreeResponseDto;
     }
 
@@ -224,7 +219,6 @@ public class CommentService {
             comment.setDisAgreeCnt(comment.getDisAgreeCnt() + 1);
             commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
         } else {
-
             //T T 일경우
             if(agreeCheck.getIsDisAgree() && agreeCheck.getIsAgree()) {
                 comment.setAgreeCnt(comment.getAgreeCnt() - 1);
@@ -235,7 +229,6 @@ public class CommentService {
                 commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
                 // T F 일경우
             }else if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
-
                 agreeCheck.setIsDisAgree(false);
                 disAgreeResponseDto.setIsDisAgree(false);
                 comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
@@ -256,9 +249,7 @@ public class CommentService {
                 commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
             }
         }
-
         return disAgreeResponseDto;
-
     }
 
 
@@ -280,18 +271,12 @@ public class CommentService {
         if (warnCommentCheck == null){
             WarnComment warnComment = new WarnComment(true, comment, user);
             warnCommentRepository.save(warnComment);
-        warnCommentResponseDto.setCommentId(warnComment.getComment().getId());
-        warnCommentResponseDto.setWarn(warnComment.getIsWarn());
+            warnCommentResponseDto.setCommentId(warnComment.getComment().getId());
+            warnCommentResponseDto.setWarn(warnComment.getIsWarn());
             System.out.println(warnCommentResponseDto);
             return warnCommentResponseDto;
         }else {
-//            WarnComment warnComment = new WarnComment(true, comment, user);
-//            warnCommentRepository.save(warnComment);
-//            warnCommentResponseDto.setCommentId(warnComment.getComment().getId());
-//            warnCommentResponseDto.setWarn(warnComment.getIsWarn());
-//            return warnCommentResponseDto;
-        return null;
-
+            return null;
         }
     }
 }
