@@ -94,7 +94,7 @@ public class AdminService {
         chatRoomRepository.save(chatRoom);
     }
 
-    // 유저 전체 조회 - 관리자
+    // 유저 신고 조회 - 관리자
     public List<UserInfoResponseDto> getUserList() {
 
         List<User> userList = userRepository.findAll();

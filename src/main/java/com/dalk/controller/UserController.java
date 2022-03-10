@@ -65,10 +65,14 @@ public class UserController {
     }
     @GetMapping("/warnings/users/{userId}")
     @ApiOperation(value = "유저 신고하기")
-    public WarnUserResponseDto WarnUser
+    public  HashMap<String, Object> WarnUser
             (@PathVariable Long userId,
              @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return userService.WarnUser(userId,userDetails);
+            userService.WarnUser(userId,userDetails);
+
+            HashMap<String, Object> result = new HashMap<>();
+        result.put("result", "true");
+        return result;
     }
 
 

@@ -2,7 +2,10 @@ package com.dalk;
 
 import com.dalk.domain.*;
 import com.dalk.domain.wl.WarnBoard;
+import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.repository.*;
+import com.dalk.repository.wl.WarnBoardRepository;
+import com.dalk.repository.wl.WarnChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -24,6 +27,9 @@ public class InitialData implements ApplicationRunner {
     private final PointRepository pointRepository;
     private final LottoRepository lottoRepository;
     private final CategoryRepository categoryRepository;
+    private final WarnBoardRepository warnBoardRepository;
+    private final WarnChatRoomRepository warnChatRoomRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
 
     @Override
@@ -205,6 +211,29 @@ public class InitialData implements ApplicationRunner {
         pointRepository.save(point7);
         Lotto lotto7 = new Lotto(0L, user7);
         lottoRepository.save(lotto7);
+
+        WarnBoard warnBoard1 = new WarnBoard(true,board1,user1);
+        warnBoardRepository.save(warnBoard1);
+        WarnBoard warnBoard2 = new WarnBoard(true,board1,user2);
+        warnBoardRepository.save(warnBoard2);
+        WarnBoard warnBoard3 = new WarnBoard(true,board1,user3);
+        warnBoardRepository.save(warnBoard3);
+        WarnBoard warnBoard4 = new WarnBoard(true,board1,user4);
+        warnBoardRepository.save(warnBoard4);
+        WarnBoard warnBoard5 = new WarnBoard(true,board1,user5);
+        warnBoardRepository.save(warnBoard5);
+        WarnBoard warnBoard6 = new WarnBoard(true,board2,user1);
+        warnBoardRepository.save(warnBoard6);
+        WarnBoard warnBoard7 = new WarnBoard(true,board2,user2);
+        warnBoardRepository.save(warnBoard7);
+        WarnBoard warnBoard8 = new WarnBoard(true,board2,user3);
+        warnBoardRepository.save(warnBoard8);
+        WarnBoard warnBoard9 = new WarnBoard(true,board2,user4);
+        warnBoardRepository.save(warnBoard9);
+        WarnBoard warnBoard10 = new WarnBoard(true,board2,user5);
+        warnBoardRepository.save(warnBoard10);
+
+
 
     }
     }
