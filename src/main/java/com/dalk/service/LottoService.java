@@ -112,6 +112,5 @@ public class LottoService {
 
     }
     public void lottoPoint6(User user) {
-
     }
 }

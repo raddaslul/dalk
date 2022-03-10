@@ -3,7 +3,6 @@ package com.dalk.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -36,5 +35,4 @@ public class Category {
         this.board = board;
         this.category = category;
     }
-
 }

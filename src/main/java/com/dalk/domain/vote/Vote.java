@@ -1,11 +1,9 @@
 package com.dalk.domain.vote;
 
 import com.dalk.domain.ChatRoom;
-import com.dalk.domain.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,9 +34,6 @@ public class Vote {
 
     @Column
     private Float totalPointB;
-//
-//    @OneToMany
-//    private List<User> userList;
 
     @OneToOne
     private ChatRoom chatRoom;

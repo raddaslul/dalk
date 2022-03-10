@@ -1,11 +1,9 @@
 package com.dalk.dto.responseDto.MainPageResponse;
 
-import com.dalk.domain.Board;
 import com.dalk.domain.ChatRoom;
 import com.dalk.domain.User;
 import com.dalk.domain.time.TimeConversion;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
-import com.dalk.service.MinkiService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,7 +28,6 @@ public class MainPageAllResponseDto {
     private List<Long> warnUserList;
 
     public MainPageAllResponseDto(ChatRoom chatRoom, List<String> categoryList, User user,Integer warnChatRoom,List<Long> warnUserList) {
-//        this.userInfo = new UserInfoResponseDto(chatRoom.getUser());
         this.userInfo = new UserInfoResponseDto(user);
         this.roomId = chatRoom.getId();
         this.topicA = chatRoom.getTopicA();

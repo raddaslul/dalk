@@ -26,7 +26,6 @@ public class UserController {
 
     private final UserService userService;
 
-    // 회원가입
     @PostMapping("/users/signup")
     @ApiOperation(value = "회원가입")
     public String signup(@RequestBody @Valid SignupRequestDto requestDto) {
@@ -37,7 +36,6 @@ public class UserController {
         return "redirect:/users/login";
     }
 
-    //로그인 확인
     @GetMapping("/loginCheck")
     @ApiOperation(value = "로그인확인")
     public UserInfoResponseDto userInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {

@@ -1,14 +1,7 @@
 package com.dalk.dto.responseDto;
 
-import com.dalk.domain.Point;
 import com.dalk.domain.User;
-import com.dalk.repository.PointRepository;
-import com.dalk.security.UserDetailsImpl;
 import lombok.*;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @RequiredArgsConstructor
