@@ -19,6 +19,7 @@ import java.util.*;
 
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 @Service
 public class ChatMessageService {
 
@@ -128,11 +129,4 @@ public class ChatMessageService {
         chatMessageItemResponseDto.setMyName(null);
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageItemResponseDto);
     }
-
-//    public Page<ChatMessage> getChatMessageByRoomId(String roomId, Pageable pageable) {
-//        int page = (pageable.getPageNumber() == 0) ? 0 : (pageable.getPageNumber() -1);
-//        pageable = PageRequest.of(page, 150);
-//        return chatMessageRepository.findByRoomId(roomId, pageable);
-//    }
-
 }

@@ -4,8 +4,6 @@ import com.dalk.domain.Board;
 import com.dalk.domain.Category;
 import com.dalk.domain.ChatRoom;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -17,5 +15,4 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findCategoryByBoard(Board board);
 
     List<Category> findAllByChatRoom(ChatRoom chatRoom);
-
 }

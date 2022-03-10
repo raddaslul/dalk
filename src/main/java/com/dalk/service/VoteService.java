@@ -13,7 +13,6 @@ import com.dalk.exception.ex.LackPointException;
 import com.dalk.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -79,7 +78,6 @@ public class VoteService {
         for (SaveVote saveVote : saveVotesList) {
             userList.add(saveVote.getUser());
         }
-//        List<User> userList = vote.getUserList();
 
         for (User user : userList) {
             VoteUserListResponseDto voteUserListResponseDto = new VoteUserListResponseDto(user);
@@ -136,5 +134,4 @@ public class VoteService {
             }
         }
     }
-
 }

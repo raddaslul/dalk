@@ -27,7 +27,4 @@ public abstract class Timestamped {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @LastModifiedDate // 마지막 변경 시점
     private LocalDateTime modifiedAt;
-//
-//    @CreatedDate
-//    private LocalDateTime createdAtTime;
 }

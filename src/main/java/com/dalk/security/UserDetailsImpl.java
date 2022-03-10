@@ -1,6 +1,5 @@
 package com.dalk.security;
 
-
 import com.dalk.domain.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 @Getter
 public class UserDetailsImpl implements UserDetails {
@@ -26,7 +24,6 @@ public class UserDetailsImpl implements UserDetails {
         return user;
     }
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         User.Role role = user.getRole();
@@ -37,7 +34,6 @@ public class UserDetailsImpl implements UserDetails {
         authorities.add(simpleGrantedAuthority);
 
         return authorities;
-//        return Collections.emptyList();
     }
 
     @Override
@@ -51,7 +47,6 @@ public class UserDetailsImpl implements UserDetails {
 
         return user.getUsername();
     }
-
 
     @Override
     public boolean isAccountNonExpired() {
@@ -72,8 +67,4 @@ public class UserDetailsImpl implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-
-
-
 }

@@ -5,13 +5,10 @@ import com.dalk.domain.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 @Table(name = "warn_user")
 public class WarnUser {
@@ -30,7 +27,6 @@ public class WarnUser {
     @OneToOne
     @JoinColumn
     private User user;
-
 
     public WarnUser(boolean isWarn, String warnUserName, User user1) {
         this.isWarn = isWarn;

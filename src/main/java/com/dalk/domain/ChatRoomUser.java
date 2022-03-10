@@ -23,10 +23,6 @@ public class ChatRoomUser {
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
 
-//    @ManyToOne
-//    @JoinColumn(name = "vote")
-//    private Vote vote;
-
     @OneToOne
     @JoinColumn(name="user_id")
     private User user;
