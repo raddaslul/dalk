@@ -17,6 +17,8 @@ public class ChatMessageRequestDto {
     private Boolean bigFont;
     private String onlyMe;
     private String myName;
+    private String papago;
+    private String reverse;
     private Long userId;
     private String createdAt;
 }

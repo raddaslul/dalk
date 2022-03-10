@@ -18,7 +18,7 @@ public class ItemResponseDto {
         this.bigFont=user.getItem().getBigFont();
         this.onlyMe=user.getItem().getOnlyMe();
         this.myName=user.getItem().getMyName();
-        this.myName=user.getItem().getPapago();
-        this.myName=user.getItem().getReverse();
+        this.papago=user.getItem().getPapago();
+        this.reverse=user.getItem().getReverse();
     }
 }

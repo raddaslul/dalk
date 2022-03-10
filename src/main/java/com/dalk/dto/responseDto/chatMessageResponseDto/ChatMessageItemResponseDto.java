@@ -17,6 +17,8 @@ public class ChatMessageItemResponseDto {
     private String message;
     private String onlyMe;
     private String myName;
+    private String papago;
+    private String reverse;
 
     public ChatMessageItemResponseDto(ChatMessageItem chatMessageItem) {
         this.type = chatMessageItem.getType();
@@ -25,5 +27,7 @@ public class ChatMessageItemResponseDto {
         this.message = chatMessageItem.getMessage();
         this.onlyMe = chatMessageItem.getOnlyMe();
         this.myName = chatMessageItem.getMyName();
+        this.papago = chatMessageItem.getPapago();
+        this.reverse = chatMessageItem.getReverse();
     }
 }
