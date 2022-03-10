@@ -5,6 +5,8 @@ package com.dalk.controller;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.SignupRequestDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnUserResponseDto;
 import com.dalk.repository.PointRepository;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.MinkiService;
@@ -63,4 +65,14 @@ public class UserController {
         result.put("result", "true");
         return result;
     }
+//    @GetMapping("/warnings/users/{userId}")
+//    @ApiOperation(value = "유저 신고하기")
+//    public WarnUserResponseDto WarnUser
+//            (@PathVariable Long userId,
+//             @AuthenticationPrincipal UserDetailsImpl userDetails){
+//
+//        return userService.WarnUser(userId,userDetails);
+//    }
+
+
 }

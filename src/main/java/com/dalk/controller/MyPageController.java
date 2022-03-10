@@ -11,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -23,9 +25,12 @@ public class MyPageController {
 
     // 유저 삭제하기(회원 탈퇴)
     @DeleteMapping("/signout")
-    public ResponseEntity<String> deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public HashMap<String,Object> deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
-        return ResponseEntity.ok().body(myPageService.deleteUser(user));
+        myPageService.deleteUser(user);
+        HashMap<String, Object> result = new HashMap<>();
+            result.put("result", "true");
+            return result;
     }
 
     @GetMapping("/mypage/points")

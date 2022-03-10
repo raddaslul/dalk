@@ -55,7 +55,7 @@ public class User extends Timestamped {
     @Column(name = "ex")
     private Integer ex;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private ChatRoomUser chatRoomUser;
 
     @Column
@@ -63,11 +63,16 @@ public class User extends Timestamped {
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
     private Role role;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Item item;
 
+    @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
+    private Lotto lotto;
+
+
+
     @JsonManagedReference
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     private List<Point> points;
 
     public void setTotalPoint(Long totalPoint) {
