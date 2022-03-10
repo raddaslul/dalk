@@ -40,6 +40,12 @@ public class ChatMessageItem extends Timestamped {
     @Column
     private String myName;
 
+    @Column
+    private String papago;
+
+    @Column
+    private String reverse;
+
     public ChatMessageItem(ChatMessageRequestDto chatMessageRequestDto) {
         this.type = chatMessageRequestDto.getType();
         this.roomId = chatMessageRequestDto.getRoomId();
@@ -48,5 +54,7 @@ public class ChatMessageItem extends Timestamped {
         this.message = chatMessageRequestDto.getMessage();
         this.onlyMe = chatMessageRequestDto.getOnlyMe();
         this.myName = chatMessageRequestDto.getMyName();
+        this.papago = chatMessageRequestDto.getPapago();
+        this.reverse = chatMessageRequestDto.getReverse();
     }
 }

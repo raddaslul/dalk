@@ -111,6 +111,12 @@ public class ChatMessageService {
         } else if (item.equals("myName")) {
             chatMessageRequestDto.setMyName(nickname);
             chatMessageRequestDto.setMessage(nickname + "님이" +  item + "을 사용하셨습니다.");
+        } else if (item.equals("papago")) {
+            chatMessageRequestDto.setPapago(nickname);
+            chatMessageRequestDto.setMessage(nickname + "님이" +  item + "을 사용하셨습니다.");
+        } else if (item.equals("reverse")) {
+            chatMessageRequestDto.setReverse(nickname);
+            chatMessageRequestDto.setMessage(nickname + "님이" + item + "을 사용하셨습니다.");
         }
         ChatMessageItem chatMessageItem = new ChatMessageItem(chatMessageRequestDto);
         chatMessageItemRepository.save(chatMessageItem);
@@ -127,6 +133,8 @@ public class ChatMessageService {
         chatMessageItemResponseDto.setMessage(item + "사용시간이 완료되었습니다.");
         chatMessageItemResponseDto.setOnlyMe(null);
         chatMessageItemResponseDto.setMyName(null);
+        chatMessageItemResponseDto.setPapago(null);
+        chatMessageItemResponseDto.setReverse(null);
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageItemResponseDto);
     }
 }
