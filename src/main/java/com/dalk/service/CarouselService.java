@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class AdminCarouselService {
+public class CarouselService {
 
     private final S3Repository s3Repository;
     private final CarouselRepository carouselRepository;

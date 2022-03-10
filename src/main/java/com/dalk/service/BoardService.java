@@ -51,11 +51,8 @@ public class BoardService {
 
     //게시글 전체 조회
     public List<MainPageBoardResponseDto> getMainPageBoard() {
-        List<Board> boardList = boardRepository.findAll();
+        List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
-
-
-
 
         for (Board board : boardList) {
             List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
@@ -66,7 +63,6 @@ public class BoardService {
             MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList),user,warnBoardList.size(),null);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
-
         return mainPageBoardResponseDtoList;
     }
 
