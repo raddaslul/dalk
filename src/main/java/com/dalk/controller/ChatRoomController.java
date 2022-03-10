@@ -9,7 +9,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,8 +23,11 @@ public class ChatRoomController {
 
     @PostMapping("/rooms")
     @ApiOperation(value = "토론방 생성")
-    public HashMap<String, Object> createChatRoom(@RequestBody ChatRoomRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        Long roomId = chatRoomService.createChatRoom(userDetails, requestDto);
+    public HashMap<String, Object> createChatRoom(
+            @RequestPart("image") MultipartFile multipartFile,
+            @RequestPart("debate") ChatRoomRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+        Long roomId = chatRoomService.createChatRoom(multipartFile, userDetails, requestDto);
         HashMap<String, Object> result = new HashMap<>();
         result.put("roomId", roomId);
         return result;

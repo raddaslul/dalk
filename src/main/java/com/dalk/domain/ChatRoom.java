@@ -39,6 +39,12 @@ public class ChatRoom extends Timestamped {
     @Column(nullable = false)
     private Boolean status;
 
+    @Column
+    private String convertedFileName;
+
+    @Column
+    private String filePath;
+
     @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
     private List<ChatRoomUser> chatRoomUser;
 
@@ -48,12 +54,14 @@ public class ChatRoom extends Timestamped {
     @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
     private List<WarnChatRoom> warnChatRooms = new ArrayList<>();
 
-    public ChatRoom(ChatRoomRequestDto requestDto, Long userId) {
+    public ChatRoom(ChatRoomRequestDto requestDto, Long userId, String convertedFileName, String filePath) {
         this.topicA = requestDto.getTopicA();
         this.topicB = requestDto.getTopicB();
         this.time = requestDto.getTime();
-        this.status = requestDto.getStatus();
         this.createUserId = userId;
+        this.status = requestDto.getStatus();
+        this.convertedFileName = convertedFileName;
+        this.filePath = filePath;
     }
 
     public void setStatus(Boolean status) {
