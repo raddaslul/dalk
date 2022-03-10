@@ -1,11 +1,15 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
+import com.dalk.domain.wl.WarnComment;
 import com.dalk.dto.requestDto.CommentRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -26,7 +30,6 @@ public class Comment extends Timestamped {
 
     @Column
     private Integer agreeCnt = 0;
-
     @Column
     private Integer disAgreeCnt = 0;
 

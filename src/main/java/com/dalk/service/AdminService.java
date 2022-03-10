@@ -1,5 +1,6 @@
 package com.dalk.service;
 
+
 import com.dalk.domain.*;
 import com.dalk.domain.wl.WarnBoard;
 import com.dalk.domain.wl.WarnChatRoom;
@@ -23,6 +24,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AdminService {
 
+
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
@@ -30,22 +32,23 @@ public class AdminService {
     private final WarnBoardRepository warnBoardRepository;
     private final WarnChatRoomRepository warnChatRoomRepository;
 
-    // 블라인드 게시글 전체 조회 - 관리자
+    //블라인드 게시글 전체 조회 - 관리자
+
     public List<MainPageBoardResponseDto> getAdminMainPageBoard() {
 
-        // board 전체를 가져옴
-        List<Board> boardList = boardRepository.findAll();
-        // 리턴할 값의 리스트를 정의
-        List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
+            //board 전체를 가져옴
+            List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
+            //리턴할 값의 리스트를 정의
+            List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
-        for (Board board : boardList) {
+            for (Board board : boardList) {
 
-            List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
-            List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
-            User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
-                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
-            );
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList), user, warnBoardList.size(),null);
+                List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
+                List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
+                User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
+                        () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+                );
+                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList), user, warnBoardList.size(),null);
 
             if(mainPageBoardResponseDto.getWarnCnt()>=5) {
                 mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
@@ -54,15 +57,15 @@ public class AdminService {
         return mainPageBoardResponseDtoList;
     }
 
-    // 블라인드 or 게시글  삭제 - 관리자
+    //  블라인드 or 게시글  삭제 - 관리자
     public void deleteAdminBoard(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new BoardNotFoundException("해당 게시글이 존재하지 않습니다. ")
         );
         boardRepository.deleteById(board.getId());
     }
+    //    토론방 목록 조회 - 관리자
 
-    // 토론방 목록 조회 - 관리자
     public List<MainPageAllResponseDto> getAdminMainPageAll() {
         //board 전체를 가져옴
         List<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc();
@@ -76,6 +79,10 @@ public class AdminService {
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
             MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+
+            if(mainPageAllResponseDto.getWarnCnt()>=1) {
+                mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+            }
         }
         return mainPageAllResponseDtoList;
     }

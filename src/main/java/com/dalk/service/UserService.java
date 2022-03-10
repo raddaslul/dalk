@@ -16,14 +16,15 @@ import com.dalk.repository.LottoRepository;
 import com.dalk.repository.PointRepository;
 import com.dalk.repository.UserRepository;
 import com.dalk.repository.wl.WarnCommentRepository;
+import com.dalk.repository.wl.WarnUserRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +39,7 @@ public class UserService {
     private final ItemRepository itemRepository;
     private final PointRepository pointRepository;
     private final LottoRepository lottoRepository;
-//    private final WarnUserRepository warnUserRepository;
+    private final WarnUserRepository warnUserRepository;
 
     private final Long onlyMePrice = 100L;
     private final Long bigFontPrice = 100L;
@@ -159,32 +160,30 @@ public class UserService {
                 break;
         }
     }
+    @Transactional
+    public WarnUserResponseDto WarnUser(Long userId, UserDetailsImpl userDetails) {
 
-//    public WarnUserResponseDto WarnUser(Long userId, UserDetailsImpl userDetails) {
-//
-//        User user1 = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
-//                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
-//        );
-//
-//        String warnUserName = String.valueOf(userRepository.findById(userId).orElseThrow(
-//                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
-//        ));
-//
-//        WarnUserResponseDto warnUserResponseDto = new WarnUserResponseDto();
-//
-//
-//        WarnUser warnUserCheck = warnUserRepository.findByIsWarnAndUserIdAndWarnUserId(false,user1,warnUserName).orElse(null);
-//
-//            if(warnUserCheck == null){
-//                WarnUser warnUser = new WarnUser(true,warnUserName,user1);
-//                warnUserRepository.save(warnUser);
-//                warnUserResponseDto.setWarnUserName(warnUser.getWarnUserName());
-//                warnUserResponseDto.setWarn(warnUser.getIsWarn());
-//                return warnUserResponseDto;
-//            }else {
-//                return null;
-//            }
-//
-//    }
+        User user1 = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
+        );
+
+        String warnUserName = String.valueOf(userRepository.findById(userId).orElseThrow(
+                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
+        ));
+        WarnUserResponseDto warnUserResponseDto = new WarnUserResponseDto();
+
+        WarnUser warnUserCheck = warnUserRepository.findByUserIdAndWarnUserName(userDetails.getUser().getId(),warnUserName).orElse(null);
+
+            if(warnUserCheck == null){
+                WarnUser warnUser = new WarnUser(true,warnUserName,user1);
+                warnUserRepository.save(warnUser);
+                warnUserResponseDto.setWarnUserName(warnUser.getWarnUserName());
+                warnUserResponseDto.setWarn(warnUser.getIsWarn());
+                return warnUserResponseDto;
+            }else {
+                return null;
+            }
+
+    }
 }
 

@@ -63,14 +63,13 @@ public class UserController {
         result.put("result", "true");
         return result;
     }
-//    @GetMapping("/warnings/users/{userId}")
-//    @ApiOperation(value = "유저 신고하기")
-//    public WarnUserResponseDto WarnUser
-//            (@PathVariable Long userId,
-//             @AuthenticationPrincipal UserDetailsImpl userDetails){
-//
-//        return userService.WarnUser(userId,userDetails);
-//    }
+    @GetMapping("/warnings/users/{userId}")
+    @ApiOperation(value = "유저 신고하기")
+    public WarnUserResponseDto WarnUser
+            (@PathVariable Long userId,
+             @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return userService.WarnUser(userId,userDetails);
+    }
 
 
 }
