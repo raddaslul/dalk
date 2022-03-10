@@ -27,8 +27,12 @@ public class Item extends Timestamped {
     private Integer myName;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Item(Integer bigFont, Integer onlyMe, Integer myName) {
         this.bigFont = bigFont;

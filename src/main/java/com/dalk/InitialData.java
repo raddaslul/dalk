@@ -42,6 +42,8 @@ public class InitialData implements ApplicationRunner {
                 User.Role.ADMIN,
                 item1);
         userRepository.save(user1);
+        item1.setUser(user1);
+        itemRepository.save(item1);
         Point point1 = new Point("회원가입",50000000L,50000000L,user1);
         pointRepository.save(point1);
         Lotto lotto1 = new Lotto(0L, user1);
@@ -58,6 +60,8 @@ public class InitialData implements ApplicationRunner {
                 User.Role.USER,
                 item2);
         userRepository.save(user2);
+        item2.setUser(user2);
+        itemRepository.save(item2);
         Point point2 = new Point("회원가입",100000000L,100000000L,user2);
         pointRepository.save(point2);
         Lotto lotto2 = new Lotto(0L, user2);
@@ -123,6 +127,8 @@ public class InitialData implements ApplicationRunner {
                 User.Role.USER,
                 item3);
         userRepository.save(user3);
+        item3.setUser(user3);
+        itemRepository.save(item3);
         Point point3 = new Point("회원가입",500L,500L,user3);
         pointRepository.save(point3);
         Lotto lotto3 = new Lotto(0L, user3);
@@ -139,6 +145,8 @@ public class InitialData implements ApplicationRunner {
                 User.Role.USER,
                 item4);
         userRepository.save(user4);
+        item4.setUser(user4);
+        itemRepository.save(item4);
         Point point4 = new Point("회원가입",500L,500L,user4);
         pointRepository.save(point4);
         Lotto lotto4 = new Lotto(0L, user4);
@@ -155,6 +163,8 @@ public class InitialData implements ApplicationRunner {
                 User.Role.USER,
                 item5);
         userRepository.save(user5);
+        item5.setUser(user5);
+        itemRepository.save(item5);
         Point point5 = new Point("회원가입",500L,500L,user5);
         pointRepository.save(point5);
         Lotto lotto5 = new Lotto(0L, user5);
@@ -171,6 +181,8 @@ public class InitialData implements ApplicationRunner {
                 User.Role.USER,
                 item6);
         userRepository.save(user6);
+        item6.setUser(user6);
+        itemRepository.save(item6);
         Point point6 = new Point("회원가입",500L,500L,user6);
         pointRepository.save(point6);
         Lotto lotto6 = new Lotto(0L, user6);
@@ -187,6 +199,8 @@ public class InitialData implements ApplicationRunner {
                 User.Role.USER,
                 item7);
         userRepository.save(user7);
+        item7.setUser(user7);
+        itemRepository.save(item7);
         Point point7 = new Point("회원가입",500L,500L,user7);
         pointRepository.save(point7);
         Lotto lotto7 = new Lotto(0L, user7);
