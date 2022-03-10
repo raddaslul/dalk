@@ -26,9 +26,10 @@ public class Item extends Timestamped {
     @Column(name = "myName")
     private Integer myName;
 
-    //    @OneToOne
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public Item(Integer bigFont, Integer onlyMe, Integer myName) {
         this.bigFont = bigFont;
         this.onlyMe = onlyMe;

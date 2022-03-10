@@ -63,7 +63,7 @@ public class User extends Timestamped {
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
     private Role role;
 
-    @OneToOne
+    @OneToOne(mappedBy = "user")
     private Item item;
 
     @JsonManagedReference
