@@ -162,7 +162,6 @@ public class UserService {
     }
     @Transactional
     public WarnUserResponseDto WarnUser(Long userId, UserDetailsImpl userDetails) {
-
         User user1 = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
         );
@@ -171,7 +170,6 @@ public class UserService {
                 ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
         ));
         WarnUserResponseDto warnUserResponseDto = new WarnUserResponseDto();
-
         WarnUser warnUserCheck = warnUserRepository.findByUserIdAndWarnUserName(userDetails.getUser().getId(),warnUserName).orElse(null);
 
             if(warnUserCheck == null){
