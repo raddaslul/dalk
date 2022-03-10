@@ -16,24 +16,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     List<Category> findCategoryByBoard(Board board);
 
-//    List<Category> findCategoryByBoard_Id(Long Id);
-
-    List<Category> findAllByChatRoom_TopicAContainingIgnoreCaseOrChatRoom_TopicBContainingIgnoreCaseOrCategory(String keyword1, String keyword2, String keyword3);
-
-//    List<Category> findAllByChatRoom_TopicAContainingIgnoreCaseOrChatRoom_TopicBContainingIgnoreCase(String keyword1, String keyword2);
-
-//    List<Category> findAllByChatRoom_TopicAContainingIgnoreCase(String keyword1);
-//    List<Category> findAllByChatRoom_TopicBContainingIgnoreCase(String keyword1);
-
-    List<Category> findAllByCategory(String keyowrd);
-
-    List<Category> findAllByBoard_TopicAContainingIgnoreCaseOrBoard_TopicBContainingIgnoreCaseOrCategory(String keyword1, String keyword2, String keyword3);
-
-//    @Modifying
-//    @Query("select p from Category p where p.category like %:keyword% or p.chatRoom.topicA like %:keyword% or p.chatRoom.topicB like %:keyword%")
-//    List<Category> findSearch(String keyword);
-
     List<Category> findAllByChatRoom(ChatRoom chatRoom);
 
-    List<Category> findAllByChatRoomId(Long id);
 }
