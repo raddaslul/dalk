@@ -37,6 +37,7 @@ public class UserService {
     private final Long onlyMePrice = 100L;
     private final Long bigFontPrice = 100L;
     private final Long myNamePrice = 100L;
+    private final Integer exBuyPrice = 100;
 
     //회원가입
     public void signup(SignupRequestDto requestDto) {
@@ -98,6 +99,11 @@ public class UserService {
                 buyitem.setMyName(buyitem.getMyName() + 1);
                 itemRepository.save(buyitem);
                 itemBuy(user, myNamePrice, "모두 내이름으로 바꾸기");
+                break;
+            case "exBuy":
+                user.setEx(user.getEx()+exBuyPrice);
+                userRepository.save(user);
+                itemBuy(user, Long.valueOf(exBuyPrice),"경험치");
                 break;
         }
     }
