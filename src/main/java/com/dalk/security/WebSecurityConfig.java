@@ -93,23 +93,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.authorizeRequests()
-                //ㅡㅡㅡㅡㅡㅡㅡㅡ
-                // 메인페이지 접근허용
-                .antMatchers("/api/mains").permitAll()
-                // api 요청 접근허용
-                .antMatchers("/api/**").permitAll()
-                .antMatchers("/").permitAll()
-                .antMatchers("/**").permitAll()
-                .antMatchers("/chatting/**").permitAll()
-                .antMatchers("/chatting").permitAll()
-                .antMatchers("/api/chat/message").permitAll()
-                // 전부 허용
-                //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ 추가
-                .antMatchers("*").permitAll()
                 .anyRequest()
                 .permitAll()
                 .and()
-
                 // [로그아웃 기능]
                 .logout()
                 // 로그아웃 요청 처리 URL
@@ -150,8 +136,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         skipPathList.add("GET,/h2-console/**");
         skipPathList.add("POST,/h2-console/**");
+
         // 회원 관리 API 허용
-//        skipPathList.add("GET,/user/**");
         skipPathList.add("POST,/users/signup");
         //메인페이지 스킵!
         skipPathList.add("GET,/users/**");
@@ -160,11 +146,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 채팅
         skipPathList.add("GET,/webjars/**");
         skipPathList.add("GET,/ws-stomp/**");
-        skipPathList.add("GET,/ws-alarm/**");
-        skipPathList.add("GET,/chat/room");
-        skipPathList.add("GET,/chat/user");
-
-//        skipPathList.add("GET,/favicon.ico");
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,

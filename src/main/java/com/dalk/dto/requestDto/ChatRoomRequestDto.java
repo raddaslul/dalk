@@ -10,4 +10,5 @@ public class ChatRoomRequestDto {
     private String topicB;
     private List<String> category;
     private Boolean time;
+    private Boolean status = true;
 }
