@@ -64,6 +64,9 @@ public class ChatRoom extends Timestamped {
         this.filePath = filePath;
     }
 
+
+
+
     public void setStatus(Boolean status) {
         this.status = status;
     }
