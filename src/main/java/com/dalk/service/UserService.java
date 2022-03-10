@@ -4,14 +4,19 @@ import com.dalk.domain.Item;
 import com.dalk.domain.Lotto;
 import com.dalk.domain.Point;
 import com.dalk.domain.User;
+import com.dalk.domain.wl.WarnUser;
 import com.dalk.dto.requestDto.SignupRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnUserResponseDto;
 import com.dalk.exception.ex.*;
 import com.dalk.repository.ItemRepository;
 import com.dalk.repository.LottoRepository;
 import com.dalk.repository.PointRepository;
 import com.dalk.repository.UserRepository;
+import com.dalk.repository.wl.WarnCommentRepository;
+import com.dalk.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +38,7 @@ public class UserService {
     private final ItemRepository itemRepository;
     private final PointRepository pointRepository;
     private final LottoRepository lottoRepository;
+//    private final WarnUserRepository warnUserRepository;
 
     private final Long onlyMePrice = 100L;
     private final Long bigFontPrice = 100L;
@@ -144,5 +150,32 @@ public class UserService {
                 break;
         }
     }
+
+//    public WarnUserResponseDto WarnUser(Long userId, UserDetailsImpl userDetails) {
+//
+//        User user1 = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+//                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
+//        );
+//
+//        String warnUserName = String.valueOf(userRepository.findById(userId).orElseThrow(
+//                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
+//        ));
+//
+//        WarnUserResponseDto warnUserResponseDto = new WarnUserResponseDto();
+//
+//
+//        WarnUser warnUserCheck = warnUserRepository.findByIsWarnAndUserIdAndWarnUserId(false,user1,warnUserName).orElse(null);
+//
+//            if(warnUserCheck == null){
+//                WarnUser warnUser = new WarnUser(true,warnUserName,user1);
+//                warnUserRepository.save(warnUser);
+//                warnUserResponseDto.setWarnUserName(warnUser.getWarnUserName());
+//                warnUserResponseDto.setWarn(warnUser.getIsWarn());
+//                return warnUserResponseDto;
+//            }else {
+//                return null;
+//            }
+//
+//    }
 }
 

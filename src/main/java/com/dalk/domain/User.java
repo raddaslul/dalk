@@ -67,8 +67,13 @@ public class User extends Timestamped {
     @OneToOne(cascade = CascadeType.REMOVE)
     private Item item;
 
+    @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
+    private Lotto lotto;
+
+
+
     @JsonManagedReference
-    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     private List<Point> points;
 
     public User(String username, String password, String nickname,Long totalPoint,Integer ex, Role role, Item item) {
