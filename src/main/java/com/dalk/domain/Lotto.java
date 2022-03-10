@@ -10,7 +10,6 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 @Table(name = "lotto")
 public class Lotto {
@@ -25,7 +24,15 @@ public class Lotto {
     @OneToOne
     private User user;
 
-    public Lotto(Long count,User user) {
+    public void setCount(Long count) {
+        this.count = count;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Lotto(Long count, User user) {
         this.count = count;
         this.user = user;
     }

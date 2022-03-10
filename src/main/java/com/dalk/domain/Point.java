@@ -4,13 +4,14 @@ import com.dalk.domain.time.Timestamped;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
 @Entity
 @Table(name = "point")
 public class Point extends Timestamped {
@@ -43,4 +44,5 @@ public class Point extends Timestamped {
 //    public Point(String 투표하기, long l, User user) {
 //        super();
 //    }
+
 }
