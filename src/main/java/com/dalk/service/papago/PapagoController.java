@@ -1,5 +1,6 @@
 package com.dalk.service.papago;
 
+import com.dalk.service.ItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,12 @@ public class PapagoController {
     @PostMapping("/papago")
     public String papago(@RequestBody PapagoRequestDto requestDto) throws IOException, NoSuchAlgorithmException {
         String string = requestDto.getText();
-        return PapagoService.papago(string);
+        return ItemService.papago(string);
+    }
+
+    @PostMapping("/reverse")
+    public String reverseItem(@RequestBody PapagoRequestDto requestDto){
+        String string = requestDto.getText();
+        return ItemService.reverseWord(string);
     }
 }
