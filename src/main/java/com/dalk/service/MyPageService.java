@@ -52,8 +52,6 @@ public class MyPageService {
         List<RankResponseDto> rankResponseDtoList =new ArrayList<>();
 
         for(User user1 :rankList ){
-            user1.setNickname(user1.getNickname());
-            user1.setEx(user1.getEx());
             RankResponseDto rankResponseDto = new RankResponseDto(user1.getNickname(),user1.getEx());
             rankResponseDtoList.add(rankResponseDto);
         }

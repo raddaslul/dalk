@@ -1,9 +1,8 @@
 package com.dalk.controller;
 
-import com.dalk.domain.Carousel;
 import com.dalk.domain.User;
 import com.dalk.dto.responseDto.CarouselResponseDto;
-import com.dalk.service.AdminCarouselService;
+import com.dalk.service.CarouselService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -15,35 +14,40 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/admin")
-public class AdminCarouselController {
+public class CarouselController {
 
-    private final AdminCarouselService adminCarouselService;
+    private final CarouselService carouselService;
 
-    // 메인 배너 등록
+    // Admin에서 배너 등록
     @Secured(User.Role.Authority.ADMIN)
-    @PostMapping("/carousels")
+    @PostMapping("/admin/carousels")
     public HashMap<String, Object> createBanner(@RequestPart("image") MultipartFile multipartFile) throws IOException {
-        Long carouselId = adminCarouselService.uploadFile(multipartFile);
+        Long carouselId = carouselService.uploadFile(multipartFile);
         HashMap<String, Object> result = new HashMap<>();
         result.put("carouselId", carouselId);
         return result;
     }
 
-    // 메인 배너 목록
+    // Admin에서 배너 목록 조회
     @Secured(User.Role.Authority.ADMIN)
-    @GetMapping("/carousels")
-    public List<CarouselResponseDto> getBanners() {
-      return adminCarouselService.getBanners();
+    @GetMapping("/admin/carousels")
+    public List<CarouselResponseDto> getAdminBanners() {
+      return carouselService.getBanners();
     }
 
-    // 메인 배너 삭제
+    // Admin에서 배너 삭제
     @Secured(User.Role.Authority.ADMIN)
-    @DeleteMapping("/carousels/{carouselId}")
+    @DeleteMapping("/admin/carousels/{carouselId}")
     public HashMap<String, Object> deleteBanner(@PathVariable Long carouselId) {
-        adminCarouselService.deleteBanner(carouselId);
+        carouselService.deleteBanner(carouselId);
         HashMap<String, Object> result = new HashMap<>();
         result.put("result", "true");
         return result;
+    }
+
+    // 메인페이지에서 배너 조회
+    @GetMapping("/api/carousels")
+    public List<CarouselResponseDto> getMainBanners() {
+        return carouselService.getBanners();
     }
 }

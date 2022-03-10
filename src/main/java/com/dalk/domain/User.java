@@ -11,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 @Table(name = "user")
 public class User extends Timestamped {
@@ -76,7 +75,23 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     private List<Point> points;
 
-    public User(String username, String password, String nickname,Long totalPoint,Integer ex, Role role, Item item) {
+    public void setTotalPoint(Long totalPoint) {
+        this.totalPoint = totalPoint;
+    }
+
+    public void setEx(Integer ex) {
+        this.ex = ex;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public void setPoints(List<Point> points) {
+        this.points = points;
+    }
+
+    public User(String username, String password, String nickname, Long totalPoint, Integer ex, Role role, Item item) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;

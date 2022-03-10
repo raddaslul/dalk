@@ -13,7 +13,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 @Table(name = "comment")
 public class Comment extends Timestamped {
@@ -30,15 +29,23 @@ public class Comment extends Timestamped {
     private Long createUserId;
 
     @Column
-    private Integer agreeCnt = 0;
+    private Integer agreeCnt;
     @Column
-    private Integer disAgreeCnt = 0;
+    private Integer disAgreeCnt;
 
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
 
 //    @OneToMany(mappedBy = "comment", orphanRemoval = true)
+
+    public void setAgreeCnt(Integer agreeCnt) {
+        this.agreeCnt = agreeCnt;
+    }
+
+    public void setDisAgreeCnt(Integer disAgreeCnt) {
+        this.disAgreeCnt = disAgreeCnt;
+    }
 //    private List<WarnComment> warnComments = new ArrayList<>();
 
 

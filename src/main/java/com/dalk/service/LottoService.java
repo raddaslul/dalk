@@ -37,34 +37,33 @@ public class LottoService {
             else {num = random.nextInt(10000);}
 
 
-            String content = "";
+            int content = 0;
             if (1 <= num && num < 30) {//0.3프로
-                content = "경 * 축 1등 당첨!!😄😄😄 세상에 이런일이.... 운이 엄청 좋으시군요...!! ";
+                content = 1;
                 lottoPoint1(user);
                 lotto.setCount(0L);
                 lottoRepository.save(lotto);
             }else if(30<= num && num < 130){ //1프로
-                content = "경 * 축 2등 당첨!!😁😁😁 2등도 잘한거야!!!!";
+                content = 2;
                 lottoPoint2(user);
                 lotto.setCount(0L);
                 lottoRepository.save(lotto);
             } else if (130 <= num && num < 630) { // 5프로
-                content = "경 * 축 3등 당첨!!😃😃😃 3등도 엄청난거지 ^^ 메달도 3등까지라구~";
+                content = 3;
                 lottoPoint3(user);
                 lotto.setCount(0L);
                 lottoRepository.save(lotto);
             } else if (630 <= num && num < 1630) { //10프로
-                content = "축! 4등 당첨!!😎😎😎";
+                content = 4;
                 lottoPoint4(user);
                 lotto.setCount(0L);
                 lottoRepository.save(lotto);
             } else if (1630 <= num && num < 3630) { //20프로
-                content = "5등 당첨!!😙😙😙";
+                content = 5;
                 lottoPoint5(user);
                 lotto.setCount(0L);
                 lottoRepository.save(lotto);
             } else { //63.7프로
-                    content = "아쉽게도 꽝입니다 😥😥😥😥 한번만 더 뽑으면 1등 당첨될수도...?";
                     lottoPoint6(user);
                     lotto.setCount(lotto.getCount()+1);
                     lottoRepository.save(lotto);
