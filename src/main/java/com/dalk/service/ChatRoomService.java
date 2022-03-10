@@ -10,19 +10,19 @@ import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnRoomResponseDto;
 import com.dalk.exception.ex.ChatRoomNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
-import com.dalk.repository.CategoryRepository;
-import com.dalk.repository.ChatRoomRepository;
-import com.dalk.repository.UserRepository;
-import com.dalk.repository.VoteRepository;
+import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnChatRoomRepository;
 import com.dalk.scheduler.ChatRoomScheduler;
 import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -35,11 +35,15 @@ public class ChatRoomService {
     private final UserRepository userRepository;
     private final WarnChatRoomRepository warnChatRoomRepository;
     private final VoteRepository voteRepository;
+    private final S3Repository s3Repository;
 
-    public Long createChatRoom(UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) {
+    public Long createChatRoom(MultipartFile multipartFile, UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) throws IOException {
+        String originalFileName = multipartFile.getOriginalFilename();
+        String convertedFileName = UUID.randomUUID() + originalFileName;
+        String filePath = s3Repository.upload(multipartFile, convertedFileName);
         User user = userDetails.getUser();
         Long userId = user.getId();
-        ChatRoom chatRoom = new ChatRoom(requestDto, userId);
+        ChatRoom chatRoom = new ChatRoom(requestDto, userId, convertedFileName, filePath);
         chatRoomRepository.save(chatRoom);
         Vote vote = new Vote(chatRoom);
         voteRepository.save(vote);
@@ -69,7 +73,7 @@ public class ChatRoomService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user,warnChatRoomList.size(),null);
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user,warnChatRoomList.size(),null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
@@ -88,7 +92,7 @@ public class ChatRoomService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom,MinkiService.categoryStringList(categoryList), user,warnChatRoomList.size(),null);
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom,ItemService.categoryStringList(categoryList), user,warnChatRoomList.size(),null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
@@ -108,7 +112,7 @@ public class ChatRoomService {
         for (WarnChatRoom warnChatRoom : warnChatRoomList){
             warnUserList.add(warnChatRoom.getUser().getId());
         }
-        return new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user,warnChatRoomList.size(),warnUserList);
+        return new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user,warnChatRoomList.size(),warnUserList);
     }
 
     //카테고리 검색
@@ -121,7 +125,7 @@ public class ChatRoomService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;

@@ -48,7 +48,7 @@ public class AdminService {
                 User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
                         () -> new LoginUserNotFoundException("유저 정보가 없습니다")
                 );
-                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList), user, warnBoardList.size(),null);
+                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), user, warnBoardList.size(),null);
 
             if(mainPageBoardResponseDto.getWarnCnt()>=5) {
                 mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
@@ -77,7 +77,7 @@ public class AdminService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
 
             if(mainPageAllResponseDto.getWarnCnt()>=1) {

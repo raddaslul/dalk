@@ -37,7 +37,7 @@ public class InitialData implements ApplicationRunner {
         String encPassword = passwordEncoder.encode("adminPass");
 
 
-        Item item1 = new Item(0, 0, 0);
+        Item item1 = new Item(0, 0, 0,0,0);
         itemRepository.save(item1);
         User user1 = new User(
                 "user1",
@@ -55,7 +55,7 @@ public class InitialData implements ApplicationRunner {
         Lotto lotto1 = new Lotto(0L, user1);
         lottoRepository.save(lotto1);
 
-        Item item2 = new Item(0,0,0);
+        Item item2 = new Item(0,0,0,0,0);
         itemRepository.save(item2);
         User user2 = new User( //유저추가
                 "user2",
@@ -122,7 +122,7 @@ public class InitialData implements ApplicationRunner {
         commentRepository.save(comment1);
         commentRepository.save(comment2);
 
-        Item item3 = new Item(0,0,0);
+        Item item3 = new Item(0,0,0,0,0);
         itemRepository.save(item3);
         User user3 = new User( //유저추가
                 "user3",
@@ -140,7 +140,7 @@ public class InitialData implements ApplicationRunner {
         Lotto lotto3 = new Lotto(0L, user3);
         lottoRepository.save(lotto3);
 
-        Item item4 = new Item(0,0,0);
+        Item item4 = new Item(0,0,0,0,0);
         itemRepository.save(item4);
         User user4 = new User( //유저추가
                 "user4",
@@ -158,7 +158,7 @@ public class InitialData implements ApplicationRunner {
         Lotto lotto4 = new Lotto(0L, user4);
         lottoRepository.save(lotto4);
 
-        Item item5 = new Item(0,0,0);
+        Item item5 = new Item(0,0,0,0,0);
         itemRepository.save(item5);
         User user5 = new User( //유저추가
                 "user5",
@@ -176,7 +176,7 @@ public class InitialData implements ApplicationRunner {
         Lotto lotto5 = new Lotto(0L, user5);
         lottoRepository.save(lotto5);
 
-        Item item6 = new Item(0,0,0);
+        Item item6 = new Item(0,0,0,0,0);
         itemRepository.save(item6);
         User user6 = new User( //유저추가
                 "user6",
@@ -194,7 +194,7 @@ public class InitialData implements ApplicationRunner {
         Lotto lotto6 = new Lotto(0L, user6);
         lottoRepository.save(lotto6);
 
-        Item item7 = new Item(0,0,0);
+        Item item7 = new Item(0,0,0,0,0);
         itemRepository.save(item7);
         User user7 = new User( //유저추가
                 "user7",

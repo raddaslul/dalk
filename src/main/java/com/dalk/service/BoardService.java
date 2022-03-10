@@ -29,6 +29,7 @@ public class BoardService {
     private final WarnBoardRepository warnBoardRepository;
     private final VoteRepository voteRepository;
     private final VoteService voteService;
+    private final S3Repository s3Repository;
 
     // 토론방 종료 후 게시글 생성
     public void createBoard(ChatRoom chatRoom) {
@@ -46,6 +47,8 @@ public class BoardService {
             }
                 boardRepository.save(board);
             }
+        String deleteFileUrl = "image/" + chatRoom.getConvertedFileName();
+        s3Repository.deleteFile(deleteFileUrl);
         chatRoomRepository.delete(chatRoom);
     }
 
@@ -60,7 +63,7 @@ public class BoardService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList),user,warnBoardList.size(),null);
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList),user,warnBoardList.size(),null);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;
@@ -83,7 +86,7 @@ public class BoardService {
             warnUserList.add(warnBoard.getUser().getId());
         }
 
-        return new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user,warnBoardList.size(),warnUserList);
+        return new MainPageBoardResponseDto(boards, ItemService.categoryStringList(categoryList), user,warnBoardList.size(),warnUserList);
     }
 
     //게시글 검색
@@ -98,7 +101,7 @@ public class BoardService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(boards.getId());
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards, MinkiService.categoryStringList(categoryList), user,warnBoardList.size(),null);
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards, ItemService.categoryStringList(categoryList), user,warnBoardList.size(),null);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;
