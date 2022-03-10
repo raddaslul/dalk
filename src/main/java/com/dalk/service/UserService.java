@@ -87,25 +87,18 @@ public class UserService {
 
 
     @Transactional
-    public WarnUserResponseDto WarnUser(Long userId, UserDetailsImpl userDetails) {
+    public void WarnUser(Long userId, UserDetailsImpl userDetails) {
         User user1 = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
         );
-
-        String warnUserName = String.valueOf(userRepository.findById(userId).orElseThrow(
+        User user2 = userRepository.findById(userId).orElseThrow(
                 ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
-        ));
-        WarnUserResponseDto warnUserResponseDto = new WarnUserResponseDto();
-        WarnUser warnUserCheck = warnUserRepository.findByUserIdAndWarnUserName(userDetails.getUser().getId(),warnUserName).orElse(null);
+        );
+        WarnUser warnUserCheck = warnUserRepository.findByUserIdAndWarnUserName(user1.getId(),user2.getUsername()).orElse(null);
 
             if(warnUserCheck == null){
-                WarnUser warnUser = new WarnUser(true,warnUserName,user1);
+                WarnUser warnUser = new WarnUser(true,user1,user2.getUsername());
                 warnUserRepository.save(warnUser);
-                warnUserResponseDto.setWarnUserName(warnUser.getWarnUserName());
-                warnUserResponseDto.setWarn(warnUser.getIsWarn());
-                return warnUserResponseDto;
-            }else {
-                return null;
             }
 
     }
