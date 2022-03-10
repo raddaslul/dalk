@@ -31,6 +31,8 @@ public class StompHandler implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+        String test = accessor.getFirstNativeHeader("Authorization");
+        log.info("웹소켓 들어올 때 가공 전 토큰 = {}", test);
         String token = accessor.getFirstNativeHeader("Authorization").substring(7);
         log.info("Web Socket 들어올 때 token 검증 = {}", token);
         // websocket 연결시 헤더의 jwt token 검증
@@ -65,13 +67,6 @@ public class StompHandler implements ChannelInterceptor {
                     log.info("TYPE Enter 일 때");
                 } else throw new LoginUserNotFoundException("로그인을 해주시기 바랍니다.");
             }
-
-//        } else if (StompCommand.SEND == accessor.getCommand()) {
-//
-//            String username = jwtDecoder.decodeUsername(token);
-//            User user = userRepository.findByUsername(username).orElseThrow(IllegalArgumentException::new);
-//            String nickname = user.getNickname();
-//            chatMessageService.itemChatMessage(ChatMessageRequestDto.builder().build());
         }
 
         else if (StompCommand.DISCONNECT == accessor.getCommand()) {

@@ -1,8 +1,7 @@
 package com.dalk.domain.wl;
 
-import com.dalk.domain.Comment;
+
 import com.dalk.domain.User;
-import com.dalk.domain.time.Timestamped;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,8 +10,9 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "warn_comment")
-public class WarnComment extends Timestamped {
+@Table(name = "warn_user")
+public class WarnUser {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -21,17 +21,16 @@ public class WarnComment extends Timestamped {
     @Column(name = "is_warn")
     private Boolean isWarn;
 
-    @ManyToOne
-    @JoinColumn(name = "comment_id")
-    private Comment comment;
+    @Column(name = "warn_user")
+    private String warnUserName;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn
     private User user;
 
-    public WarnComment(boolean isWarn, Comment comment, User user) {
+    public WarnUser(boolean isWarn, String warnUserName, User user1) {
         this.isWarn = isWarn;
-        this.comment = comment;
-        this.user = user;
+        this.warnUserName = warnUserName;
+        this.user = user1;
     }
 }

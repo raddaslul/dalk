@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WarnChatRoomRepository extends JpaRepository<WarnChatRoom, Long> {
-    @Override
     Optional<WarnChatRoom> findById(Long aLong);
 
     Optional<WarnChatRoom> findByUserIdAndChatRoomId(Long userId, Long chatRoomId);

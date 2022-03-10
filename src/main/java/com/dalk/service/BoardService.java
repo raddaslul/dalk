@@ -38,22 +38,21 @@ public class BoardService {
         voteRepository.save(vote);
         Board board = new Board(chatRoom);
         List<Category> categoryList = categoryRepository.findAllByChatRoom(chatRoom);
-        for (Category categorys : categoryList) {
-            String stringCategory = categorys.getCategory();
-            Category category = new Category(board, stringCategory);
-            categoryRepository.save(category);
-        }
-        boardRepository.save(board);
+        if(chatRoom.getStatus()){
+            for (Category categorys : categoryList) {
+                String stringCategory = categorys.getCategory();
+                Category category = new Category(board, stringCategory);
+                categoryRepository.save(category);
+            }
+                boardRepository.save(board);
+            }
         chatRoomRepository.delete(chatRoom);
     }
 
     //게시글 전체 조회
     public List<MainPageBoardResponseDto> getMainPageBoard() {
-        List<Board> boardList = boardRepository.findAll();
+        List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
-
-
-
 
         for (Board board : boardList) {
             List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
@@ -64,7 +63,6 @@ public class BoardService {
             MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList),user,warnBoardList.size(),null);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
-
         return mainPageBoardResponseDtoList;
     }
 
@@ -90,12 +88,12 @@ public class BoardService {
 
     //게시글 검색
     public List<MainPageBoardResponseDto> getSearchWord(String keyword) {
-//        List<Board> boardList = boardRepository.findSearch(keyword);
-        List<Category> categoryList = categoryRepository.findAllByBoard_TopicAContainingIgnoreCaseOrBoard_TopicBContainingIgnoreCaseOrCategory(keyword,keyword, keyword);
-        List<Board> boardList = boardRepository.findAllByTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(keyword, keyword);
+        List<Board> boardList = boardRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(keyword,keyword,keyword);
+
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
         for (Board boards : boardList) {
+            List<Category> categoryList = categoryRepository.findCategoryByBoard(boards);
             User user = userRepository.findById(boards.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
@@ -128,9 +126,5 @@ public class BoardService {
             return warnBoardResponseDto;
         }
         return null;
-
-
-
-
     }
 }

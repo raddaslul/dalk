@@ -35,7 +35,6 @@ public class EmbeddedRedisConfig {
             redisServer.stop();
         }
     }
-
 }
 
 

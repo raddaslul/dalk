@@ -15,17 +15,9 @@ import java.util.List;
 
 @Service
 public class MinkiService {
-    private static PointRepository pointRepository;
-
     //항해99 5기 B반 김민기님이 해줌
-    @Autowired
-    public MinkiService(PointRepository pointRepository) {
-        this.pointRepository = pointRepository;
-    }
 
     public static UserInfoResponseDto userInfo(User user) {
-        Point point = pointRepository.findTopByUserIdOrderByCreatedAt(user.getId());
-        user.setTotalPoint(point.getToTalPoint());
         return new UserInfoResponseDto(user);
     }
 
@@ -37,7 +29,4 @@ public class MinkiService {
         }
         return stringList;
     }
-
-
-
 }

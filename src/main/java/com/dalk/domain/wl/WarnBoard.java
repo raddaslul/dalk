@@ -7,11 +7,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-
 @Entity
 @Table(name = "warn_board")
 public class WarnBoard extends Timestamped {

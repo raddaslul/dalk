@@ -5,10 +5,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
 @Entity
 @Table(name = "item")
 public class Item extends Timestamped {
@@ -26,12 +25,29 @@ public class Item extends Timestamped {
     @Column(name = "myName")
     private Integer myName;
 
-    //    @OneToOne
-//    @JoinColumn(name = "user_id", nullable = false)
-//    private User user;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Item(Integer bigFont, Integer onlyMe, Integer myName) {
         this.bigFont = bigFont;
         this.onlyMe = onlyMe;
+        this.myName = myName;
+    }
+
+    public void setBigFont(Integer bigFont) {
+        this.bigFont = bigFont;
+    }
+
+    public void setOnlyMe(Integer onlyMe) {
+        this.onlyMe = onlyMe;
+    }
+
+    public void setMyName(Integer myName) {
         this.myName = myName;
     }
 }

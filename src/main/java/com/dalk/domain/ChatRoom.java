@@ -4,16 +4,12 @@ import com.dalk.domain.time.Timestamped;
 import com.dalk.domain.vote.SaveVote;
 import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -32,13 +28,16 @@ public class ChatRoom extends Timestamped {
     private String topicB;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
-    private List<Category> categorys = new ArrayList<>();
+    private List<Category> categorys;
 
     @Column(name = "time", nullable = false)
     private Boolean time;
 
     @Column(nullable = false)
     private Long createUserId;
+
+    @Column(nullable = false)
+    private Boolean status;
 
     @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
     private List<ChatRoomUser> chatRoomUser;
@@ -53,6 +52,11 @@ public class ChatRoom extends Timestamped {
         this.topicA = requestDto.getTopicA();
         this.topicB = requestDto.getTopicB();
         this.time = requestDto.getTime();
+        this.status = requestDto.getStatus();
         this.createUserId = userId;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }

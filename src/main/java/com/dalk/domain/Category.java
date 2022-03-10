@@ -1,20 +1,20 @@
 package com.dalk.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
-@Setter
 @Getter
 @NoArgsConstructor
 @Entity
+@AllArgsConstructor
 public class Category {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long categoryId;
+    private Long Id;
 
     @JoinColumn(name = "chatRoomId")
     @ManyToOne
@@ -31,11 +31,6 @@ public class Category {
         this.chatRoom = chatRoom;
         this.category = category;
     }
-
-    public Category(ChatRoom chatRoom) {
-        this.chatRoom = chatRoom;
-    }
-
     public Category(Board board, String category) {
         this.board = board;
         this.category = category;

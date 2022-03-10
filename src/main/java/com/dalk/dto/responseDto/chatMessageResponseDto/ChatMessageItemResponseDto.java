@@ -19,11 +19,11 @@ public class ChatMessageItemResponseDto {
     private String myName;
 
     public ChatMessageItemResponseDto(ChatMessageItem chatMessageItem) {
-            this.type = chatMessageItem.getType();
-            this.roomId = chatMessageItem.getRoomId();
-            this.item = chatMessageItem.getItem();
-            this.message = chatMessageItem.getMessage();
-            this.onlyMe = chatMessageItem.getOnlyMe();
-            this.myName = chatMessageItem.getMyName();
-        }
+        this.type = chatMessageItem.getType();
+        this.roomId = chatMessageItem.getRoomId();
+        this.item = chatMessageItem.getItem();
+        this.message = chatMessageItem.getMessage();
+        this.onlyMe = chatMessageItem.getOnlyMe();
+        this.myName = chatMessageItem.getMyName();
+    }
 }

@@ -4,6 +4,8 @@ import com.dalk.domain.ChatMessage;
 import com.dalk.dto.requestDto.ChatMessageRequestDto;
 import com.dalk.security.jwt.JwtDecoder;
 import com.dalk.service.ChatMessageService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -22,6 +24,7 @@ public class ChatMessageController {
     // 채팅 메시지를 @MessageMapping 형태로 받는다
     // 웹소켓으로 publish 된 메시지를 받는 곳이다
     @MessageMapping("/chat/message")
+    @ApiOperation(value = "채팅 메세지 수신")
     public void message(@RequestBody ChatMessageRequestDto chatMessageRequestDto, @Header("Authorization") String rawToken) {
         String token = rawToken.substring(7);
         // 로그인 회원 정보를 들어온 메시지에 값 세팅
@@ -36,5 +39,4 @@ public class ChatMessageController {
         else if(chatMessageRequestDto.getType().equals(ChatMessage.MessageType.ITEM))
             chatMessageService.itemChatMessage(chatMessageRequestDto);
     }
-
 }
