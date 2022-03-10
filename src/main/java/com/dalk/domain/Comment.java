@@ -29,9 +29,9 @@ public class Comment extends Timestamped {
     private Long createUserId;
 
     @Column
-    private Integer agreeCnt;
+    private Integer agreeCnt = 0;
     @Column
-    private Integer disAgreeCnt;
+    private Integer disAgreeCnt = 0;
 
     @ManyToOne
     @JoinColumn(name = "board_id")

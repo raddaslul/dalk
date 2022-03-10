@@ -11,4 +11,5 @@ public interface WarnBoardRepository extends JpaRepository<WarnBoard, Long> {
     Optional<WarnBoard> findByUserIdAndBoard(Long user_id, Board board);
 
     List<WarnBoard> findByBoardId(Long id);
+
 }

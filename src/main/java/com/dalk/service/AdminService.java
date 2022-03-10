@@ -37,7 +37,7 @@ public class AdminService {
     public List<MainPageBoardResponseDto> getAdminMainPageBoard() {
 
             //board 전체를 가져옴
-            List<Board> boardList = boardRepository.findAll();
+            List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
             //리턴할 값의 리스트를 정의
             List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
@@ -50,11 +50,10 @@ public class AdminService {
                 );
                 MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList), user, warnBoardList.size(),null);
 
-                if(mainPageBoardResponseDto.getWarnCnt()>=5) {
+                if(mainPageBoardResponseDto.getWarnCnt()>=1) {
                     mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
                 }
 
-//                mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
             }
 
 
@@ -83,6 +82,10 @@ public class AdminService {
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
             MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+
+            if(mainPageAllResponseDto.getWarnCnt()>=1) {
+                mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+            }
         }
         return mainPageAllResponseDtoList;
     }
