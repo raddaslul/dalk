@@ -2,6 +2,7 @@ package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
 import com.dalk.domain.vote.Vote;
+import com.dalk.domain.wl.WarnBoard;
 import lombok.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,12 +36,15 @@ public class Board extends Timestamped {
     private Long createUserId;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<WarnBoard> warnBoards;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Category> categorys;
 
     @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(mappedBy = "board",cascade = CascadeType.REMOVE)
     private Vote vote;
 
     public Board(ChatRoom chatRoom) {

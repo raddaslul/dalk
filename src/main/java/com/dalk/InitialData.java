@@ -33,7 +33,6 @@ public class InitialData implements ApplicationRunner {
     private final WarnChatRoomRepository warnChatRoomRepository;
     private final ChatRoomRepository chatRoomRepository;
 
-
     @Override
     public void run(ApplicationArguments args) {
         String encPassword = passwordEncoder.encode("adminPass");
@@ -48,8 +47,6 @@ public class InitialData implements ApplicationRunner {
                 50000000L,
                 100,
                 0,
-
-
                 User.Role.ADMIN,
                 item1);
         userRepository.save(user1);
@@ -69,8 +66,6 @@ public class InitialData implements ApplicationRunner {
                 100000000L,
                 100,
                 15,
-
-
                 User.Role.USER,
                 item2);
         userRepository.save(user2);
@@ -302,20 +297,7 @@ public class InitialData implements ApplicationRunner {
         warnChatRoomRepository.save(warnChatRoom1);
         warnChatRoomRepository.save(warnChatRoom2);
         warnChatRoomRepository.save(warnChatRoom3);
-
-//        Vote vote1 = new Vote(
-//                0L,
-//                0L,
-//                0L,
-//                0L,
-//                0F,
-//                0F,
-//                chatRoom1
-//        );
-//        voteRepository.save(vote1);
-
-
     }
-    }
+}
 
 

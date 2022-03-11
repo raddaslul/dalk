@@ -5,7 +5,6 @@ import com.dalk.dto.responseDto.PointResponseDto;
 import com.dalk.dto.responseDto.RankResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.security.UserDetailsImpl;
-import com.dalk.service.ItemService;
 import com.dalk.service.MyPageService;
 import com.dalk.service.UserService;
 import io.swagger.annotations.ApiOperation;
