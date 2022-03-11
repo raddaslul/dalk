@@ -28,9 +28,9 @@ public class WarnUser {
     @JoinColumn
     private User user;
 
-    public WarnUser(boolean isWarn, String warnUserName, User user1) {
+    public WarnUser(boolean isWarn, User user1 ,String warnUserName) {
         this.isWarn = isWarn;
-        this.warnUserName = warnUserName;
         this.user = user1;
+        this.warnUserName = warnUserName;
     }
 }
