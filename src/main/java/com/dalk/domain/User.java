@@ -14,6 +14,10 @@ import java.util.List;
 @Table(name = "user")
 public class User extends Timestamped {
 
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
+
     public enum Role {
         USER(Authority.USER),  // 사용자 권한
         ADMIN(Authority.ADMIN);  // 관리자 권한
@@ -53,6 +57,9 @@ public class User extends Timestamped {
 
     @Column(name = "ex")
     private Integer ex;
+
+    @Column(name = "rank")
+    private Integer rank;
 
     @OneToOne(cascade = CascadeType.REMOVE)
     private ChatRoomUser chatRoomUser;

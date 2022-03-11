@@ -8,7 +8,7 @@ public class TimeConversion {
 
     public static String timeCreatedConversion(LocalDateTime createdAt) {
         String resultConversion = "";
-        resultConversion = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm"));
+        resultConversion = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss"));
         return resultConversion;
     }
 

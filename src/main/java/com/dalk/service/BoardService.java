@@ -3,6 +3,7 @@ package com.dalk.service;
 import com.dalk.domain.*;
 import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnBoard;
+import com.dalk.dto.responseDto.MainPageResponse.DetailResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
 import com.dalk.exception.ex.BoardNotFoundException;
@@ -46,6 +47,10 @@ public class BoardService {
             }
                 boardRepository.save(board);
             }
+        vote.setBoard(board);
+        voteRepository.save(vote);
+        board.setVote(vote);
+        boardRepository.save(board);
         chatRoomRepository.delete(chatRoom);
     }
 
@@ -67,7 +72,7 @@ public class BoardService {
     }
 
     //게시글 상세 조회
-    public MainPageBoardResponseDto getMainPageBoardDetail(Long boardId) {
+    public DetailResponseDto getMainPageBoardDetail(Long boardId) {
         Board boards = boardRepository.findById(boardId).orElseThrow(
                 () -> new BoardNotFoundException("게시글이 없습니다")
         );
@@ -83,7 +88,7 @@ public class BoardService {
             warnUserList.add(warnBoard.getUser().getId());
         }
 
-        return new MainPageBoardResponseDto(boards, ItemService.categoryStringList(categoryList), user,warnBoardList.size(),warnUserList);
+        return new DetailResponseDto(boards, ItemService.categoryStringList(categoryList), user,warnBoardList.size(),warnUserList, boards.getVote());
     }
 
     //게시글 검색

@@ -1,6 +1,7 @@
 package com.dalk;
 
 import com.dalk.domain.*;
+import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnBoard;
 import com.dalk.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class InitialData implements ApplicationRunner {
     private final PointRepository pointRepository;
     private final LottoRepository lottoRepository;
     private final CategoryRepository categoryRepository;
+    private final VoteRepository voteRepository;
 
 
     @Override
@@ -38,7 +40,7 @@ public class InitialData implements ApplicationRunner {
                 encPassword,
                 "user1",
                 50000000L,
-                100,
+                1000000,
                 User.Role.ADMIN,
                 item1);
         userRepository.save(user1);
@@ -56,7 +58,7 @@ public class InitialData implements ApplicationRunner {
                 encPassword,
                 "user2",
                 100000000L,
-                100,
+                100000,
                 User.Role.USER,
                 item2);
         userRepository.save(user2);
@@ -74,6 +76,10 @@ public class InitialData implements ApplicationRunner {
                 "승자",
                 userId1
         );
+        boardRepository.save(board1);
+        Vote vote1 = new Vote(board1, 10L, 25000L, 17500F, 10L, 1200L, 42000F);
+        voteRepository.save(vote1);
+        board1.setVote(vote1);
         boardRepository.save(board1);
 
 
@@ -94,6 +100,11 @@ public class InitialData implements ApplicationRunner {
                 userId2
         );
         boardRepository.save(board2);
+        Vote vote2 = new Vote(board2, 10L, 17500L, 42000F, 7L, 20000L, 32000F);
+        voteRepository.save(vote2);
+        board2.setVote(vote2);
+        boardRepository.save(board2);
+
         List<String> categoryList2 = new ArrayList<>();
         categoryList2.add("도움");
         categoryList2.add("사랑");
@@ -123,7 +134,7 @@ public class InitialData implements ApplicationRunner {
                 encPassword,
                 "user3",
                 500L,
-                100,
+                1000,
                 User.Role.USER,
                 item3);
         userRepository.save(user3);
@@ -141,7 +152,7 @@ public class InitialData implements ApplicationRunner {
                 encPassword,
                 "user4",
                 500L,
-                100,
+                200,
                 User.Role.USER,
                 item4);
         userRepository.save(user4);
@@ -159,7 +170,7 @@ public class InitialData implements ApplicationRunner {
                 encPassword,
                 "user5",
                 500L,
-                100,
+                10,
                 User.Role.USER,
                 item5);
         userRepository.save(user5);
@@ -177,7 +188,7 @@ public class InitialData implements ApplicationRunner {
                 encPassword,
                 "user6",
                 500L,
-                100,
+                19,
                 User.Role.USER,
                 item6);
         userRepository.save(user6);
@@ -195,7 +206,7 @@ public class InitialData implements ApplicationRunner {
                 encPassword,
                 "user7",
                 500L,
-                100,
+                107,
                 User.Role.USER,
                 item7);
         userRepository.save(user7);
