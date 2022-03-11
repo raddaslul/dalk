@@ -15,6 +15,7 @@ import com.dalk.repository.wl.WarnChatRoomRepository;
 import com.dalk.scheduler.ChatRoomScheduler;
 import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +28,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
@@ -38,9 +40,13 @@ public class ChatRoomService {
     private final S3Repository s3Repository;
 
     public Long createChatRoom(MultipartFile multipartFile, UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) throws IOException {
-        String originalFileName = multipartFile.getOriginalFilename();
-        String convertedFileName = UUID.randomUUID() + originalFileName;
-        String filePath = s3Repository.upload(multipartFile, convertedFileName);
+        String convertedFileName = null;
+        String filePath = null;
+        if(multipartFile != null) {
+            String originalFileName = multipartFile.getOriginalFilename();
+            convertedFileName = UUID.randomUUID() + originalFileName;
+            filePath = s3Repository.upload(multipartFile, convertedFileName);
+        }
         User user = userDetails.getUser();
         Long userId = user.getId();
         ChatRoom chatRoom = new ChatRoom(requestDto, userId, convertedFileName, filePath);
