@@ -2,6 +2,7 @@ package com.dalk.service;
 
 
 import com.dalk.domain.*;
+import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnBoard;
 import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
@@ -32,6 +33,7 @@ public class AdminService {
     private final CategoryRepository categoryRepository;
     private final WarnBoardRepository warnBoardRepository;
     private final WarnChatRoomRepository warnChatRoomRepository;
+    private final VoteRepository voteRepository;
 
     //블라인드 게시글 전체 조회 - 관리자
 
