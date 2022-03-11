@@ -81,9 +81,3 @@ public class TimeConversion {
         return resultConversion;
     }
 }
-
-//        }
-//        else if ((timeDiff / 86400) > 0) { // 1 일
-//            resultConversion = timeDiff / 86400 + "일 전";
-//        } else if ((timeDiff / 3600) > 0) { // 시간
-//            resultConversion = timeDiff / 3600 + "시간 전";
