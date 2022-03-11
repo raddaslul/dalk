@@ -21,6 +21,7 @@ public class MainPageAllResponseDto {
     private String topicB;
     private String content;
     private List<String> category;
+    private String filePath;
     private Long restTime;
     private String createdAt;
     private Boolean time;
@@ -33,6 +34,7 @@ public class MainPageAllResponseDto {
         this.topicA = chatRoom.getTopicA();
         this.topicB = chatRoom.getTopicB();
         this.category = categoryList;
+        this.filePath = chatRoom.getFilePath();
         this.restTime = TimeConversion.restTime(chatRoom.getCreatedAt(),chatRoom.getTime());
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
         this.time = chatRoom.getTime();

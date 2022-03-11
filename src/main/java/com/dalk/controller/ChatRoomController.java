@@ -7,22 +7,29 @@ import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.ChatRoomService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
 
     @PostMapping("/rooms")
     @ApiOperation(value = "토론방 생성")
-    public HashMap<String, Object> createChatRoom(@RequestBody ChatRoomRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        Long roomId = chatRoomService.createChatRoom(userDetails, requestDto);
+    public HashMap<String, Object> createChatRoom(
+            @RequestPart(value = "image", required = false) MultipartFile multipartFile,
+            @RequestPart("debate") ChatRoomRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+        Long roomId = chatRoomService.createChatRoom(multipartFile, userDetails, requestDto);
         HashMap<String, Object> result = new HashMap<>();
         result.put("roomId", roomId);
         return result;

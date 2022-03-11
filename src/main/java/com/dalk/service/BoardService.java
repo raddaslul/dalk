@@ -30,6 +30,7 @@ public class BoardService {
     private final WarnBoardRepository warnBoardRepository;
     private final VoteRepository voteRepository;
     private final VoteService voteService;
+    private final S3Repository s3Repository;
 
     // 토론방 종료 후 게시글 생성
     public void createBoard(ChatRoom chatRoom) {
@@ -51,6 +52,8 @@ public class BoardService {
         voteRepository.save(vote);
         board.setVote(vote);
         boardRepository.save(board);
+        String deleteFileUrl = "image/" + chatRoom.getConvertedFileName();
+        s3Repository.deleteFile(deleteFileUrl);
         chatRoomRepository.delete(chatRoom);
     }
 
