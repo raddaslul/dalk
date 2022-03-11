@@ -7,6 +7,7 @@ import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.ItemService;
 import com.dalk.service.MyPageService;
+import com.dalk.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,7 +28,7 @@ public class MyPageController {
     @GetMapping("/mypage")
     @ApiOperation(value = "유저 조회")
     public UserInfoResponseDto getMypage(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return ItemService.userInfo(userDetails.getUser());
+        return UserService.userInfo(userDetails.getUser());
     }
 
 

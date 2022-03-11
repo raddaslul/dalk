@@ -50,10 +50,7 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
             String tokenPayload = request.getHeader("Authorization");
             System.out.println("tokenPayload = "+tokenPayload);
             if (tokenPayload == null) {
-//            response.sendRedirect("/signin");
-//                throw new IllegalArgumentException("토큰이 이상해요");
-                response.sendError(400, "유효하지않은 토근입니다");
-                System.out.println("null인데요");
+                response.sendRedirect("/error");
                 return null;
             }
 
