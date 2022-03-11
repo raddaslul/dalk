@@ -260,6 +260,8 @@ public class InitialData implements ApplicationRunner {
                 true
         );
         chatRoomRepository.save(chatRoom1);
+        Vote vote = new Vote(chatRoom1);
+        voteRepository.save(vote);
 
         Vote vote = new Vote(chatRoom1);
         voteRepository.save(vote);
