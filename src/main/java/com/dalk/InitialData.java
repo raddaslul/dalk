@@ -32,8 +32,6 @@ public class InitialData implements ApplicationRunner {
     private final WarnBoardRepository warnBoardRepository;
     private final WarnChatRoomRepository warnChatRoomRepository;
     private final ChatRoomRepository chatRoomRepository;
-    private final VoteRepository voteRepository;
-
 
     @Override
     public void run(ApplicationArguments args) {
@@ -49,8 +47,6 @@ public class InitialData implements ApplicationRunner {
                 50000000L,
                 100,
                 0,
-                1000000,
-
                 User.Role.ADMIN,
                 item1);
         userRepository.save(user1);
@@ -70,8 +66,6 @@ public class InitialData implements ApplicationRunner {
                 100000000L,
                 100,
                 15,
-                100000,
-
                 User.Role.USER,
                 item2);
         userRepository.save(user2);
@@ -148,7 +142,6 @@ public class InitialData implements ApplicationRunner {
                 500L,
                 100,
                 0,
-                1000,
                 User.Role.USER,
                 item3);
         userRepository.save(user3);
@@ -168,7 +161,6 @@ public class InitialData implements ApplicationRunner {
                 500L,
                 100,
                 0,
-                200,
                 User.Role.USER,
                 item4);
         userRepository.save(user4);
@@ -188,7 +180,6 @@ public class InitialData implements ApplicationRunner {
                 500L,
                 100,
                 16,
-                10,
                 User.Role.USER,
                 item5);
         userRepository.save(user5);
@@ -208,7 +199,6 @@ public class InitialData implements ApplicationRunner {
                 500L,
                 100,
                 10,
-                19,
                 User.Role.USER,
                 item6);
         userRepository.save(user6);
@@ -228,7 +218,6 @@ public class InitialData implements ApplicationRunner {
                 500L,
                 100,
                 5,
-                107,
                 User.Role.USER,
                 item7);
         userRepository.save(user7);
@@ -308,20 +297,7 @@ public class InitialData implements ApplicationRunner {
         warnChatRoomRepository.save(warnChatRoom1);
         warnChatRoomRepository.save(warnChatRoom2);
         warnChatRoomRepository.save(warnChatRoom3);
-
-//        Vote vote1 = new Vote(
-//                0L,
-//                0L,
-//                0L,
-//                0L,
-//                0F,
-//                0F,
-//                chatRoom1
-//        );
-//        voteRepository.save(vote1);
-
-
     }
-    }
+}
 
 
