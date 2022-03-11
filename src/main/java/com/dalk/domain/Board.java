@@ -1,6 +1,7 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
+import com.dalk.domain.vote.Vote;
 import lombok.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,12 +40,19 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToOne
+    private Vote vote;
+
     public Board(ChatRoom chatRoom) {
         this.topicA = chatRoom.getTopicA();
         this.topicB = chatRoom.getTopicB();
 //        this.winner = vote.getWinner();
         this.createUserId = chatRoom.getCreateUserId();
         this.categorys = chatRoom.getCategorys();
+    }
+
+    public void setVote(Vote vote) {
+        this.vote = vote;
     }
 
     public Board(

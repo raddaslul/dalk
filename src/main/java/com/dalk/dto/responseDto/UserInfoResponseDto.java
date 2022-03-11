@@ -13,6 +13,7 @@ public class UserInfoResponseDto {
     private String nickname;
     private Long point;
     private Integer ex;
+    private Integer rank;
     private User.Role role;
     private ItemResponseDto item;
 
@@ -22,6 +23,7 @@ public class UserInfoResponseDto {
         this.nickname = user.getNickname();
         this.point = user.getTotalPoint();
         this.ex = user.getEx();
+        this.rank = user.getRank();
         this.role = user.getRole();
         this.item = new ItemResponseDto(user);
     }

@@ -1,5 +1,6 @@
 package com.dalk.controller;
 
+import com.dalk.dto.responseDto.MainPageResponse.DetailResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
 import com.dalk.security.UserDetailsImpl;
@@ -27,7 +28,7 @@ public class BoardController {
 
     @GetMapping("/api/boards/{boardId}")
     @ApiOperation(value = "게시글 상세 조회")
-    public MainPageBoardResponseDto getMainPageBoardDetail(@PathVariable Long boardId) {
+    public DetailResponseDto getMainPageBoardDetail(@PathVariable Long boardId) {
         return boardService.getMainPageBoardDetail(boardId);
     }
 
