@@ -136,6 +136,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 채팅
         skipPathList.add("GET,/webjars/**");
         skipPathList.add("GET,/ws-stomp/**");
+        skipPathList.add("GET,/error");
 
         FilterSkipMatcher matcher = new FilterSkipMatcher(
                 skipPathList,
