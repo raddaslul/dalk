@@ -40,7 +40,7 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Vote vote;
 
     public Board(ChatRoom chatRoom) {
