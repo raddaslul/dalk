@@ -249,10 +249,6 @@ public class ItemService {
         return sb.reverse().toString();
     }
 
-    public static UserInfoResponseDto userInfo(User user) {
-        return new UserInfoResponseDto(user);
-    }
-
     public static List<String> categoryStringList(List<Category> categoryList) {
         List<String> stringList = new ArrayList<>();
         for (Category tag : categoryList) {

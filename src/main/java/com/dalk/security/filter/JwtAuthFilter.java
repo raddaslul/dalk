@@ -4,10 +4,13 @@ package com.dalk.security.filter;
 import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.security.jwt.HeaderTokenExtractor;
 import com.dalk.security.jwt.JwtPreProcessingToken;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
@@ -38,25 +41,29 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
     public Authentication attemptAuthentication(
             HttpServletRequest request,
             HttpServletResponse response
-    ) throws AuthenticationException {
-        System.out.println("헤더 토큰 request : " + request);
-        System.out.println("헤더 토큰 response : " + response);
+    ) throws AuthenticationException, IOException {
 
-        // JWT 값을 담아주는 변수 TokenPayload
-        String tokenPayload = request.getHeader("Authorization");
-        System.out.println("tokenPayload = "+tokenPayload);
-        if (tokenPayload == null) {
+            System.out.println("헤더 토큰 request : " + request);
+            System.out.println("헤더 토큰 response : " + response);
+
+            // JWT 값을 담아주는 변수 TokenPayload
+            String tokenPayload = request.getHeader("Authorization");
+            System.out.println("tokenPayload = "+tokenPayload);
+            if (tokenPayload == null) {
 //            response.sendRedirect("/signin");
-//            return null;
-            throw new LoginUserNotFoundException("로그인 정보가 없습니다.");
-        }
+//                throw new IllegalArgumentException("토큰이 이상해요");
+                response.sendError(400, "유효하지않은 토근입니다");
+                System.out.println("null인데요");
+                return null;
+            }
 
-        JwtPreProcessingToken jwtToken = new JwtPreProcessingToken(
-                extractor.extract(tokenPayload, request));
+            JwtPreProcessingToken jwtToken = new JwtPreProcessingToken(
+                    extractor.extract(tokenPayload, request));
 
-        return super
-                .getAuthenticationManager()
-                .authenticate(jwtToken);
+            return super
+                    .getAuthenticationManager()
+                    .authenticate(jwtToken);
+
     }
 
     @Override
