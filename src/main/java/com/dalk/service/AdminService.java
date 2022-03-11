@@ -79,7 +79,6 @@ public class AdminService {
             );
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
             MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
-            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
 
             if(mainPageAllResponseDto.getWarnCnt()>=1) {
                 mainPageAllResponseDtoList.add(mainPageAllResponseDto);
