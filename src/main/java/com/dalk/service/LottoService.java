@@ -85,7 +85,6 @@ public class LottoService {
         userRepository.save(user);
         Point point = new Point("2등 당첨", point1, user.getTotalPoint(), user);
         pointRepository.save(point);
-
     }
     public void lottoPoint3(User user) {
         Long point1 = 10000L;
@@ -93,7 +92,6 @@ public class LottoService {
         userRepository.save(user);
         Point point = new Point("3등 당첨", point1, user.getTotalPoint(), user);
         pointRepository.save(point);
-
     }
     public void lottoPoint4(User user) {
         Long point1 = 1000L;
@@ -101,7 +99,6 @@ public class LottoService {
         userRepository.save(user);
         Point point = new Point("4등 당첨", point1, user.getTotalPoint(), user);
         pointRepository.save(point);
-
     }
     public void lottoPoint5(User user) {
         Long point1 = 500L;
@@ -109,7 +106,6 @@ public class LottoService {
         userRepository.save(user);
         Point point = new Point("5등 당첨", point1, user.getTotalPoint(), user);
         pointRepository.save(point);
-
     }
     public void lottoPoint6(User user) {
     }

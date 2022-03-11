@@ -46,6 +46,15 @@ public class MyPageService {
 
     // 랭킹조회
     public List<RankResponseDto> getRank() {
+        List<User> top3rankList = userRepository.findTop3ByOrderByExDesc();
+        List<User> top3rank = new ArrayList<>(top3rankList);
+        top3rank.get(0).setRank(1);
+        userRepository.save(top3rank.get(0));
+        top3rank.get(1).setRank(2);
+        userRepository.save(top3rank.get(1));
+        top3rank.get(2).setRank(3);
+        userRepository.save(top3rank.get(2));
+
         List<User> rankList = userRepository.findTop99ByOrderByExDesc();
         List<RankResponseDto> rankResponseDtoList =new ArrayList<>();
 

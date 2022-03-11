@@ -28,6 +28,7 @@ public class InitialData implements ApplicationRunner {
     private final PointRepository pointRepository;
     private final LottoRepository lottoRepository;
     private final CategoryRepository categoryRepository;
+    private final VoteRepository voteRepository;
     private final WarnBoardRepository warnBoardRepository;
     private final WarnChatRoomRepository warnChatRoomRepository;
     private final ChatRoomRepository chatRoomRepository;
@@ -48,6 +49,8 @@ public class InitialData implements ApplicationRunner {
                 50000000L,
                 100,
                 0,
+                1000000,
+
                 User.Role.ADMIN,
                 item1);
         userRepository.save(user1);
@@ -67,6 +70,8 @@ public class InitialData implements ApplicationRunner {
                 100000000L,
                 100,
                 15,
+                100000,
+
                 User.Role.USER,
                 item2);
         userRepository.save(user2);
@@ -84,6 +89,10 @@ public class InitialData implements ApplicationRunner {
                 "승자",
                 userId1
         );
+        boardRepository.save(board1);
+        Vote vote1 = new Vote(board1, 10L, 25000L, 17500F, 10L, 1200L, 42000F);
+        voteRepository.save(vote1);
+        board1.setVote(vote1);
         boardRepository.save(board1);
 
 
@@ -103,6 +112,11 @@ public class InitialData implements ApplicationRunner {
                 userId2
         );
         boardRepository.save(board2);
+        Vote vote2 = new Vote(board2, 10L, 17500L, 42000F, 7L, 20000L, 32000F);
+        voteRepository.save(vote2);
+        board2.setVote(vote2);
+        boardRepository.save(board2);
+
         List<String> categoryList2 = new ArrayList<>();
         categoryList2.add("도움");
         categoryList2.add("사랑");
@@ -134,6 +148,7 @@ public class InitialData implements ApplicationRunner {
                 500L,
                 100,
                 0,
+                1000,
                 User.Role.USER,
                 item3);
         userRepository.save(user3);
@@ -153,6 +168,7 @@ public class InitialData implements ApplicationRunner {
                 500L,
                 100,
                 0,
+                200,
                 User.Role.USER,
                 item4);
         userRepository.save(user4);
@@ -172,6 +188,7 @@ public class InitialData implements ApplicationRunner {
                 500L,
                 100,
                 16,
+                10,
                 User.Role.USER,
                 item5);
         userRepository.save(user5);
@@ -191,6 +208,7 @@ public class InitialData implements ApplicationRunner {
                 500L,
                 100,
                 10,
+                19,
                 User.Role.USER,
                 item6);
         userRepository.save(user6);
@@ -210,6 +228,7 @@ public class InitialData implements ApplicationRunner {
                 500L,
                 100,
                 5,
+                107,
                 User.Role.USER,
                 item7);
         userRepository.save(user7);

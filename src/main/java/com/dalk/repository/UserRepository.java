@@ -14,4 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findTop99ByOrderByExDesc();
 
     List<User> findAllByOrderByWarnUserCntDesc();
+
+    List<User> findTop3ByOrderByExDesc();
+
 }

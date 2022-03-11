@@ -104,5 +104,9 @@ public class UserService {
             }
 
     }
+
+    public static UserInfoResponseDto userInfo(User user) {
+        return new UserInfoResponseDto(user);
+    }
 }
 
