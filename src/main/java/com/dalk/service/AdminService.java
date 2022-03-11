@@ -15,6 +15,7 @@ import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnBoardRepository;
 import com.dalk.repository.wl.WarnChatRoomRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -95,13 +96,16 @@ public class AdminService {
     }
 
     // 유저 신고 조회 - 관리자
+
     public List<UserInfoResponseDto> getUserList() {
 
-        List<User> userList = userRepository.findAll();
+        List<User> userList = userRepository.findAllByOrderByWarnUserCntDesc();
         List<UserInfoResponseDto> allUsers = new ArrayList<>();
         for (User user : userList) {
             UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
-            allUsers.add(userInfoResponseDto);
+            if(userInfoResponseDto.getWarnUserCnt()>=5) {
+                allUsers.add(userInfoResponseDto);
+            }
         }
         return allUsers;
     }

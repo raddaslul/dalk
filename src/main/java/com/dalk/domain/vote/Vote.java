@@ -52,7 +52,9 @@ public class Vote {
         this.chatRoom = chatRoom;
     }
 
+
     public Vote(Board board, Long topicACnt, Long topPointA, Float totalPointA,Long topicBCnt, Long topPointB, Float totalPointB) {
+
         this.topicACnt =topicACnt;
         this.topPointA = topPointA;
         this.totalPointA = totalPointA;
