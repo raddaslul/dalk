@@ -47,4 +47,16 @@ public class Vote {
         this.totalPointB = 0F;
         this.chatRoom = chatRoom;
     }
+
+    public Vote(Long topicACnt,Long topicBCnt,Long topPointA,Long topPointB,Float totalPointA,Float totalPointB,ChatRoom chatRoom) {
+        this.topicACnt =topicACnt;
+        this.topPointA = topPointA;
+        this.totalPointA = totalPointA;
+        this.topicBCnt =topicBCnt;
+        this.topPointB = topPointB;
+        this.totalPointB = totalPointB;
+        this.chatRoom = chatRoom;
+    }
+
+
 }

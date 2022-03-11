@@ -4,8 +4,11 @@ import com.dalk.domain.Point;
 import com.dalk.domain.User;
 import com.dalk.dto.responseDto.PointResponseDto;
 import com.dalk.dto.responseDto.RankResponseDto;
+import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.PointRepository;
 import com.dalk.repository.UserRepository;
+import com.dalk.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,4 +55,5 @@ public class MyPageService {
         }
         return rankResponseDtoList;
     }
+
 }

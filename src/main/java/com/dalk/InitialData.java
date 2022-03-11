@@ -1,6 +1,7 @@
 package com.dalk;
 
 import com.dalk.domain.*;
+import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnBoard;
 import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.repository.*;
@@ -30,6 +31,7 @@ public class InitialData implements ApplicationRunner {
     private final WarnBoardRepository warnBoardRepository;
     private final WarnChatRoomRepository warnChatRoomRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final VoteRepository voteRepository;
 
 
     @Override
@@ -37,7 +39,7 @@ public class InitialData implements ApplicationRunner {
         String encPassword = passwordEncoder.encode("adminPass");
 
 
-        Item item1 = new Item(0, 0, 0,0,0);
+        Item item1 = new Item(0, 0, 0, 0, 0);
         itemRepository.save(item1);
         User user1 = new User(
                 "user1",
@@ -45,17 +47,18 @@ public class InitialData implements ApplicationRunner {
                 "user1",
                 50000000L,
                 100,
+                0,
                 User.Role.ADMIN,
                 item1);
         userRepository.save(user1);
         item1.setUser(user1);
         itemRepository.save(item1);
-        Point point1 = new Point("회원가입",50000000L,50000000L,user1);
+        Point point1 = new Point("회원가입", 50000000L, 50000000L, user1);
         pointRepository.save(point1);
         Lotto lotto1 = new Lotto(0L, user1);
         lottoRepository.save(lotto1);
 
-        Item item2 = new Item(0,0,0,0,0);
+        Item item2 = new Item(0, 0, 0, 0, 0);
         itemRepository.save(item2);
         User user2 = new User( //유저추가
                 "user2",
@@ -63,12 +66,13 @@ public class InitialData implements ApplicationRunner {
                 "user2",
                 100000000L,
                 100,
+                15,
                 User.Role.USER,
                 item2);
         userRepository.save(user2);
         item2.setUser(user2);
         itemRepository.save(item2);
-        Point point2 = new Point("회원가입",100000000L,100000000L,user2);
+        Point point2 = new Point("회원가입", 100000000L, 100000000L, user2);
         pointRepository.save(point2);
         Lotto lotto2 = new Lotto(0L, user2);
         lottoRepository.save(lotto2);
@@ -83,11 +87,10 @@ public class InitialData implements ApplicationRunner {
         boardRepository.save(board1);
 
 
-
         List<String> categoryList1 = new ArrayList<>();
         categoryList1.add("연애");
         categoryList1.add("오락");
-        for(String stringCategory : categoryList1){
+        for (String stringCategory : categoryList1) {
             Category category = new Category(board1, stringCategory);
             categoryRepository.save(category);
         }
@@ -103,7 +106,7 @@ public class InitialData implements ApplicationRunner {
         List<String> categoryList2 = new ArrayList<>();
         categoryList2.add("도움");
         categoryList2.add("사랑");
-        for(String stringCategory : categoryList2){
+        for (String stringCategory : categoryList2) {
             Category category = new Category(board2, stringCategory);
             categoryRepository.save(category);
         }
@@ -122,7 +125,7 @@ public class InitialData implements ApplicationRunner {
         commentRepository.save(comment1);
         commentRepository.save(comment2);
 
-        Item item3 = new Item(0,0,0,0,0);
+        Item item3 = new Item(0, 0, 0, 0, 0);
         itemRepository.save(item3);
         User user3 = new User( //유저추가
                 "user3",
@@ -130,17 +133,18 @@ public class InitialData implements ApplicationRunner {
                 "user3",
                 500L,
                 100,
+                0,
                 User.Role.USER,
                 item3);
         userRepository.save(user3);
         item3.setUser(user3);
         itemRepository.save(item3);
-        Point point3 = new Point("회원가입",500L,500L,user3);
+        Point point3 = new Point("회원가입", 500L, 500L, user3);
         pointRepository.save(point3);
         Lotto lotto3 = new Lotto(0L, user3);
         lottoRepository.save(lotto3);
 
-        Item item4 = new Item(0,0,0,0,0);
+        Item item4 = new Item(0, 0, 0, 0, 0);
         itemRepository.save(item4);
         User user4 = new User( //유저추가
                 "user4",
@@ -148,17 +152,18 @@ public class InitialData implements ApplicationRunner {
                 "user4",
                 500L,
                 100,
+                0,
                 User.Role.USER,
                 item4);
         userRepository.save(user4);
         item4.setUser(user4);
         itemRepository.save(item4);
-        Point point4 = new Point("회원가입",500L,500L,user4);
+        Point point4 = new Point("회원가입", 500L, 500L, user4);
         pointRepository.save(point4);
         Lotto lotto4 = new Lotto(0L, user4);
         lottoRepository.save(lotto4);
 
-        Item item5 = new Item(0,0,0,0,0);
+        Item item5 = new Item(0, 0, 0, 0, 0);
         itemRepository.save(item5);
         User user5 = new User( //유저추가
                 "user5",
@@ -166,17 +171,18 @@ public class InitialData implements ApplicationRunner {
                 "user5",
                 500L,
                 100,
+                16,
                 User.Role.USER,
                 item5);
         userRepository.save(user5);
         item5.setUser(user5);
         itemRepository.save(item5);
-        Point point5 = new Point("회원가입",500L,500L,user5);
+        Point point5 = new Point("회원가입", 500L, 500L, user5);
         pointRepository.save(point5);
         Lotto lotto5 = new Lotto(0L, user5);
         lottoRepository.save(lotto5);
 
-        Item item6 = new Item(0,0,0,0,0);
+        Item item6 = new Item(0, 0, 0, 0, 0);
         itemRepository.save(item6);
         User user6 = new User( //유저추가
                 "user6",
@@ -184,17 +190,18 @@ public class InitialData implements ApplicationRunner {
                 "user6",
                 500L,
                 100,
+                10,
                 User.Role.USER,
                 item6);
         userRepository.save(user6);
         item6.setUser(user6);
         itemRepository.save(item6);
-        Point point6 = new Point("회원가입",500L,500L,user6);
+        Point point6 = new Point("회원가입", 500L, 500L, user6);
         pointRepository.save(point6);
         Lotto lotto6 = new Lotto(0L, user6);
         lottoRepository.save(lotto6);
 
-        Item item7 = new Item(0,0,0,0,0);
+        Item item7 = new Item(0, 0, 0, 0, 0);
         itemRepository.save(item7);
         User user7 = new User( //유저추가
                 "user7",
@@ -202,37 +209,97 @@ public class InitialData implements ApplicationRunner {
                 "user7",
                 500L,
                 100,
+                5,
                 User.Role.USER,
                 item7);
         userRepository.save(user7);
         item7.setUser(user7);
         itemRepository.save(item7);
-        Point point7 = new Point("회원가입",500L,500L,user7);
+        Point point7 = new Point("회원가입", 500L, 500L, user7);
         pointRepository.save(point7);
         Lotto lotto7 = new Lotto(0L, user7);
         lottoRepository.save(lotto7);
 
-        WarnBoard warnBoard1 = new WarnBoard(true,board1,user1);
+        WarnBoard warnBoard1 = new WarnBoard(true, board1, user1);
         warnBoardRepository.save(warnBoard1);
-        WarnBoard warnBoard2 = new WarnBoard(true,board1,user2);
+        WarnBoard warnBoard2 = new WarnBoard(true, board1, user2);
         warnBoardRepository.save(warnBoard2);
-        WarnBoard warnBoard3 = new WarnBoard(true,board1,user3);
+        WarnBoard warnBoard3 = new WarnBoard(true, board1, user3);
         warnBoardRepository.save(warnBoard3);
-        WarnBoard warnBoard4 = new WarnBoard(true,board1,user4);
+        WarnBoard warnBoard4 = new WarnBoard(true, board1, user4);
         warnBoardRepository.save(warnBoard4);
-        WarnBoard warnBoard5 = new WarnBoard(true,board1,user5);
+        WarnBoard warnBoard5 = new WarnBoard(true, board1, user5);
         warnBoardRepository.save(warnBoard5);
-        WarnBoard warnBoard6 = new WarnBoard(true,board2,user1);
+        WarnBoard warnBoard6 = new WarnBoard(true, board2, user1);
         warnBoardRepository.save(warnBoard6);
-        WarnBoard warnBoard7 = new WarnBoard(true,board2,user2);
+        WarnBoard warnBoard7 = new WarnBoard(true, board2, user2);
         warnBoardRepository.save(warnBoard7);
-        WarnBoard warnBoard8 = new WarnBoard(true,board2,user3);
+        WarnBoard warnBoard8 = new WarnBoard(true, board2, user3);
         warnBoardRepository.save(warnBoard8);
-        WarnBoard warnBoard9 = new WarnBoard(true,board2,user4);
+        WarnBoard warnBoard9 = new WarnBoard(true, board2, user4);
         warnBoardRepository.save(warnBoard9);
-        WarnBoard warnBoard10 = new WarnBoard(true,board2,user5);
+        WarnBoard warnBoard10 = new WarnBoard(true, board2, user5);
         warnBoardRepository.save(warnBoard10);
 
+
+        List<Category> categorys1 = null;
+        ChatRoom chatRoom1 = new ChatRoom(
+                "topicA",
+                "topicB",
+                categorys1,
+                false,
+                1L,
+                true
+        );
+        chatRoomRepository.save(chatRoom1);
+
+        Category category1 = new Category(
+                chatRoom1,
+                "음식"
+        );
+        categoryRepository.save(category1);
+
+        Category category2 = new Category(
+                chatRoom1,
+                "유머"
+        );
+        categoryRepository.save(category2);
+
+        categorys1 = new ArrayList<>();
+        categorys1.add(category1);
+        categorys1.add(category2);
+
+
+
+        WarnChatRoom warnChatRoom1 = new WarnChatRoom(
+                true,
+                chatRoom1,
+                user2
+        );
+        WarnChatRoom warnChatRoom2 = new WarnChatRoom(
+                true,
+                chatRoom1,
+                user3
+        );
+        WarnChatRoom warnChatRoom3 = new WarnChatRoom(
+                true,
+                chatRoom1,
+                user4
+        );
+        warnChatRoomRepository.save(warnChatRoom1);
+        warnChatRoomRepository.save(warnChatRoom2);
+        warnChatRoomRepository.save(warnChatRoom3);
+
+//        Vote vote1 = new Vote(
+//                0L,
+//                0L,
+//                0L,
+//                0L,
+//                0F,
+//                0F,
+//                chatRoom1
+//        );
+//        voteRepository.save(vote1);
 
 
     }

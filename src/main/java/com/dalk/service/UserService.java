@@ -64,7 +64,7 @@ public class UserService {
         Item item = new Item(0,0,0, 0, 0);
         itemRepository.save(item);
 
-        User user = new User(username, password, nickname, 500L, 1, User.Role.USER, item);
+        User user = new User(username, password, nickname, 500L, 1,0, User.Role.USER, item);
         userRepository.save(user);
 
         item.setUser(user);
@@ -96,9 +96,11 @@ public class UserService {
         );
         WarnUser warnUserCheck = warnUserRepository.findByUserIdAndWarnUserName(user1.getId(),user2.getUsername()).orElse(null);
 
+
             if(warnUserCheck == null){
-                WarnUser warnUser = new WarnUser(true,user1,user2.getUsername());
+                WarnUser warnUser = new WarnUser(user1,user2.getUsername());
                 warnUserRepository.save(warnUser);
+                user2.setWarnUserCnt(user2.getWarnUserCnt()+1);
             }
 
     }

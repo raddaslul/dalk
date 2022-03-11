@@ -18,8 +18,7 @@ public class WarnUser {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "is_warn")
-    private Boolean isWarn;
+
 
     @Column(name = "warn_user")
     private String warnUserName;
@@ -28,8 +27,8 @@ public class WarnUser {
     @JoinColumn
     private User user;
 
-    public WarnUser(boolean isWarn, User user1 ,String warnUserName) {
-        this.isWarn = isWarn;
+    public WarnUser( User user1 ,String warnUserName) {
+
         this.user = user1;
         this.warnUserName = warnUserName;
     }

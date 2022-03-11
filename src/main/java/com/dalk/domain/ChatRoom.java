@@ -63,6 +63,14 @@ public class ChatRoom extends Timestamped {
         this.convertedFileName = convertedFileName;
         this.filePath = filePath;
     }
+    public ChatRoom(String topicA, String topicB,List<Category> categorys,Boolean time,Long createUserId,Boolean status ) {
+        this.topicA = topicA;
+        this.topicB = topicB;
+        this.time = time;
+        this.categorys= categorys;
+        this.createUserId = createUserId;
+        this.status = status;
+    }
 
 
 
