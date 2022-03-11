@@ -6,15 +6,19 @@ import com.dalk.domain.User;
 import com.dalk.dto.requestDto.SignupRequestDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnUserResponseDto;
+import com.dalk.exception.ErrorResponse;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.UserService;
 import com.dalk.service.ItemService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.xml.ws.Response;
 import java.util.HashMap;
 
 
@@ -65,15 +69,19 @@ public class UserController {
 
     @GetMapping("/warnings/users/{userId}")
     @ApiOperation(value = "유저 신고하기")
-    public  HashMap<String, Object> WarnUser
+    public HashMap<String, Object> WarnUser
             (@PathVariable Long userId,
-             @AuthenticationPrincipal UserDetailsImpl userDetails){
-            userService.WarnUser(userId,userDetails);
+             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.WarnUser(userId, userDetails);
 
-            HashMap<String, Object> result = new HashMap<>();
+        HashMap<String, Object> result = new HashMap<>();
         result.put("result", "true");
         return result;
     }
 
-
+    //로그인 처리
+    @GetMapping("/error")
+    public ResponseEntity<ErrorResponse> error() {
+        return new ResponseEntity<>(new ErrorResponse("400", "로그인 정보가 없습니다."), HttpStatus.BAD_REQUEST);
+    }
 }
