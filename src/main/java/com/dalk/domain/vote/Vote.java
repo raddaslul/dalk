@@ -40,6 +40,7 @@ public class Vote {
     private ChatRoom chatRoom;
 
     @OneToOne
+    @JoinColumn(name = "board_id")
     private Board board;
 
     public Vote(ChatRoom chatRoom) {

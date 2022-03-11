@@ -24,6 +24,7 @@ public class WarnBoard extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
