@@ -5,6 +5,7 @@ import com.dalk.dto.requestDto.ChatMessageRequestDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageItemResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageAccessResponseDto;
+import com.dalk.exception.ex.ChatRoomNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -77,9 +78,14 @@ public class ChatMessageService {
                 else if (item.equals("myName")) {
                     chatMessageRequestDto.setMyName(itemUser.getNickname());
                 }
-            }
+                else if (item.equals("papago")) {
+                    chatMessageRequestDto.setPapago(itemUser.getNickname());
+                }
+                else if (item.equals("reverse")) {
+                    chatMessageRequestDto.setReverse(itemUser.getNickname());
+                }
+            }else throw new ChatRoomNotFoundException("채팅방이 존재하지 않습니다.");
             ChatMessageAccessResponseDto chatMessageAccessResponseDto = new ChatMessageAccessResponseDto(chatMessageRequestDto);
-//            this.itemChatMessage(chatMessageRequestDto);
             redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageAccessResponseDto);
 
         } else if (ChatMessage.MessageType.EXIT.equals(chatMessageRequestDto.getType())) {

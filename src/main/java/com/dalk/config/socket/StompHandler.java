@@ -31,16 +31,11 @@ public class StompHandler implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        String test = accessor.getFirstNativeHeader("Authorization");
-        log.info("웹소켓 들어올 때 가공 전 토큰 = {}", test);
         String token = accessor.getFirstNativeHeader("Authorization").substring(7);
-        log.info("Web Socket 들어올 때 token 검증 = {}", token);
         // websocket 연결시 헤더의 jwt token 검증
         if (StompCommand.CONNECT == accessor.getCommand()) {
             String username = jwtDecoder.decodeUsername(token);
-            log.info("CONNECT 할 때 username = {}", username);
             if(username == null) {
-                log.info("CONNECT 할 때");
                 throw new LoginUserNotFoundException("로그인을 해주시기 바랍니다.");
             }
         }
@@ -58,9 +53,6 @@ public class StompHandler implements ChannelInterceptor {
                 if(username != null) {
                     redisRepository.setSessionUserInfo(sessionId, roomId, username);
                     redisRepository.setUserChatRoomInOut(roomId + "_" + username, true);
-                    log.info("SUBSCRIBE 할 때 roomId = {}", roomId);
-                    log.info("SUBSCRIBE 할 때 sessionId = {}", sessionId);
-                    log.info("SUBSCRIBE 할 때 username = {}", username);
 
                     // 클라이언트 입장 메시지를 채팅방에 발송한다.(redis publish)
                     chatMessageService.accessChatMessage(ChatMessageRequestDto.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).userId(userId).build());
