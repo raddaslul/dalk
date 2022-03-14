@@ -1,5 +1,6 @@
 package com.dalk.dto.responseDto;
 
+import com.dalk.domain.ItemType;
 import com.dalk.domain.User;
 import com.dalk.service.MinkiService;
 import lombok.*;
@@ -16,10 +17,10 @@ public class ItemResponseDto {
     private Long reverse;
 
     public ItemResponseDto(User user) {
-        this.bigFont = MinkiService.changeBigFont(user);
-        this.onlyMe = MinkiService.changeOnlyMe(user);
-        this.myName=MinkiService.changeMyName(user);
-        this.papago=MinkiService.changePapago(user);
-        this.reverse=MinkiService.changeReverse(user);
+        this.bigFont = MinkiService.changeItem(user, ItemType.bigFont);
+        this.onlyMe = MinkiService.changeItem(user, ItemType.onlyMe);
+        this.myName=MinkiService.changeItem(user, ItemType.myName);
+        this.papago=MinkiService.changeItem(user, ItemType.papago);
+        this.reverse=MinkiService.changeItem(user, ItemType.reverse);
     }
 }

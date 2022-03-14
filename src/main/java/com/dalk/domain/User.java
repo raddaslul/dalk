@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(indexes = @Index(name = "user",columnList = "userName"))
+@Table(indexes = @Index(name = "user", columnList = "id"))
 public class User extends Timestamped {
 
     public void setRank(Integer rank) {

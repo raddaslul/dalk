@@ -61,7 +61,7 @@ public class UserService {
         Point point = new Point("회원가입 지급", 500L, 500L, user);
         pointRepository.save(point);
 
-        Lotto lotto = new Lotto(0L, user);
+        Lotto lotto = new Lotto(0, user);
         lottoRepository.save(lotto);
     }
 
