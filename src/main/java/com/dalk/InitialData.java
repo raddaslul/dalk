@@ -336,6 +336,8 @@ public class InitialData implements ApplicationRunner {
                 true
             );
             chatRoomRepository.save(chatRoom);
+            Vote vote = new Vote(chatRoom);
+            voteRepository.save(vote);
             Category category = new Category(
                 chatRoom,
                 "음식"

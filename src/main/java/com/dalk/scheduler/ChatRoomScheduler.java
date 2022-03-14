@@ -93,7 +93,7 @@ public class ChatRoomScheduler {
                 }
             }
             else if (!chatRoom.getTime()){
-                if (resultNow - resultCreatedAt >= 3600) {
+                if (resultNow - resultCreatedAt >= 30) {
                     boardService.createBoard(chatRoom);
                 }
             }
