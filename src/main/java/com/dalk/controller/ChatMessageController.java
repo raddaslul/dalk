@@ -39,17 +39,19 @@ public class ChatMessageController {
         // 로그인 회원 정보를 들어온 메시지에 값 세팅
         Long userId = Long.parseLong(jwtDecoder.decodeUserId(token));
         chatMessageRequestDto.setUserId(userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("해당 유저가 존재하지 않습니다."));
+        User user = userRepository.findById(userId).orElseThrow(()->new UsernameNotFoundException("해당 유저가 존재하지 않습니다."));
         String nickname = user.getNickname();
-
 
         // MySql DB에 채팅 메시지 저장
         if (chatMessageRequestDto.getType().equals(ChatMessage.MessageType.TALK)) {
-            if (chatMessageRequestDto.getPapago() != null || chatMessageRequestDto.getReverse() != null) {
-                if (!nickname.equals(chatMessageRequestDto.getPapago())) {
+            if(chatMessageRequestDto.getPapago() != null) {
+                if(!nickname.equals(chatMessageRequestDto.getPapago())) {
                     String message = ItemService.papago(chatMessageRequestDto.getMessage());
+                    log.info("파파고 메세지 = {}", message);
                     chatMessageRequestDto.setMessage(message);
-                } else if (!nickname.equals(chatMessageRequestDto.getReverse())) {
+                }
+            } else if(chatMessageRequestDto.getReverse() != null) {
+                if(!nickname.equals(chatMessageRequestDto.getReverse())){
                     String message = ItemService.reverseWord(chatMessageRequestDto.getMessage());
                     chatMessageRequestDto.setMessage(message);
                 }

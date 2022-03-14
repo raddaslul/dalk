@@ -84,23 +84,6 @@ public class BoardService {
     }
 
 
-
-//    public List<MainPageBoardResponseDto> getMainPageBoard(int page,int size) {
-//        List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
-//        List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
-//
-//        for (Board board : boardList) {
-//            List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
-//            User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
-//                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
-//            );
-//            List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
-//            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), null);
-//            mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
-//        }
-//        return mainPageBoardResponseDtoList;
-//    }
-
     //게시글 상세 조회
     public DetailResponseDto getMainPageBoardDetail(Long boardId) {
         Board boards = boardRepository.findById(boardId).orElseThrow(
