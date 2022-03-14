@@ -106,8 +106,6 @@ public class UserService {
                 ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
         );
         WarnUser warnUserCheck = warnUserRepository.findByUserIdAndWarnUserName(user1.getId(),user2.getUsername()).orElse(null);
-
-
             if(warnUserCheck == null){
                 WarnUser warnUser = new WarnUser(user1,user2.getUsername());
                 warnUserRepository.save(warnUser);
