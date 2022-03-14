@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -98,7 +99,7 @@ public class UserService {
 
 
     @Transactional
-    public void WarnUser(Long userId, UserDetailsImpl userDetails) {
+    public HashMap<String, Object> WarnUser(Long userId, UserDetailsImpl userDetails) {
         User user1 = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
         );
@@ -106,12 +107,19 @@ public class UserService {
                 ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
         );
         WarnUser warnUserCheck = warnUserRepository.findByUserIdAndWarnUserName(user1.getId(),user2.getUsername()).orElse(null);
+
+      HashMap<String, Object> result = new HashMap<>();
+
+
             if(warnUserCheck == null){
                 WarnUser warnUser = new WarnUser(user1,user2.getUsername());
                 warnUserRepository.save(warnUser);
                 user2.setWarnUserCnt(user2.getWarnUserCnt()+1);
+                result.put("result", "true");
+                return result;
             }
-
+            result.put("result", "false");
+            return result;
     }
 
     public static UserInfoResponseDto userInfo(User user) {

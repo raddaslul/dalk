@@ -42,22 +42,24 @@ public class ChatMessageController {
         User user = userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException("해당 유저가 존재하지 않습니다."));
         String nickname = user.getNickname();
 
-
-        // MySql DB에 채팅 메시지 저장
-        if (chatMessageRequestDto.getType().equals(ChatMessage.MessageType.TALK)) {
-            if (chatMessageRequestDto.getPapago() != null || chatMessageRequestDto.getReverse() != null) {
-                if (!nickname.equals(chatMessageRequestDto.getPapago())) {
-                    String message = ItemService.papago(chatMessageRequestDto.getMessage());
-                    chatMessageRequestDto.setMessage(message);
-                } else if (!nickname.equals(chatMessageRequestDto.getReverse())) {
-                    String message = ItemService.reverseWord(chatMessageRequestDto.getMessage());
-                    chatMessageRequestDto.setMessage(message);
-                }
-            }
-            ChatMessage chatMessage = chatMessageService.save(chatMessageRequestDto);
-            chatMessageService.sendChatMessage(chatMessage, chatMessageRequestDto);
-        } else if (chatMessageRequestDto.getType().equals(ChatMessage.MessageType.ITEM)) {
-            chatMessageService.itemChatMessage(chatMessageRequestDto);
-        }
-    }
+// MySql DB에 채팅 메시지 저장 
+      if (chatMessageRequestDto.getType().equals(ChatMessage.MessageType.TALK)) { 
+        if(chatMessageRequestDto.getPapago() != null) { 
+          if(!nickname.equals(chatMessageRequestDto.getPapago())) { 
+            String message = ItemService.papago(chatMessageRequestDto.getMessage()); 
+            chatMessageRequestDto.setMessage(message); 
+          } 
+        }   else if(chatMessageRequestDto.getReverse() != null) { 
+          if(!nickname.equals(chatMessageRequestDto.getReverse())){ 
+            String message = ItemService.reverseWord(chatMessageRequestDto.getMessage()); 
+            chatMessageRequestDto.setMessage(message); 
+          } 
+        } 
+        ChatMessage chatMessage = chatMessageService.save(chatMessageRequestDto); 
+        chatMessageService.sendChatMessage(chatMessage, chatMessageRequestDto); 
+      }  else if (chatMessageRequestDto.getType().equals(ChatMessage.MessageType.ITEM)) { 
+        chatMessageService.itemChatMessage(chatMessageRequestDto); 
+      } 
+    } 
 }
+
