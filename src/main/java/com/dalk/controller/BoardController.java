@@ -29,8 +29,7 @@ public class BoardController {
     public List<MainPageBoardResponseDto> getMainPageBoard(
             @RequestParam("page") int page,
             @RequestParam("size") int size
-//            @RequestParam("sortBy") String sortBy,
-//            @RequestParam("isAsc") boolean isAsc
+
         ){
 
         return boardService.getMainPageBoard(page,size);

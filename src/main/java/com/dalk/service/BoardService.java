@@ -66,10 +66,7 @@ public class BoardService {
     //게시글 전체 조회
 
     public List<MainPageBoardResponseDto> getMainPageBoard(int page, int size) {
-//        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC ;
-//        Sort sort = Sort.by(direction,sortBy);
         Pageable pageable = PageRequest.of(page,size);
-//        Pageable pageable1 =new PageRequest(page,size,sort);
 
         Page<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc(pageable);
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
