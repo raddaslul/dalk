@@ -12,6 +12,10 @@ import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnBoardRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -60,8 +64,14 @@ public class BoardService {
     }
 
     //게시글 전체 조회
-    public List<MainPageBoardResponseDto> getMainPageBoard() {
-        List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
+
+    public List<MainPageBoardResponseDto> getMainPageBoard(int page, int size) {
+//        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC ;
+//        Sort sort = Sort.by(direction,sortBy);
+        Pageable pageable = PageRequest.of(page,size);
+//        Pageable pageable1 =new PageRequest(page,size,sort);
+
+        Page<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc(pageable);
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
         for (Board board : boardList) {
@@ -75,6 +85,24 @@ public class BoardService {
         }
         return mainPageBoardResponseDtoList;
     }
+
+
+
+//    public List<MainPageBoardResponseDto> getMainPageBoard(int page,int size) {
+//        List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
+//        List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
+//
+//        for (Board board : boardList) {
+//            List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
+//            User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
+//                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+//            );
+//            List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
+//            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), null);
+//            mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
+//        }
+//        return mainPageBoardResponseDtoList;
+//    }
 
     //게시글 상세 조회
     public DetailResponseDto getMainPageBoardDetail(Long boardId) {
