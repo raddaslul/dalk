@@ -268,8 +268,8 @@ public class InitialData implements ApplicationRunner {
                 true
         );
         chatRoomRepository.save(chatRoom1);
-        Vote vote = new Vote(chatRoom1);
-        voteRepository.save(vote);
+//        Vote vote = new Vote(chatRoom1);
+//        voteRepository.save(vote);
 
         Category category1 = new Category(
                 chatRoom1,
@@ -286,7 +286,6 @@ public class InitialData implements ApplicationRunner {
         categorys1 = new ArrayList<>();
         categorys1.add(category1);
         categorys1.add(category2);
-
 
 
         WarnChatRoom warnChatRoom1 = new WarnChatRoom(
@@ -307,6 +306,26 @@ public class InitialData implements ApplicationRunner {
         warnChatRoomRepository.save(warnChatRoom1);
         warnChatRoomRepository.save(warnChatRoom2);
         warnChatRoomRepository.save(warnChatRoom3);
+
+        for (int i = 0; i < 20; i++) {
+            Board board = new Board(
+                    "topicA",
+                    "topicB",
+                    "topicA",
+                    userId1);
+            boardRepository.save(board);
+            Vote vote = new Vote(
+                    board,
+                    10L,
+                    25000L,
+                    17500F,
+                    8L,
+                    1200L, 42000F);
+            voteRepository.save(vote);
+            board.setVote(vote);
+            boardRepository.save(board);
+        }
+
     }
 }
 
