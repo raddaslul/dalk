@@ -74,7 +74,7 @@ public class ChatRoomScheduler {
 //            log.info("createdAtMonth = {}", createdAtMonth);
 
                 Long createdAtDay = Long.parseLong(createdAtDate.substring(8,10)) * 86400;
-                log.info("createdAtDay = {}", createdAtDay);
+//                log.info("createdAtDay = {}", createdAtDay);
 
                 String createdAtTime = createdAt.split("T")[1].split("\\.")[0];
 //            log.info("createdAtTime = {}", createdAtTime);

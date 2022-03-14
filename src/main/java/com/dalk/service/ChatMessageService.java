@@ -62,7 +62,7 @@ public class ChatMessageService {
     // 채팅방 입출입 시 메시지 발송
     public void accessChatMessage(ChatMessageRequestDto chatMessageRequestDto) {
         User user = userRepository.findById(chatMessageRequestDto.getUserId())
-                .orElseThrow(() -> new LoginUserNotFoundException(""));
+                .orElseThrow(() -> new LoginUserNotFoundException("로그인 후 이용해 주시기 바랍니다."));
 
         if (ChatMessage.MessageType.ENTER.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에 입장했습니다.");
@@ -84,15 +84,12 @@ public class ChatMessageService {
                 else if (item.equals("reverse")) {
                     chatMessageRequestDto.setReverse(itemUser.getNickname());
                 }
-            }else throw new ChatRoomNotFoundException("채팅방이 존재하지 않습니다.");
-            ChatMessageAccessResponseDto chatMessageAccessResponseDto = new ChatMessageAccessResponseDto(chatMessageRequestDto);
-            redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageAccessResponseDto);
-
+            }
         } else if (ChatMessage.MessageType.EXIT.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에서 나갔습니다.");
-            ChatMessageAccessResponseDto chatMessageAccessResponseDto = new ChatMessageAccessResponseDto(chatMessageRequestDto);
-            redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageAccessResponseDto);
         }
+        ChatMessageAccessResponseDto chatMessageAccessResponseDto = new ChatMessageAccessResponseDto(chatMessageRequestDto);
+        redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageAccessResponseDto);
     }
 
     // 채팅방에서 메세지 발송

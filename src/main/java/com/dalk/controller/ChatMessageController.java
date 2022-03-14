@@ -49,27 +49,15 @@ public class ChatMessageController {
                     String message = ItemService.papago(chatMessageRequestDto.getMessage());
                     log.info("파파고 메세지 = {}", message);
                     chatMessageRequestDto.setMessage(message);
-                    ChatMessage chatMessage = chatMessageService.save(chatMessageRequestDto);
-                    chatMessageService.sendChatMessage(chatMessage, chatMessageRequestDto);
-                } else {
-                    ChatMessage chatMessage = chatMessageService.save(chatMessageRequestDto);
-                    chatMessageService.sendChatMessage(chatMessage, chatMessageRequestDto);
                 }
             } else if(chatMessageRequestDto.getReverse() != null) {
                 if(!nickname.equals(chatMessageRequestDto.getReverse())){
                     String message = ItemService.reverseWord(chatMessageRequestDto.getMessage());
                     chatMessageRequestDto.setMessage(message);
-                    ChatMessage chatMessage = chatMessageService.save(chatMessageRequestDto);
-                    chatMessageService.sendChatMessage(chatMessage, chatMessageRequestDto);
-                } else {
-                    ChatMessage chatMessage = chatMessageService.save(chatMessageRequestDto);
-                    chatMessageService.sendChatMessage(chatMessage, chatMessageRequestDto);
                 }
             }
-            else {
-                ChatMessage chatMessage = chatMessageService.save(chatMessageRequestDto);
-                chatMessageService.sendChatMessage(chatMessage, chatMessageRequestDto);
-            }
+            ChatMessage chatMessage = chatMessageService.save(chatMessageRequestDto);
+            chatMessageService.sendChatMessage(chatMessage, chatMessageRequestDto);
         } else if (chatMessageRequestDto.getType().equals(ChatMessage.MessageType.ITEM)) {
             chatMessageService.itemChatMessage(chatMessageRequestDto);
         }

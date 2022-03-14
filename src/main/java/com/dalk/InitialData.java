@@ -263,9 +263,6 @@ public class InitialData implements ApplicationRunner {
         Vote vote = new Vote(chatRoom1);
         voteRepository.save(vote);
 
-        Vote vote = new Vote(chatRoom1);
-        voteRepository.save(vote);
-
         Category category1 = new Category(
                 chatRoom1,
                 "음식"
