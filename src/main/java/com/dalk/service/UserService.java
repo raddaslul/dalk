@@ -1,32 +1,20 @@
 package com.dalk.service;
 
-import com.dalk.domain.Item;
-import com.dalk.domain.Lotto;
-import com.dalk.domain.Point;
-import com.dalk.domain.User;
+import com.dalk.domain.*;
 import com.dalk.domain.wl.WarnUser;
 import com.dalk.dto.requestDto.SignupRequestDto;
-import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
-import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
-import com.dalk.dto.responseDto.WarnResponse.WarnUserResponseDto;
 import com.dalk.exception.ex.*;
-import com.dalk.repository.ItemRepository;
-import com.dalk.repository.LottoRepository;
-import com.dalk.repository.PointRepository;
-import com.dalk.repository.UserRepository;
-import com.dalk.repository.wl.WarnCommentRepository;
+import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnUserRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +32,7 @@ public class UserService {
 
 
     //회원가입
+    @Transactional
     public void signup(SignupRequestDto requestDto) {
 
         String username = requestDto.getUsername();
@@ -61,20 +50,42 @@ public class UserService {
         String password = passwordEncoder.encode(requestDto.getPassword());//비번 인코딩
 
 
-        Item item = new Item(0,0,0, 0, 0);
-        itemRepository.save(item);
-
-        User user = new User(username, password, nickname, 500L, 1,0, User.Role.USER, item);
+        User user = new User(username, password, nickname, 500L, 1,0, User.Role.USER);
         userRepository.save(user);
 
-        item.setUser(user);
-        itemRepository.save(item);
+        List<Item> items = getItemTests(user);
+
+        user.setItems(items);
+        userRepository.save(user);
 
         Point point = new Point("회원가입 지급", 500L, 500L, user);
         pointRepository.save(point);
 
-        Lotto lotto = new Lotto(0L, user);
+        Lotto lotto = new Lotto(0, user);
         lottoRepository.save(lotto);
+    }
+
+    public List<Item> getItemTests(User user) {
+        List<Item> items = new ArrayList<>();
+        Item item1 = new Item("bigFont", 0L, user);
+        Item item2 = new Item("onlyMe", 0L, user);
+        Item item3 = new Item("myName", 0L, user);
+        Item item4 = new Item("papago", 0L, user);
+        Item item5 = new Item("reverse", 0L, user);
+        Item item6 = new Item("exBuy", 0L, user);
+        itemRepository.save(item1);
+        itemRepository.save(item2);
+        itemRepository.save(item3);
+        itemRepository.save(item4);
+        itemRepository.save(item5);
+        itemRepository.save(item6);
+        items.add(item1);
+        items.add(item2);
+        items.add(item3);
+        items.add(item4);
+        items.add(item5);
+        items.add(item6);
+        return items;
     }
 
     // 채팅방에서 유저 확인하기

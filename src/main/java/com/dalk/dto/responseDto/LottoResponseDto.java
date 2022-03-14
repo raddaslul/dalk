@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 public class LottoResponseDto {
     private Integer rank;
-    private Long count;
+    private Integer count;
 
-    public LottoResponseDto(Integer rank, Long count) {
+    public LottoResponseDto(Integer rank, Integer count) {
         this.rank = rank;
         this.count = count;
     }

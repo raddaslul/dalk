@@ -57,8 +57,6 @@ public class AdminController {
         return result;
     }
 
-
-
     @Secured(User.Role.Authority.ADMIN)
     @GetMapping("/users")
     @ApiOperation(value = "신고 유저 목록 조회")

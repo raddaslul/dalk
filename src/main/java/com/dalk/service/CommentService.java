@@ -50,7 +50,7 @@ public class CommentService {
         Board boards = boardRepository.findById(boardId).orElseThrow(
                 ()-> new BoardNotFoundException("해당 게시글이 없습니다")
         );
-        List<Comment> comments = commentRepository.findAllByBoard(boards);
+        List<Comment> comments = commentRepository.findAllByBoard_Id(boards.getId());
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 //
         for (Comment comment : comments) {
