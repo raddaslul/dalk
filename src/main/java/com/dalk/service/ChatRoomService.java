@@ -10,6 +10,8 @@ import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnRoomResponseDto;
 import com.dalk.exception.ex.ChatRoomNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
+import com.dalk.exception.ex.WarnChatRoomDuplicateException;
+import com.dalk.exception.ex.WarnCommentDuplicateException;
 import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnChatRoomRepository;
 import com.dalk.scheduler.ChatRoomScheduler;
@@ -156,6 +158,6 @@ public class ChatRoomService {
             warnRoomResponseDto.setRoomId(warnChatRoom.getChatRoom().getId());
             return warnRoomResponseDto;
         }
-        return null;
+        else throw new WarnChatRoomDuplicateException("이미 신고한 채팅방입니다.");
     }
 }
