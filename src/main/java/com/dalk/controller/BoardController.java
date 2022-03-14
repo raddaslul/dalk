@@ -43,8 +43,11 @@ public class BoardController {
 
     @GetMapping("/api/keywords/{keyword}")
     @ApiOperation(value = "게시글 검색")
-    public List<MainPageBoardResponseDto> getSearchWord(@PathVariable String keyword) {
-        return boardService.getSearchWord(keyword);
+    public List<MainPageBoardResponseDto> getSearchWord(
+            @PathVariable String keyword,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size) {
+        return boardService.getSearchWord(keyword,page,size);
     }
 
     @GetMapping("/warnings/boards/{boardId}")

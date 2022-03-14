@@ -106,8 +106,10 @@ public class BoardService {
     }
 
     //게시글 검색
-    public List<MainPageBoardResponseDto> getSearchWord(String keyword) {
-        List<Board> boardList = boardRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(keyword, keyword, keyword);
+    public List<MainPageBoardResponseDto> getSearchWord(String keyword,int page, int size) {
+
+        Pageable pageable = PageRequest.of(page,size);
+        Page<Board> boardList = boardRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCaseOrderByCreatedAtDesc(keyword, keyword, keyword,pageable);
 
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
