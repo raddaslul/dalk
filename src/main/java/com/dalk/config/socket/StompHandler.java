@@ -31,10 +31,12 @@ public class StompHandler implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+        String sessionId = (String) message.getHeaders().get("simpSessionId");
         String token = accessor.getFirstNativeHeader("Authorization").substring(7);
+        String username = jwtDecoder.decodeUsername(token);
+        Long userId = Long.parseLong(jwtDecoder.decodeUserId(token));
         // websocket 연결시 헤더의 jwt token 검증
         if (StompCommand.CONNECT == accessor.getCommand()) {
-            String username = jwtDecoder.decodeUsername(token);
             if(username == null) {
                 throw new LoginUserNotFoundException("로그인을 해주시기 바랍니다.");
             }
@@ -46,34 +48,18 @@ public class StompHandler implements ChannelInterceptor {
                     Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId")
             );
             // 채팅방에 들어온 클라이언트 sessionId를 roomId와 맵핑해 놓는다.(나중에 특정 세션이 어떤 채팅방에 들어가 있는지 알기 위함)
-            if (roomId != null) {
-                String username = jwtDecoder.decodeUsername(token);
-                Long userId = Long.parseLong(jwtDecoder.decodeUserId(token));
-                String sessionId = (String) message.getHeaders().get("simpSessionId");
-                if(username != null) {
-                    redisRepository.setSessionUserInfo(sessionId, roomId, username);
-                    redisRepository.setUserChatRoomInOut(roomId + "_" + username, true);
+            if(username != null) {
+                redisRepository.setSessionRoomId(sessionId, roomId);
 
-                    // 클라이언트 입장 메시지를 채팅방에 발송한다.(redis publish)
-                    chatMessageService.accessChatMessage(ChatMessageRequestDto.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).userId(userId).build());
-                    log.info("TYPE Enter 일 때");
-                } else throw new LoginUserNotFoundException("로그인을 해주시기 바랍니다.");
-            }
+                // 클라이언트 입장 메시지를 채팅방에 발송한다.(redis publish)
+                chatMessageService.accessChatMessage(ChatMessageRequestDto.builder().type(ChatMessage.MessageType.ENTER).roomId(roomId).userId(userId).build());
+            } else throw new LoginUserNotFoundException("로그인을 해주시기 바랍니다.");
         }
 
         else if (StompCommand.DISCONNECT == accessor.getCommand()) {
-            String roomId = chatMessageService.getRoomId(
-                    Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId")
-            );
-            Long userId = Long.parseLong(jwtDecoder.decodeUserId(token));
-            String sessionId = (String) message.getHeaders().get("simpSessionId");
-            String findInOutKey = redisRepository.getSessionUserInfo(sessionId);
-
-            if (findInOutKey != null) {
-                redisRepository.setUserChatRoomInOut(findInOutKey, false);
-            }
-            redisRepository.removeUserEnterInfo(sessionId);
+            String roomId = redisRepository.getSessionRoomId(sessionId);
             chatMessageService.accessChatMessage(ChatMessageRequestDto.builder().type(ChatMessage.MessageType.EXIT).roomId(roomId).userId(userId).build());
+            redisRepository.removeUserEnterInfo(sessionId);
         }
         return message;
     }
