@@ -108,7 +108,8 @@ public class UserService {
         );
         WarnUser warnUserCheck = warnUserRepository.findByUserIdAndWarnUserName(user1.getId(),user2.getUsername()).orElse(null);
 
-        HashMap<String, Object> result = new HashMap<>();
+      HashMap<String, Object> result = new HashMap<>();
+
 
             if(warnUserCheck == null){
                 WarnUser warnUser = new WarnUser(user1,user2.getUsername());

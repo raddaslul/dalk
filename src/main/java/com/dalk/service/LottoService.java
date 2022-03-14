@@ -1,6 +1,5 @@
 package com.dalk.service;
 
-import com.dalk.DalkApplication;
 import com.dalk.domain.Lotto;
 import com.dalk.domain.Point;
 import com.dalk.domain.User;
@@ -12,7 +11,6 @@ import com.dalk.repository.UserRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
