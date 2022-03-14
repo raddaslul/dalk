@@ -47,7 +47,7 @@ public class AdminService {
             for (Board board : boardList) {
 
                 List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
-                List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
+                List<Category> categoryList = categoryRepository.findCategoryByBoard_Id(board.getId());
                 User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
                         () -> new LoginUserNotFoundException("유저 정보가 없습니다")
                 );

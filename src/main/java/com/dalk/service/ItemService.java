@@ -125,7 +125,7 @@ public class ItemService {
             user.setEx((int) (user.getEx() + item.getPrice()));
             userRepository.save(user);
         } else {
-            Item userItem = itemRepository.findByItemCodeAndUser(item.getItemCode(), user);
+            Item userItem = itemRepository.findByUser_IdAndItemCode(user.getId(), item.getItemCode());
             userItem.setCnt(userItem.getCnt() + 1);
             itemRepository.save(userItem);
         }
@@ -138,7 +138,7 @@ public class ItemService {
     //아이템 사용
     @Transactional
     public void useItem(ItemType item, User user) {
-        Item userItem = itemRepository.findByItemCodeAndUser(item.getItemCode(), user);
+        Item userItem = itemRepository.findByUser_IdAndItemCode(user.getId(), item.getItemCode());
 
         if (userItem.getCnt() > 0) {
             userItem.setCnt(userItem.getCnt() - 1);

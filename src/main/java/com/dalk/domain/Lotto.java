@@ -19,12 +19,12 @@ public class Lotto {
     private Long id;
 
     @Column
-    private Long count;
+    private Integer count;
 
     @OneToOne
     private User user;
 
-    public void setCount(Long count) {
+    public void setCount(Integer count) {
         this.count = count;
     }
 
@@ -32,7 +32,7 @@ public class Lotto {
         this.user = user;
     }
 
-    public Lotto(Long count, User user) {
+    public Lotto(Integer count, User user) {
         this.count = count;
         this.user = user;
     }
