@@ -118,8 +118,7 @@ public class UserService {
                 result.put("result", "true");
                 return result;
             }
-            result.put("result", "false");
-            return result;
+            else throw new WarnDuplicateException("이미 신고한 유저입니다.");
     }
 
     public static UserInfoResponseDto userInfo(User user) {

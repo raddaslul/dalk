@@ -10,12 +10,17 @@ import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnRoomResponseDto;
 import com.dalk.exception.ex.ChatRoomNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
+import com.dalk.exception.ex.WarnChatRoomDuplicateException;
+import com.dalk.exception.ex.WarnCommentDuplicateException;
 import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnChatRoomRepository;
 import com.dalk.scheduler.ChatRoomScheduler;
 import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -86,9 +91,10 @@ public class ChatRoomService {
     }
 
     //토론방리스트 전체조회
-    public List<MainPageAllResponseDto> getMainPageAll() {
+    public List<MainPageAllResponseDto> getMainPageAll(int page,int size) {
+        Pageable pageable = PageRequest.of(page,size);
         //board 전체를 가져옴
-        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc();
+        Page<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc(pageable);
         //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
 
@@ -122,8 +128,9 @@ public class ChatRoomService {
     }
 
     //카테고리 검색
-    public List<MainPageAllResponseDto> getSearchCategory(String category) {
-        List<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(category, category, category);
+    public List<MainPageAllResponseDto> getSearchCategory(String category,int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(category, category, category ,pageable);
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
         for (ChatRoom chatRoom : chatRoomList) {
             List<Category> categoryList = chatRoom.getCategorys();
@@ -156,6 +163,6 @@ public class ChatRoomService {
             warnRoomResponseDto.setRoomId(warnChatRoom.getChatRoom().getId());
             return warnRoomResponseDto;
         }
-        return null;
+        else throw new WarnChatRoomDuplicateException("이미 신고한 채팅방입니다.");
     }
 }

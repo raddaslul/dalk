@@ -8,6 +8,7 @@ import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
 import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
+import com.dalk.exception.ex.WarnBoardDuplicateException;
 import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnBoardRepository;
 import com.dalk.security.UserDetailsImpl;
@@ -105,8 +106,10 @@ public class BoardService {
     }
 
     //게시글 검색
-    public List<MainPageBoardResponseDto> getSearchWord(String keyword) {
-        List<Board> boardList = boardRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(keyword, keyword, keyword);
+    public List<MainPageBoardResponseDto> getSearchWord(String keyword,int page, int size) {
+
+        Pageable pageable = PageRequest.of(page,size);
+        Page<Board> boardList = boardRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCaseOrderByCreatedAtDesc(keyword, keyword, keyword,pageable);
 
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
@@ -143,6 +146,6 @@ public class BoardService {
             warnBoardResponseDto.setWarn(warnBoard.getIsWarn());
             return warnBoardResponseDto;
         }
-        return null;
+        else throw new WarnBoardDuplicateException("이미 신고한 게시글입니다.");
     }
 }
