@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "user")
+@Table(indexes = @Index(name = "user",columnList = "userName"))
 public class User extends Timestamped {
 
     public void setRank(Integer rank) {
@@ -71,14 +71,11 @@ public class User extends Timestamped {
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
     private Role role;
 
-
-
-    @OneToOne(cascade = CascadeType.REMOVE)
-    private Item item;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Item> items;
 
     @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
     private Lotto lotto;
-
 
     @JsonManagedReference
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
@@ -92,8 +89,8 @@ public class User extends Timestamped {
         this.ex = ex;
     }
 
-    public void setItem(Item item) {
-        this.item = item;
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 
     public void setPoints(List<Point> points) {
@@ -102,7 +99,7 @@ public class User extends Timestamped {
 
     public void setWarnUserCnt(Integer warnUserCnt){this.warnUserCnt =warnUserCnt;}
 
-    public User(String username, String password, String nickname, Long totalPoint, Integer ex,Integer warnUserCnt, Role role, Item item) {
+    public User(String username, String password, String nickname, Long totalPoint, Integer ex,Integer warnUserCnt, Role role) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
@@ -110,6 +107,5 @@ public class User extends Timestamped {
         this.ex = ex;
         this.warnUserCnt=warnUserCnt;
         this.role = role;
-        this.item = item;
     }
 }
