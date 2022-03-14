@@ -43,8 +43,9 @@ public class ChatRoomController {
 
     @GetMapping("/api/rooms")
     @ApiOperation(value = "토론방 리스트 전체 조회")
-    public List<MainPageAllResponseDto> getMainPageAll() {
-        return chatRoomService.getMainPageAll();
+    public List<MainPageAllResponseDto> getMainPageAll(   @RequestParam("page") int page,
+                                                          @RequestParam("size") int size) {
+        return chatRoomService.getMainPageAll(page,size);
     }
 
     @GetMapping("/rooms/{roomId}")
@@ -55,8 +56,12 @@ public class ChatRoomController {
 
     @GetMapping("/api/main/{category}")
     @ApiOperation(value = "카테고리 태그 검색")
-    public List<MainPageAllResponseDto> getSearchCategory(@PathVariable String category) {
-        return chatRoomService.getSearchCategory(category);
+    public List<MainPageAllResponseDto> getSearchCategory(
+            @PathVariable String category,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size
+            ) {
+        return chatRoomService.getSearchCategory(category,page,size);
     }
 
     @GetMapping("/warnings/rooms/{roomId}")

@@ -9,9 +9,7 @@ import com.dalk.domain.wl.WarnComment;
 import com.dalk.dto.requestDto.CommentRequestDto;
 import com.dalk.dto.responseDto.*;
 import com.dalk.dto.responseDto.WarnResponse.WarnCommentResponseDto;
-import com.dalk.exception.ex.BoardNotFoundException;
-import com.dalk.exception.ex.CommentNotFoundException;
-import com.dalk.exception.ex.LoginUserNotFoundException;
+import com.dalk.exception.ex.*;
 import com.dalk.repository.wl.AgreeRepository;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CommentRepository;
@@ -257,7 +255,7 @@ public class CommentService {
             System.out.println(warnCommentResponseDto);
             return warnCommentResponseDto;
         }
-        return  null;
+        else throw new WarnCommentDuplicateException("이미 신고한 댓글입니다.");
 
     }
 }

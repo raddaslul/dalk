@@ -258,54 +258,52 @@ public class InitialData implements ApplicationRunner {
         warnBoardRepository.save(warnBoard10);
 
 
-        List<Category> categorys1 = null;
-        ChatRoom chatRoom1 = new ChatRoom(
-                "topicA",
-                "topicB",
-                categorys1,
-                false,
-                1L,
-                true
-        );
-        chatRoomRepository.save(chatRoom1);
-//        Vote vote = new Vote(chatRoom1);
-//        voteRepository.save(vote);
-
-        Category category1 = new Category(
-                chatRoom1,
-                "음식"
-        );
-        categoryRepository.save(category1);
-
-        Category category2 = new Category(
-                chatRoom1,
-                "유머"
-        );
-        categoryRepository.save(category2);
-
-        categorys1 = new ArrayList<>();
-        categorys1.add(category1);
-        categorys1.add(category2);
-
-
-        WarnChatRoom warnChatRoom1 = new WarnChatRoom(
-                true,
-                chatRoom1,
-                user2
-        );
-        WarnChatRoom warnChatRoom2 = new WarnChatRoom(
-                true,
-                chatRoom1,
-                user3
-        );
-        WarnChatRoom warnChatRoom3 = new WarnChatRoom(
-                true,
-                chatRoom1,
-                user4
-        );
-        warnChatRoomRepository.save(warnChatRoom1);
-        warnChatRoomRepository.save(warnChatRoom2);
-        warnChatRoomRepository.save(warnChatRoom3);
+//        List<Category> categorys1 = null;
+//        ChatRoom chatRoom1 = new ChatRoom(
+//                "topicA",
+//                "topicB",
+//                categorys1,
+//                false,
+//                1L,
+//                true
+//        );
+//        chatRoomRepository.save(chatRoom1);
+//
+//        Category category1 = new Category(
+//                chatRoom1,
+//                "음식"
+//        );
+//        categoryRepository.save(category1);
+//
+//        Category category2 = new Category(
+//                chatRoom1,
+//                "유머"
+//        );
+//        categoryRepository.save(category2);
+//
+//        categorys1 = new ArrayList<>();
+//        categorys1.add(category1);
+//        categorys1.add(category2);
+//
+//
+//        WarnChatRoom warnChatRoom1 = new WarnChatRoom(
+//                true,
+//                chatRoom1,
+//                user2
+//        );
+//        WarnChatRoom warnChatRoom2 = new WarnChatRoom(
+//                true,
+//                chatRoom1,
+//                user3
+//        );
+//        WarnChatRoom warnChatRoom3 = new WarnChatRoom(
+//                true,
+//                chatRoom1,
+//                user4
+//        );
+//        warnChatRoomRepository.save(warnChatRoom1);
+//        warnChatRoomRepository.save(warnChatRoom2);
+//        warnChatRoomRepository.save(warnChatRoom3);
 
         for (int i = 0; i < 20; i++) {
             Board board = new Board(
@@ -325,6 +323,30 @@ public class InitialData implements ApplicationRunner {
             board.setVote(vote);
             boardRepository.save(board);
         }
+
+
+        for (int i = 0; i < 20; i++) {
+            List<Category> categorys = null;
+            ChatRoom chatRoom = new ChatRoom(
+                    "topicA",
+                "topicB",
+                categorys,
+                false,
+                1L,
+                true
+            );
+            chatRoomRepository.save(chatRoom);
+            Category category = new Category(
+                chatRoom,
+                "음식"
+        );
+        categoryRepository.save(category);
+            categorys = new ArrayList<>();
+            categorys.add(category);
+        }
+
+
+
 
     }
 }

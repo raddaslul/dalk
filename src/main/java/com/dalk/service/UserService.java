@@ -108,7 +108,8 @@ public class UserService {
         );
         WarnUser warnUserCheck = warnUserRepository.findByUserIdAndWarnUserName(user1.getId(),user2.getUsername()).orElse(null);
 
-        HashMap<String, Object> result = new HashMap<>();
+      HashMap<String, Object> result = new HashMap<>();
+
 
             if(warnUserCheck == null){
                 WarnUser warnUser = new WarnUser(user1,user2.getUsername());
@@ -117,8 +118,7 @@ public class UserService {
                 result.put("result", "true");
                 return result;
             }
-            result.put("result", "false");
-            return result;
+            else throw new WarnDuplicateException("이미 신고한 유저입니다.");
     }
 
     public static UserInfoResponseDto userInfo(User user) {
