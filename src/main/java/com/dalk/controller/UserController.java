@@ -68,7 +68,7 @@ public class UserController {
         return result;
     }
 
-    @GetMapping("/warnings/users/{userId}")
+    @GetMapping("/warnings/{userId}")
     @ApiOperation(value = "유저 신고하기")
     public HashMap<String, Object> WarnUser
             (@PathVariable Long userId,
