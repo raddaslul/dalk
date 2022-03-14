@@ -72,9 +72,6 @@ public class ChatRoom extends Timestamped {
         this.status = status;
     }
 
-
-
-
     public void setStatus(Boolean status) {
         this.status = status;
     }

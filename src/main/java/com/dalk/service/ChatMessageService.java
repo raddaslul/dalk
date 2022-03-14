@@ -5,6 +5,7 @@ import com.dalk.dto.requestDto.ChatMessageRequestDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageItemResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageAccessResponseDto;
+import com.dalk.exception.ex.ChatRoomNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +62,7 @@ public class ChatMessageService {
     // 채팅방 입출입 시 메시지 발송
     public void accessChatMessage(ChatMessageRequestDto chatMessageRequestDto) {
         User user = userRepository.findById(chatMessageRequestDto.getUserId())
-                .orElseThrow(() -> new LoginUserNotFoundException(""));
+                .orElseThrow(() -> new LoginUserNotFoundException("로그인 후 이용해 주시기 바랍니다."));
 
         if (ChatMessage.MessageType.ENTER.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에 입장했습니다.");
@@ -77,16 +78,18 @@ public class ChatMessageService {
                 else if (item.equals("myName")) {
                     chatMessageRequestDto.setMyName(itemUser.getNickname());
                 }
+                else if (item.equals("papago")) {
+                    chatMessageRequestDto.setPapago(itemUser.getNickname());
+                }
+                else if (item.equals("reverse")) {
+                    chatMessageRequestDto.setReverse(itemUser.getNickname());
+                }
             }
-            ChatMessageAccessResponseDto chatMessageAccessResponseDto = new ChatMessageAccessResponseDto(chatMessageRequestDto);
-//            this.itemChatMessage(chatMessageRequestDto);
-            redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageAccessResponseDto);
-
         } else if (ChatMessage.MessageType.EXIT.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에서 나갔습니다.");
-            ChatMessageAccessResponseDto chatMessageAccessResponseDto = new ChatMessageAccessResponseDto(chatMessageRequestDto);
-            redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageAccessResponseDto);
         }
+        ChatMessageAccessResponseDto chatMessageAccessResponseDto = new ChatMessageAccessResponseDto(chatMessageRequestDto);
+        redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageAccessResponseDto);
     }
 
     // 채팅방에서 메세지 발송
