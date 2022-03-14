@@ -2,6 +2,7 @@ package com.dalk.controller;
 
 
 
+import com.dalk.domain.ItemType;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.SignupRequestDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
@@ -47,7 +48,7 @@ public class UserController {
 
     @GetMapping("/mypage/{item}")
     @ApiOperation(value = "아이템 구매")
-    public HashMap<String, Object> buyItem(@PathVariable String item, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public HashMap<String, Object> buyItem2(@PathVariable ItemType item, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         itemService.buyItem(item, user);
 
@@ -58,7 +59,7 @@ public class UserController {
 
     @GetMapping("/chat/rooms/{item}")
     @ApiOperation(value = "아이템 사용")
-    public HashMap<String, Object> userItem(@PathVariable String item, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public HashMap<String, Object> userItem(@PathVariable ItemType item, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         itemService.useItem(item, user);
 

@@ -1,6 +1,7 @@
 package com.dalk.dto.responseDto;
 
 import com.dalk.domain.User;
+import com.dalk.service.MinkiService;
 import lombok.*;
 
 
@@ -8,17 +9,17 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 public class ItemResponseDto {
-    private Integer bigFont;
-    private Integer onlyMe;
-    private Integer myName;
-    private Integer papago;
-    private Integer reverse;
+    private Long bigFont;
+    private Long onlyMe;
+    private Long myName;
+    private Long papago;
+    private Long reverse;
 
     public ItemResponseDto(User user) {
-        this.bigFont=user.getItem().getBigFont();
-        this.onlyMe=user.getItem().getOnlyMe();
-        this.myName=user.getItem().getMyName();
-        this.papago=user.getItem().getPapago();
-        this.reverse=user.getItem().getReverse();
+        this.bigFont = MinkiService.changeBigFont(user);
+        this.onlyMe = MinkiService.changeOnlyMe(user);
+        this.myName=MinkiService.changeMyName(user);
+        this.papago=MinkiService.changePapago(user);
+        this.reverse=MinkiService.changeReverse(user);
     }
 }
