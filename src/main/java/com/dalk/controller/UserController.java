@@ -73,11 +73,7 @@ public class UserController {
     public HashMap<String, Object> WarnUser
             (@PathVariable Long userId,
              @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        userService.WarnUser(userId, userDetails);
-
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("result", "true");
-        return result;
+        return userService.WarnUser(userId, userDetails);
     }
 
     //로그인 처리

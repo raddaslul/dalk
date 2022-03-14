@@ -256,8 +256,8 @@ public class CommentService {
             warnCommentResponseDto.setWarn(warnComment.getIsWarn());
             System.out.println(warnCommentResponseDto);
             return warnCommentResponseDto;
-        }else {
-            return null;
         }
+        return  null;
+
     }
 }
