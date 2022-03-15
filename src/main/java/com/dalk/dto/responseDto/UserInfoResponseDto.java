@@ -1,7 +1,6 @@
 package com.dalk.dto.responseDto;
 
 import com.dalk.domain.User;
-import com.dalk.domain.wl.WarnUser;
 import lombok.*;
 
 @AllArgsConstructor
@@ -9,7 +8,7 @@ import lombok.*;
 @Data
 @Builder
 public class UserInfoResponseDto {
-    private Long id;
+    private Long userId;
     private String username;
     private String nickname;
     private Long point;
@@ -21,7 +20,7 @@ public class UserInfoResponseDto {
 
 
     public UserInfoResponseDto(User user) {
-        this.id = user.getId();
+        this.userId = user.getId();
         this.username = user.getUsername();
         this.nickname = user.getNickname();
         this.point = user.getTotalPoint();
