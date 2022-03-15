@@ -87,13 +87,7 @@ public class ChatMessageService {
                     chatMessageRequestDto.setReverse(itemUser.getNickname());
                 }
             }
-            List<ChatRoomUser> chatRoomUserList = chatRoomUserRepository.findAllByChatRoom_Id(Long.valueOf(chatMessageRequestDto.getRoomId()));
-            List<UserInfoResponseDto> userInfo = new ArrayList<>();
-            for (ChatRoomUser chatRoomUser : chatRoomUserList) {
-                UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoomUser.getUser());
-                userInfo.add(userInfoResponseDto);
-            }
-            ChatMessageEnterResponseDto chatMessageEnterResponseDto = new ChatMessageEnterResponseDto(chatMessageRequestDto, userInfo);
+            ChatMessageEnterResponseDto chatMessageEnterResponseDto = new ChatMessageEnterResponseDto(chatMessageRequestDto, user);
             redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageEnterResponseDto);
         } else if (ChatMessage.MessageType.EXIT.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에서 나갔습니다.");

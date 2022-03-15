@@ -130,7 +130,7 @@ public class ChatRoomService {
     }
 
     // 채팅방 입장 시 기존 메세지 조회
-    public List<ChatMessageRoomResponseDto> getMessages(Long roomId) {
+    public List<ChatMessageRoomResponseDto> getMessages(String roomId) {
         List<ChatMessageRoomResponseDto> chatMessageRoomResponseDtoList = new ArrayList<>();
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllByRoomId(roomId);
         for (ChatMessage chatMessage : chatMessageList) {

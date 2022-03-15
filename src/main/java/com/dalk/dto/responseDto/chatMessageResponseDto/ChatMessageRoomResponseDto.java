@@ -7,13 +7,15 @@ import lombok.Data;
 
 @Data
 public class ChatMessageRoomResponseDto {
+    private ChatMessage.MessageType type;
     private UserInfoResponseDto userInfo;
     private String message;
     private String createdAt;
 
     public ChatMessageRoomResponseDto(User user, ChatMessage chatMessage) {
+        this.type = chatMessage.getType();
         this.userInfo = new UserInfoResponseDto(user);
         this.message = chatMessage.getMessage();
-        this.message = chatMessage.getCreatedAt();
+        this.createdAt = chatMessage.getCreatedAt();
     }
 }
