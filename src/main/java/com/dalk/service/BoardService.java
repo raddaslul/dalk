@@ -31,6 +31,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final CategoryRepository categoryRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomUserRepository chatRoomUserRepository;
     private final UserRepository userRepository;
     private final WarnBoardRepository warnBoardRepository;
     private final VoteRepository voteRepository;
@@ -61,6 +62,7 @@ public class BoardService {
         }
         String deleteFileUrl = "image/" + chatRoom.getConvertedFileName();
         s3Repository.deleteFile(deleteFileUrl);
+        chatRoomUserRepository.deleteByChatRoom(chatRoom);
         chatRoomRepository.delete(chatRoom);
     }
 

@@ -45,7 +45,7 @@ public class ChatRoom extends Timestamped {
     @Column
     private String filePath;
 
-    @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
     private List<ChatRoomUser> chatRoomUser;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
