@@ -16,10 +16,10 @@ public enum ItemType {
         private Long price;
         private String itemName;
 
-        ItemType(String itemCode, Long price, String itemname) {
+        ItemType(String itemCode, Long price, String itemName) {
             this.itemCode = itemCode;
             this.price = price;
-            this.itemName = itemname;
+            this.itemName = itemName;
 
     }
 

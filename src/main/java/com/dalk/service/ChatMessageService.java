@@ -2,10 +2,11 @@ package com.dalk.service;
 
 import com.dalk.domain.*;
 import com.dalk.dto.requestDto.ChatMessageRequestDto;
+import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageExitResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageItemResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageResponseDto;
-import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageAccessResponseDto;
-import com.dalk.exception.ex.ChatRoomNotFoundException;
+import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageEnterResponseDto;
 import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class ChatMessageService {
     private final ChannelTopic channelTopic;
     private final RedisTemplate redisTemplate;
     private final UserRepository userRepository;
+    private final ChatRoomUserRepository chatRoomUserRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final ChatMessageItemRepository chatMessageItemRepository;
 
@@ -85,11 +87,22 @@ public class ChatMessageService {
                     chatMessageRequestDto.setReverse(itemUser.getNickname());
                 }
             }
+            List<ChatRoomUser> chatRoomUserList = chatRoomUserRepository.findAllByChatRoom_Id(Long.valueOf(chatMessageRequestDto.getRoomId()));
+            List<UserInfoResponseDto> userInfo = new ArrayList<>();
+            for (ChatRoomUser chatRoomUser : chatRoomUserList) {
+                UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(chatRoomUser.getUser());
+                userInfo.add(userInfoResponseDto);
+            }
+            ChatMessageEnterResponseDto chatMessageEnterResponseDto = new ChatMessageEnterResponseDto(chatMessageRequestDto, userInfo);
+            redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageEnterResponseDto);
         } else if (ChatMessage.MessageType.EXIT.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에서 나갔습니다.");
+            chatRoomUserRepository.deleteByUser_Id(user.getId());
+            ChatMessageExitResponseDto chatMessageExitResponseDto = new ChatMessageExitResponseDto(chatMessageRequestDto);
+            redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageExitResponseDto);
         }
-        ChatMessageAccessResponseDto chatMessageAccessResponseDto = new ChatMessageAccessResponseDto(chatMessageRequestDto);
-        redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageAccessResponseDto);
+
+
     }
 
     // 채팅방에서 메세지 발송

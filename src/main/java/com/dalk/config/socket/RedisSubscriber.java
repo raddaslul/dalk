@@ -1,9 +1,10 @@
-package com.dalk.pubsub;
+package com.dalk.config.socket;
 
 
+import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageExitResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageItemResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageResponseDto;
-import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageAccessResponseDto;
+import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageEnterResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +28,13 @@ public class RedisSubscriber {
         try {
             // 채팅방 입장시 메세지 보내기
             if (publishMessage.startsWith("ENTER", 9)) {
-                ChatMessageAccessResponseDto chatMessageAccessResponseDto = objectMapper.readValue(publishMessage, ChatMessageAccessResponseDto.class);
-                messagingTemplate.convertAndSend("/sub/chat/rooms/" + chatMessageAccessResponseDto.getRoomId(), chatMessageAccessResponseDto);
+                ChatMessageEnterResponseDto chatMessageEnterResponseDto = objectMapper.readValue(publishMessage, ChatMessageEnterResponseDto.class);
+                messagingTemplate.convertAndSend("/sub/chat/rooms/" + chatMessageEnterResponseDto.getRoomId(), chatMessageEnterResponseDto);
             }
 
             else if (publishMessage.startsWith("EXIT", 9)) {
-                ChatMessageAccessResponseDto chatMessageAccessResponseDto = objectMapper.readValue(publishMessage, ChatMessageAccessResponseDto.class);
-                messagingTemplate.convertAndSend("/sub/chat/rooms/" + chatMessageAccessResponseDto.getRoomId(), chatMessageAccessResponseDto);
+                ChatMessageExitResponseDto chatMessageExitResponseDto = objectMapper.readValue(publishMessage, ChatMessageExitResponseDto.class);
+                messagingTemplate.convertAndSend("/sub/chat/rooms/" + chatMessageExitResponseDto.getRoomId(), chatMessageExitResponseDto);
             }
 
             // 채팅방에서 채팅 시 메세지 보내기
