@@ -3,6 +3,7 @@ package com.dalk.controller;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnRoomResponseDto;
+import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageRoomResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.ChatRoomService;
 import io.swagger.annotations.ApiOperation;
@@ -54,15 +55,14 @@ public class ChatRoomController {
         return chatRoomService.getMainPageOne(roomId);
     }
 
-    @GetMapping("api/category/{category")
-    @ApiOperation(value = "해당 카테고리 시간순 조회 (카테코리만 조회)")
-    public List<MainPageAllResponseDto> getMainPageCreatedAt(@PathVariable String category,@RequestParam("page") int page,
-                                                       @RequestParam("size") int size) {
-        return chatRoomService.getMainPageCreatedAt(category, page, size);
+    @GetMapping("rooms/messages/{roomId}")
+    @ApiOperation(value = "채팅방 입장시 기존 채팅 메세지 조회")
+    public List<ChatMessageRoomResponseDto> getMessages(@PathVariable Long roomId) {
+        return chatRoomService.getMessages(roomId);
     }
 
     @GetMapping("/api/main/{category}")
-    @ApiOperation(value = "카테고리 태그 검색, 제목도 검색")
+    @ApiOperation(value = "카테고리 태그 검색")
     public List<MainPageAllResponseDto> getSearchCategory(
             @PathVariable String category,
             @RequestParam("page") int page,

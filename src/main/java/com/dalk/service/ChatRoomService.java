@@ -1,17 +1,13 @@
 package com.dalk.service;
 
-import com.dalk.domain.Category;
-import com.dalk.domain.ChatRoom;
-import com.dalk.domain.User;
+import com.dalk.domain.*;
 import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnRoomResponseDto;
-import com.dalk.exception.ex.ChatRoomNotFoundException;
-import com.dalk.exception.ex.LoginUserNotFoundException;
-import com.dalk.exception.ex.WarnChatRoomDuplicateException;
-import com.dalk.exception.ex.WarnCommentDuplicateException;
+import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageRoomResponseDto;
+import com.dalk.exception.ex.*;
 import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnChatRoomRepository;
 import com.dalk.scheduler.ChatRoomScheduler;
@@ -37,6 +33,8 @@ import java.util.UUID;
 public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomUserRepository chatRoomUserRepository;
+    private final ChatMessageRepository chatMessageRepository;
     private final CategoryRepository categoryRepository;
     private final ChatRoomScheduler chatRoomScheduler;
     private final UserRepository userRepository;
@@ -119,6 +117,8 @@ public class ChatRoomService {
         User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
                 () -> new LoginUserNotFoundException("유저 정보가 없습니다")
         );
+        ChatRoomUser chatRoomUser = new ChatRoomUser(chatRoom, user);
+        chatRoomUserRepository.save(chatRoomUser);
         List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
         List<Long> warnUserList =new ArrayList<>();
         for (WarnChatRoom warnChatRoom : warnChatRoomList){
@@ -127,6 +127,19 @@ public class ChatRoomService {
         chatRoom.setUserCnt(chatRoom.getUserCnt()+1);
         chatRoomRepository.save(chatRoom);
         return new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user,warnChatRoomList.size(),warnUserList);
+    }
+
+    // 채팅방 입장 시 기존 메세지 조회
+    public List<ChatMessageRoomResponseDto> getMessages(Long roomId) {
+        List<ChatMessageRoomResponseDto> chatMessageRoomResponseDtoList = new ArrayList<>();
+        List<ChatMessage> chatMessageList = chatMessageRepository.findAllByRoomId(roomId);
+        for (ChatMessage chatMessage : chatMessageList) {
+            User user = userRepository.findById(chatMessage.getUser().getId())
+                    .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
+            ChatMessageRoomResponseDto chatMessageRoomResponseDto = new ChatMessageRoomResponseDto(user, chatMessage);
+            chatMessageRoomResponseDtoList.add(chatMessageRoomResponseDto);
+        }
+        return chatMessageRoomResponseDtoList;
     }
 
     //카테고리 검색

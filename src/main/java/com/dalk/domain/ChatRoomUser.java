@@ -26,4 +26,9 @@ public class ChatRoomUser {
     @OneToOne
     @JoinColumn(name="user_id")
     private User user;
+
+    public ChatRoomUser (ChatRoom chatRoom, User user) {
+        this.chatRoom = chatRoom;
+        this.user = user;
+    }
 }

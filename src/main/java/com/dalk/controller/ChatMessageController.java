@@ -47,7 +47,6 @@ public class ChatMessageController {
             if(chatMessageRequestDto.getPapago() != null) {
                 if(!nickname.equals(chatMessageRequestDto.getPapago())) {
                     String message = ItemService.papago(chatMessageRequestDto.getMessage());
-                    log.info("파파고 메세지 = {}", message);
                     chatMessageRequestDto.setMessage(message);
                 }
             } else if(chatMessageRequestDto.getReverse() != null) {
