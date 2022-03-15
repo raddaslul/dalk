@@ -14,4 +14,6 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     List<ChatRoom> findTop6ByOrderByCreatedAtDesc();
     Page<ChatRoom> findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(String category1 ,String category2, String category3,Pageable pageable);
     Page<ChatRoom> findDistinctByCategorys_CategoryOrderByCreatedAt(String category1, Pageable pageable);
+
+    ChatRoom findTopByCategorys_Category(String category1);
 }

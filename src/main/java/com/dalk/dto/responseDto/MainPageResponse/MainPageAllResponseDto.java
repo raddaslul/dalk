@@ -26,6 +26,7 @@ public class MainPageAllResponseDto {
     private String createdAt;
     private Boolean time;
     private Integer warnCnt;
+    private Integer userCnt;
     private List<Long> warnUserList;
 
     public MainPageAllResponseDto(ChatRoom chatRoom, List<String> categoryList, User user,Integer warnChatRoom,List<Long> warnUserList) {
@@ -38,6 +39,7 @@ public class MainPageAllResponseDto {
         this.restTime = TimeConversion.restTime(chatRoom.getCreatedAt(),chatRoom.getTime());
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
         this.time = chatRoom.getTime();
+        this.userCnt = chatRoom.getChatRoomUser().size();
         this.warnCnt=warnChatRoom;
         this.warnUserList=warnUserList;
     }

@@ -7,6 +7,7 @@ import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageExitResponseDt
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageItemResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageEnterResponseDto;
+import com.dalk.exception.ex.ChatRoomNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class ChatMessageService {
     private final ChatRoomUserRepository chatRoomUserRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final ChatMessageItemRepository chatMessageItemRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
     // destination 정보에서 roomId 추출
     public String getRoomId(String destination) {
@@ -98,6 +100,11 @@ public class ChatMessageService {
         } else if (ChatMessage.MessageType.EXIT.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에서 나갔습니다.");
             chatRoomUserRepository.deleteByUser_Id(user.getId());
+            ChatRoom chatRoom = chatRoomRepository.findById(Long.valueOf(chatMessageRequestDto.getRoomId())).orElseThrow(
+                    ()->new ChatRoomNotFoundException("채팅방이 없습니다")
+            );
+            chatRoom.setUserCnt(chatRoom.getUserCnt()-1);
+            chatRoomRepository.save(chatRoom);
             ChatMessageExitResponseDto chatMessageExitResponseDto = new ChatMessageExitResponseDto(chatMessageRequestDto);
             redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageExitResponseDto);
         }

@@ -69,6 +69,7 @@ public class ChatRoom extends Timestamped {
         this.status = requestDto.getStatus();
         this.convertedFileName = convertedFileName;
         this.filePath = filePath;
+        this.userCnt = 0;
     }
     public ChatRoom(String topicA, String topicB,List<Category> categorys,Boolean time,Long createUserId,Boolean status ) {
         this.topicA = topicA;
@@ -77,6 +78,7 @@ public class ChatRoom extends Timestamped {
         this.categorys= categorys;
         this.createUserId = createUserId;
         this.status = status;
+        this.userCnt = 0;
     }
 
     public void setStatus(Boolean status) {
