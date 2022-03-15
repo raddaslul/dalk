@@ -6,6 +6,7 @@ import com.dalk.dto.requestDto.NoticeRequestDto;
 import com.dalk.dto.responseDto.NoticeResponseDto;
 import com.dalk.exception.ex.NoticeNotFoundException;
 import com.dalk.repository.NoticeRepository;
+import com.dalk.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,7 @@ public class NoticeService {
     public void createNotice(NoticeRequestDto noticeRequestDto) {
         Notice notice = new Notice(noticeRequestDto);
         noticeRepository.save(notice);
+
     }
 
     //공지글 전체 조회 - 로그인 안해도 볼수있음.
@@ -47,13 +49,12 @@ public class NoticeService {
     }
 
     //공지글 수정 - 관리자만
+    @Transactional
     public void updateNotices(Long noticeId, NoticeRequestDto noticeRequestDto) {
-
         Notice notice = noticeRepository.findById(noticeId).orElseThrow(
                 ()-> new NoticeNotFoundException("해당 공지글이 없습니다.")
         );
         notice.update(noticeRequestDto);
-
     }
 
     //공지글 삭제 - 관리자만

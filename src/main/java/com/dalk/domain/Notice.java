@@ -21,19 +21,18 @@ public class Notice extends Timestamped {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = "title" )
     private String title;
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content")
     private String content;
 
-    @ManyToOne
-    private User user;
+//    @ManyToOne
+//    private User user;
 
     public Notice(NoticeRequestDto noticeRequestDto) {
        this.title = noticeRequestDto.getTitle();
        this.content = noticeRequestDto.getContent();
-
     }
     public void update(NoticeRequestDto noticeRequestDto) {
         this.title = noticeRequestDto.getTitle();
