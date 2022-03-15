@@ -54,8 +54,15 @@ public class ChatRoomController {
         return chatRoomService.getMainPageOne(roomId);
     }
 
+    @GetMapping("api/category/{category")
+    @ApiOperation(value = "해당 카테고리 시간순 조회 (카테코리만 조회)")
+    public List<MainPageAllResponseDto> getMainPageCreatedAt(@PathVariable String category,@RequestParam("page") int page,
+                                                       @RequestParam("size") int size) {
+        return chatRoomService.getMainPageCreatedAt(category, page, size);
+    }
+
     @GetMapping("/api/main/{category}")
-    @ApiOperation(value = "카테고리 태그 검색")
+    @ApiOperation(value = "카테고리 태그 검색, 제목도 검색")
     public List<MainPageAllResponseDto> getSearchCategory(
             @PathVariable String category,
             @RequestParam("page") int page,

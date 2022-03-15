@@ -146,6 +146,23 @@ public class ChatRoomService {
         return mainPageAllResponseDtoList;
     }
 
+    //카테고리 검색 제목은 안하고 시간순 정렬
+    public List<MainPageAllResponseDto> getMainPageCreatedAt(String category, int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrderByCreatedAt(category, pageable);
+        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
+        for (ChatRoom chatRoom : chatRoomList) {
+            List<Category> categoryList = chatRoom.getCategorys();
+            User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+            );
+            List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
+            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+        }
+        return mainPageAllResponseDtoList;
+    }
+
 //    토론방 신고기능
     @Transactional
     public WarnRoomResponseDto WarnChatRoom(Long roomId, UserDetailsImpl userDetails) {
