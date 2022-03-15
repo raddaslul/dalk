@@ -206,7 +206,6 @@ public class CommentService {
             comment.setDisAgreeCnt(comment.getDisAgreeCnt() + 1);
             commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
         } else {
-
                 if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
                 agreeCheck.setIsDisAgree(false);
                 disAgreeResponseDto.setIsDisAgree(false);
