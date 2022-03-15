@@ -4,7 +4,6 @@ import com.dalk.domain.ChatRoom;
 import com.dalk.domain.User;
 import com.dalk.domain.time.Timestamped;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +26,7 @@ public class WarnChatRoom extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;

@@ -1,6 +1,5 @@
 package com.dalk.domain;
 
-//import com.dalk.domain.vote.Vote;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
