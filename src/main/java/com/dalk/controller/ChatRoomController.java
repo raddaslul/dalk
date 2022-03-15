@@ -57,11 +57,15 @@ public class ChatRoomController {
 
     @GetMapping("rooms/messages/{roomId}")
     @ApiOperation(value = "채팅방 입장시 기존 채팅 메세지 조회")
-    public List<ChatMessageRoomResponseDto> getMessages(@PathVariable String roomId) {
+    public List<ChatMessageRoomResponseDto> getMessages(@PathVariable Long roomId) {
         return chatRoomService.getMessages(roomId);
     }
 
-
+    @GetMapping("api/category/best/{category}")
+    @ApiOperation(value = "카테고리에서 가장 참여자가 많은 토론방")
+    public MainPageAllResponseDto getCategoryTop1(@PathVariable String category) {
+        return chatRoomService.getCategoryTop1(category);
+    }
 
     @GetMapping("/api/main/{category}")
     @ApiOperation(value = "카테고리 태그 검색")
