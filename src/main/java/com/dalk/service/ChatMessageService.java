@@ -72,8 +72,12 @@ public class ChatMessageService {
 
         if (ChatMessage.MessageType.ENTER.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에 입장했습니다.");
-            ChatRoomUser chatRoomUser = new ChatRoomUser(chatRoom, user);
-            chatRoomUserRepository.save(chatRoomUser);
+            ChatRoomUser chatRoomUser1 = chatRoomUserRepository.findAllByChatRoom_IdAndUser_Id(chatRoom.getId(), user.getId());
+            if (chatRoomUser1 != null) {
+                ChatRoomUser chatRoomUser = new ChatRoomUser(chatRoom, user);
+                chatRoomUserRepository.save(chatRoomUser);
+            }
+
 
             if(chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId()) != null) {
                 ChatMessageItem chatMessageItem = chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId());
@@ -98,7 +102,7 @@ public class ChatMessageService {
         } else if (ChatMessage.MessageType.EXIT.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에서 나갔습니다.");
             chatRoomUserRepository.deleteByUser_Id(user.getId());
-            chatRoom.setUserCnt(chatRoom.getUserCnt()-1);
+            chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
             chatRoomRepository.save(chatRoom);
             ChatMessageExitResponseDto chatMessageExitResponseDto = new ChatMessageExitResponseDto(chatMessageRequestDto);
             redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageExitResponseDto);
