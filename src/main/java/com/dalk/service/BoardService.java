@@ -62,8 +62,8 @@ public class BoardService {
         }
         String deleteFileUrl = "image/" + chatRoom.getConvertedFileName();
         s3Repository.deleteFile(deleteFileUrl);
-        chatRoomUserRepository.deleteByChatRoom(chatRoom);
         chatRoomRepository.delete(chatRoom);
+        chatRoomUserRepository.deleteByChatRoom(chatRoom);
     }
 
     //게시글 전체 조회

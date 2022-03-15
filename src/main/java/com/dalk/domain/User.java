@@ -63,7 +63,7 @@ public class User extends Timestamped {
     @Column(name = "rank")
     private Integer rank;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private ChatRoomUser chatRoomUser;
 
     @Column
