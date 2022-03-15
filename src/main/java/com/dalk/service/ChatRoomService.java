@@ -42,6 +42,7 @@ public class ChatRoomService {
     private final VoteRepository voteRepository;
     private final S3Repository s3Repository;
 
+    //토론방 만들기
     public Long createChatRoom(MultipartFile multipartFile, UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) throws IOException {
         String convertedFileName = null;
         String filePath = null;
@@ -75,6 +76,8 @@ public class ChatRoomService {
         List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByOrderByCreatedAtDesc();
         //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
+
+
 
         for (ChatRoom chatRoom : chatRoomList) {
             List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
@@ -142,10 +145,38 @@ public class ChatRoomService {
         return chatMessageRoomResponseDtoList;
     }
 
+
     //카테고리 검색
     public List<MainPageAllResponseDto> getSearchCategory(String category,int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
         Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(category, category, category ,pageable);
+        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
+        for (ChatRoom chatRoom : chatRoomList) {
+            List<Category> categoryList = chatRoom.getCategorys();
+            User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+            );
+            List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
+            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+        }
+        return mainPageAllResponseDtoList;
+    }
+    //카테고리에서 제일 사람 많은사람
+    public MainPageAllResponseDto getCategoryTop1(String category) {
+        ChatRoom chatRoom = chatRoomRepository.findTopByCategorys_Category(category);
+        List<Category> categoryList = chatRoom.getCategorys();
+        User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+        );
+        List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
+        return new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
+    }
+
+    //카테고리 검색 제목은 안하고 시간순 정렬
+    public List<MainPageAllResponseDto> getMainPageCreatedAt(String category, int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrderByCreatedAt(category, pageable);
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
         for (ChatRoom chatRoom : chatRoomList) {
             List<Category> categoryList = chatRoom.getCategorys();
