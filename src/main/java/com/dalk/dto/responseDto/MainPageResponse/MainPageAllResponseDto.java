@@ -39,7 +39,7 @@ public class MainPageAllResponseDto {
         this.restTime = TimeConversion.restTime(chatRoom.getCreatedAt(),chatRoom.getTime());
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
         this.time = chatRoom.getTime();
-        this.userCnt = chatRoom.getChatRoomUser().size();
+        this.userCnt = chatRoom.getUserCnt();
         this.warnCnt=warnChatRoom;
         this.warnUserList=warnUserList;
     }

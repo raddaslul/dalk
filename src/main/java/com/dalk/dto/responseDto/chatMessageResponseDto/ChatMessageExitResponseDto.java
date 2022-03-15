@@ -2,9 +2,13 @@ package com.dalk.dto.responseDto.chatMessageResponseDto;
 
 import com.dalk.domain.ChatMessage;
 import com.dalk.dto.requestDto.ChatMessageRequestDto;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChatMessageExitResponseDto {
     private ChatMessage.MessageType type;
     private String roomId;

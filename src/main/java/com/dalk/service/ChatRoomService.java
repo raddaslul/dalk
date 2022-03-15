@@ -5,6 +5,7 @@ import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
+import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnRoomResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageRoomResponseDto;
 import com.dalk.exception.ex.*;
@@ -120,8 +121,6 @@ public class ChatRoomService {
         User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
                 () -> new LoginUserNotFoundException("유저 정보가 없습니다")
         );
-        ChatRoomUser chatRoomUser = new ChatRoomUser(chatRoom, user);
-        chatRoomUserRepository.save(chatRoomUser);
         List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
         List<Long> warnUserList =new ArrayList<>();
         for (WarnChatRoom warnChatRoom : warnChatRoomList){
@@ -145,6 +144,18 @@ public class ChatRoomService {
         return chatMessageRoomResponseDtoList;
     }
 
+
+    public List<UserInfoResponseDto> getUsers(Long roomId) {
+        List<UserInfoResponseDto> userInfoResponseDtoList = new ArrayList<>();
+        List<ChatRoomUser> chatRoomUserList = chatRoomUserRepository.findAllByChatRoom_Id(roomId);
+        for (ChatRoomUser chatRoomUser : chatRoomUserList) {
+            User user = userRepository.findById(chatRoomUser.getUser().getId())
+                    .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
+            userInfoResponseDtoList.add(userInfoResponseDto);
+        }
+        return userInfoResponseDtoList;
+    }
 
     //카테고리 검색
     public List<MainPageAllResponseDto> getSearchCategory(String category,int page, int size) {
