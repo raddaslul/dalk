@@ -70,8 +70,6 @@ public class VoteService {
             }
             voteRepository.save(vote);
         }
-
-
     }
 
     //토론방 유저 리스트

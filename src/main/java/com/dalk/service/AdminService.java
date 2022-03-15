@@ -68,7 +68,6 @@ public class AdminService {
         boardRepository.deleteById(board.getId());
     }
     //    토론방 목록 조회 - 관리자
-
     public List<MainPageAllResponseDto> getAdminMainPageAll() {
         //board 전체를 가져옴
         List<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc();
