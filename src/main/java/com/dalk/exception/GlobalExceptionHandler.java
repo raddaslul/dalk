@@ -139,6 +139,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleCarouselNotFoundException(CarouselNotFoundException e) {
         return new ResponseEntity<>(new ErrorResponse("CS001", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(NoticeNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoticeNotFoundException(NoticeNotFoundException e) {
+        return new ResponseEntity<>(new ErrorResponse("N001", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
