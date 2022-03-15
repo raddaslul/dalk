@@ -132,6 +132,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //메인페이지 스킵!
         skipPathList.add("GET,/users/**");
         skipPathList.add("GET,/api/**");
+        skipPathList.add("GET,/api/**");
+
+
 
         // 채팅
         skipPathList.add("GET,/webjars/**");

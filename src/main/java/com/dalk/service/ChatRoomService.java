@@ -218,6 +218,8 @@ public class ChatRoomService {
             warnRoomResponseDto.setRoomId(warnChatRoom.getChatRoom().getId());
             return warnRoomResponseDto;
         }
+        //예외 처리안하면 신고두번되니까  500에러가뜸 그런데그런데 예측할 수 있는 에러를 400에러로 바꿈
+//        500에러 서버, 400에러 프론트에러 , 500에러 예측할수 없는에러 , 400에러 예측할 수있는 에러
         else throw new WarnChatRoomDuplicateException("이미 신고한 채팅방입니다.");
     }
 }
