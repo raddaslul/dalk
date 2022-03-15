@@ -124,6 +124,8 @@ public class ChatRoomService {
         for (WarnChatRoom warnChatRoom : warnChatRoomList){
             warnUserList.add(warnChatRoom.getUser().getId());
         }
+        chatRoom.setUserCnt(chatRoom.getUserCnt()+1);
+        chatRoomRepository.save(chatRoom);
         return new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user,warnChatRoomList.size(),warnUserList);
     }
 
