@@ -27,9 +27,6 @@ public class Notice extends Timestamped {
     @Column(name = "content")
     private String content;
 
-//    @ManyToOne
-//    private User user;
-
     public Notice(NoticeRequestDto noticeRequestDto) {
        this.title = noticeRequestDto.getTitle();
        this.content = noticeRequestDto.getContent();
