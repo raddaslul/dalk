@@ -1,6 +1,8 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
+import com.dalk.domain.vote.Vote;
+import com.dalk.domain.wl.WarnBoard;
 import lombok.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "board")
+@Table(indexes= @Index(name = "board", columnList = "id"))
 public class Board extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,10 +36,16 @@ public class Board extends Timestamped {
     private Long createUserId;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
+    private List<WarnBoard> warnBoards;
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Category> categorys;
 
     @OneToMany(mappedBy = "board", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToOne(mappedBy = "board",cascade = CascadeType.REMOVE)
+    private Vote vote;
 
     public Board(ChatRoom chatRoom) {
         this.topicA = chatRoom.getTopicA();
@@ -45,6 +53,10 @@ public class Board extends Timestamped {
 //        this.winner = vote.getWinner();
         this.createUserId = chatRoom.getCreateUserId();
         this.categorys = chatRoom.getCategorys();
+    }
+
+    public void setVote(Vote vote) {
+        this.vote = vote;
     }
 
     public Board(

@@ -1,5 +1,6 @@
 package com.dalk.domain.vote;
 
+import com.dalk.domain.Board;
 import com.dalk.domain.ChatRoom;
 import lombok.*;
 
@@ -38,6 +39,10 @@ public class Vote {
     @OneToOne
     private ChatRoom chatRoom;
 
+    @OneToOne
+    @JoinColumn(name = "board_id")
+    private Board board;
+
     public Vote(ChatRoom chatRoom) {
         this.topicACnt =0L;
         this.topPointA = 0L;
@@ -47,4 +52,17 @@ public class Vote {
         this.totalPointB = 0F;
         this.chatRoom = chatRoom;
     }
+
+
+    public Vote(Board board, Long topicACnt, Long topPointA, Float totalPointA,Long topicBCnt, Long topPointB, Float totalPointB) {
+
+        this.topicACnt =topicACnt;
+        this.topPointA = topPointA;
+        this.totalPointA = totalPointA;
+        this.topicBCnt =topicBCnt;
+        this.topPointB = topPointB;
+        this.totalPointB = totalPointB;
+        this.board = board;
+    }
+
 }

@@ -39,7 +39,20 @@ public class ChatRoom extends Timestamped {
     @Column(nullable = false)
     private Boolean status;
 
-    @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
+    @Column
+    private String convertedFileName;
+
+    @Column
+    private String filePath;
+
+    @Column
+    private Integer userCnt;
+
+    public void setUserCnt(Integer userCnt) {
+        this.userCnt = userCnt;
+    }
+
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
     private List<ChatRoomUser> chatRoomUser;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
@@ -48,12 +61,22 @@ public class ChatRoom extends Timestamped {
     @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
     private List<WarnChatRoom> warnChatRooms = new ArrayList<>();
 
-    public ChatRoom(ChatRoomRequestDto requestDto, Long userId) {
+    public ChatRoom(ChatRoomRequestDto requestDto, Long userId, String convertedFileName, String filePath) {
         this.topicA = requestDto.getTopicA();
         this.topicB = requestDto.getTopicB();
         this.time = requestDto.getTime();
-        this.status = requestDto.getStatus();
         this.createUserId = userId;
+        this.status = requestDto.getStatus();
+        this.convertedFileName = convertedFileName;
+        this.filePath = filePath;
+    }
+    public ChatRoom(String topicA, String topicB,List<Category> categorys,Boolean time,Long createUserId,Boolean status ) {
+        this.topicA = topicA;
+        this.topicB = topicB;
+        this.time = time;
+        this.categorys= categorys;
+        this.createUserId = createUserId;
+        this.status = status;
     }
 
     public void setStatus(Boolean status) {

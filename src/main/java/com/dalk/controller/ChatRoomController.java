@@ -3,26 +3,34 @@ package com.dalk.controller;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnRoomResponseDto;
+import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageRoomResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.ChatRoomService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
 
     @PostMapping("/rooms")
     @ApiOperation(value = "토론방 생성")
-    public HashMap<String, Object> createChatRoom(@RequestBody ChatRoomRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        Long roomId = chatRoomService.createChatRoom(userDetails, requestDto);
+    public HashMap<String, Object> createChatRoom(
+            @RequestPart(value = "image", required = false) MultipartFile multipartFile,
+            @RequestPart("debate") ChatRoomRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+        Long roomId = chatRoomService.createChatRoom(multipartFile, userDetails, requestDto);
         HashMap<String, Object> result = new HashMap<>();
         result.put("roomId", roomId);
         return result;
@@ -36,8 +44,9 @@ public class ChatRoomController {
 
     @GetMapping("/api/rooms")
     @ApiOperation(value = "토론방 리스트 전체 조회")
-    public List<MainPageAllResponseDto> getMainPageAll() {
-        return chatRoomService.getMainPageAll();
+    public List<MainPageAllResponseDto> getMainPageAll(   @RequestParam("page") int page,
+                                                          @RequestParam("size") int size) {
+        return chatRoomService.getMainPageAll(page,size);
     }
 
     @GetMapping("/rooms/{roomId}")
@@ -46,10 +55,20 @@ public class ChatRoomController {
         return chatRoomService.getMainPageOne(roomId);
     }
 
+    @GetMapping("rooms/messages/{roomId}")
+    @ApiOperation(value = "채팅방 입장시 기존 채팅 메세지 조회")
+    public List<ChatMessageRoomResponseDto> getMessages(@PathVariable Long roomId) {
+        return chatRoomService.getMessages(roomId);
+    }
+
     @GetMapping("/api/main/{category}")
     @ApiOperation(value = "카테고리 태그 검색")
-    public List<MainPageAllResponseDto> getSearchCategory(@PathVariable String category) {
-        return chatRoomService.getSearchCategory(category);
+    public List<MainPageAllResponseDto> getSearchCategory(
+            @PathVariable String category,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size
+            ) {
+        return chatRoomService.getSearchCategory(category,page,size);
     }
 
     @GetMapping("/warnings/rooms/{roomId}")

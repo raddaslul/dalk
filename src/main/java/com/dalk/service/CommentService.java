@@ -9,9 +9,7 @@ import com.dalk.domain.wl.WarnComment;
 import com.dalk.dto.requestDto.CommentRequestDto;
 import com.dalk.dto.responseDto.*;
 import com.dalk.dto.responseDto.WarnResponse.WarnCommentResponseDto;
-import com.dalk.exception.ex.BoardNotFoundException;
-import com.dalk.exception.ex.CommentNotFoundException;
-import com.dalk.exception.ex.LoginUserNotFoundException;
+import com.dalk.exception.ex.*;
 import com.dalk.repository.wl.AgreeRepository;
 import com.dalk.repository.BoardRepository;
 import com.dalk.repository.CommentRepository;
@@ -50,7 +48,7 @@ public class CommentService {
         Board boards = boardRepository.findById(boardId).orElseThrow(
                 ()-> new BoardNotFoundException("해당 게시글이 없습니다")
         );
-        List<Comment> comments = commentRepository.findAllByBoard(boards);
+        List<Comment> comments = commentRepository.findAllByBoard_Id(boards.getId());
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 //
         for (Comment comment : comments) {
@@ -154,23 +152,13 @@ public class CommentService {
         Agree agreeCheck = agreeRepository.findByUserAndComment(userDetails.getUser(), comment).orElse(null);
 
         if (agreeCheck == null) {
-            Agree agree = new Agree(comment, user, false, false);
+            Agree agree = new Agree(comment, user, true, false);
             agreeRepository.save(agree);
-            agree.setIsAgree(true);
             agreeResponseDto.setIsAgree(true);
             comment.setAgreeCnt(comment.getAgreeCnt() + 1);
             commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
         } else {
-            //T T 일경우
-            if(agreeCheck.getIsDisAgree() && agreeCheck.getIsAgree()) {
-                comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
-                agreeCheck.setIsAgree(false);
-                agreeCheck.setIsDisAgree(false);
-                agreeResponseDto.setIsAgree(false);
-                comment.setAgreeCnt(comment.getAgreeCnt() - 1);
-                commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
-                // T F 일경우
-            }else if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
+                if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
                 comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
                 agreeCheck.setIsAgree(true);
                 agreeCheck.setIsDisAgree(false);
@@ -211,24 +199,15 @@ public class CommentService {
         Agree agreeCheck = agreeRepository.findByUserAndComment(userDetails.getUser(),comment).orElse(null);
 
         if (agreeCheck == null) {
-            Agree agree = new Agree(comment, user, false, false);
+            Agree agree = new Agree(comment, user, false, true);
             agreeRepository.save(agree);
             agree.setIsAgree(false);
-            agree.setIsDisAgree(true);
             disAgreeResponseDto.setIsDisAgree(true);
             comment.setDisAgreeCnt(comment.getDisAgreeCnt() + 1);
             commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
         } else {
-            //T T 일경우
-            if(agreeCheck.getIsDisAgree() && agreeCheck.getIsAgree()) {
-                comment.setAgreeCnt(comment.getAgreeCnt() - 1);
-                agreeCheck.setIsAgree(false);
-                agreeCheck.setIsDisAgree(false);
-                disAgreeResponseDto.setIsDisAgree(false);
-                comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
-                commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
-                // T F 일경우
-            }else if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
+
+                if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
                 agreeCheck.setIsDisAgree(false);
                 disAgreeResponseDto.setIsDisAgree(false);
                 comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
@@ -275,8 +254,8 @@ public class CommentService {
             warnCommentResponseDto.setWarn(warnComment.getIsWarn());
             System.out.println(warnCommentResponseDto);
             return warnCommentResponseDto;
-        }else {
-            return null;
         }
+        else throw new WarnCommentDuplicateException("이미 신고한 댓글입니다.");
+
     }
 }

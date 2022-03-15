@@ -2,6 +2,7 @@ package com.dalk.service;
 
 
 import com.dalk.domain.*;
+import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnBoard;
 import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
@@ -15,6 +16,7 @@ import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnBoardRepository;
 import com.dalk.repository.wl.WarnChatRoomRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public class AdminService {
     private final CategoryRepository categoryRepository;
     private final WarnBoardRepository warnBoardRepository;
     private final WarnChatRoomRepository warnChatRoomRepository;
+    private final VoteRepository voteRepository;
 
     //블라인드 게시글 전체 조회 - 관리자
 
@@ -44,11 +47,11 @@ public class AdminService {
             for (Board board : boardList) {
 
                 List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
-                List<Category> categoryList = categoryRepository.findCategoryByBoard(board);
+                List<Category> categoryList = categoryRepository.findCategoryByBoard_Id(board.getId());
                 User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
                         () -> new LoginUserNotFoundException("유저 정보가 없습니다")
                 );
-                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, MinkiService.categoryStringList(categoryList), user, warnBoardList.size(),null);
+                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), user, warnBoardList.size(),null);
 
             if(mainPageBoardResponseDto.getWarnCnt()>=5) {
                 mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
@@ -77,8 +80,7 @@ public class AdminService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, MinkiService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
-            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
 
             if(mainPageAllResponseDto.getWarnCnt()>=1) {
                 mainPageAllResponseDtoList.add(mainPageAllResponseDto);
@@ -94,14 +96,17 @@ public class AdminService {
         chatRoomRepository.save(chatRoom);
     }
 
-    // 유저 전체 조회 - 관리자
+    // 유저 신고 조회 - 관리자
+
     public List<UserInfoResponseDto> getUserList() {
 
-        List<User> userList = userRepository.findAll();
+        List<User> userList = userRepository.findAllByOrderByWarnUserCntDesc();
         List<UserInfoResponseDto> allUsers = new ArrayList<>();
         for (User user : userList) {
             UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
-            allUsers.add(userInfoResponseDto);
+            if(userInfoResponseDto.getWarnUserCnt()>=5) {
+                allUsers.add(userInfoResponseDto);
+            }
         }
         return allUsers;
     }

@@ -45,7 +45,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException e) {
-        return new ResponseEntity<>(new ErrorResponse("U006", e.getMessage()), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(new ErrorResponse("U007", e.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+    @ExceptionHandler(WarnDuplicateException.class)
+    public ResponseEntity<ErrorResponse> handleWarnDuplicateException(WarnDuplicateException e) {
+        return new ResponseEntity<>(new ErrorResponse("U008", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalTokenUsernameException.class)
@@ -82,6 +86,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleIllegalPostDeleteUserException(IllegalPostDeleteUserException e) {
         return new ResponseEntity<>(new ErrorResponse("B003", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(WarnBoardDuplicateException.class)
+    public ResponseEntity<ErrorResponse> handleWarnBoardDuplicateException(WarnBoardDuplicateException e) {
+        return new ResponseEntity<>(new ErrorResponse("B004", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(CommentNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleCommentNotFoundException(CommentNotFoundException e) {
@@ -97,6 +105,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleIllegalCommentDeleteUserException(IllegalCommentDeleteUserException e) {
         return new ResponseEntity<>(new ErrorResponse("C003", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(WarnCommentDuplicateException.class)
+    public ResponseEntity<ErrorResponse> handleWarnCommentDuplicateException(WarnCommentDuplicateException e) {
+        return new ResponseEntity<>(new ErrorResponse("C004", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(ItemNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleItemNotFoundException(ItemNotFoundException e) {
@@ -111,6 +123,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ChatRoomNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleChatRoomNotFoundException(ChatRoomNotFoundException e) {
         return new ResponseEntity<>(new ErrorResponse("CR001", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(WarnChatRoomDuplicateException.class)
+    public ResponseEntity<ErrorResponse> handleWarnChatRoomDuplicateException(WarnChatRoomDuplicateException e) {
+        return new ResponseEntity<>(new ErrorResponse("C004", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DuplicateVoteException.class)

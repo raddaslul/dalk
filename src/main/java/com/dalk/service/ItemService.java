@@ -1,19 +1,28 @@
-package com.dalk.service.papago;
+package com.dalk.service;
 
+import com.dalk.domain.*;
+import com.dalk.exception.ex.ItemNotFoundException;
+import com.dalk.exception.ex.LackPointException;
+import com.dalk.repository.*;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.*;
 import java.net.*;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 // 네이버 기계번역 (Papago SMT) API 예제
 @Service
-public class PapagoService {
+@AllArgsConstructor
+@Transactional
+@Slf4j
+public class ItemService {
 
+    //파파고
     public static String papago(String string) throws IOException, NoSuchAlgorithmException {
         String clientId = "8r31LT9MJMcXuUniJSm1";//애플리케이션 클라이언트 아이디값";
         String clientSecret = "lt8SRWXOgS";//애플리케이션 클라이언트 시크릿값";
@@ -30,8 +39,9 @@ public class PapagoService {
         requestHeaders.put("X-Naver-Client-Id", clientId);
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
         String responseBody = post(apiURL, requestHeaders, text); //74개 짜르기
-        String text1 = responseBody.substring(responseBody.indexOf("translatedText")+17);
-        return text1.substring(0, text1.indexOf("engineType")-4); //뒤에 점찍히는거 뺄거면 -4 넣을거면 -3
+        String text1 = responseBody.substring(responseBody.indexOf("translatedText") + 17);
+        return text1.substring(0, text1.indexOf("engineType") - 3); //뒤에 점찍히는거 뺄거면 -4 넣을거면 -3
+
     }
 
     private static String post(String apiUrl, Map<String, String> requestHeaders, String text) throws IOException, NoSuchAlgorithmException {
@@ -39,33 +49,13 @@ public class PapagoService {
         Random random = SecureRandom.getInstanceStrong();
         int num = random.nextInt(11);
         String postParams;
-        if (num == 1) {
-            postParams = "source=ko&target=en&text=" + text;
-        } else if(num==2) {
-            postParams = "source=ko&target=ja&text=" + text;
-        }else if(num==3) {
-            postParams = "source=ko&target=zh-CN&text=" + text;
-        }else if(num==4) {
-            postParams = "source=ko&target=vi&text=" + text;
-        }else if(num==5) {
-            postParams = "source=ko&target=id&text=" + text;
-        }else if(num==6) {
-            postParams = "source=ko&target=th&text=" + text;
-        }else if(num==7) {
-            postParams = "source=ko&target=de&text=" + text;
-        }else if(num==8) {
-            postParams = "source=ko&target=ru&text=" + text;
-        }else if(num==9) {
-            postParams = "source=ko&target=es&text=" + text;
-        }else if(num==10) {
-            postParams = "source=ko&target=it&text=" + text;
-        }else{
-            postParams = "source=ko&target=fr&text=" + text;
-        }
+        List<String> list = Arrays.asList("en","ja","zh-CN","vi","id","th","de","ru","es","it","fr");
+
+        postParams = "source=ko&target=" + list.get(num) + "&text=" + text;
 //        postParams = "source=ko&target=en&text=" + text; //원본언어: 한국어 (ko) -> 목적언어: 영어 (en)
         try {
             con.setRequestMethod("POST");
-            for(Map.Entry<String, String> header :requestHeaders.entrySet()) {
+            for (Map.Entry<String, String> header : requestHeaders.entrySet()) {
                 con.setRequestProperty(header.getKey(), header.getValue());
             }
 
@@ -88,10 +78,10 @@ public class PapagoService {
         }
     }
 
-    private static HttpURLConnection connect(String apiUrl){
+    private static HttpURLConnection connect(String apiUrl) {
         try {
             URL url = new URL(apiUrl);
-            return (HttpURLConnection)url.openConnection();
+            return (HttpURLConnection) url.openConnection();
         } catch (MalformedURLException e) {
             throw new RuntimeException("API URL이 잘못되었습니다. : " + apiUrl, e);
         } catch (IOException e) {
@@ -99,7 +89,7 @@ public class PapagoService {
         }
     }
 
-    private static String readBody(InputStream body){
+    private static String readBody(InputStream body) {
         InputStreamReader streamReader = new InputStreamReader(body);
 
         try (BufferedReader lineReader = new BufferedReader(streamReader)) {
@@ -115,4 +105,62 @@ public class PapagoService {
             throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
         }
     }
+
+    //여기부터 아이템 쓰는 곳곳
+    private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
+    private final PointRepository pointRepository;
+
+    //아이템 구매
+    @Transactional
+    public void buyItem(ItemType item, User user) {
+
+        if (user.getTotalPoint() < item.getPrice()) {
+            throw new LackPointException("보유한 포인트가 부족합니다");
+        }
+        user.setTotalPoint(user.getTotalPoint() - item.getPrice());
+        userRepository.save(user);
+
+        if (item.getItemCode().equals("exBuy")) {
+            user.setEx((int) (user.getEx() + item.getPrice()));
+            userRepository.save(user);
+        } else {
+            Item userItem = itemRepository.findByUser_IdAndItemCode(user.getId(), item.getItemCode());
+            userItem.setCnt(userItem.getCnt() + 1);
+            itemRepository.save(userItem);
+        }
+
+        Point point = new Point(item.getItemName() + "구매", -item.getPrice(), user.getTotalPoint(), user);
+        pointRepository.save(point);
+
+    }
+
+    //아이템 사용
+    @Transactional
+    public void useItem(ItemType item, User user) {
+        Item userItem = itemRepository.findByUser_IdAndItemCode(user.getId(), item.getItemCode());
+
+        if (userItem.getCnt() > 0) {
+            userItem.setCnt(userItem.getCnt() - 1);
+            itemRepository.save(userItem);
+        } else {
+            throw new ItemNotFoundException("아이템이 없습니다");
+        }
+    }
+
+    //단어 거꾸로 하기
+    public static String reverseWord(String word) {
+        StringBuffer sb = new StringBuffer(word);
+        return sb.reverse().toString();
+    }
+
+    public static List<String> categoryStringList(List<Category> categoryList) {
+        List<String> stringList = new ArrayList<>();
+        for (Category tag : categoryList) {
+            String categoryString = tag.getCategory();
+            stringList.add(categoryString);
+        }
+        return stringList;
+    }
+
 }

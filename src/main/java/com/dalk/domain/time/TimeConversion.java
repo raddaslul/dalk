@@ -8,7 +8,7 @@ public class TimeConversion {
 
     public static String timeCreatedConversion(LocalDateTime createdAt) {
         String resultConversion = "";
-        resultConversion = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm"));
+        resultConversion = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         return resultConversion;
     }
 
@@ -22,8 +22,8 @@ public class TimeConversion {
                 resultConversion = 0L;
             }
         } else {
-            resultConversion = 10800 - timeDiff;
-            if ((timeDiff) > 10800) {
+            resultConversion = 3600 - timeDiff;
+            if ((timeDiff) > 3600) {
                 resultConversion = 0L;
             }
         }
@@ -81,9 +81,3 @@ public class TimeConversion {
         return resultConversion;
     }
 }
-
-//        }
-//        else if ((timeDiff / 86400) > 0) { // 1 일
-//            resultConversion = timeDiff / 86400 + "일 전";
-//        } else if ((timeDiff / 3600) > 0) { // 시간
-//            resultConversion = timeDiff / 3600 + "시간 전";

@@ -8,6 +8,8 @@ import com.dalk.exception.ex.LackPointException;
 import com.dalk.repository.LottoRepository;
 import com.dalk.repository.PointRepository;
 import com.dalk.repository.UserRepository;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,27 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class LottoService {
 
+    @NoArgsConstructor
+    @Getter
+    public enum LottoType {
+        ONE("1등 당첨", 1000000L, 1),
+        TWO("2등 당첨", 100000L, 2),
+        THREE("3등 당첨", 10000L, 3),
+        FOUR("4등 당첨", 1000L, 4),
+        FIVE("5등 당첨", 100L, 5),
+        SIX("꽝", 0L, 6);
+
+        private String content;
+        private Long point;
+        private Integer rank;
+
+        LottoType(String content, Long point, Integer rank) {
+            this.content = content;
+            this.point = point;
+            this.rank = rank;
+        }
+    }
+
     private final PointRepository pointRepository;
     private final UserRepository userRepository;
     private final LottoRepository lottoRepository;
@@ -26,91 +49,54 @@ public class LottoService {
     public LottoResponseDto getLotto(User user) throws NoSuchAlgorithmException {
         Long lottoPrice = 200L;
         Lotto lotto = lottoRepository.findByUser(user);
-        if(user.getTotalPoint()>=lottoPrice) {
-            user.setTotalPoint(user.getTotalPoint()-lottoPrice);
-            userRepository.save(user);
-            Point point = new Point("로또 참여", -lottoPrice, user.getTotalPoint(), user);
-            pointRepository.save(point);
-            Random random = SecureRandom.getInstanceStrong();
-            int num;
-            if(lotto.getCount()>=5) {num = random.nextInt(3630);}
-            else {num = random.nextInt(10000);}
-
-
-            int content = 0;
-            if (1 <= num && num < 30) {//0.3프로
-                content = 1;
-                lottoPoint1(user);
-                lotto.setCount(0L);
-                lottoRepository.save(lotto);
-            }else if(30<= num && num < 130){ //1프로
-                content = 2;
-                lottoPoint2(user);
-                lotto.setCount(0L);
-                lottoRepository.save(lotto);
-            } else if (130 <= num && num < 630) { // 5프로
-                content = 3;
-                lottoPoint3(user);
-                lotto.setCount(0L);
-                lottoRepository.save(lotto);
-            } else if (630 <= num && num < 1630) { //10프로
-                content = 4;
-                lottoPoint4(user);
-                lotto.setCount(0L);
-                lottoRepository.save(lotto);
-            } else if (1630 <= num && num < 3630) { //20프로
-                content = 5;
-                lottoPoint5(user);
-                lotto.setCount(0L);
-                lottoRepository.save(lotto);
-            } else { //63.7프로
-                    lottoPoint6(user);
-                    lotto.setCount(lotto.getCount()+1);
-                    lottoRepository.save(lotto);
-            }
-            return new LottoResponseDto(content, lotto.getCount());
-        }else throw new LackPointException("보유한 포인트가 부족합니다");
-    }
-
-    public void lottoPoint1(User user) {
-        Long point1 = 1000000L;
-        user.setTotalPoint(user.getTotalPoint()+point1);
+        if (user.getTotalPoint() < lottoPrice) {
+            throw new LackPointException("보유한 포인트가 부족합니다");
+        }
+        user.setTotalPoint(user.getTotalPoint() - lottoPrice);
         userRepository.save(user);
-        Point point = new Point("1등 당첨", point1, user.getTotalPoint(), user);
-        pointRepository.save(point);
-    }
-    public void lottoPoint2(User user) {
-        Long point1 = 100000L;
-        user.setTotalPoint(user.getTotalPoint()+point1);
-        userRepository.save(user);
-        Point point = new Point("2등 당첨", point1, user.getTotalPoint(), user);
+
+        Point point = new Point("로또 참여", -lottoPrice, user.getTotalPoint(), user);
         pointRepository.save(point);
 
-    }
-    public void lottoPoint3(User user) {
-        Long point1 = 10000L;
-        user.setTotalPoint(user.getTotalPoint()+point1);
-        userRepository.save(user);
-        Point point = new Point("3등 당첨", point1, user.getTotalPoint(), user);
-        pointRepository.save(point);
+        Random random = SecureRandom.getInstanceStrong();
+        int num;
+        if (lotto.getCount() >= 5) {
+            num = random.nextInt(3630);
+        } else {
+            num = random.nextInt(10000);
+        }
+
+        if (num < 30) {//0.3프로
+            return lotto(LottoType.ONE, user, lotto);
+        }
+        if (30 <= num && num < 130) { //1프로
+            return lotto(LottoType.TWO, user, lotto);
+        }
+        if (130 <= num && num < 630) { // 5프로
+            return lotto(LottoType.THREE, user, lotto);
+        }
+        if (630 <= num && num < 1630) { //10프로
+            return lotto(LottoType.FOUR, user, lotto);
+        }
+        if (1630 <= num && num < 3630) { //20프로
+            return lotto(LottoType.FIVE, user, lotto);
+        }
+        lotto.setCount(lotto.getCount() + 1);
+        lottoRepository.save(lotto);
+        return new LottoResponseDto(6, lotto.getCount());
 
     }
-    public void lottoPoint4(User user) {
-        Long point1 = 1000L;
-        user.setTotalPoint(user.getTotalPoint()+point1);
+
+    public LottoResponseDto lotto(LottoType lottoType, User user, Lotto lotto) {
+        user.setTotalPoint(user.getTotalPoint() + lottoType.getPoint());
         userRepository.save(user);
-        Point point = new Point("4등 당첨", point1, user.getTotalPoint(), user);
+
+        Point point = new Point(lottoType.getContent(), lottoType.getPoint(), user.getTotalPoint(), user);
         pointRepository.save(point);
 
-    }
-    public void lottoPoint5(User user) {
-        Long point1 = 500L;
-        user.setTotalPoint(user.getTotalPoint()+point1);
-        userRepository.save(user);
-        Point point = new Point("5등 당첨", point1, user.getTotalPoint(), user);
-        pointRepository.save(point);
+        lotto.setCount(0);
 
-    }
-    public void lottoPoint6(User user) {
+        lottoRepository.save(lotto);
+        return new LottoResponseDto(lottoType.getRank(), lotto.getCount());
     }
 }

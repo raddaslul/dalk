@@ -1,32 +1,25 @@
 package com.dalk.service;
 
-import com.dalk.domain.Category;
-import com.dalk.domain.Point;
+import com.dalk.domain.Item;
+import com.dalk.domain.ItemType;
 import com.dalk.domain.User;
-import com.dalk.domain.wl.WarnBoard;
-import com.dalk.dto.responseDto.UserInfoResponseDto;
-import com.dalk.repository.PointRepository;
+import com.dalk.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class MinkiService {
-    //항해99 5기 B반 김민기님이 해줌
 
-    public static UserInfoResponseDto userInfo(User user) {
-        return new UserInfoResponseDto(user);
+    public static ItemRepository itemRepository;
+
+    @Autowired
+    public MinkiService(ItemRepository itemRepository) {
+        MinkiService.itemRepository = itemRepository;
     }
 
-    public static List<String> categoryStringList(List<Category> categoryList) {
-        List<String> stringList = new ArrayList<>();
-        for (Category tag : categoryList) {
-            String categoryString = tag.getCategory();
-            stringList.add(categoryString);
-        }
-        return stringList;
+    public static Long changeItem(User user, ItemType itemType) {
+        Item item = itemRepository.findByUser_IdAndItemCode(user.getId(), itemType.getItemCode());
+        return item.getCnt();
     }
 }

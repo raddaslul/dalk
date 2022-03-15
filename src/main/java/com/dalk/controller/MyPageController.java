@@ -3,8 +3,10 @@ package com.dalk.controller;
 import com.dalk.domain.User;
 import com.dalk.dto.responseDto.PointResponseDto;
 import com.dalk.dto.responseDto.RankResponseDto;
+import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.MyPageService;
+import com.dalk.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +22,14 @@ import java.util.List;
 public class MyPageController {
 
     private final MyPageService myPageService;
+
+
+    @GetMapping("/mypage")
+    @ApiOperation(value = "유저 조회")
+    public UserInfoResponseDto getMypage(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return UserService.userInfo(userDetails.getUser());
+    }
+
 
     @DeleteMapping("/signout")
     @ApiOperation(value = "회원 탈퇴")

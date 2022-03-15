@@ -4,10 +4,13 @@ package com.dalk.security.filter;
 import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.security.jwt.HeaderTokenExtractor;
 import com.dalk.security.jwt.JwtPreProcessingToken;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
@@ -38,25 +41,26 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
     public Authentication attemptAuthentication(
             HttpServletRequest request,
             HttpServletResponse response
-    ) throws AuthenticationException {
-        System.out.println("헤더 토큰 request : " + request);
-        System.out.println("헤더 토큰 response : " + response);
+    ) throws AuthenticationException, IOException {
 
-        // JWT 값을 담아주는 변수 TokenPayload
-        String tokenPayload = request.getHeader("Authorization");
-        System.out.println("tokenPayload = "+tokenPayload);
-        if (tokenPayload == null) {
-//            response.sendRedirect("/signin");
-//            return null;
-            throw new LoginUserNotFoundException("로그인 정보가 없습니다.");
-        }
+            System.out.println("헤더 토큰 request : " + request);
+            System.out.println("헤더 토큰 response : " + response);
 
-        JwtPreProcessingToken jwtToken = new JwtPreProcessingToken(
-                extractor.extract(tokenPayload, request));
+            // JWT 값을 담아주는 변수 TokenPayload
+            String tokenPayload = request.getHeader("Authorization");
+            System.out.println("tokenPayload = "+tokenPayload);
+            if (tokenPayload == null) {
+                response.sendRedirect("/error");
+                return null;
+            }
 
-        return super
-                .getAuthenticationManager()
-                .authenticate(jwtToken);
+            JwtPreProcessingToken jwtToken = new JwtPreProcessingToken(
+                    extractor.extract(tokenPayload, request));
+
+            return super
+                    .getAuthenticationManager()
+                    .authenticate(jwtToken);
+
     }
 
     @Override

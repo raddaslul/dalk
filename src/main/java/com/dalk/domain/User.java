@@ -11,8 +11,12 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "user")
+@Table(indexes = @Index(name = "user", columnList = "id"))
 public class User extends Timestamped {
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
 
     public enum Role {
         USER(Authority.USER),  // 사용자 권한
@@ -54,6 +58,11 @@ public class User extends Timestamped {
     @Column(name = "ex")
     private Integer ex;
 
+    @Column(name = "warnUser")
+    private Integer warnUserCnt;
+    @Column(name = "rank")
+    private Integer rank;
+
     @OneToOne(cascade = CascadeType.REMOVE)
     private ChatRoomUser chatRoomUser;
 
@@ -62,13 +71,11 @@ public class User extends Timestamped {
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
     private Role role;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
-    private Item item;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Item> items;
 
     @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
     private Lotto lotto;
-
-
 
     @JsonManagedReference
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
@@ -82,21 +89,23 @@ public class User extends Timestamped {
         this.ex = ex;
     }
 
-    public void setItem(Item item) {
-        this.item = item;
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 
     public void setPoints(List<Point> points) {
         this.points = points;
     }
 
-    public User(String username, String password, String nickname, Long totalPoint, Integer ex, Role role, Item item) {
+    public void setWarnUserCnt(Integer warnUserCnt){this.warnUserCnt =warnUserCnt;}
+
+    public User(String username, String password, String nickname, Long totalPoint, Integer ex,Integer warnUserCnt, Role role) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.totalPoint = totalPoint;
         this.ex = ex;
+        this.warnUserCnt=warnUserCnt;
         this.role = role;
-        this.item = item;
     }
 }

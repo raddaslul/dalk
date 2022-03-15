@@ -12,7 +12,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     List<Category> findCategoryByChatRoom_Id(Long Id);
 
-    List<Category> findCategoryByBoard(Board board);
+    List<Category> findCategoryByBoard_Id(Long Id);
 
     List<Category> findAllByChatRoom(ChatRoom chatRoom);
 }
