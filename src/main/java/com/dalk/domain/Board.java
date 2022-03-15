@@ -5,7 +5,6 @@ import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnBoard;
 import lombok.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -47,16 +46,16 @@ public class Board extends Timestamped {
     @OneToOne(mappedBy = "board",cascade = CascadeType.REMOVE)
     private Vote vote;
 
+    public void setVote(Vote vote) {
+        this.vote = vote;
+    }
+
     public Board(ChatRoom chatRoom) {
         this.topicA = chatRoom.getTopicA();
         this.topicB = chatRoom.getTopicB();
 //        this.winner = vote.getWinner();
         this.createUserId = chatRoom.getCreateUserId();
         this.categorys = chatRoom.getCategorys();
-    }
-
-    public void setVote(Vote vote) {
-        this.vote = vote;
     }
 
     public Board(

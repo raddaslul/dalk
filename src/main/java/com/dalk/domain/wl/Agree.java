@@ -1,6 +1,5 @@
 package com.dalk.domain.wl;
 
-
 import com.dalk.domain.Comment;
 import com.dalk.domain.User;
 import lombok.*;

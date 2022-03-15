@@ -14,10 +14,6 @@ import java.util.List;
 @Table(indexes = @Index(name = "user", columnList = "id"))
 public class User extends Timestamped {
 
-    public void setRank(Integer rank) {
-        this.rank = rank;
-    }
-
     public enum Role {
         USER(Authority.USER),  // 사용자 권한
         ADMIN(Authority.ADMIN);  // 관리자 권한
@@ -33,11 +29,11 @@ public class User extends Timestamped {
         }
 
         public static class Authority {
+
             public static final String USER = "ROLE_USER";
             public static final String ADMIN = "ROLE_ADMIN";
         }
     }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -60,16 +56,17 @@ public class User extends Timestamped {
 
     @Column(name = "warnUser")
     private Integer warnUserCnt;
+
     @Column(name = "rank")
     private Integer rank;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private ChatRoomUser chatRoomUser;
 
     @Column
     @Enumerated(value = EnumType.STRING) // 정보를 받을 때는 Enum 값으로 받지만
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
     private Role role;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private ChatRoomUser chatRoomUser;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Item> items;
@@ -89,12 +86,12 @@ public class User extends Timestamped {
         this.ex = ex;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public void setRank(Integer rank) {
+        this.rank = rank;
     }
 
-    public void setPoints(List<Point> points) {
-        this.points = points;
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 
     public void setWarnUserCnt(Integer warnUserCnt){this.warnUserCnt =warnUserCnt;}
