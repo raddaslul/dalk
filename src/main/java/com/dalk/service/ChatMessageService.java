@@ -2,7 +2,6 @@ package com.dalk.service;
 
 import com.dalk.domain.*;
 import com.dalk.dto.requestDto.ChatMessageRequestDto;
-import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageExitResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageItemResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageResponseDto;
@@ -72,12 +71,13 @@ public class ChatMessageService {
 
         if (ChatMessage.MessageType.ENTER.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에 입장했습니다.");
-            ChatRoomUser chatRoomUser1 = chatRoomUserRepository.findAllByChatRoom_IdAndUser_Id(chatRoom.getId(), user.getId());
-            if (chatRoomUser1 != null) {
+            ChatRoomUser chatRoomOldUser = chatRoomUserRepository.findAllByChatRoom_IdAndUser_Id(chatRoom.getId(), user.getId());
+            if (chatRoomOldUser == null) {
                 ChatRoomUser chatRoomUser = new ChatRoomUser(chatRoom, user);
                 chatRoomUserRepository.save(chatRoomUser);
             }
-
+            chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
+            chatRoomRepository.save(chatRoom);
 
             if(chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId()) != null) {
                 ChatMessageItem chatMessageItem = chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId());
@@ -104,11 +104,9 @@ public class ChatMessageService {
             chatRoomUserRepository.deleteByUser_Id(user.getId());
             chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
             chatRoomRepository.save(chatRoom);
-            ChatMessageExitResponseDto chatMessageExitResponseDto = new ChatMessageExitResponseDto(chatMessageRequestDto);
+            ChatMessageExitResponseDto chatMessageExitResponseDto = new ChatMessageExitResponseDto(chatMessageRequestDto, user);
             redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageExitResponseDto);
         }
-
-
     }
 
     // 채팅방에서 메세지 발송

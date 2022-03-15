@@ -269,6 +269,9 @@ public class InitialData implements ApplicationRunner {
         );
         chatRoomRepository.save(chatRoom1);
 
+        Vote vote3 = new Vote(chatRoom1);
+        voteRepository.save(vote3);
+
         Category category1 = new Category(
                 chatRoom1,
                 "음식"
