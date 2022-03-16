@@ -22,7 +22,7 @@ public class PointResponseDto {
     public PointResponseDto(Point point){
         this.content =point.getContent();
         this.changePoint = point.getChangePoint();
-        this.totalPoint = point.getToTalPoint();
+        this.totalPoint = point.getTotalPoint();
         this.createdAt = TimeConversion.timeCreatedConversion(point.getCreatedAt());
     }
 }
