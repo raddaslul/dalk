@@ -27,6 +27,10 @@ public class Item {
     @JoinColumn(name = "userId")
     private User user;
 
+    public void setCnt(Long cnt) {
+        this.cnt = cnt;
+    }
+
     public Item(String itemCode, Long cnt, User user) {
         this.itemCode = itemCode;
         this.cnt = cnt;
