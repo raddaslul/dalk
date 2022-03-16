@@ -182,7 +182,7 @@ public class ChatRoomService {
         return new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
     }
 
-    //카테고리 검색 제목은 안하고 시간순 정렬
+    //카테고리 검색 제목은 안하고 시간순 정렬 카테고리 검색시
     public List<MainPageAllResponseDto> getMainPageCreatedAt(String category, int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
         Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrderByCreatedAt(category, pageable);

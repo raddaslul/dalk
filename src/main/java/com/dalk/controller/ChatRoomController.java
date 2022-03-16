@@ -84,6 +84,14 @@ public class ChatRoomController {
         return chatRoomService.getSearchCategory(category,page,size);
     }
 
+    @GetMapping("/api/main/best/{category}")
+    @ApiOperation(value = "카테고리 클릭시 그 카테고리 게시글만 나옴")
+    public List<MainPageAllResponseDto> getMainPageCreatedAt(@PathVariable String category,
+                                                    @RequestParam("page") int page,
+                                                    @RequestParam("size") int size) {
+        return chatRoomService.getMainPageCreatedAt(category, page, size);
+    }
+
     @GetMapping("/warnings/rooms/{roomId}")
     @ApiOperation(value = "토론방 신고하기")
     public WarnRoomResponseDto WarnChatRoom
