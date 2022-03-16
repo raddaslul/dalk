@@ -5,6 +5,7 @@ import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
+import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnRoomResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageRoomResponseDto;
 import com.dalk.exception.ex.*;
@@ -42,6 +43,7 @@ public class ChatRoomService {
     private final VoteRepository voteRepository;
     private final S3Repository s3Repository;
 
+    //토론방 만들기
     public Long createChatRoom(MultipartFile multipartFile, UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) throws IOException {
         String convertedFileName = null;
         String filePath = null;
@@ -75,6 +77,8 @@ public class ChatRoomService {
         List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByOrderByCreatedAtDesc();
         //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
+
+
 
         for (ChatRoom chatRoom : chatRoomList) {
             List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
@@ -117,20 +121,16 @@ public class ChatRoomService {
         User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
                 () -> new LoginUserNotFoundException("유저 정보가 없습니다")
         );
-        ChatRoomUser chatRoomUser = new ChatRoomUser(chatRoom, user);
-        chatRoomUserRepository.save(chatRoomUser);
         List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
         List<Long> warnUserList =new ArrayList<>();
         for (WarnChatRoom warnChatRoom : warnChatRoomList){
             warnUserList.add(warnChatRoom.getUser().getId());
         }
-        chatRoom.setUserCnt(chatRoom.getUserCnt()+1);
-        chatRoomRepository.save(chatRoom);
         return new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user,warnChatRoomList.size(),warnUserList);
     }
 
     // 채팅방 입장 시 기존 메세지 조회
-    public List<ChatMessageRoomResponseDto> getMessages(Long roomId) {
+    public List<ChatMessageRoomResponseDto> getMessages(String roomId) {
         List<ChatMessageRoomResponseDto> chatMessageRoomResponseDtoList = new ArrayList<>();
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllByRoomId(roomId);
         for (ChatMessage chatMessage : chatMessageList) {
@@ -142,10 +142,50 @@ public class ChatRoomService {
         return chatMessageRoomResponseDtoList;
     }
 
+
+    public List<UserInfoResponseDto> getUsers(Long roomId) {
+        List<UserInfoResponseDto> userInfoResponseDtoList = new ArrayList<>();
+        List<ChatRoomUser> chatRoomUserList = chatRoomUserRepository.findAllByChatRoom_Id(roomId);
+        for (ChatRoomUser chatRoomUser : chatRoomUserList) {
+            User user = userRepository.findById(chatRoomUser.getUser().getId())
+                    .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
+            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
+            userInfoResponseDtoList.add(userInfoResponseDto);
+        }
+        return userInfoResponseDtoList;
+    }
+
     //카테고리 검색
     public List<MainPageAllResponseDto> getSearchCategory(String category,int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
         Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(category, category, category ,pageable);
+        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
+        for (ChatRoom chatRoom : chatRoomList) {
+            List<Category> categoryList = chatRoom.getCategorys();
+            User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+            );
+            List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
+            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+        }
+        return mainPageAllResponseDtoList;
+    }
+    //카테고리에서 제일 사람 많은사람
+    public MainPageAllResponseDto getCategoryTop1(String category) {
+        ChatRoom chatRoom = chatRoomRepository.findTopByCategorys_Category(category);
+        List<Category> categoryList = chatRoom.getCategorys();
+        User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
+                () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+        );
+        List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
+        return new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
+    }
+
+    //카테고리 검색 제목은 안하고 시간순 정렬
+    public List<MainPageAllResponseDto> getMainPageCreatedAt(String category, int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrderByCreatedAt(category, pageable);
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
         for (ChatRoom chatRoom : chatRoomList) {
             List<Category> categoryList = chatRoom.getCategorys();
@@ -178,6 +218,8 @@ public class ChatRoomService {
             warnRoomResponseDto.setRoomId(warnChatRoom.getChatRoom().getId());
             return warnRoomResponseDto;
         }
+        //예외 처리안하면 신고두번되니까  500에러가뜸 그런데그런데 예측할 수 있는 에러를 400에러로 바꿈
+//        500에러 서버, 400에러 프론트에러 , 500에러 예측할수 없는에러 , 400에러 예측할 수있는 에러
         else throw new WarnChatRoomDuplicateException("이미 신고한 채팅방입니다.");
     }
 }

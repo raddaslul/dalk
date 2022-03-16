@@ -43,9 +43,6 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
             HttpServletResponse response
     ) throws AuthenticationException, IOException {
 
-            System.out.println("헤더 토큰 request : " + request);
-            System.out.println("헤더 토큰 response : " + response);
-
             // JWT 값을 담아주는 변수 TokenPayload
             String tokenPayload = request.getHeader("Authorization");
             System.out.println("tokenPayload = "+tokenPayload);

@@ -18,8 +18,6 @@ public class WarnUser {
     @Column(name = "id")
     private Long id;
 
-
-
     @Column(name = "warn_user")
     private String warnUserName;
 
@@ -28,7 +26,6 @@ public class WarnUser {
     private User user;
 
     public WarnUser( User user1 ,String warnUserName) {
-
         this.user = user1;
         this.warnUserName = warnUserName;
     }

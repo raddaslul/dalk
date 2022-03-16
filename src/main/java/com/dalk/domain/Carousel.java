@@ -2,7 +2,6 @@ package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

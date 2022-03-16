@@ -4,9 +4,7 @@ import com.dalk.dto.requestDto.ChatMessageRequestDto;
 
 import lombok.*;
 
-
 import javax.persistence.*;
-
 
 @Getter
 @NoArgsConstructor
@@ -39,10 +37,7 @@ public class ChatMessage {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public ChatMessage(
-            ChatMessageRequestDto chatMessageRequestDto,
-            User user
-    ) {
+    public ChatMessage(ChatMessageRequestDto chatMessageRequestDto, User user) {
         this.type = chatMessageRequestDto.getType();
         this.roomId = chatMessageRequestDto.getRoomId();
         this.message = chatMessageRequestDto.getMessage();

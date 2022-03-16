@@ -53,7 +53,6 @@ public class Vote {
         this.chatRoom = chatRoom;
     }
 
-
     public Vote(Board board, Long topicACnt, Long topPointA, Float totalPointA,Long topicBCnt, Long topPointB, Float totalPointB) {
 
         this.topicACnt =topicACnt;
@@ -64,5 +63,4 @@ public class Vote {
         this.totalPointB = totalPointB;
         this.board = board;
     }
-
 }

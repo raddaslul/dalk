@@ -20,7 +20,5 @@ public enum ItemType {
             this.itemCode = itemCode;
             this.price = price;
             this.itemName = itemName;
-
     }
-
 }
