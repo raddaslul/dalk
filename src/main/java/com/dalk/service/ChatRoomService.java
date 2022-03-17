@@ -165,7 +165,7 @@ public class ChatRoomService {
     //카테고리 검색
     public List<MainPageAllResponseDto> getSearchCategory(String category,int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
-        Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCaseOrderByCreatedAt(category, category, category ,pageable);
+        Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCaseOrderByCreatedAtDesc(category, category, category ,pageable);
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
         for (ChatRoom chatRoom : chatRoomList) {
             List<Category> categoryList = chatRoom.getCategorys();
@@ -192,7 +192,7 @@ public class ChatRoomService {
     //카테고리 검색 제목은 안하고 시간순 정렬 카테고리 검색시
     public List<MainPageAllResponseDto> getMainPageCreatedAt(String category, int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
-        Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrderByCreatedAt(category, pageable);
+        Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrderByCreatedAtDesc(category, pageable);
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
         for (ChatRoom chatRoom : chatRoomList) {
             List<Category> categoryList = chatRoom.getCategorys();
