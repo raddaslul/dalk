@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 public class ChatRoomEnterResponseDto {
     private UserInfoResponseDto userInfo;
-    private UserVoteResponseDto userVoteResponseDto;
+    private UserVoteResponseDto userVote;
     private Long roomId;
     private String topicA;
     private String topicB;
@@ -32,7 +32,7 @@ public class ChatRoomEnterResponseDto {
 
     public ChatRoomEnterResponseDto(SaveVote saveVote, ChatRoom chatRoom, List<String> categoryList, User user, Integer warnChatRoom, List<Long> warnUserList) {
         this.userInfo = new UserInfoResponseDto(user);
-        this.userVoteResponseDto = new UserVoteResponseDto(saveVote);
+        this.userVote = new UserVoteResponseDto(saveVote);
         this.roomId = chatRoom.getId();
         this.topicA = chatRoom.getTopicA();
         this.topicB = chatRoom.getTopicB();
@@ -42,13 +42,13 @@ public class ChatRoomEnterResponseDto {
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
         this.time = chatRoom.getTime();
         this.userCnt = chatRoom.getUserCnt();
-        this.warnCnt=warnChatRoom;
-        this.warnUserList=warnUserList;
+        this.warnCnt = warnChatRoom;
+        this.warnUserList = warnUserList;
 
 }
     public ChatRoomEnterResponseDto(ChatRoom chatRoom, List<String> categoryList, User user, Integer warnChatRoom, List<Long> warnUserList) {
         this.userInfo = new UserInfoResponseDto(user);
-        this.userVoteResponseDto = null;
+        this.userVote = null;
         this.roomId = chatRoom.getId();
         this.topicA = chatRoom.getTopicA();
         this.topicB = chatRoom.getTopicB();
@@ -58,7 +58,7 @@ public class ChatRoomEnterResponseDto {
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
         this.time = chatRoom.getTime();
         this.userCnt = chatRoom.getUserCnt();
-        this.warnCnt=warnChatRoom;
-        this.warnUserList=warnUserList;
+        this.warnCnt = warnChatRoom;
+        this.warnUserList = warnUserList;
     }
 }

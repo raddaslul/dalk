@@ -43,8 +43,8 @@ public class DetailResponseDto {
         this.category = categoryList;
         this.createdAt = TimeConversion.timeCreatedConversion(board.getCreatedAt());
         this.commentCnt = board.getComments().size();
-        this.warnCnt =warnBoard;
-        this.warnUserList=warnUserList;
+        this.warnCnt = warnBoard;
+        this.warnUserList = warnUserList;
         this.winnerResponse = new WinnerResponse(vote);
         this.loserResponse = new LoserResponse(vote);
     }

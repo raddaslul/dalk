@@ -124,16 +124,16 @@ public class ChatRoomService {
         User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
                 () -> new LoginUserNotFoundException("유저 정보가 없습니다")
         );
-        SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(roomId, user.getId());
+        SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId);
         List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
         List<Long> warnUserList =new ArrayList<>();
         for (WarnChatRoom warnChatRoom : warnChatRoomList){
             warnUserList.add(warnChatRoom.getUser().getId());
         }
         if (saveVote == null) {
-            return new ChatRoomEnterResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user,warnChatRoomList.size(),warnUserList);
-        }
-        return new ChatRoomEnterResponseDto(saveVote,chatRoom, ItemService.categoryStringList(categoryList), user,warnChatRoomList.size(),warnUserList);
+            return new ChatRoomEnterResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(), warnUserList);
+        } else
+        return new ChatRoomEnterResponseDto(saveVote, chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(), warnUserList);
     }
 
     // 채팅방 입장 시 기존 메세지 조회
