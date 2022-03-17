@@ -44,5 +44,21 @@ public class ChatRoomEnterResponseDto {
         this.userCnt = chatRoom.getUserCnt();
         this.warnCnt=warnChatRoom;
         this.warnUserList=warnUserList;
+
 }
+    public ChatRoomEnterResponseDto(ChatRoom chatRoom, List<String> categoryList, User user, Integer warnChatRoom, List<Long> warnUserList) {
+        this.userInfo = new UserInfoResponseDto(user);
+        this.userVoteResponseDto = null;
+        this.roomId = chatRoom.getId();
+        this.topicA = chatRoom.getTopicA();
+        this.topicB = chatRoom.getTopicB();
+        this.category = categoryList;
+        this.filePath = chatRoom.getFilePath();
+        this.restTime = TimeConversion.restTime(chatRoom.getCreatedAt(),chatRoom.getTime());
+        this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
+        this.time = chatRoom.getTime();
+        this.userCnt = chatRoom.getUserCnt();
+        this.warnCnt=warnChatRoom;
+        this.warnUserList=warnUserList;
+    }
 }
