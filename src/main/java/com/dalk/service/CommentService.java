@@ -152,19 +152,18 @@ public class CommentService {
         Agree agreeCheck = agreeRepository.findByUserAndComment(userDetails.getUser(), comment).orElse(null);
 
         if (agreeCheck == null) {
-            Agree agree = new Agree(comment, user, true, false);
-            agreeRepository.save(agree);
+            agreeCheck = new Agree(comment, user, true, false);
             agreeResponseDto.setIsAgree(true);
             comment.setAgreeCnt(comment.getAgreeCnt() + 1);
             commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
         } else {
-            if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
-            comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
-            agreeCheck.setIsAgree(true);
-            agreeCheck.setIsDisAgree(false);
-            agreeResponseDto.setIsAgree(true);
-            comment.setAgreeCnt(comment.getAgreeCnt() + 1);
-            commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
+                if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
+                comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
+                agreeCheck.setIsAgree(true);
+                agreeCheck.setIsDisAgree(false);
+                agreeResponseDto.setIsAgree(true);
+                comment.setAgreeCnt(comment.getAgreeCnt() + 1);
+                commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
                 // F T 일 경우
             }else if(!agreeCheck.getIsDisAgree() && agreeCheck.getIsAgree()) {
                 agreeCheck.setIsAgree(false);
@@ -179,6 +178,8 @@ public class CommentService {
                 commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
             }
         }
+        agreeRepository.save(agreeCheck);
+        commentRepository.save(comment);
         return agreeResponseDto;
     }
 
@@ -199,18 +200,17 @@ public class CommentService {
         Agree agreeCheck = agreeRepository.findByUserAndComment(userDetails.getUser(),comment).orElse(null);
 
         if (agreeCheck == null) {
-            Agree agree = new Agree(comment, user, false, true);
-            agreeRepository.save(agree);
-            agree.setIsAgree(false);
+            agreeCheck = new Agree(comment, user, false, true);
+            agreeCheck.setIsAgree(false);
             disAgreeResponseDto.setIsDisAgree(true);
             comment.setDisAgreeCnt(comment.getDisAgreeCnt() + 1);
             commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
         } else {
-            if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
-            agreeCheck.setIsDisAgree(false);
-            disAgreeResponseDto.setIsDisAgree(false);
-            comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
-            commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
+                if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
+                agreeCheck.setIsDisAgree(false);
+                disAgreeResponseDto.setIsDisAgree(false);
+                comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
+                commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
                 // F T 일 경우
             }else if(!agreeCheck.getIsDisAgree() && agreeCheck.getIsAgree()) {
                 comment.setAgreeCnt(comment.getAgreeCnt() - 1);
@@ -227,6 +227,8 @@ public class CommentService {
                 commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
             }
         }
+        agreeRepository.save(agreeCheck);
+        commentRepository.save(comment);
         return disAgreeResponseDto;
     }
 
