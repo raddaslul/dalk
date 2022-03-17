@@ -8,11 +8,11 @@ import java.util.List;
 public interface SaveVoteRepository extends JpaRepository<SaveVote, Long> {
     SaveVote findByUser_IdAndChatRoom_IdAndVote_Id(Long id1, Long id2, Long id3);
 
-    List<SaveVote> findAllByChatRoom_Id(Long id);
+    List<SaveVote> findAllByChatRoom_Id(Long ChatRoomId);
 
-    List<SaveVote> findAllByChatRoom_IdAndPickTrue(Long id);
+    List<SaveVote> findAllByChatRoom_IdAndPickTrue(Long ChatRoomId);
 
-    List<SaveVote> findAllByChatRoom_IdAndPickFalse(Long id);
+    List<SaveVote> findAllByChatRoom_IdAndPickFalse(Long ChatRoomId);
 
-    SaveVote findByUser_IdAndChatRoom_Id(Long id1, Long id2);
+    SaveVote findByUser_IdAndChatRoom_Id(Long userId, Long ChatRoomId);
 }
