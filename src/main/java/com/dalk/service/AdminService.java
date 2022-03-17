@@ -33,6 +33,7 @@ public class AdminService {
     private final CategoryRepository categoryRepository;
     private final WarnBoardRepository warnBoardRepository;
     private final WarnChatRoomRepository warnChatRoomRepository;
+    private final S3Repository s3Repository;
     private final VoteRepository voteRepository;
 
     //블라인드 게시글 전체 조회 - 관리자
@@ -65,6 +66,8 @@ public class AdminService {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new BoardNotFoundException("해당 게시글이 존재하지 않습니다. ")
         );
+        String deleteFileUrl = "image/" + board.getConvertedFileName();
+        s3Repository.deleteFile(deleteFileUrl);
         boardRepository.deleteById(board.getId());
     }
     //    토론방 목록 조회 - 관리자
@@ -92,6 +95,8 @@ public class AdminService {
     public void deleteAdminChatRoom(Long roomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(()-> new ChatRoomNotFoundException("토론방이 없습니다."));
         chatRoom.setStatus(false);
+        String deleteFileUrl = "image/" + chatRoom.getConvertedFileName();
+        s3Repository.deleteFile(deleteFileUrl);
         chatRoomRepository.save(chatRoom);
     }
 
