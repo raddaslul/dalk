@@ -20,6 +20,7 @@ public class MainPageBoardResponseDto {
     private String topicA;
     private String topicB;
     private String winner;
+    private String filePath;
     private List<String> category;
     private String createdAt;
     private Integer commentCnt;
@@ -38,6 +39,7 @@ public class MainPageBoardResponseDto {
         }else{
             this.winner = "무승부";
         }
+        this.filePath = board.getFilePath();
         this.category = categoryList;
         this.createdAt = TimeConversion.timeCreatedConversion(board.getCreatedAt());
         this.commentCnt = board.getComments().size();

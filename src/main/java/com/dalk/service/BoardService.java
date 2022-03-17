@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -60,8 +61,8 @@ public class BoardService {
         } else {
             voteRepository.delete(vote);
         }
-        String deleteFileUrl = "image/" + chatRoom.getConvertedFileName();
-        s3Repository.deleteFile(deleteFileUrl);
+//        String deleteFileUrl = "image/" + chatRoom.getConvertedFileName();
+//        s3Repository.deleteFile(deleteFileUrl);
         chatRoomRepository.delete(chatRoom);
         chatRoomUserRepository.deleteByChatRoom(chatRoom);
     }
