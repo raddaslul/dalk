@@ -88,7 +88,7 @@ public class ChatRoomScheduler {
 //            log.info("생성 시간 = {}", resultCreatedAt);
             }
             if(chatRoom.getTime()) {
-                if (resultNow - resultCreatedAt >= 30) {
+                if (resultNow - resultCreatedAt >= 40) {
                     boardService.createBoard(chatRoom);
                 }
             }

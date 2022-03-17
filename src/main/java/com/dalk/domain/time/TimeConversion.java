@@ -17,8 +17,8 @@ public class TimeConversion {
         Long timeDiff = Duration.between(createdAt, currentTime).getSeconds(); //현재시간 계산
         Long resultConversion;
         if (time) {
-            resultConversion = 30 - timeDiff;
-            if((timeDiff) > 30){
+            resultConversion = 40 - timeDiff;
+            if((timeDiff) > 40){
                 resultConversion = 0L;
             }
         } else {
