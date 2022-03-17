@@ -32,23 +32,26 @@ public class StompHandler implements ChannelInterceptor {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         String sessionId = (String) message.getHeaders().get("simpSessionId");
-        String token = accessor.getFirstNativeHeader("Authorization").substring(7);
-        String username = jwtDecoder.decodeUsername(token);
-        Long userId = Long.parseLong(jwtDecoder.decodeUserId(token));
+
         // websocket 연결시 헤더의 jwt token 검증
         if (StompCommand.CONNECT == accessor.getCommand()) {
-            if(username == null) {
+            String token = accessor.getFirstNativeHeader("Authorization").substring(7);
+            Long userId = Long.parseLong(jwtDecoder.decodeUserId(token));
+            if(userId == null) {
                 throw new LoginUserNotFoundException("로그인을 해주시기 바랍니다.");
             }
         }
 
         else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
+            String token = accessor.getFirstNativeHeader("Authorization").substring(7);
+//            String username = jwtDecoder.decodeUsername(token);
+            Long userId = Long.parseLong(jwtDecoder.decodeUserId(token));
             log.info("SUBSCRIBE 할 때 token = {}", token );
             String roomId = chatMessageService.getRoomId(
                     Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId")
             );
             // 채팅방에 들어온 클라이언트 sessionId를 roomId와 맵핑해 놓는다.(나중에 특정 세션이 어떤 채팅방에 들어가 있는지 알기 위함)
-            if(username != null) {
+            if(userId != null) {
                 redisRepository.setSessionRoomId(sessionId, roomId);
 
                 // 클라이언트 입장 메시지를 채팅방에 발송한다.(redis publish)
@@ -57,6 +60,8 @@ public class StompHandler implements ChannelInterceptor {
         }
 
         else if (StompCommand.DISCONNECT == accessor.getCommand()) {
+            String token = accessor.getFirstNativeHeader("Authorization").substring(7);
+            Long userId = Long.parseLong(jwtDecoder.decodeUserId(token));
             String roomId = redisRepository.getSessionRoomId(sessionId);
             chatMessageService.accessChatMessage(ChatMessageRequestDto.builder().type(ChatMessage.MessageType.EXIT).roomId(roomId).userId(userId).build());
             redisRepository.removeUserEnterInfo(sessionId);

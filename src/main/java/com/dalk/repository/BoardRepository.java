@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    Page<Board> findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCaseOrderByCreatedAtDesc(String category1 ,String category2, String category3,Pageable pageable);
+    Page<Board> findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCaseOrderByCreatedAtDesc(String category1, String category2, String category3, Pageable pageable);
 
     Page<Board> findAllByOrderByCreatedAtDesc(Pageable pageable);
     List<Board> findAllByOrderByCreatedAtDesc();

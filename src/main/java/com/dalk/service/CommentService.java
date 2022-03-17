@@ -158,13 +158,13 @@ public class CommentService {
             comment.setAgreeCnt(comment.getAgreeCnt() + 1);
             commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
         } else {
-                if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
-                comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
-                agreeCheck.setIsAgree(true);
-                agreeCheck.setIsDisAgree(false);
-                agreeResponseDto.setIsAgree(true);
-                comment.setAgreeCnt(comment.getAgreeCnt() + 1);
-                commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
+            if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
+            comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
+            agreeCheck.setIsAgree(true);
+            agreeCheck.setIsDisAgree(false);
+            agreeResponseDto.setIsAgree(true);
+            comment.setAgreeCnt(comment.getAgreeCnt() + 1);
+            commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
                 // F T 일 경우
             }else if(!agreeCheck.getIsDisAgree() && agreeCheck.getIsAgree()) {
                 agreeCheck.setIsAgree(false);
@@ -206,11 +206,11 @@ public class CommentService {
             comment.setDisAgreeCnt(comment.getDisAgreeCnt() + 1);
             commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
         } else {
-                if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
-                agreeCheck.setIsDisAgree(false);
-                disAgreeResponseDto.setIsDisAgree(false);
-                comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
-                commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
+            if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()){
+            agreeCheck.setIsDisAgree(false);
+            disAgreeResponseDto.setIsDisAgree(false);
+            comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
+            commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
                 // F T 일 경우
             }else if(!agreeCheck.getIsDisAgree() && agreeCheck.getIsAgree()) {
                 comment.setAgreeCnt(comment.getAgreeCnt() - 1);
