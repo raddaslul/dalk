@@ -130,6 +130,9 @@ public class ChatRoomService {
         for (WarnChatRoom warnChatRoom : warnChatRoomList){
             warnUserList.add(warnChatRoom.getUser().getId());
         }
+        if (saveVote == null) {
+            return new ChatRoomEnterResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user,warnChatRoomList.size(),warnUserList);
+        }
         return new ChatRoomEnterResponseDto(saveVote,chatRoom, ItemService.categoryStringList(categoryList), user,warnChatRoomList.size(),warnUserList);
     }
 
