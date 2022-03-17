@@ -1,6 +1,7 @@
 package com.dalk.controller;
 
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
+import com.dalk.dto.responseDto.MainPageResponse.ChatRoomEnterResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnRoomResponseDto;
@@ -52,7 +53,7 @@ public class ChatRoomController {
 
     @GetMapping("/rooms/{roomId}")
     @ApiOperation(value = "채팅방 클릭시 방 넘어가는 기능")
-    public MainPageAllResponseDto getMainPageOne(@PathVariable Long roomId) {
+    public ChatRoomEnterResponseDto getMainPageOne(@PathVariable Long roomId) {
         return chatRoomService.getMainPageOne(roomId);
     }
 
