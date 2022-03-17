@@ -1,10 +1,12 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
+import com.dalk.domain.wl.Agree;
 import com.dalk.dto.requestDto.CommentRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,6 +35,9 @@ public class Comment extends Timestamped {
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<Agree> agreeList;
 
     public void setAgreeCnt(Integer agreeCnt) {
         this.agreeCnt = agreeCnt;

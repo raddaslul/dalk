@@ -1,9 +1,11 @@
 package com.dalk.service;
 
 import com.dalk.domain.*;
+import com.dalk.domain.vote.SaveVote;
 import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
+import com.dalk.dto.responseDto.MainPageResponse.ChatRoomEnterResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnRoomResponseDto;
@@ -42,6 +44,7 @@ public class ChatRoomService {
     private final WarnChatRoomRepository warnChatRoomRepository;
     private final VoteRepository voteRepository;
     private final S3Repository s3Repository;
+    private final SaveVoteRepository saveVoteRepository;
 
     //토론방 만들기
     public Long createChatRoom(MultipartFile multipartFile, UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) throws IOException {
@@ -113,7 +116,7 @@ public class ChatRoomService {
     }
 
     //채팅방 하나 입장
-    public MainPageAllResponseDto getMainPageOne(Long roomId) {
+    public ChatRoomEnterResponseDto getMainPageOne(Long roomId) {
         List<Category> categoryList = categoryRepository.findCategoryByChatRoom_Id(roomId);
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(
                 ()-> new ChatRoomNotFoundException("채팅방이 없습니다.")
@@ -121,12 +124,16 @@ public class ChatRoomService {
         User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
                 () -> new LoginUserNotFoundException("유저 정보가 없습니다")
         );
+        SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId);
         List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
         List<Long> warnUserList =new ArrayList<>();
         for (WarnChatRoom warnChatRoom : warnChatRoomList){
             warnUserList.add(warnChatRoom.getUser().getId());
         }
-        return new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user,warnChatRoomList.size(),warnUserList);
+        if (saveVote == null) {
+            return new ChatRoomEnterResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(), warnUserList);
+        } else
+        return new ChatRoomEnterResponseDto(saveVote, chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(), warnUserList);
     }
 
     // 채팅방 입장 시 기존 메세지 조회
@@ -182,7 +189,7 @@ public class ChatRoomService {
         return new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
     }
 
-    //카테고리 검색 제목은 안하고 시간순 정렬
+    //카테고리 검색 제목은 안하고 시간순 정렬 카테고리 검색시
     public List<MainPageAllResponseDto> getMainPageCreatedAt(String category, int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
         Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrderByCreatedAt(category, pageable);
