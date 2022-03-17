@@ -40,7 +40,7 @@ public class MainPageAllResponseDto {
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
         this.time = chatRoom.getTime();
         this.userCnt = chatRoom.getUserCnt();
-        this.warnCnt=warnChatRoom;
-        this.warnUserList=warnUserList;
+        this.warnCnt = warnChatRoom;
+        this.warnUserList = warnUserList;
     }
 }
