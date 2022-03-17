@@ -88,6 +88,8 @@ public class ChatRoomService {
             User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
+            chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
+            chatRoomRepository.save(chatRoom);
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
             MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user,warnChatRoomList.size(),null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
@@ -108,6 +110,8 @@ public class ChatRoomService {
             User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
+            chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
+            chatRoomRepository.save(chatRoom);
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
             MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom,ItemService.categoryStringList(categoryList), user,warnChatRoomList.size(),null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
@@ -124,6 +128,8 @@ public class ChatRoomService {
         User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
                 () -> new LoginUserNotFoundException("유저 정보가 없습니다")
         );
+        chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
+        chatRoomRepository.save(chatRoom);
         SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId);
         List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
         List<Long> warnUserList =new ArrayList<>();
@@ -172,6 +178,8 @@ public class ChatRoomService {
             User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
+            chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
+            chatRoomRepository.save(chatRoom);
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
             MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
@@ -185,6 +193,8 @@ public class ChatRoomService {
         User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
                 () -> new LoginUserNotFoundException("유저 정보가 없습니다")
         );
+        chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
+        chatRoomRepository.save(chatRoom);
         List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
         return new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
     }
@@ -199,6 +209,8 @@ public class ChatRoomService {
             User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
+            chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
+            chatRoomRepository.save(chatRoom);
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
             MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
