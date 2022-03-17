@@ -165,7 +165,7 @@ public class ChatRoomService {
     //카테고리 검색
     public List<MainPageAllResponseDto> getSearchCategory(String category,int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
-        Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCase(category, category, category ,pageable);
+        Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCaseOrderByCreatedAt(category, category, category ,pageable);
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
         for (ChatRoom chatRoom : chatRoomList) {
             List<Category> categoryList = chatRoom.getCategorys();
@@ -180,7 +180,7 @@ public class ChatRoomService {
     }
     //카테고리에서 제일 사람 많은사람
     public MainPageAllResponseDto getCategoryTop1(String category) {
-        ChatRoom chatRoom = chatRoomRepository.findTopByCategorys_Category(category);
+        ChatRoom chatRoom = chatRoomRepository.findTopByCategorys_CategoryOrderByUserCntDesc(category);
         List<Category> categoryList = chatRoom.getCategorys();
         User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
                 () -> new LoginUserNotFoundException("유저 정보가 없습니다")
