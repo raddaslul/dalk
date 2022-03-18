@@ -44,23 +44,33 @@ public class CommentService {
     //댓글 조회
     @Transactional
     public List<CommentResponseDto> getComment(Long boardId) {
+
         //생성일자
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-        Calendar cal = Calendar.getInstance();
-        Date date = cal.getTime();
-        sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
-        String dateResult = sdf.format(date);
+//        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+//        Calendar cal = Calendar.getInstance();
+//        Date date = cal.getTime();
+//        sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+//        String dateResult = sdf.format(date);
 
         Board boards = boardRepository.findById(boardId).orElseThrow(
                 ()-> new BoardNotFoundException("해당 게시글이 없습니다")
         );
         List<Comment> comments = commentRepository.findAllByBoard_Id(boards.getId());
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
+
+
+
+
 //
         for (Comment comment : comments) {
             User user = userRepository.findById(comment.getCreateUserId()).orElseThrow(
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
+
+            String rawCreatedAt = String.valueOf(comment.getCreatedAt());
+            String createdAtDate = rawCreatedAt.split("T")[0];
+            String createdAtTime = rawCreatedAt.split("T")[1].split("\\.")[0];
+            String createdAt = createdAtDate +" "+ createdAtTime;
 
 //          댓글 찬성 , 반대
             List<Agree> agreeList = agreeRepository.findByCommentId(comment.getId());
@@ -85,7 +95,7 @@ public class CommentService {
                 warnUserList.add(warnComment.getUser().getId());
             }
 
-            CommentResponseDto commentResponseDto = new CommentResponseDto(user,comment,dateResult,warnUserList,agreeUserList,disagreeUserList);
+            CommentResponseDto commentResponseDto = new CommentResponseDto(user,comment,createdAt,warnUserList,agreeUserList,disagreeUserList);
             commentResponseDtoList.add(commentResponseDto);
         }
 
