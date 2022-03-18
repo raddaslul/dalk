@@ -20,9 +20,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -45,6 +44,13 @@ public class CommentService {
     //댓글 조회
     @Transactional
     public List<CommentResponseDto> getComment(Long boardId) {
+        //생성일자
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        Date date = cal.getTime();
+        sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
+        String dateResult = sdf.format(date);
+
         Board boards = boardRepository.findById(boardId).orElseThrow(
                 ()-> new BoardNotFoundException("해당 게시글이 없습니다")
         );
@@ -79,22 +85,10 @@ public class CommentService {
                 warnUserList.add(warnComment.getUser().getId());
             }
 
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
-
-            CommentResponseDto commentResponseDto = new CommentResponseDto(
-                    userInfoResponseDto,
-                    comment.getId(),
-                    comment.getComment(),
-                    comment.getAgreeCnt(),
-                    comment.getDisAgreeCnt(),
-                    warnCommentList.size(),
-                    warnUserList,
-                    agreeUserList,
-                    disagreeUserList
-            );
-
+            CommentResponseDto commentResponseDto = new CommentResponseDto(user,comment,dateResult,warnUserList,agreeUserList,disagreeUserList);
             commentResponseDtoList.add(commentResponseDto);
         }
+
         return commentResponseDtoList;
     }
 
