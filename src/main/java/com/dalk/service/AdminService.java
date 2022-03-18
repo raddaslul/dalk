@@ -94,10 +94,15 @@ public class AdminService {
     // 토론방 삭제
     public void deleteAdminChatRoom(Long roomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(()-> new ChatRoomNotFoundException("토론방이 없습니다."));
-        chatRoom.setStatus(false);
+        Vote vote = voteRepository.findByChatRoom_Id(chatRoom.getId());
+        vote.setChatRoom(null);
+        voteRepository.save(vote);
+        voteRepository.delete(vote);
         String deleteFileUrl = "image/" + chatRoom.getConvertedFileName();
         s3Repository.deleteFile(deleteFileUrl);
-        chatRoomRepository.save(chatRoom);
+        chatRoomRepository.delete(chatRoom);
+//        chatRoom.setStatus(false);
+//        chatRoomRepository.save(chatRoom);
     }
 
     // 유저 신고 조회 - 관리자

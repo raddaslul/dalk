@@ -55,8 +55,8 @@ public class ChatRoomScheduler {
 
         List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
         for (ChatRoom chatRoom : chatRoomList) {
-            Long resultCreatedAt = 0L;
-            if(chatRoom.getStatus()) {
+//            Long resultCreatedAt = 0L;
+//            if(chatRoom.getStatus()) {
                 String createdAt = String.valueOf(chatRoom.getCreatedAt());
                 // log.info("createdAt = {}", createdAt);
                 String createdAtDate = createdAt.split("T")[0];
@@ -84,9 +84,9 @@ public class ChatRoomScheduler {
 //            log.info("createdAtMinute = {}", createdAtMinute);
                 Long createdAtSecond = Long.parseLong(createdAtTime.substring(6,8));
 //            log.info("createdAtSecond = {}", createdAtSecond);
-                resultCreatedAt = createdAtYear + createdAtMonth + createdAtDay + createdHour + createdAtMinute + createdAtSecond;
+                Long resultCreatedAt = createdAtYear + createdAtMonth + createdAtDay + createdHour + createdAtMinute + createdAtSecond;
 //            log.info("생성 시간 = {}", resultCreatedAt);
-            }
+//            }
             if(chatRoom.getTime()) {
                 if (resultNow - resultCreatedAt >= 70) {
                     boardService.createBoard(chatRoom);

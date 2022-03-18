@@ -33,8 +33,8 @@ public class ChatRoom extends Timestamped {
     @Column(nullable = false)
     private Long createUserId;
 
-    @Column(nullable = false)
-    private Boolean status;
+//    @Column(nullable = false)
+//    private Boolean status;
 
     @Column
     private String convertedFileName;
@@ -61,16 +61,16 @@ public class ChatRoom extends Timestamped {
         this.userCnt = userCnt;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
+//    public void setStatus(Boolean status) {
+//        this.status = status;
+//    }
 
     public ChatRoom(ChatRoomRequestDto requestDto, Long userId, String convertedFileName, String filePath) {
         this.topicA = requestDto.getTopicA();
         this.topicB = requestDto.getTopicB();
         this.time = requestDto.getTime();
         this.createUserId = userId;
-        this.status = requestDto.getStatus();
+//        this.status = requestDto.getStatus();
         this.convertedFileName = convertedFileName;
         this.filePath = filePath;
         this.userCnt = 0;
@@ -82,7 +82,7 @@ public class ChatRoom extends Timestamped {
         this.time = time;
         this.categorys= categorys;
         this.createUserId = createUserId;
-        this.status = status;
+//        this.status = status;
         this.userCnt = 0;
     }
 }

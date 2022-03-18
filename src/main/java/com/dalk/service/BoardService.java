@@ -47,7 +47,7 @@ public class BoardService {
         voteRepository.save(vote);
         Board board = new Board(chatRoom);
         List<Category> categoryList = categoryRepository.findAllByChatRoom(chatRoom);
-        if (chatRoom.getStatus()) {
+//        if (chatRoom.getStatus()) {
             for (Category categorys : categoryList) {
                 String stringCategory = categorys.getCategory();
                 Category category = new Category(board, stringCategory);
@@ -58,9 +58,9 @@ public class BoardService {
             voteRepository.save(vote);
             board.setVote(vote);
             boardRepository.save(board);
-        } else {
-            voteRepository.delete(vote);
-        }
+//        } else {
+//            voteRepository.delete(vote);
+//        }
 //        String deleteFileUrl = "image/" + chatRoom.getConvertedFileName();
 //        s3Repository.deleteFile(deleteFileUrl);
         chatRoomRepository.delete(chatRoom);
