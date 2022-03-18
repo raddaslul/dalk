@@ -131,6 +131,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse("CR001", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(DuplicateChatRoomUserException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateChatRoomUserException(DuplicateChatRoomUserException e) {
+        return new ResponseEntity<>(new ErrorResponse("CR002", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(WarnChatRoomDuplicateException.class)
     public ResponseEntity<ErrorResponse> handleWarnChatRoomDuplicateException(WarnChatRoomDuplicateException e) {
         return new ResponseEntity<>(new ErrorResponse("C004", e.getMessage()), HttpStatus.BAD_REQUEST);
@@ -149,7 +154,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleNoticeNotFoundException(NoticeNotFoundException e) {
         return new ResponseEntity<>(new ErrorResponse("N001", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
-
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
