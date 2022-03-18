@@ -65,7 +65,7 @@ public class ItemScheduler {
             Long createdAtMinute = Long.parseLong(createdAtTime.substring(3,5)) * 60;
             Long createdAtSecond = Long.parseLong(createdAtTime.substring(6,8));
             Long resultCreatedAt = createdAtYear + createdAtMonth + createdAtDay + createdHour + createdAtMinute + createdAtSecond;
-            if(resultNow - resultCreatedAt >= 30) {
+            if(resultNow - resultCreatedAt >= 5) {
                 chatMessageItemRepository.delete(chatMessageItem);
                 chatMessageService.itemDeleteMessage(roomId, item);
             }

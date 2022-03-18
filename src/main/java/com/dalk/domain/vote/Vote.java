@@ -5,6 +5,7 @@ import com.dalk.domain.ChatRoom;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,6 +43,9 @@ public class Vote {
     @OneToOne
     @JoinColumn(name = "board_id")
     private Board board;
+
+    @OneToMany(mappedBy = "vote", cascade = CascadeType.REMOVE)
+    private List<SaveVote> saveVoteList;
 
     public Vote(ChatRoom chatRoom) {
         this.topicACnt =0L;
