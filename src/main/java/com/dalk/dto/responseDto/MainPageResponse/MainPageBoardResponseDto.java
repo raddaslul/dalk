@@ -33,13 +33,7 @@ public class MainPageBoardResponseDto {
         this.boardId = board.getId();
         this.topicA = board.getTopicA();
         this.topicB = board.getTopicB();
-        if (board.getVote().getTopicACnt() > board.getVote().getTopicBCnt()) {
-            this.winner = board.getTopicA();
-        } else if (board.getVote().getTopicACnt() < board.getVote().getTopicBCnt()) {
-            this.winner = board.getTopicB();
-        }else{
-            this.winner = "무승부";
-        }
+        this.winner = board.getWinner();
         this.filePath = board.getFilePath();
         this.voteCnt = board.getVote().getTopicBCnt()+board.getVote().getTopicACnt();
         this.category = categoryList;

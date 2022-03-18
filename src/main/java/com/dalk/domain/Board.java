@@ -56,6 +56,10 @@ public class Board extends Timestamped {
         this.vote = vote;
     }
 
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
+
     public Board(ChatRoom chatRoom) {
         this.topicA = chatRoom.getTopicA();
         this.topicB = chatRoom.getTopicB();
