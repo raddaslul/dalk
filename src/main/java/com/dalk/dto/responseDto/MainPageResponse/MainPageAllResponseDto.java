@@ -17,11 +17,11 @@ import java.util.List;
 public class MainPageAllResponseDto {
     private UserInfoResponseDto userInfo;
     private Long roomId;
+    private String filePath;
     private String topicA;
     private String topicB;
     private String content;
     private List<String> category;
-    private String filePath;
     private Long restTime;
     private String createdAt;
     private Boolean time;

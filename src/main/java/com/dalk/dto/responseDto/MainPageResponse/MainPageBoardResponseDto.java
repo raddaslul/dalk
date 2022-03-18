@@ -17,10 +17,11 @@ import java.util.List;
 public class MainPageBoardResponseDto {
     private UserInfoResponseDto userInfo;
     private Long boardId;
+    private String filePath;
+    private Long voteCnt;
     private String topicA;
     private String topicB;
     private String winner;
-    private String filePath;
     private List<String> category;
     private String createdAt;
     private Integer commentCnt;
@@ -40,6 +41,7 @@ public class MainPageBoardResponseDto {
             this.winner = "무승부";
         }
         this.filePath = board.getFilePath();
+        this.voteCnt = board.getVote().getTopicBCnt()+board.getVote().getTopicACnt();
         this.category = categoryList;
         this.createdAt = TimeConversion.timeCreatedConversion(board.getCreatedAt());
         this.commentCnt = board.getComments().size();
