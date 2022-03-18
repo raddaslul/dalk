@@ -47,7 +47,7 @@ public class ChatMessageService {
 
     public ChatMessage save(ChatMessageRequestDto chatMessageRequestDto) {
         // 메시지 생성 시간 삽입
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
         sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
