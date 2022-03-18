@@ -57,6 +57,13 @@ public class BoardService {
             vote.setBoard(board);
             voteRepository.save(vote);
             board.setVote(vote);
+            if (board.getVote().getTopicACnt() > board.getVote().getTopicBCnt()) {
+                board.setWinner(board.getTopicA());
+            } else if (board.getVote().getTopicACnt() < board.getVote().getTopicBCnt()) {
+                board.setWinner(board.getTopicB());
+            }else{
+                board.setWinner("무승부");
+            }
             boardRepository.save(board);
 //        } else {
 //            voteRepository.delete(vote);

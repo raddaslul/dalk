@@ -33,13 +33,7 @@ public class DetailResponseDto {
         this.boardId = board.getId();
         this.topicA = board.getTopicA();
         this.topicB = board.getTopicB();
-        if (board.getVote().getTopicACnt() > board.getVote().getTopicBCnt()) {
-            this.winner = board.getTopicA();
-        } else if (board.getVote().getTopicACnt() < board.getVote().getTopicBCnt()) {
-            this.winner = board.getTopicB();
-        }else{
-            this.winner = "무승부";
-        }
+        this.winner = board.getWinner();
         this.category = categoryList;
         this.createdAt = TimeConversion.timeCreatedConversion(board.getCreatedAt());
         this.commentCnt = board.getComments().size();
