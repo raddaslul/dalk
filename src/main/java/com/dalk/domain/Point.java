@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.context.event.EventListener;
 
 import javax.persistence.*;
 
@@ -41,4 +42,5 @@ public class Point extends Timestamped {
         this.totalPoint = totalPoint;
         this.user = user;
     }
+
 }
