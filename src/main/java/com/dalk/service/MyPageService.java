@@ -45,7 +45,7 @@ public class MyPageService {
     @Transactional
     public List<RankResponseDto> getRank() {
         //나중에 지우기 책임자 현지훈
-        RankService.saveRank();
+        StaticService.saveRank();
 
         List<User> rankList = userRepository.findTop99ByOrderByExDesc();
         List<RankResponseDto> rankResponseDtoList =new ArrayList<>();
