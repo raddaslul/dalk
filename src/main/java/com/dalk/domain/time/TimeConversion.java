@@ -1,5 +1,7 @@
 package com.dalk.domain.time;
 
+import com.dalk.domain.ChatRoom;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -7,9 +9,17 @@ import java.time.format.DateTimeFormatter;
 public class TimeConversion {
 
     public static String timeCreatedConversion(LocalDateTime createdAt) {
-        String resultConversion = "";
-        resultConversion = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        return resultConversion;
+        return createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    public static String timeEndConversion(ChatRoom chatRoom) {
+        LocalDateTime endAt;
+        if(chatRoom.getTime()) {
+            endAt = chatRoom.getCreatedAt().plusSeconds(40);
+        } else {
+            endAt = chatRoom.getCreatedAt().plusHours(1);
+        }
+        return endAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     public static Long restTime(LocalDateTime createdAt, Boolean time) {
