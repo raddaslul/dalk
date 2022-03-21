@@ -36,4 +36,13 @@ public class Item {
         this.cnt = cnt;
         this.user = user;
     }
+
+    public void itemAdd() {
+        this.cnt += 1;
+    }
+
+    public void itemSubtract() {
+        this.cnt -= 1;
+    }
+
 }

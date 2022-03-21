@@ -6,6 +6,7 @@ import com.dalk.exception.ex.LackPointException;
 import com.dalk.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -108,44 +109,27 @@ public class ItemService {
 
     //여기부터 아이템 쓰는 곳곳
     private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
     private final PointRepository pointRepository;
+    private final UserRepository userRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     //아이템 구매
     @Transactional
     public void buyItem(ItemType item, User user) {
 
-        if (user.getTotalPoint() < item.getPrice()) {
-            throw new LackPointException("보유한 포인트가 부족합니다");
-        }
-        user.setTotalPoint(user.getTotalPoint() - item.getPrice());
+        Item userItem = itemRepository.findByUser_IdAndItemCode(user.getId(), item.getItemCode());
+        user.buyItem(item, userItem);
         userRepository.save(user);
-
-        if (item.getItemCode().equals("exBuy")) {
-            user.setEx((int) (user.getEx() + item.getPrice()));
-            userRepository.save(user);
-        } else {
-            Item userItem = itemRepository.findByUser_IdAndItemCode(user.getId(), item.getItemCode());
-            userItem.setCnt(userItem.getCnt() + 1);
-            itemRepository.save(userItem);
-        }
-
         Point point = new Point(item.getItemName() + "구매", -item.getPrice(), user.getTotalPoint(), user);
         pointRepository.save(point);
-
     }
 
     //아이템 사용
     @Transactional
     public void useItem(ItemType item, User user) {
         Item userItem = itemRepository.findByUser_IdAndItemCode(user.getId(), item.getItemCode());
-
-        if (userItem.getCnt() > 0) {
-            userItem.setCnt(userItem.getCnt() - 1);
-            itemRepository.save(userItem);
-        } else {
-            throw new ItemNotFoundException("아이템이 없습니다");
-        }
+        userRepository.save(user);
+        user.useItem(userItem);
     }
 
     //단어 거꾸로 하기
