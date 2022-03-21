@@ -10,4 +10,5 @@ import lombok.RequiredArgsConstructor;
 public class RankResponseDto {
     private String nickname;
     private Integer ex;
+    private Integer rank;
 }
