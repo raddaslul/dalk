@@ -1,6 +1,7 @@
 package com.dalk.dto.responseDto;
 
 import com.dalk.domain.Comment;
+import com.dalk.domain.Rank;
 import com.dalk.domain.User;
 import com.dalk.domain.wl.WarnComment;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,7 @@ public class CommentResponseDto {
     private List<Long> disagreeUserList;
 
 
-    public CommentResponseDto(User user, Comment comment,String createdAt,List<Long> warnUserList, List<Long> agreeUserList, List<Long> disagreeUserList) {
+    public CommentResponseDto(User user,Comment comment, String createdAt, List<Long> warnUserList, List<Long> agreeUserList, List<Long> disagreeUserList) {
         this.userInfo = new UserInfoResponseDto(user);
         this.commentId = comment.getId();
         this.comment = comment.getComment();
