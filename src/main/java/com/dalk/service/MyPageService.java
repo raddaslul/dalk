@@ -57,6 +57,7 @@ public class MyPageService {
                 rankNum = user.getRank().getId();
             }
             RankResponseDto rankResponseDto = new RankResponseDto(rankNum, user.getNickname(),user.getEx());
+
             rankResponseDtoList.add(rankResponseDto);
         }
         return rankResponseDtoList;

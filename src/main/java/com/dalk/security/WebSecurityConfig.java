@@ -164,6 +164,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("https://raddaslul.s3.ap-northeast-2.amazonaws.com/");
         configuration.addAllowedOrigin("http://jeonhaekang.shop.s3-website.ap-northeast-2.amazonaws.com/");
+        configuration.addAllowedOrigin("https://master.d33lja7kfvwqj0.amplifyapp.com/");
+        configuration.addAllowedOrigin("https://www.debate-talk.com/");
         configuration.setAllowCredentials(true); // 클라이언트의 쿠키를 전달하고 받을 것이기 때문에 allowCredentials를 true로 설정한다.
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");

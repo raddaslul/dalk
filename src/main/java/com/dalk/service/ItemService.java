@@ -4,7 +4,6 @@ import com.dalk.domain.*;
 import com.dalk.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -109,7 +108,6 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final PointRepository pointRepository;
     private final UserRepository userRepository;
-    private final ApplicationEventPublisher applicationEventPublisher;
 
     //아이템 구매
     @Transactional
@@ -126,8 +124,8 @@ public class ItemService {
     @Transactional
     public void useItem(ItemType item, User user) {
         Item userItem = itemRepository.findByUser_IdAndItemCode(user.getId(), item.getItemCode());
-        userRepository.save(user);
         user.useItem(userItem);
+        userRepository.save(user);
     }
 
     //단어 거꾸로 하기

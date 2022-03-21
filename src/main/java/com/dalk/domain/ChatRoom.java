@@ -21,10 +21,10 @@ public class ChatRoom extends Timestamped {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "topic_a", nullable = false)
+    @Column(name = "topic_a", nullable = false, length = 14)
     private String topicA;
 
-    @Column(name = "topic_b", nullable = false)
+    @Column(name = "topic_b", nullable = false, length = 14)
     private String topicB;
 
     @Column(name = "time", nullable = false)
