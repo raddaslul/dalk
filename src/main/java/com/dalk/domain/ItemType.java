@@ -11,7 +11,7 @@ public enum ItemType {
         myName("myName", 100L, "모두 내이름으로 바꾸기"),
         papago("papago", 100L, "나만빼고 랜덤으로 번역하기"),
         reverse("reverse", 100L, "나만빼고 반대로 말하기"),
-        exBuy("exBuy", 100L, "경험치 구매");
+        exBuy("exBuy", 100L, "경험치");
         private String itemCode;
         private Long price;
         private String itemName;

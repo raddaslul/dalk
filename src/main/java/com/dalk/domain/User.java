@@ -3,8 +3,7 @@ package com.dalk.domain;
 import com.dalk.domain.time.Timestamped;
 import com.dalk.exception.ex.ItemNotFoundException;
 import com.dalk.exception.ex.LackPointException;
-import com.dalk.repository.ItemRepository;
-import com.dalk.service.RankService;
+import com.dalk.service.StaticService;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -112,7 +111,7 @@ public class User extends Timestamped {
         this.totalPoint -= item.getPrice();
         if (item.getItemCode().equals("exBuy")) {
             this.ex += item.getPrice().intValue();
-            RankService.saveRank();
+            StaticService.saveRank();
         } else {
             userItem.itemAdd();
         }

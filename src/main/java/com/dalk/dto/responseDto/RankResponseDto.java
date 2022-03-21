@@ -11,5 +11,4 @@ public class RankResponseDto {
     private Long rank;
     private String nickname;
     private Integer ex;
-    private Integer rank;
 }
