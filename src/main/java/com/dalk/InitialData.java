@@ -43,7 +43,7 @@ public class InitialData implements ApplicationRunner {
                 encPassword,
                 "user1",
                 50000000L,
-                100,
+                300,
                 0,
                 User.Role.ADMIN);
         userRepository.save(user1);
@@ -62,7 +62,7 @@ public class InitialData implements ApplicationRunner {
                 encPassword,
                 "user2",
                 100000000L,
-                100,
+                200,
                 15,
                 User.Role.USER);
         userRepository.save(user2);

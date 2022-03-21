@@ -4,6 +4,7 @@ import com.dalk.domain.time.Timestamped;
 import com.dalk.exception.ex.ItemNotFoundException;
 import com.dalk.exception.ex.LackPointException;
 import com.dalk.repository.ItemRepository;
+import com.dalk.service.RankService;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -60,8 +61,8 @@ public class User extends Timestamped {
     @Column(name = "warnUser")
     private Integer warnUserCnt;
 
-    @Column(name = "rank")
-    private Integer rank;
+//    @Column(name = "rank")
+//    private Integer rank;
 
     @Column
     @Enumerated(value = EnumType.STRING) // 정보를 받을 때는 Enum 값으로 받지만
@@ -81,14 +82,11 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     private List<Point> points;
 
-    public void setTotalPoint(Long totalPoint) {this.totalPoint = totalPoint; }
+    @OneToOne(mappedBy = "user",cascade =CascadeType.REMOVE)
+    private Rank rank;
 
     public void setEx(Integer ex) {
         this.ex = ex;
-    }
-
-    public void setRank(Integer rank) {
-        this.rank = rank;
     }
 
     public void setItems(List<Item> items) {
@@ -114,6 +112,7 @@ public class User extends Timestamped {
         this.totalPoint -= item.getPrice();
         if (item.getItemCode().equals("exBuy")) {
             this.ex += item.getPrice().intValue();
+            RankService.saveRank();
         } else {
             userItem.itemAdd();
         }
