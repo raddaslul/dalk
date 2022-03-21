@@ -49,10 +49,11 @@ public class LottoService {
     public LottoResponseDto getLotto(User user) throws NoSuchAlgorithmException {
         Long lottoPrice = 200L;
         Lotto lotto = lottoRepository.findByUser(user);
-        if (user.getTotalPoint() < lottoPrice) {
-            throw new LackPointException("보유한 포인트가 부족합니다");
-        }
-        user.setTotalPoint(user.getTotalPoint() - lottoPrice);
+//        if (user.getTotalPoint() < lottoPrice) {
+//            throw new LackPointException("보유한 포인트가 부족합니다");
+//        }
+//        user.setTotalPoint(user.getTotalPoint() - lottoPrice);\
+        user.totalPointSubtract(lottoPrice);
         userRepository.save(user);
 
         Point point = new Point("로또 참여", -lottoPrice, user.getTotalPoint(), user);
@@ -88,7 +89,8 @@ public class LottoService {
     }
 
     public LottoResponseDto lotto(LottoType lottoType, User user, Lotto lotto) {
-        user.setTotalPoint(user.getTotalPoint() + lottoType.getPoint());
+//        user.setTotalPoint(user.getTotalPoint() + lottoType.getPoint());
+        user.totalPointAdd(lottoType.getPoint());
         userRepository.save(user);
 
         Point point = new Point(lottoType.getContent(), lottoType.getPoint(), user.getTotalPoint(), user);
