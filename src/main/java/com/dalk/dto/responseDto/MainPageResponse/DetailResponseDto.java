@@ -3,7 +3,6 @@ package com.dalk.dto.responseDto.MainPageResponse;
 import com.dalk.domain.Board;
 import com.dalk.domain.User;
 import com.dalk.domain.time.TimeConversion;
-import com.dalk.domain.vote.Vote;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,10 +24,10 @@ public class DetailResponseDto {
     private Integer commentCnt;
     private Integer warnCnt;
     private List<Long> warnUserList;
-    private WinnerResponse winnerResponse;
-    private LoserResponse loserResponse;
+    private VoteResultResponseDto winnerResponse;
+    private VoteResultResponseDto loserResponse;
 
-    public DetailResponseDto(Board board, List<String> categoryList, User user, Integer warnBoard, List<Long> warnUserList, Vote vote) {
+    public DetailResponseDto(Board board, List<String> categoryList, User user, Integer warnBoard, List<Long> warnUserList, VoteResultResponseDto winner, VoteResultResponseDto loser) {
         this.userInfo = new UserInfoResponseDto(user);
         this.boardId = board.getId();
         this.topicA = board.getTopicA();
@@ -39,7 +38,7 @@ public class DetailResponseDto {
         this.commentCnt = board.getComments().size();
         this.warnCnt = warnBoard;
         this.warnUserList = warnUserList;
-        this.winnerResponse = new WinnerResponse(vote);
-        this.loserResponse = new LoserResponse(vote);
+        this.winnerResponse = winner;
+        this.loserResponse = loser;
     }
 }
