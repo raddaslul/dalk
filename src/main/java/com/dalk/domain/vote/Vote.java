@@ -2,6 +2,9 @@ package com.dalk.domain.vote;
 
 import com.dalk.domain.Board;
 import com.dalk.domain.ChatRoom;
+import com.dalk.domain.User;
+import com.dalk.dto.requestDto.VoteRequestDto;
+import com.dalk.exception.ex.DuplicateVoteException;
 import lombok.*;
 
 import javax.persistence.*;
@@ -66,5 +69,21 @@ public class Vote {
         this.topPointB = topPointB;
         this.totalPointB = totalPointB;
         this.board = board;
+    }
+
+    public void winnerA(VoteRequestDto requestDto) {
+        this.totalPointA += requestDto.getPoint();
+        this.topicACnt += 1;
+        if (this.topPointA < requestDto.getPoint()) {
+            this.topPointA = requestDto.getPoint();
+        }
+    }
+
+    public void winnerB(VoteRequestDto requestDto) {
+        this.totalPointB += requestDto.getPoint();
+        this.topicBCnt += 1;
+        if (this.topPointB < requestDto.getPoint()) {
+            this.topPointB = requestDto.getPoint();
+        }
     }
 }
