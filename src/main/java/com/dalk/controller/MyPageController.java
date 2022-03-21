@@ -23,7 +23,6 @@ public class MyPageController {
 
     private final MyPageService myPageService;
 
-
     @GetMapping("/mypage")
     @ApiOperation(value = "유저 조회")
     public UserInfoResponseDto getMypage(@AuthenticationPrincipal UserDetailsImpl userDetails){
