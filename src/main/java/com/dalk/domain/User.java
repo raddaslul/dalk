@@ -135,5 +135,4 @@ public class User extends Timestamped {
         }
         this.totalPoint = this.totalPoint-point;
     }
-
 }
