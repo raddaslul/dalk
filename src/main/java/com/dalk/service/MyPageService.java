@@ -51,10 +51,10 @@ public class MyPageService {
         List<RankResponseDto> rankResponseDtoList =new ArrayList<>();
         Long rankNum;
         for(User user :rankList ){
-            if(user.getRank()==null){
+            if(user.getRanking()==null){
                 rankNum=null;
             }else {
-                rankNum = user.getRank().getId();
+                rankNum = user.getRanking().getId();
             }
             RankResponseDto rankResponseDto = new RankResponseDto(rankNum, user.getNickname(),user.getEx());
 

@@ -1,6 +1,5 @@
 package com.dalk.dto.responseDto;
 
-import com.dalk.domain.Rank;
 import com.dalk.domain.User;
 import lombok.*;
 
@@ -26,7 +25,7 @@ public class UserInfoResponseDto {
         this.point = user.getTotalPoint();
         this.ex = user.getEx();
         this.warnUserCnt =user.getWarnUserCnt();
-        this.rank = user.getRank().getId();
+        this.rank = user.getRanking().getId();
         this.role = user.getRole();
         this.item = new ItemResponseDto(user);
     }

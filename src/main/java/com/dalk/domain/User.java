@@ -82,7 +82,7 @@ public class User extends Timestamped {
     private List<Point> points;
 
     @OneToOne(mappedBy = "user",cascade =CascadeType.REMOVE)
-    private Rank rank;
+    private Ranking ranking;
 
     public void setEx(Integer ex) {
         this.ex = ex;
