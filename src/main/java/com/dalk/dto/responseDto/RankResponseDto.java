@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class RankResponseDto {
+    private Long rank;
     private String nickname;
     private Integer ex;
 }

@@ -7,6 +7,7 @@ import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageItemResponseDt
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageEnterResponseDto;
 import com.dalk.exception.ex.ChatRoomNotFoundException;
+import com.dalk.exception.ex.DuplicateChatRoomUserException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,7 @@ public class ChatMessageService {
 
     public ChatMessage save(ChatMessageRequestDto chatMessageRequestDto) {
         // 메시지 생성 시간 삽입
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
         sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
@@ -75,7 +76,7 @@ public class ChatMessageService {
             if (chatRoomOldUser == null) {
                 ChatRoomUser chatRoomUser = new ChatRoomUser(chatRoom, user);
                 chatRoomUserRepository.save(chatRoomUser);
-            }
+            }else throw new DuplicateChatRoomUserException("챗룸유저는 이미 있습니다");
             chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
             chatRoomRepository.save(chatRoom);
 

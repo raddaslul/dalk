@@ -14,10 +14,9 @@ public class UserInfoResponseDto {
     private Long point;
     private Integer ex;
     private Integer warnUserCnt;
-    private Integer rank;
+    private Long rank;
     private User.Role role;
     private ItemResponseDto item;
-
 
     public UserInfoResponseDto(User user) {
         this.userId = user.getId();
@@ -26,7 +25,7 @@ public class UserInfoResponseDto {
         this.point = user.getTotalPoint();
         this.ex = user.getEx();
         this.warnUserCnt =user.getWarnUserCnt();
-        this.rank = user.getRank();
+        this.rank = user.getRanking().getId();
         this.role = user.getRole();
         this.item = new ItemResponseDto(user);
     }

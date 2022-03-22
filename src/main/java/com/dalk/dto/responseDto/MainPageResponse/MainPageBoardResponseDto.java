@@ -17,6 +17,8 @@ import java.util.List;
 public class MainPageBoardResponseDto {
     private UserInfoResponseDto userInfo;
     private Long boardId;
+    private String filePath;
+    private Long voteCnt;
     private String topicA;
     private String topicB;
     private String winner;
@@ -31,13 +33,9 @@ public class MainPageBoardResponseDto {
         this.boardId = board.getId();
         this.topicA = board.getTopicA();
         this.topicB = board.getTopicB();
-        if (board.getVote().getTopicACnt() > board.getVote().getTopicBCnt()) {
-            this.winner = board.getTopicA();
-        } else if (board.getVote().getTopicACnt() < board.getVote().getTopicBCnt()) {
-            this.winner = board.getTopicB();
-        }else{
-            this.winner = "무승부";
-        }
+        this.winner = board.getWinner();
+        this.filePath = board.getFilePath();
+        this.voteCnt = board.getVote().getTopicBCnt()+board.getVote().getTopicACnt();
         this.category = categoryList;
         this.createdAt = TimeConversion.timeCreatedConversion(board.getCreatedAt());
         this.commentCnt = board.getComments().size();

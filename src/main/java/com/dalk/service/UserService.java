@@ -51,7 +51,7 @@ public class UserService {
         String password = passwordEncoder.encode(requestDto.getPassword());//비번 인코딩
 
 
-        User user = new User(username, password, nickname, 500L, 1,0, User.Role.USER);
+        User user = new User(username, password, nickname, 10000000L, 0,0, User.Role.USER);
         userRepository.save(user);
 
         List<Item> items = getItemTests(user);
@@ -59,7 +59,7 @@ public class UserService {
         user.setItems(items);
         userRepository.save(user);
 
-        Point point = new Point("회원가입 지급", 500L, 500L, user);
+        Point point = new Point("회원가입 지급", 10000000L, 10000000L, user);
         pointRepository.save(point);
 
         Lotto lotto = new Lotto(0, user);

@@ -30,6 +30,7 @@ public class SaveVote {
     private ChatRoom chatRoom;
 
     @ManyToOne
+    @JoinColumn(name = "vote")
     private Vote vote;
 
     @ManyToOne

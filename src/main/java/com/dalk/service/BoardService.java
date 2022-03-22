@@ -5,6 +5,7 @@ import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnBoard;
 import com.dalk.dto.responseDto.MainPageResponse.DetailResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
+import com.dalk.dto.responseDto.MainPageResponse.VoteResultResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
 import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
@@ -12,11 +13,11 @@ import com.dalk.exception.ex.WarnBoardDuplicateException;
 import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnBoardRepository;
 import com.dalk.security.UserDetailsImpl;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -46,7 +47,7 @@ public class BoardService {
         voteRepository.save(vote);
         Board board = new Board(chatRoom);
         List<Category> categoryList = categoryRepository.findAllByChatRoom(chatRoom);
-        if (chatRoom.getStatus()) {
+//        if (chatRoom.getStatus()) {
             for (Category categorys : categoryList) {
                 String stringCategory = categorys.getCategory();
                 Category category = new Category(board, stringCategory);
@@ -56,12 +57,19 @@ public class BoardService {
             vote.setBoard(board);
             voteRepository.save(vote);
             board.setVote(vote);
+            if (board.getVote().getTopicACnt() > board.getVote().getTopicBCnt()) {
+                board.setWinner(board.getTopicA());
+            } else if (board.getVote().getTopicACnt() < board.getVote().getTopicBCnt()) {
+                board.setWinner(board.getTopicB());
+            }else{
+                board.setWinner("무승부");
+            }
             boardRepository.save(board);
-        } else {
-            voteRepository.delete(vote);
-        }
-        String deleteFileUrl = "image/" + chatRoom.getConvertedFileName();
-        s3Repository.deleteFile(deleteFileUrl);
+//        } else {
+//            voteRepository.delete(vote);
+//        }
+//        String deleteFileUrl = "image/" + chatRoom.getConvertedFileName();
+//        s3Repository.deleteFile(deleteFileUrl);
         chatRoomRepository.delete(chatRoom);
         chatRoomUserRepository.deleteByChatRoom(chatRoom);
     }
@@ -96,6 +104,9 @@ public class BoardService {
         User user = userRepository.findById(boards.getCreateUserId()).orElseThrow(
                 () -> new LoginUserNotFoundException("유저 정보가 없습니다")
         );
+
+        Vote vote = boards.getVote();
+
         List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(boards.getId());
 
         List<Long> warnUserList = new ArrayList<>();
@@ -104,8 +115,28 @@ public class BoardService {
             warnUserList.add(warnBoard.getUser().getId());
         }
 
-        return new DetailResponseDto(boards, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), warnUserList, boards.getVote());
+        if (vote.getTopicACnt() > vote.getTopicBCnt()) { //A가 이겼을 때
+            return new DetailResponseDto(boards, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), warnUserList ,whoWin(vote, true, true), whoWin(vote, false, false));
+        } else if (vote.getTopicACnt() < vote.getTopicBCnt()) {
+            return new DetailResponseDto(boards, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), warnUserList ,whoWin(vote, true, false), whoWin(vote, false, true));
+        } else {
+            return new DetailResponseDto(boards, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), warnUserList, whoWin(vote, false, true), whoWin(vote, false, false));
+        }
     }
+
+    public VoteResultResponseDto whoWin(Vote vote, Boolean winner, Boolean AorB) {
+        String rate;
+        if (AorB) {
+            if (winner) { rate = String.format("%.2f", ((vote.getTotalPointA() + vote.getTotalPointB()) / vote.getTotalPointA()));}
+            else {rate = "0"; }
+            return new VoteResultResponseDto(vote.getBoard().getTopicA(),rate,String.format("%.0f", vote.getTotalPointA()),String.valueOf(vote.getTopicACnt()),String.valueOf(vote.getTopPointA()));
+        } else {
+            if (winner) { rate = String.format("%.2f", ((vote.getTotalPointA() + vote.getTotalPointB()) / vote.getTotalPointB()));}
+            else {rate = "0"; }
+            return new VoteResultResponseDto(vote.getBoard().getTopicB(),rate,String.format("%.0f",vote.getTotalPointB()),String.valueOf(vote.getTopicBCnt()),String.valueOf(vote.getTopPointB()));
+        }
+    }
+
 
     //게시글 검색
     public List<MainPageBoardResponseDto> getSearchWord(String keyword,int page, int size) {

@@ -25,6 +25,7 @@ public class ChatRoomEnterResponseDto {
     private String filePath;
     private Long restTime;
     private String createdAt;
+    private String endAt;
     private Boolean time;
     private Integer warnCnt;
     private Integer userCnt;
@@ -40,6 +41,7 @@ public class ChatRoomEnterResponseDto {
         this.filePath = chatRoom.getFilePath();
         this.restTime = TimeConversion.restTime(chatRoom.getCreatedAt(),chatRoom.getTime());
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
+        this.endAt = TimeConversion.timeEndConversion(chatRoom);
         this.time = chatRoom.getTime();
         this.userCnt = chatRoom.getUserCnt();
         this.warnCnt = warnChatRoom;
@@ -56,6 +58,7 @@ public class ChatRoomEnterResponseDto {
         this.filePath = chatRoom.getFilePath();
         this.restTime = TimeConversion.restTime(chatRoom.getCreatedAt(),chatRoom.getTime());
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
+        this.endAt = TimeConversion.timeEndConversion(chatRoom);
         this.time = chatRoom.getTime();
         this.userCnt = chatRoom.getUserCnt();
         this.warnCnt = warnChatRoom;

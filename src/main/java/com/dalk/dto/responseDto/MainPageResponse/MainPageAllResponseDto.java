@@ -17,13 +17,14 @@ import java.util.List;
 public class MainPageAllResponseDto {
     private UserInfoResponseDto userInfo;
     private Long roomId;
+    private String filePath;
     private String topicA;
     private String topicB;
     private String content;
     private List<String> category;
-    private String filePath;
     private Long restTime;
     private String createdAt;
+    private String endAt;
     private Boolean time;
     private Integer warnCnt;
     private Integer userCnt;
@@ -38,6 +39,7 @@ public class MainPageAllResponseDto {
         this.filePath = chatRoom.getFilePath();
         this.restTime = TimeConversion.restTime(chatRoom.getCreatedAt(),chatRoom.getTime());
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
+        this.endAt = TimeConversion.timeEndConversion(chatRoom);
         this.time = chatRoom.getTime();
         this.userCnt = chatRoom.getUserCnt();
         this.warnCnt = warnChatRoom;

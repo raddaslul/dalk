@@ -1,6 +1,9 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
+import com.dalk.exception.ex.ItemNotFoundException;
+import com.dalk.exception.ex.LackPointException;
+import com.dalk.service.StaticService;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -57,8 +60,8 @@ public class User extends Timestamped {
     @Column(name = "warnUser")
     private Integer warnUserCnt;
 
-    @Column(name = "rank")
-    private Integer rank;
+//    @Column(name = "rank")
+//    private Integer rank;
 
     @Column
     @Enumerated(value = EnumType.STRING) // 정보를 받을 때는 Enum 값으로 받지만
@@ -68,7 +71,7 @@ public class User extends Timestamped {
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private ChatRoomUser chatRoomUser;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Item> items;
 
     @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
@@ -78,16 +81,11 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
     private List<Point> points;
 
-    public void setTotalPoint(Long totalPoint) {
-        this.totalPoint = totalPoint;
-    }
+    @OneToOne(mappedBy = "user",cascade =CascadeType.REMOVE)
+    private Ranking ranking;
 
     public void setEx(Integer ex) {
         this.ex = ex;
-    }
-
-    public void setRank(Integer rank) {
-        this.rank = rank;
     }
 
     public void setItems(List<Item> items) {
@@ -105,4 +103,37 @@ public class User extends Timestamped {
         this.warnUserCnt=warnUserCnt;
         this.role = role;
     }
+
+    public void buyItem(ItemType item, Item userItem) {
+        if (this.totalPoint < item.getPrice()) {
+            throw new LackPointException("보유한 포인트가 부족합니다");
+        }
+        this.totalPoint -= item.getPrice();
+        if (item.getItemCode().equals("exBuy")) {
+            this.ex += item.getPrice().intValue();
+            StaticService.saveRank();
+        } else {
+            userItem.itemAdd();
+        }
+    }
+
+    public void useItem(Item userItem) {
+        if (userItem.getCnt() > 0) {
+            userItem.itemSubtract();
+        }else {
+            throw new ItemNotFoundException("아이템이 없습니다");
+        }
+    }
+
+    public void totalPointAdd(Long totalPoint) {
+        this.totalPoint += totalPoint;
+    }
+
+    public void totalPointSubtract(Long point) {
+        if (this.totalPoint < point) {
+            throw new LackPointException("보유한 포인트가 부족합니다");
+        }
+        this.totalPoint = this.totalPoint-point;
+    }
+
 }
