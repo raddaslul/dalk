@@ -82,7 +82,7 @@ public class LottoService {
         if (1630 <= num && num < 3630) { //20프로
             return lotto(LottoType.FIVE, user, lotto);
         }
-        lotto.setCount(lotto.getCount() + 1);
+        lotto.addCount();
         lottoRepository.save(lotto);
         return new LottoResponseDto(6, lotto.getCount());
 
@@ -96,7 +96,7 @@ public class LottoService {
         Point point = new Point(lottoType.getContent(), lottoType.getPoint(), user.getTotalPoint(), user);
         pointRepository.save(point);
 
-        lotto.setCount(0);
+        lotto.refreshCount();
 
         lottoRepository.save(lotto);
         return new LottoResponseDto(lottoType.getRank(), lotto.getCount());
