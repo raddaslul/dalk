@@ -10,7 +10,6 @@ on:
 # 환경변수
 env:
   S3_BUCKET_NAME: dalk-deploy
-  PROJECT_NAME: dalk
 
 jobs:
   build:
@@ -50,4 +49,4 @@ jobs:
       
       # Code Deploy 배포 부분
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name Dalk-Deploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name Github-Actions-Group --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip  
+        run: aws deploy create-deployment --application-name Dalk-Deploy --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name Github-Actions-Group --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip  
