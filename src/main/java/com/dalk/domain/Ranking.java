@@ -4,16 +4,14 @@ package com.dalk.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
-public class Rank {
+public class Ranking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +25,7 @@ public class Rank {
     @JoinColumn(name = "userId")
     private User user;
 
-    public Rank(long rankId,User user) {
+    public Ranking(long rankId, User user) {
         this.id = rankId;
         this.nickname = user.getNickname();
         this.user = user;

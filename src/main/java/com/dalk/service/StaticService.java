@@ -1,7 +1,7 @@
 package com.dalk.service;
 import com.dalk.domain.Item;
 import com.dalk.domain.ItemType;
-import com.dalk.domain.Rank;
+import com.dalk.domain.Ranking;
 import com.dalk.domain.User;
 import com.dalk.repository.ItemRepository;
 import com.dalk.repository.RankRepository;
@@ -34,11 +34,11 @@ public class StaticService {
     public static void saveRank() {
         List<User> top3rankList = userRepository.findTop3ByOrderByExDescCreatedAtDesc();
 
-        Rank rank1 = new Rank(1L, top3rankList.get(0));
-        rankRepository.save(rank1);
-        Rank rank2 = new Rank(2L, top3rankList.get(1));
-        rankRepository.save(rank2);
-        Rank rank3 = new Rank(3L, top3rankList.get(2));
-        rankRepository.save(rank3);
+        Ranking ranking1 = new Ranking(1L, top3rankList.get(0));
+        rankRepository.save(ranking1);
+        Ranking ranking2 = new Ranking(2L, top3rankList.get(1));
+        rankRepository.save(ranking2);
+        Ranking ranking3 = new Ranking(3L, top3rankList.get(2));
+        rankRepository.save(ranking3);
     }
 }

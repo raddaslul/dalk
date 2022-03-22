@@ -1,14 +1,11 @@
 package com.dalk.dto.responseDto;
 
 import com.dalk.domain.Comment;
-import com.dalk.domain.Rank;
 import com.dalk.domain.User;
-import com.dalk.domain.wl.WarnComment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
