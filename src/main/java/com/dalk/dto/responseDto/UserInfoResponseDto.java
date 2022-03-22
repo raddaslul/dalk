@@ -25,7 +25,11 @@ public class UserInfoResponseDto {
         this.point = user.getTotalPoint();
         this.ex = user.getEx();
         this.warnUserCnt =user.getWarnUserCnt();
-        this.rank = user.getRanking().getId();
+        if (user.getRanking() != null) {
+            this.rank = user.getRanking().getId();
+        } else {
+            this.rank = null;
+        }
         this.role = user.getRole();
         this.item = new ItemResponseDto(user);
     }
