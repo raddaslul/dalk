@@ -126,7 +126,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         skipPathList.add("GET,/h2-console/**");
         skipPathList.add("POST,/h2-console/**");
-        skipPathList.add("Get,/health");
+        skipPathList.add("GET,/health");
 
         // 회원 관리 API 허용
         skipPathList.add("POST,/users/signup");
