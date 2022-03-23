@@ -81,4 +81,9 @@ public class UserController {
     public ResponseEntity<ErrorResponse> error() {
         return new ResponseEntity<>(new ErrorResponse("400", "로그인 정보가 없습니다."), HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("/health")
+    public String checkHealth() {
+        return "healthy";
+    }
 }
