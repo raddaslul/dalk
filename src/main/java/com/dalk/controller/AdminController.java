@@ -73,4 +73,9 @@ public class AdminController {
         result.put("result", "true");
         return result;
     }
+
+    @GetMapping("/health")
+    public String checkHealth() {
+        return "healthy";
+    }
 }
