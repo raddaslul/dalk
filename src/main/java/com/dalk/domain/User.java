@@ -14,7 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(indexes = @Index(name = "user", columnList = "id"))
+@Table(name = "user")
+//@Table(indexes = @Index(name = "user", columnList = "id"))
 public class User extends Timestamped {
 
     public enum Role {
