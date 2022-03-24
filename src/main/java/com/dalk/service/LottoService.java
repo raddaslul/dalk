@@ -67,22 +67,22 @@ public class LottoService {
             num = random.nextInt(10000);
         }
 
-        if (num < 30) {//0.3프로
+        if (num < 30) {//0.3프로 10000000
             return lotto(LottoType.ONE, user, lotto);
         }
-        if (30 <= num && num < 130) { //1프로
+        if (30 <= num && num < 130) { //1프로 1000000
             return lotto(LottoType.TWO, user, lotto);
         }
-        if (130 <= num && num < 630) { // 5프로
+        if (130 <= num && num < 630) { // 5프로 10000
             return lotto(LottoType.THREE, user, lotto);
         }
-        if (630 <= num && num < 1630) { //10프로
+        if (630 <= num && num < 1630) { //10프로 1000
             return lotto(LottoType.FOUR, user, lotto);
         }
-        if (1630 <= num && num < 3630) { //20프로
+        if (1630 <= num && num < 3630) { //20프로 100
             return lotto(LottoType.FIVE, user, lotto);
         }
-        lotto.setCount(lotto.getCount() + 1);
+        lotto.addCount();
         lottoRepository.save(lotto);
         return new LottoResponseDto(6, lotto.getCount());
 
@@ -96,7 +96,7 @@ public class LottoService {
         Point point = new Point(lottoType.getContent(), lottoType.getPoint(), user.getTotalPoint(), user);
         pointRepository.save(point);
 
-        lotto.setCount(0);
+        lotto.refreshCount();
 
         lottoRepository.save(lotto);
         return new LottoResponseDto(lottoType.getRank(), lotto.getCount());

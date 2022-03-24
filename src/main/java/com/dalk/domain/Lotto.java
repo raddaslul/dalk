@@ -23,8 +23,13 @@ public class Lotto {
     @OneToOne
     private User user;
 
-    public void setCount(Integer count) {
-        this.count = count;
+
+    public void refreshCount() {
+        this.count =0;
+    }
+
+    public void addCount() {
+        this.count += 1;
     }
 
     public void setUser(User user) {
