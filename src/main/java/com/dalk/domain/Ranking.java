@@ -25,8 +25,15 @@ public class Ranking {
     @JoinColumn(name = "userId")
     private User user;
 
+
+
     public Ranking(long rankId, User user) {
         this.id = rankId;
+        this.nickname = user.getNickname();
+        this.user = user;
+    }
+
+    public void setUserRank(User user) {
         this.nickname = user.getNickname();
         this.user = user;
     }
