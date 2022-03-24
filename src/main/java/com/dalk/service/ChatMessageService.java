@@ -72,13 +72,14 @@ public class ChatMessageService {
 
         if (ChatMessage.MessageType.ENTER.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에 입장했습니다.");
-            ChatRoomUser chatRoomOldUser = chatRoomUserRepository.findAllByChatRoom_IdAndUser_Id(chatRoom.getId(), user.getId());
+            ChatRoomUser chatRoomOldUser = chatRoomUserRepository.findByChatRoom_IdAndUser_Id(chatRoom.getId(), user.getId());
             if (chatRoomOldUser == null) {
                 ChatRoomUser chatRoomUser = new ChatRoomUser(chatRoom, user);
                 chatRoomUserRepository.save(chatRoomUser);
             }else throw new DuplicateChatRoomUserException("챗룸유저는 이미 있습니다");
             chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
             chatRoomRepository.save(chatRoom);
+            log.info("socket 채팅방 유저 수 = {}", chatRoom.getUserCnt());
 
             if(chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId()) != null) {
                 ChatMessageItem chatMessageItem = chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId());

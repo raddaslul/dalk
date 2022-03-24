@@ -130,6 +130,7 @@ public class ChatRoomService {
         );
         chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
         chatRoomRepository.save(chatRoom);
+        log.info("api 채팅방 유저 수 = {}", chatRoom.getUserCnt());
         SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId);
         List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
         List<Long> warnUserList =new ArrayList<>();
