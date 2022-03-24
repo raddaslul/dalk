@@ -102,6 +102,7 @@ public class User extends Timestamped {
         this.ex = ex;
         this.warnUserCnt=warnUserCnt;
         this.role = role;
+        this.ranking = null;
     }
 
     public void buyItem(ItemType item, Item userItem) {
