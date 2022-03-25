@@ -32,6 +32,15 @@ public class ChatMessageController {
 
     // 채팅 메시지를 @MessageMapping 형태로 받는다
     // 웹소켓으로 publish 된 메시지를 받는 곳이다
+    @MessageMapping("/chat/enter")
+    @ApiOperation(value = "채팅방 입장")
+    public void enterMessage(@RequestBody ChatMessageRequestDto chatMessageRequestDto, @Header("Authorization") String rawToken) {
+        String token = rawToken.substring(7);
+        Long userId = Long.parseLong(jwtDecoder.decodeUserId(token));
+        chatMessageRequestDto.setUserId(userId);
+        chatMessageService.accessChatMessage(chatMessageRequestDto);
+    }
+
     @MessageMapping("/chat/message")
     @ApiOperation(value = "채팅 메세지 수신")
     public void message(@RequestBody ChatMessageRequestDto chatMessageRequestDto, @Header("Authorization") String rawToken) throws IOException, NoSuchAlgorithmException {
