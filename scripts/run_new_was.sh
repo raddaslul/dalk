@@ -16,15 +16,16 @@ else
   echo "> No WAS is connected to nginx"
 fi
 
-TARGET_PID=$(lsof -Fp -i TCP:${TARGET_PORT} | grep -Po 'p[0-9]+' | grep -Po '[0-9]+')
+TARGET_PID=$(sudo lsof -Fp -i TCP:${TARGET_PORT} | grep -Po 'p[0-9]+' | grep -Po '[0-9]+')
 
 # 만약 타겟포트에도 WAS 떠 있다면 kill하고 새롭게 띄우기
-if [ ! -z ${TARGET_PID} ]; then
+if [ ! -z "${TARGET_PID}" ]; then
   echo "> Kill WAS running at ${TARGET_PORT}."
   sudo kill ${TARGET_PID}
 fi
 
 #마지막&는 프로세스가 백그라운드로 실행되도록 해준다.
-nohup java -jar -Dserver.port=${TARGET_PORT} /home/ubuntu/dalk/build/libs/dalk-0.0.1-SNAPSHOT.jar > /home/ubuntu/dalk/build/libs/nohup.out 2>&1 &
+# shellcheck disable=SC2046
+nohup java -jar -Dserver.port=${TARGET_PORT} /home/ubuntu/dalk/build/libs/dalk-0.0.1-SNAPSHOT.jar > /home/ubuntu/dalk/build/libs/nohup$(date +%Y)-$(date +%m)-$(date +%d)-$(date +%H):$(date +%M).out 2>&1 &
 echo "> Now new WAS runs at ${TARGET_PORT}."
 exit 0

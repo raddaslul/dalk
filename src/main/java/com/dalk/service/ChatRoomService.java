@@ -120,13 +120,10 @@ public class ChatRoomService {
     }
 
     //채팅방 하나 입장
-    public ChatRoomEnterResponseDto getMainPageOne(Long roomId) {
+    public ChatRoomEnterResponseDto getMainPageOne(Long roomId, User user) {
         List<Category> categoryList = categoryRepository.findCategoryByChatRoom_Id(roomId);
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(
                 ()-> new ChatRoomNotFoundException("채팅방이 없습니다.")
-        );
-        User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
-                () -> new LoginUserNotFoundException("유저 정보가 없습니다")
         );
         chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
         chatRoomRepository.save(chatRoom);
