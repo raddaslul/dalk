@@ -52,23 +52,11 @@ public class VoteService {
             saveVoteRepository.save(saveVote); //저장
             vote.winnerA(requestDto);
             voteRepository.save(vote);
-//            vote.setTotalPointA(vote.getTotalPointA() + requestDto.getPoint()); //totalpoint 추가
-//            vote.setTopicACnt(vote.getTopicACnt() + 1);
-//            if (vote.getTopPointA() < requestDto.getPoint()) { //toppoint찾기
-//                vote.setTopPointA(requestDto.getPoint());
-//            }
-//            voteRepository.save(vote);
         } else {//topicB를 골랐을 때
             SaveVote saveVote = new SaveVote(false, chatRoom, requestDto.getPoint(), vote, user);
             saveVoteRepository.save(saveVote); //저장
             vote.winnerB(requestDto);
             voteRepository.save(vote);
-//            vote.setTotalPointB(vote.getTotalPointB() + requestDto.getPoint()); //totalpoint 추가
-//            vote.setTopicBCnt(vote.getTopicBCnt() + 1);
-//            if (vote.getTopPointB() < requestDto.getPoint()) { //toppoint찾기
-//                vote.setTopPointB(requestDto.getPoint());
-//            }
-//            voteRepository.save(vote);
         }
     }
 
@@ -114,8 +102,6 @@ public class VoteService {
                 SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId); //유저와 채팅방 id로 savevote를 뽑아옴 (유저는 한개씩 가짐)
                 user.totalPointAdd(saveVote.getPoint());
                 userRepository.save(user);
-//                user.setTotalPoint((user.getTotalPoint() + (saveVote.getPoint()))); //savevote에서 내가 얼마를 걸었는지가 있는데 거기서 뽑아와서 winRate계산을 함
-//                userRepository.save(user);
                 Point point = new Point("투표 무승부", (saveVote.getPoint()), user.getTotalPoint(), user); //포인트 내역 생성
                 pointRepository.save(point);
             }
@@ -130,8 +116,6 @@ public class VoteService {
             SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId); //유저와 채팅방 id로 savevote를 뽑아옴 (유저는 한개씩 가짐)
             user.totalPointAdd((long) (saveVote.getPoint()*winRate));
             userRepository.save(user);
-//                user.setTotalPoint((long) (user.getTotalPoint() + (saveVote.getPoint() * winRate))); //savevote에서 내가 얼마를 걸었는지가 있는데 거기서 뽑아와서 winRate계산을 함
-//                userRepository.save(user);
             Point point = new Point("투표 승리", (long) (saveVote.getPoint() * winRate), user.getTotalPoint(), user); //포인트 내역 생성
             pointRepository.save(point);
         }
