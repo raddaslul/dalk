@@ -15,6 +15,7 @@ public class UserInfoResponseDto {
     private Integer ex;
     private Integer warnUserCnt;
     private Long rank;
+    private Integer lottoCount;
     private User.Role role;
     private ItemResponseDto item;
 
@@ -30,6 +31,7 @@ public class UserInfoResponseDto {
         } else {
             this.rank = null;
         }
+        this.lottoCount = user.getLottoCnt();
         this.role = user.getRole();
         this.item = new ItemResponseDto(user);
     }
