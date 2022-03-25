@@ -48,7 +48,7 @@ public class ChatMessageService {
 
     public ChatMessage save(ChatMessageRequestDto chatMessageRequestDto) {
         // 메시지 생성 시간 삽입
-        SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
         sdf.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
@@ -72,41 +72,44 @@ public class ChatMessageService {
 
         if (ChatMessage.MessageType.ENTER.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에 입장했습니다.");
-            ChatRoomUser chatRoomOldUser = chatRoomUserRepository.findAllByChatRoom_IdAndUser_Id(chatRoom.getId(), user.getId());
+            ChatRoomUser chatRoomOldUser = chatRoomUserRepository.findByChatRoom_IdAndUser_Id(chatRoom.getId(), user.getId());
             if (chatRoomOldUser == null) {
                 ChatRoomUser chatRoomUser = new ChatRoomUser(chatRoom, user);
                 chatRoomUserRepository.save(chatRoomUser);
             }else throw new DuplicateChatRoomUserException("챗룸유저는 이미 있습니다");
             chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
             chatRoomRepository.save(chatRoom);
+            log.info("socket 채팅방 유저 수 = {}", chatRoom.getUserCnt());
 
-            if(chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId()) != null) {
+            if (chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId()) != null) {
                 ChatMessageItem chatMessageItem = chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId());
                 User itemUser = userRepository.findById(chatMessageItem.getUserId())
                         .orElseThrow(() -> new LoginUserNotFoundException("로그인 후 이용해 주시기 바랍니다."));
                 String item = chatMessageItem.getItem();
-                if (item.equals("onlyMe")) {
-                    chatMessageRequestDto.setOnlyMe(itemUser.getNickname());
-                }
-                else if (item.equals("myName")) {
-                    chatMessageRequestDto.setMyName(itemUser.getNickname());
-                }
-                else if (item.equals("papago")) {
-                    chatMessageRequestDto.setPapago(itemUser.getNickname());
-                }
-                else if (item.equals("reverse")) {
-                    chatMessageRequestDto.setReverse(itemUser.getNickname());
+                switch (item) {
+                    case "onlyMe":
+                        chatMessageRequestDto.setOnlyMe(itemUser.getNickname());
+                        break;
+                    case "myName":
+                        chatMessageRequestDto.setMyName(itemUser.getNickname());
+                        break;
+                    case "papago":
+                        chatMessageRequestDto.setPapago(itemUser.getNickname());
+                        break;
+                    case "reverse":
+                        chatMessageRequestDto.setReverse(itemUser.getNickname());
+                        break;
                 }
             }
             ChatMessageEnterResponseDto chatMessageEnterResponseDto = new ChatMessageEnterResponseDto(chatMessageRequestDto, user);
             redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageEnterResponseDto);
         } else if (ChatMessage.MessageType.EXIT.equals(chatMessageRequestDto.getType())) {
-            chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에서 나갔습니다.");
-            chatRoomUserRepository.deleteByUser_Id(user.getId());
-            chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
-            chatRoomRepository.save(chatRoom);
-            ChatMessageExitResponseDto chatMessageExitResponseDto = new ChatMessageExitResponseDto(chatMessageRequestDto, user);
-            redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageExitResponseDto);
+                chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에서 나갔습니다.");
+                chatRoomUserRepository.deleteByUser_Id(user.getId());
+                chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
+                chatRoomRepository.save(chatRoom);
+                ChatMessageExitResponseDto chatMessageExitResponseDto = new ChatMessageExitResponseDto(chatMessageRequestDto, user);
+                redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageExitResponseDto);
         }
     }
 
@@ -117,7 +120,9 @@ public class ChatMessageService {
         log.info("sendChatMessage user= {}", user);
         Boolean bigFont = chatMessageRequestDto.getBigFont();
         ChatMessageResponseDto chatMessageResponseDto = new ChatMessageResponseDto(chatMessage, bigFont);
-        redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageResponseDto);
+        String topic = channelTopic.getTopic();
+        log.info("topic = {}", topic);
+        redisTemplate.convertAndSend(topic, chatMessageResponseDto);
     }
 
     // 채팅방에서 아이템 사용
@@ -126,18 +131,23 @@ public class ChatMessageService {
                 .orElseThrow(IllegalAccessError::new);
         String nickname = user.getNickname();
         String item = chatMessageRequestDto.getItem();
-        if (item.equals("onlyMe")) {
-            chatMessageRequestDto.setOnlyMe(nickname);
-            chatMessageRequestDto.setMessage(nickname + "님이" + item + "를 사용하셨습니다.");
-        } else if (item.equals("myName")) {
-            chatMessageRequestDto.setMyName(nickname);
-            chatMessageRequestDto.setMessage(nickname + "님이" +  item + "을 사용하셨습니다.");
-        } else if (item.equals("papago")) {
-            chatMessageRequestDto.setPapago(nickname);
-            chatMessageRequestDto.setMessage(nickname + "님이" +  item + "을 사용하셨습니다.");
-        } else if (item.equals("reverse")) {
-            chatMessageRequestDto.setReverse(nickname);
-            chatMessageRequestDto.setMessage(nickname + "님이" + item + "을 사용하셨습니다.");
+        switch (item) {
+            case "onlyMe":
+                chatMessageRequestDto.setOnlyMe(nickname);
+                chatMessageRequestDto.setMessage(nickname + "님이" + item + "를 사용하셨습니다.");
+                break;
+            case "myName":
+                chatMessageRequestDto.setMyName(nickname);
+                chatMessageRequestDto.setMessage(nickname + "님이" + item + "을 사용하셨습니다.");
+                break;
+            case "papago":
+                chatMessageRequestDto.setPapago(nickname);
+                chatMessageRequestDto.setMessage(nickname + "님이" + item + "을 사용하셨습니다.");
+                break;
+            case "reverse":
+                chatMessageRequestDto.setReverse(nickname);
+                chatMessageRequestDto.setMessage(nickname + "님이" + item + "을 사용하셨습니다.");
+                break;
         }
         ChatMessageItem chatMessageItem = new ChatMessageItem(chatMessageRequestDto);
         chatMessageItemRepository.save(chatMessageItem);

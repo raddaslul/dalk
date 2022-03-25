@@ -13,7 +13,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class DalkApplication {
 
     public static final String APPLICATION_LOCATIONS = "spring.config.location="
-            + "/home/ubuntu/dalk/build/libs/application.yml";
+//            + "/home/ubuntu/dalk/build/libs/application.yml";
+            + "classpath:application.yml";
 
     public static void main(String[] args) {
 

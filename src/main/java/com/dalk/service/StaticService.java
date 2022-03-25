@@ -34,11 +34,21 @@ public class StaticService {
     public static void saveRank() {
         List<User> top3rankList = userRepository.findTop3ByOrderByExDescCreatedAtDesc();
 
-        Ranking ranking1 = new Ranking(1L, top3rankList.get(0));
+        Ranking ranking1 = rankRepository.findById(1L).orElseThrow(
+                () -> new IllegalArgumentException("오류났어용")
+        );
+        Ranking ranking2 = rankRepository.findById(2L).orElseThrow(
+                () -> new IllegalArgumentException("오류났어용")
+        );
+        Ranking ranking3 = rankRepository.findById(3L).orElseThrow(
+                () -> new IllegalArgumentException("오류났어용")
+        );
+
+        ranking1.setUserRank(top3rankList.get(0));
+        ranking2.setUserRank(top3rankList.get(1));
+        ranking3.setUserRank(top3rankList.get(2));
         rankRepository.save(ranking1);
-        Ranking ranking2 = new Ranking(2L, top3rankList.get(1));
         rankRepository.save(ranking2);
-        Ranking ranking3 = new Ranking(3L, top3rankList.get(2));
         rankRepository.save(ranking3);
     }
 }

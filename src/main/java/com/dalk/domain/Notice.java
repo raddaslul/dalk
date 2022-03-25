@@ -13,7 +13,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(indexes= @Index(name = "notice", columnList = "id"))
+@Table(name = "notice")
+//@Table(indexes= @Index(name = "notice", columnList = "id"))
 public class Notice extends Timestamped {
 
     @Id
