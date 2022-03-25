@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 public class LottoResponseDto {
     private Integer rank;
-    private Integer count;
+    private Integer cnt;
 
-    public LottoResponseDto(Integer rank, Integer count) {
+    public LottoResponseDto(Integer rank, Integer cnt) {
         this.rank = rank;
-        this.count = count;
+        this.cnt = cnt;
     }
 }
