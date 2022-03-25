@@ -1,11 +1,9 @@
 package com.dalk.service;
 
-import com.dalk.domain.Lotto;
 import com.dalk.domain.Point;
 import com.dalk.domain.User;
 import com.dalk.dto.responseDto.LottoResponseDto;
-import com.dalk.exception.ex.LackPointException;
-import com.dalk.repository.LottoRepository;
+import com.dalk.exception.ex.LottoCountException;
 import com.dalk.repository.PointRepository;
 import com.dalk.repository.UserRepository;
 import lombok.Getter;
@@ -44,61 +42,50 @@ public class LottoService {
 
     private final PointRepository pointRepository;
     private final UserRepository userRepository;
-    private final LottoRepository lottoRepository;
 
     public LottoResponseDto getLotto(User user) throws NoSuchAlgorithmException {
-        Long lottoPrice = 500L;
-        Lotto lotto = lottoRepository.findByUser(user);
-//        if (user.getTotalPoint() < lottoPrice) {
-//            throw new LackPointException("보유한 포인트가 부족합니다");
-//        }
-//        user.setTotalPoint(user.getTotalPoint() - lottoPrice);\
-        user.totalPointSubtract(lottoPrice);
-        userRepository.save(user);
-
-        Point point = new Point("로또 참여", -lottoPrice, user.getTotalPoint(), user);
-        pointRepository.save(point);
+        if (user.getLottoCnt() <= 0) {
+            throw new LottoCountException("뽑기 횟수를 다 소진하셨습니다");
+        }
 
         Random random = SecureRandom.getInstanceStrong();
         int num;
-        if (lotto.getCount() >= 5) {
+        if (user.getLottoCnt() <= 1) {
             num = random.nextInt(3630);
         } else {
             num = random.nextInt(10000);
         }
 
         if (num < 50) {// 0.5프로
-            return lotto(LottoType.ONE, user, lotto);
+            return lotto(LottoType.ONE, user);
         }
         if (50 <= num && num < 150) { // 1프로
-            return lotto(LottoType.TWO, user, lotto);
+            return lotto(LottoType.TWO, user);
         }
         if (150 <= num && num < 450) { // 3프로
-            return lotto(LottoType.THREE, user, lotto);
+            return lotto(LottoType.THREE, user);
         }
         if (450 <= num && num < 1450) { // 10프로 1000
-            return lotto(LottoType.FOUR, user, lotto);
+            return lotto(LottoType.FOUR, user);
         }
         if (1450 <= num && num < 3450) { // 20프로 100
-            return lotto(LottoType.FIVE, user, lotto);
+            return lotto(LottoType.FIVE, user);
         }
-        lotto.addCount();
-        lottoRepository.save(lotto);
-        return new LottoResponseDto(6, lotto.getCount());
+        user.subtractCount();
+        userRepository.save(user);
+
+        return new LottoResponseDto(6, user.getLottoCnt());
 
     }
 
-    public LottoResponseDto lotto(LottoType lottoType, User user, Lotto lotto) {
-//        user.setTotalPoint(user.getTotalPoint() + lottoType.getPoint());
+    public LottoResponseDto lotto(LottoType lottoType, User user) {
         user.totalPointAdd(lottoType.getPoint());
+        user.subtractCount();
         userRepository.save(user);
 
         Point point = new Point(lottoType.getContent(), lottoType.getPoint(), user.getTotalPoint(), user);
         pointRepository.save(point);
 
-        lotto.refreshCount();
-
-        lottoRepository.save(lotto);
-        return new LottoResponseDto(lottoType.getRank(), lotto.getCount());
+        return new LottoResponseDto(lottoType.getRank(), user.getLottoCnt());
     }
 }

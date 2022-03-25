@@ -155,6 +155,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse("N001", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(LottoCountException.class)
+    public ResponseEntity<ErrorResponse> handleLottoCountException(LottoCountException e) {
+        return new ResponseEntity<>(new ErrorResponse("L001", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {

@@ -58,11 +58,11 @@ public class User extends Timestamped {
     @Column(name = "ex")
     private Integer ex;
 
+    @Column(name = "lottoCount")
+    private Integer lottoCnt;
+
     @Column(name = "warnUser")
     private Integer warnUserCnt;
-
-//    @Column(name = "rank")
-//    private Integer rank;
 
     @Column
     @Enumerated(value = EnumType.STRING) // 정보를 받을 때는 Enum 값으로 받지만
@@ -74,9 +74,6 @@ public class User extends Timestamped {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Item> items;
-
-    @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
-    private Lotto lotto;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
@@ -104,6 +101,7 @@ public class User extends Timestamped {
         this.warnUserCnt=warnUserCnt;
         this.role = role;
         this.ranking = null;
+        this.lottoCnt = 5;
     }
 
     public void buyItem(ItemType item, Item userItem) {
@@ -117,6 +115,14 @@ public class User extends Timestamped {
         } else {
             userItem.itemAdd();
         }
+    }
+
+    public void refreshCount() {
+        this.lottoCnt = 5;
+    }
+
+    public void subtractCount() {
+        this.lottoCnt -= 1;
     }
 
     public void useItem(Item userItem) {

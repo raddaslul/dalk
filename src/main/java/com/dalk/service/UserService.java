@@ -27,7 +27,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
     private final PointRepository pointRepository;
-    private final LottoRepository lottoRepository;
     private final WarnUserRepository warnUserRepository;
 
 
@@ -61,9 +60,6 @@ public class UserService {
 
         Point point = new Point("회원가입 지급", 5000L, 5000L, user);
         pointRepository.save(point);
-
-        Lotto lotto = new Lotto(0, user);
-        lottoRepository.save(lotto);
     }
 
     public List<Item> getItemTests(User user) {
