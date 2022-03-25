@@ -24,11 +24,11 @@ public class LottoService {
     @NoArgsConstructor
     @Getter
     public enum LottoType {
-        ONE("1등 당첨", 1000000L, 1),
-        TWO("2등 당첨", 100000L, 2),
-        THREE("3등 당첨", 10000L, 3),
-        FOUR("4등 당첨", 1000L, 4),
-        FIVE("5등 당첨", 100L, 5),
+        ONE("1등 당첨", 40000L, 1),
+        TWO("2등 당첨", 20000L, 2),
+        THREE("3등 당첨", 6000L, 3),
+        FOUR("4등 당첨", 2000L, 4),
+        FIVE("5등 당첨", 1000L, 5),
         SIX("꽝", 0L, 6);
 
         private String content;
@@ -47,7 +47,7 @@ public class LottoService {
     private final LottoRepository lottoRepository;
 
     public LottoResponseDto getLotto(User user) throws NoSuchAlgorithmException {
-        Long lottoPrice = 200L;
+        Long lottoPrice = 500L;
         Lotto lotto = lottoRepository.findByUser(user);
 //        if (user.getTotalPoint() < lottoPrice) {
 //            throw new LackPointException("보유한 포인트가 부족합니다");
@@ -67,22 +67,22 @@ public class LottoService {
             num = random.nextInt(10000);
         }
 
-        if (num < 30) {//0.3프로
+        if (num < 50) {// 0.5프로
             return lotto(LottoType.ONE, user, lotto);
         }
-        if (30 <= num && num < 130) { //1프로
+        if (50 <= num && num < 150) { // 1프로
             return lotto(LottoType.TWO, user, lotto);
         }
-        if (130 <= num && num < 630) { // 5프로
+        if (150 <= num && num < 450) { // 3프로
             return lotto(LottoType.THREE, user, lotto);
         }
-        if (630 <= num && num < 1630) { //10프로
+        if (450 <= num && num < 1450) { // 10프로 1000
             return lotto(LottoType.FOUR, user, lotto);
         }
-        if (1630 <= num && num < 3630) { //20프로
+        if (1450 <= num && num < 3450) { // 20프로 100
             return lotto(LottoType.FIVE, user, lotto);
         }
-        lotto.setCount(lotto.getCount() + 1);
+        lotto.addCount();
         lottoRepository.save(lotto);
         return new LottoResponseDto(6, lotto.getCount());
 
@@ -96,7 +96,7 @@ public class LottoService {
         Point point = new Point(lottoType.getContent(), lottoType.getPoint(), user.getTotalPoint(), user);
         pointRepository.save(point);
 
-        lotto.setCount(0);
+        lotto.refreshCount();
 
         lottoRepository.save(lotto);
         return new LottoResponseDto(lottoType.getRank(), lotto.getCount());

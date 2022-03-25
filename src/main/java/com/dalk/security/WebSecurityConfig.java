@@ -165,6 +165,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("https://raddaslul.s3.ap-northeast-2.amazonaws.com/");
         configuration.addAllowedOrigin("https://jhoon3697.s3.ap-northeast-2.amazonaws.com/image/");
+        configuration.addAllowedOrigin("https://dss1222.s3.ap-northeast-2.amazonaws.com/image/");
         configuration.addAllowedOrigin("http://jeonhaekang.shop.s3-website.ap-northeast-2.amazonaws.com/");
         configuration.addAllowedOrigin("https://master.d33lja7kfvwqj0.amplifyapp.com/");
         configuration.addAllowedOrigin("https://www.debate-talk.com/");
