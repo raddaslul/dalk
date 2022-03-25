@@ -2,6 +2,8 @@ package com.dalk.controller;
 
 
 import com.dalk.domain.User;
+import com.dalk.dto.requestDto.GivePointRequestDto;
+import com.dalk.dto.requestDto.NoticeRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -73,4 +76,12 @@ public class AdminController {
         result.put("result", "true");
         return result;
     }
+
+    @Secured(User.Role.Authority.ADMIN)
+    @PostMapping("/eventpoint")
+    @ApiOperation(value = "유저에게 포인트지급")
+    public Map<String, Object> givePoint(@RequestBody GivePointRequestDto givePointRequestDto){
+        return adminService.givePoint(givePointRequestDto);
+    }
+
 }

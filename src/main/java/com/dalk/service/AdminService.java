@@ -5,6 +5,7 @@ import com.dalk.domain.*;
 import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnBoard;
 import com.dalk.domain.wl.WarnChatRoom;
+import com.dalk.dto.requestDto.GivePointRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
@@ -18,8 +19,11 @@ import com.dalk.repository.wl.WarnChatRoomRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -34,6 +38,7 @@ public class AdminService {
     private final WarnChatRoomRepository warnChatRoomRepository;
     private final S3Repository s3Repository;
     private final VoteRepository voteRepository;
+    private final PointRepository pointRepository;
 
     //블라인드 게시글 전체 조회 - 관리자
 
@@ -123,5 +128,21 @@ public class AdminService {
     public void deleteUser(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
         userRepository.deleteById(userId);
+    }
+
+    @Transactional
+    public Map<String,Object> givePoint(GivePointRequestDto givePointRequestDto) {
+
+       User user = userRepository.findByUsername(givePointRequestDto.getUsername()).orElseThrow(()->new UserNotFoundException("해당 유저가 존재하지 않습니다."));
+
+       user.totalPointAdd(givePointRequestDto.getPoint());
+       userRepository.save(user);
+        Point point = new Point(givePointRequestDto.getContent(),givePointRequestDto.getPoint(), user);
+        pointRepository.save(point);
+
+
+        Map<String,Object> result = new HashMap<>();
+        result.put("result",true);
+        return result;
     }
 }

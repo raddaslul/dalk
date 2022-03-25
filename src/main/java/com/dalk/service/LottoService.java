@@ -56,7 +56,7 @@ public class LottoService {
         user.totalPointSubtract(lottoPrice);
         userRepository.save(user);
 
-        Point point = new Point("로또 참여", -lottoPrice, user.getTotalPoint(), user);
+        Point point = new Point("로또 참여", -lottoPrice, user);
         pointRepository.save(point);
 
         Random random = SecureRandom.getInstanceStrong();
@@ -93,7 +93,7 @@ public class LottoService {
         user.totalPointAdd(lottoType.getPoint());
         userRepository.save(user);
 
-        Point point = new Point(lottoType.getContent(), lottoType.getPoint(), user.getTotalPoint(), user);
+        Point point = new Point(lottoType.getContent(), lottoType.getPoint(), user);
         pointRepository.save(point);
 
         lotto.refreshCount();

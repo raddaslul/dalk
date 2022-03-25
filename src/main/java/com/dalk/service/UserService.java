@@ -59,7 +59,7 @@ public class UserService {
         user.setItems(items);
         userRepository.save(user);
 
-        Point point = new Point("회원가입 지급", 5000L, 5000L, user);
+        Point point = new Point("회원가입 지급", 5000L, user);
         pointRepository.save(point);
 
         Lotto lotto = new Lotto(0, user);

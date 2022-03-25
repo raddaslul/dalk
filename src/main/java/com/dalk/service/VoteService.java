@@ -44,7 +44,7 @@ public class VoteService {
 
         user.totalPointSubtract(requestDto.getPoint()); // 포인트 빼기
         userRepository.save(user);
-        Point point = new Point("투표 참여", -requestDto.getPoint(), user.getTotalPoint(), user); //포인트 내역 생성
+        Point point = new Point("투표 참여", -requestDto.getPoint(), user); //포인트 내역 생성
         pointRepository.save(point); //포인트 내역 저장
 
         if (requestDto.getTopic()) { // topicA를 골랐을 때
@@ -116,7 +116,7 @@ public class VoteService {
                 userRepository.save(user);
 //                user.setTotalPoint((user.getTotalPoint() + (saveVote.getPoint()))); //savevote에서 내가 얼마를 걸었는지가 있는데 거기서 뽑아와서 winRate계산을 함
 //                userRepository.save(user);
-                Point point = new Point("투표 무승부", (saveVote.getPoint()), user.getTotalPoint(), user); //포인트 내역 생성
+                Point point = new Point("투표 무승부", (saveVote.getPoint()), user); //포인트 내역 생성
                 pointRepository.save(point);
             }
         }
@@ -132,7 +132,7 @@ public class VoteService {
             userRepository.save(user);
 //                user.setTotalPoint((long) (user.getTotalPoint() + (saveVote.getPoint() * winRate))); //savevote에서 내가 얼마를 걸었는지가 있는데 거기서 뽑아와서 winRate계산을 함
 //                userRepository.save(user);
-            Point point = new Point("투표 승리", (long) (saveVote.getPoint() * winRate), user.getTotalPoint(), user); //포인트 내역 생성
+            Point point = new Point("투표 승리", (long) (saveVote.getPoint() * winRate),  user); //포인트 내역 생성
             pointRepository.save(point);
         }
     }
