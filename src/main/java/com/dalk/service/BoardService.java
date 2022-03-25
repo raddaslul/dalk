@@ -13,20 +13,18 @@ import com.dalk.exception.ex.WarnBoardDuplicateException;
 import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnBoardRepository;
 import com.dalk.security.UserDetailsImpl;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class BoardService {
 
     private final BoardRepository boardRepository;
@@ -37,9 +35,9 @@ public class BoardService {
     private final WarnBoardRepository warnBoardRepository;
     private final VoteRepository voteRepository;
     private final VoteService voteService;
-    private final S3Repository s3Repository;
 
     // 토론방 종료 후 게시글 생성
+    @Transactional
     public void createBoard(ChatRoom chatRoom) {
         voteService.winVote(chatRoom.getId());
         Vote vote = voteRepository.findByChatRoom_Id(chatRoom.getId());
@@ -47,7 +45,6 @@ public class BoardService {
         voteRepository.save(vote);
         Board board = new Board(chatRoom);
         List<Category> categoryList = categoryRepository.findAllByChatRoom(chatRoom);
-//        if (chatRoom.getStatus()) {
             for (Category categorys : categoryList) {
                 String stringCategory = categorys.getCategory();
                 Category category = new Category(board, stringCategory);
@@ -65,17 +62,12 @@ public class BoardService {
                 board.setWinner("무승부");
             }
             boardRepository.save(board);
-//        } else {
-//            voteRepository.delete(vote);
-//        }
-//        String deleteFileUrl = "image/" + chatRoom.getConvertedFileName();
-//        s3Repository.deleteFile(deleteFileUrl);
         chatRoomRepository.delete(chatRoom);
         chatRoomUserRepository.deleteByChatRoom(chatRoom);
     }
 
     //게시글 전체 조회
-
+    @Transactional(readOnly = true)
     public List<MainPageBoardResponseDto> getMainPageBoard(int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
 
@@ -94,8 +86,8 @@ public class BoardService {
         return mainPageBoardResponseDtoList;
     }
 
-
     //게시글 상세 조회
+    @Transactional(readOnly = true)
     public DetailResponseDto getMainPageBoardDetail(Long boardId) {
         Board boards = boardRepository.findById(boardId).orElseThrow(
                 () -> new BoardNotFoundException("게시글이 없습니다")
@@ -104,17 +96,12 @@ public class BoardService {
         User user = userRepository.findById(boards.getCreateUserId()).orElseThrow(
                 () -> new LoginUserNotFoundException("유저 정보가 없습니다")
         );
-
         Vote vote = boards.getVote();
-
         List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(boards.getId());
-
         List<Long> warnUserList = new ArrayList<>();
-
         for (WarnBoard warnBoard : warnBoardList) {
             warnUserList.add(warnBoard.getUser().getId());
         }
-
         if (vote.getTopicACnt() > vote.getTopicBCnt()) { //A가 이겼을 때
             return new DetailResponseDto(boards, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), warnUserList ,whoWin(vote, true, true), whoWin(vote, false, false));
         } else if (vote.getTopicACnt() < vote.getTopicBCnt()) {
@@ -137,8 +124,8 @@ public class BoardService {
         }
     }
 
-
     //게시글 검색
+    @Transactional(readOnly = true)
     public List<MainPageBoardResponseDto> getSearchWord(String keyword,int page, int size) {
 
         Pageable pageable = PageRequest.of(page,size);
@@ -158,7 +145,8 @@ public class BoardService {
         return mainPageBoardResponseDtoList;
     }
 
-    //    게시글 신고하기
+    // 게시글 신고하기
+    @Transactional(readOnly = true)
     public WarnBoardResponseDto warnBoard(Long boardId, UserDetailsImpl userDetails) {
 
         Board board = boardRepository.findById(boardId).orElseThrow(
@@ -167,11 +155,8 @@ public class BoardService {
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 () -> new LoginUserNotFoundException("유저 정보가 없습니다.")
         );
-
         WarnBoardResponseDto warnBoardResponseDto = new WarnBoardResponseDto();
-
         WarnBoard warnBoardCheck = warnBoardRepository.findByUserIdAndBoard(userDetails.getUser().getId(), board).orElse(null);
-
         if (warnBoardCheck == null) {
             WarnBoard warnBoard = new WarnBoard(true, board, user);
             warnBoardRepository.save(warnBoard);

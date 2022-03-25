@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,7 +21,7 @@ public class noticeController {
     @Secured(User.Role.Authority.ADMIN)
     @PostMapping("/admin/notices")
     @ApiOperation(value = "공지글 작성")
-    public HashMap<String,Object> createNotice(@RequestBody NoticeRequestDto noticeRequestDto){
+    public Map<String,Object> createNotice(@RequestBody NoticeRequestDto noticeRequestDto){
         return noticeService.createNotice(noticeRequestDto);
     }
     @GetMapping("/api/notices")
@@ -39,16 +39,14 @@ public class noticeController {
     @Secured(User.Role.Authority.ADMIN)
     @PutMapping("/admin/notices/{noticeId}")
     @ApiOperation(value = "공지글 수정")
-    public HashMap<String,Object> updateNotices(@PathVariable Long noticeId, @RequestBody NoticeRequestDto noticeRequestDto) {
+    public Map<String,Object> updateNotices(@PathVariable Long noticeId, @RequestBody NoticeRequestDto noticeRequestDto) {
         return noticeService.updateNotices(noticeId,noticeRequestDto);
     }
 
     @Secured(User.Role.Authority.ADMIN)
     @DeleteMapping("/admin/notices/{noticeId}")
     @ApiOperation(value = "공지글 삭제")
-    public HashMap<String,Object> deleteNotice(@PathVariable Long noticeId){
+    public Map<String,Object> deleteNotice(@PathVariable Long noticeId){
         return noticeService.deleteNotice(noticeId);
     }
-
-
 }

@@ -9,13 +9,13 @@ import com.dalk.dto.requestDto.VoteRequestDto;
 import com.dalk.dto.responseDto.VoteUserListResponseDto;
 import com.dalk.exception.ex.ChatRoomNotFoundException;
 import com.dalk.exception.ex.DuplicateVoteException;
-import com.dalk.exception.ex.LackPointException;
 import com.dalk.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +37,6 @@ public class VoteService {
         if (savevote != null) {
             throw new DuplicateVoteException("이미 투표에 참여하셨습니다");
         }
-
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(
                 () -> new ChatRoomNotFoundException("해당 채팅방이 없습니다")
         );
@@ -61,7 +60,7 @@ public class VoteService {
     }
 
     //토론방 유저 리스트
-    @Transactional
+    @Transactional(readOnly = true)
     public List<VoteUserListResponseDto> voteUserList(Long roomId) {
         List<VoteUserListResponseDto> voteUserListResponseDtoList = new ArrayList<>();
         List<SaveVote> saveVotesList = saveVoteRepository.findAllByChatRoom_Id(roomId);
@@ -69,7 +68,6 @@ public class VoteService {
         for (SaveVote saveVote : saveVotesList) {
             userList.add(saveVote.getUser());
         }
-
         for (User user : userList) {
             VoteUserListResponseDto voteUserListResponseDto = new VoteUserListResponseDto(user);
             voteUserListResponseDtoList.add(voteUserListResponseDto);
@@ -102,7 +100,6 @@ public class VoteService {
                 SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId); //유저와 채팅방 id로 savevote를 뽑아옴 (유저는 한개씩 가짐)
                 user.totalPointAdd(saveVote.getPoint());
                 userRepository.save(user);
-
                 Point point = new Point("투표 무승부", (saveVote.getPoint()), user); //포인트 내역 생성
                 pointRepository.save(point);
             }
@@ -117,9 +114,7 @@ public class VoteService {
             SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId); //유저와 채팅방 id로 savevote를 뽑아옴 (유저는 한개씩 가짐)
             user.totalPointAdd((long) (saveVote.getPoint()*winRate));
             userRepository.save(user);
-
             Point point = new Point("투표 승리", (long) (saveVote.getPoint() * winRate),  user); //포인트 내역 생성
-
             pointRepository.save(point);
         }
     }

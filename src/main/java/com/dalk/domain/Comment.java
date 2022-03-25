@@ -52,13 +52,6 @@ public class Comment extends Timestamped {
         this.board = board;
         this.createUserId = userId;
     }
-    public Comment(String comment,
-                   Board boardId,
-                   Long userId) {
-        this.comment = comment;
-        this.board = boardId;
-        this.createUserId = userId;
-    }
 
     public void update(String comment) {
         this.comment = comment;

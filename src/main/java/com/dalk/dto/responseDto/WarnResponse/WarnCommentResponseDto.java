@@ -1,6 +1,5 @@
 package com.dalk.dto.responseDto.WarnResponse;
 
-
 import lombok.Data;
 
 @Data

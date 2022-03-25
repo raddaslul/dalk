@@ -23,7 +23,5 @@ public class LottoScheduler {
             user.refreshCount();
             userRepository.save(user);
         }
-        System.out.println("오늘 초기화 됐당");
     }
-
 }

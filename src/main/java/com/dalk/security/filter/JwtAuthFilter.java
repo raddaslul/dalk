@@ -1,16 +1,11 @@
 package com.dalk.security.filter;
 
-
-import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.security.jwt.HeaderTokenExtractor;
 import com.dalk.security.jwt.JwtPreProcessingToken;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
@@ -57,7 +52,6 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
             return super
                     .getAuthenticationManager()
                     .authenticate(jwtToken);
-
     }
 
     @Override

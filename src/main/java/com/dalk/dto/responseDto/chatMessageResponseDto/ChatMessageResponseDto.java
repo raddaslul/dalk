@@ -3,7 +3,6 @@ package com.dalk.dto.responseDto.chatMessageResponseDto;
 import com.dalk.domain.ChatMessage;
 
 import com.dalk.dto.responseDto.UserInfoResponseDto;
-import com.dalk.service.ItemService;
 import com.dalk.service.UserService;
 import lombok.*;
 

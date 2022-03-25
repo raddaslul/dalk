@@ -1,8 +1,5 @@
 package com.dalk.exception.ex;
 
-import lombok.Getter;
-
-@Getter
 public class LoginUserNotFoundException extends RuntimeException {
     public LoginUserNotFoundException(String message) {
         super(message);

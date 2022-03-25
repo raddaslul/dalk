@@ -1,6 +1,5 @@
 package com.dalk.repository;
 
-import com.dalk.domain.Board;
 import com.dalk.domain.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
