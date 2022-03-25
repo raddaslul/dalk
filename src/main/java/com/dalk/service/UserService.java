@@ -14,10 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -29,8 +26,6 @@ public class UserService {
     private final PointRepository pointRepository;
     private final WarnUserRepository warnUserRepository;
 
-
-
     //회원가입
     @Transactional
     public void signup(SignupRequestDto requestDto) {
@@ -40,15 +35,12 @@ public class UserService {
         if (found.isPresent()) {
             throw new DuplicateUsernameException("중복된 사용자 ID 가 존재합니다.");
         }
-
         String nickname = requestDto.getNickname();
         Optional<User> found1 = userRepository.findByNickname(nickname);
         if (found1.isPresent()) {
             throw new DuplicationNicknameException("중복된 사용자 닉네임이 존재합니다.");
         }
-
         String password = passwordEncoder.encode(requestDto.getPassword());//비번 인코딩
-
 
         User user = new User(username, password, nickname, 5000L, 0,0, User.Role.USER);
         userRepository.save(user);
@@ -85,17 +77,8 @@ public class UserService {
         return items;
     }
 
-    // 채팅방에서 유저 확인하기
-    public User findById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new LoginUserNotFoundException("찾는 유저가 없습니다")
-        );
-        return user;
-    }
-
-
     @Transactional
-    public HashMap<String, Object> WarnUser(Long userId, UserDetailsImpl userDetails) {
+    public Map<String, Object> WarnUser(Long userId, UserDetailsImpl userDetails) {
         User user1 = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
         );
@@ -104,17 +87,16 @@ public class UserService {
         );
         WarnUser warnUserCheck = warnUserRepository.findByUserIdAndWarnUserName(user1.getId(),user2.getUsername()).orElse(null);
 
-      HashMap<String, Object> result = new HashMap<>();
+      Map<String, Object> result = new HashMap<>();
             if(warnUserCheck == null){
                 WarnUser warnUser = new WarnUser(user1,user2.getUsername());
                 warnUserRepository.save(warnUser);
                 user2.setWarnUserCnt(user2.getWarnUserCnt()+1);
-                result.put("result", "true");
+                result.put("result", true);
                 return result;
             }
             else throw new WarnDuplicateException("이미 신고한 유저입니다.");
     }
-
     public static UserInfoResponseDto userInfo(User user) {
         return new UserInfoResponseDto(user);
     }

@@ -13,13 +13,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class DalkApplication {
 
     public static final String APPLICATION_LOCATIONS = "spring.config.location="
-
 //            무중단 배포일때 이것만 써야함.
-//            + "/home/ubuntu/dalk/build/libs/application.yml";
+            + "/home/ubuntu/dalk/build/libs/application.yml";
 
             //이게 로컬이고
-            + "classpath:application.yml";
-
+//            + "classpath:application.yml";
 
     public static void main(String[] args) {
 

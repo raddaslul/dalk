@@ -11,8 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,15 +22,12 @@ public class CommentController {
 
     @PostMapping("/comments/{boardId}")
     @ApiOperation(value = "게시글 작성")
-    public HashMap<String, Object> createComment(
+    public Map<String, Object> createComment(
             @PathVariable Long boardId,
             @RequestBody CommentRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl UserDetails) {
         User user = UserDetails.getUser();
-        commentService.createComment(boardId, requestDto, user);
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("result", "true");
-        return result;
+        return commentService.createComment(boardId, requestDto, user);
     }
 
     @GetMapping("/api/comments/{boardId}")
@@ -41,15 +38,15 @@ public class CommentController {
 
     @PutMapping("/comments/{commentId}")
     @ApiOperation(value = "댓글 수정")
-    public HashMap<String, Object> editComment(@PathVariable Long commentId,
-                                               @RequestBody CommentRequestDto requestDto,
-                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public Map<String, Object> editComment(@PathVariable Long commentId,
+                                           @RequestBody CommentRequestDto requestDto,
+                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.editComment(commentId, requestDto, userDetails);
     }
 
     @DeleteMapping("/comments/{commentId}")
     @ApiOperation(value = "댓글 삭제")
-    public HashMap<String, Object> deleteComment(@PathVariable Long commentId,
+    public Map<String, Object> deleteComment(@PathVariable Long commentId,
                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.deleteComment(commentId, userDetails);
     }

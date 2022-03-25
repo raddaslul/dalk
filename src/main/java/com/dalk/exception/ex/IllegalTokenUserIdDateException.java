@@ -4,5 +4,4 @@ public class IllegalTokenUserIdDateException extends RuntimeException{
     public IllegalTokenUserIdDateException(String message) {
         super(message);
     }
-
 }

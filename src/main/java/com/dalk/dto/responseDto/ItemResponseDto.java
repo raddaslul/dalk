@@ -5,7 +5,6 @@ import com.dalk.domain.User;
 import com.dalk.service.StaticService;
 import lombok.*;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

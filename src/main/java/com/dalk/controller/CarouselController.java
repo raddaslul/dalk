@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,9 +23,9 @@ public class CarouselController {
     @Secured(User.Role.Authority.ADMIN)
     @PostMapping("/admin/carousels")
     @ApiOperation(value = "Admin에서 배너 등록")
-    public HashMap<String, Object> createBanner(@RequestPart("image") MultipartFile multipartFile) throws IOException {
+    public Map<String, Object> createBanner(@RequestPart("image") MultipartFile multipartFile) throws IOException {
         Long carouselId = carouselService.uploadFile(multipartFile);
-        HashMap<String, Object> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
         result.put("carouselId", carouselId);
         return result;
     }
@@ -39,11 +40,8 @@ public class CarouselController {
     @Secured(User.Role.Authority.ADMIN)
     @DeleteMapping("/admin/carousels/{carouselId}")
     @ApiOperation(value = "Admin에서 배너 삭제")
-    public HashMap<String, Object> deleteBanner(@PathVariable Long carouselId) {
-        carouselService.deleteBanner(carouselId);
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("result", "true");
-        return result;
+    public Map<String, Object> deleteBanner(@PathVariable Long carouselId) {
+        return carouselService.deleteBanner(carouselId);
     }
 
     @GetMapping("/api/carousels")

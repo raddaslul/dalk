@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,15 +29,11 @@ public class MyPageController {
         return UserService.userInfo(userDetails.getUser());
     }
 
-
     @DeleteMapping("/signout")
     @ApiOperation(value = "회원 탈퇴")
-    public HashMap<String,Object> deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public Map<String,Object> deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
-        myPageService.deleteUser(user);
-        HashMap<String, Object> result = new HashMap<>();
-            result.put("result", "true");
-            return result;
+        return myPageService.deleteUser(user);
     }
 
     @GetMapping("/mypage/points")

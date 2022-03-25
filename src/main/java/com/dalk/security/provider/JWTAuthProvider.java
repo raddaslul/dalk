@@ -1,6 +1,5 @@
 package com.dalk.security.provider;
 
-
 import com.dalk.domain.User;
 import com.dalk.repository.UserRepository;
 import com.dalk.security.UserDetailsImpl;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Component;
 public class JWTAuthProvider implements AuthenticationProvider {
 
     private final JwtDecoder jwtDecoder;
-
     private final UserRepository userRepository;
 
     @Override
@@ -34,7 +32,6 @@ public class JWTAuthProvider implements AuthenticationProvider {
         //    -> JWT 에 userId, username, role 정보를 암호화/복호화하여 사용
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
-        ;
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }

@@ -15,14 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 @Service
 public class ChatMessageService {
 
@@ -46,6 +45,7 @@ public class ChatMessageService {
         }
     }
 
+    @Transactional
     public ChatMessage save(ChatMessageRequestDto chatMessageRequestDto) {
         // 메시지 생성 시간 삽입
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -64,6 +64,7 @@ public class ChatMessageService {
     }
 
     // 채팅방 입출입 시 메시지 발송
+    @Transactional
     public void accessChatMessage(ChatMessageRequestDto chatMessageRequestDto) {
         User user = userRepository.findById(chatMessageRequestDto.getUserId())
                 .orElseThrow(() -> new LoginUserNotFoundException("로그인 후 이용해 주시기 바랍니다."));
@@ -79,7 +80,6 @@ public class ChatMessageService {
             }else throw new DuplicateChatRoomUserException("챗룸유저는 이미 있습니다");
             chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
             chatRoomRepository.save(chatRoom);
-            log.info("socket 채팅방 유저 수 = {}", chatRoom.getUserCnt());
 
             if (chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId()) != null) {
                 ChatMessageItem chatMessageItem = chatMessageItemRepository.findByRoomId(chatMessageRequestDto.getRoomId());
@@ -104,28 +104,25 @@ public class ChatMessageService {
             ChatMessageEnterResponseDto chatMessageEnterResponseDto = new ChatMessageEnterResponseDto(chatMessageRequestDto, user);
             redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageEnterResponseDto);
         } else if (ChatMessage.MessageType.EXIT.equals(chatMessageRequestDto.getType())) {
-                chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에서 나갔습니다.");
-                chatRoomUserRepository.deleteByUser_Id(user.getId());
-                chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
-                chatRoomRepository.save(chatRoom);
-                ChatMessageExitResponseDto chatMessageExitResponseDto = new ChatMessageExitResponseDto(chatMessageRequestDto, user);
-                redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageExitResponseDto);
+            chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에서 나갔습니다.");
+            chatRoomUserRepository.deleteByUser_Id(user.getId());
+            chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
+            chatRoomRepository.save(chatRoom);
+            ChatMessageExitResponseDto chatMessageExitResponseDto = new ChatMessageExitResponseDto(chatMessageRequestDto, user);
+            redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageExitResponseDto);
         }
     }
 
     // 채팅방에서 메세지 발송
+    @Transactional
     public void sendChatMessage(ChatMessage chatMessage, ChatMessageRequestDto chatMessageRequestDto) {
-        User user = userRepository.findById(chatMessage.getUser().getId())
-                .orElseThrow(IllegalAccessError::new);
-        log.info("sendChatMessage user= {}", user);
         Boolean bigFont = chatMessageRequestDto.getBigFont();
         ChatMessageResponseDto chatMessageResponseDto = new ChatMessageResponseDto(chatMessage, bigFont);
-        String topic = channelTopic.getTopic();
-        log.info("topic = {}", topic);
-        redisTemplate.convertAndSend(topic, chatMessageResponseDto);
+        redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageResponseDto);
     }
 
     // 채팅방에서 아이템 사용
+    @Transactional
     public void itemChatMessage(ChatMessageRequestDto chatMessageRequestDto) {
         User user = userRepository.findById(chatMessageRequestDto.getUserId())
                 .orElseThrow(IllegalAccessError::new);
@@ -155,7 +152,8 @@ public class ChatMessageService {
         redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageItemResponseDto);
     }
 
-//     아이템 사용시간 지난 후 아이템 삭제
+    // 아이템 사용시간 지난 후 아이템 삭제
+    @Transactional
     public void itemDeleteMessage(String roomId, String item) {
         ChatMessageItemResponseDto chatMessageItemResponseDto = new ChatMessageItemResponseDto();
         chatMessageItemResponseDto.setRoomId(roomId);

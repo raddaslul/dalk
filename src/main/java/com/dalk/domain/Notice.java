@@ -1,6 +1,5 @@
 package com.dalk.domain;
 
-
 import com.dalk.domain.time.Timestamped;
 import com.dalk.dto.requestDto.NoticeRequestDto;
 import lombok.AllArgsConstructor;

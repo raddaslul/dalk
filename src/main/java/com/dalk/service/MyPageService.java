@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -21,11 +23,15 @@ public class MyPageService {
     private final PointRepository pointRepository;
 
     @Transactional
-    public void deleteUser(User user) {
+    public Map<String, Object> deleteUser(User user) {
         Long userId = user.getId();
         userRepository.deleteById(userId);
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", true);
+        return result;
     }
 
+    @Transactional(readOnly = true)
     public List<PointResponseDto> getPoint(User user) {
         List<Point> pointList = pointRepository.findAllByUserOrderByCreatedAtDesc(user);
         List<PointResponseDto> pointResponseDtoList =new ArrayList<>();
@@ -42,7 +48,7 @@ public class MyPageService {
     }
 
     // 랭킹조회
-    @Transactional
+    @Transactional(readOnly = true)
     public List<RankResponseDto> getRank() {
         //나중에 지우기 책임자 현지훈
         StaticService.saveRank();
@@ -57,10 +63,8 @@ public class MyPageService {
                 rankNum = user.getRanking().getId();
             }
             RankResponseDto rankResponseDto = new RankResponseDto(rankNum, user.getNickname(),user.getEx());
-
             rankResponseDtoList.add(rankResponseDto);
         }
         return rankResponseDtoList;
     }
-
 }

@@ -9,8 +9,8 @@ import com.dalk.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -46,8 +46,6 @@ public class StaticService {
         Ranking ranking3 = rankRepository.findById(3L).orElseThrow(
                 () -> new IllegalArgumentException("오류났어용")
         );
-
-
         ranking1.setUserRank(top3rankList.get(0));
         ranking2.setUserRank(top3rankList.get(1));
         ranking3.setUserRank(top3rankList.get(2));

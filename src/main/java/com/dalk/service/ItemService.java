@@ -42,7 +42,7 @@ public class ItemService {
 
     }
 
-    private static String post(String apiUrl, Map<String, String> requestHeaders, String text) throws IOException, NoSuchAlgorithmException {
+    private static String post(String apiUrl, Map<String, String> requestHeaders, String text) throws NoSuchAlgorithmException {
         HttpURLConnection con = connect(apiUrl);
         Random random = SecureRandom.getInstanceStrong();
         int num = random.nextInt(11);
@@ -111,21 +111,27 @@ public class ItemService {
 
     //아이템 구매
     @Transactional
-    public void buyItem(ItemType item, User user) {
+    public Map<String, Object> buyItem(ItemType item, User user) {
 
         Item userItem = itemRepository.findByUser_IdAndItemCode(user.getId(), item.getItemCode());
         user.buyItem(item, userItem);
         userRepository.save(user);
         Point point = new Point(item.getItemName() + "구매", -item.getPrice(), user);
         pointRepository.save(point);
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", true);
+        return result;
     }
 
     //아이템 사용
     @Transactional
-    public void useItem(ItemType item, User user) {
+    public Map<String, Object> useItem(ItemType item, User user) {
         Item userItem = itemRepository.findByUser_IdAndItemCode(user.getId(), item.getItemCode());
         user.useItem(userItem);
         userRepository.save(user);
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", true);
+        return result;
     }
 
     //단어 거꾸로 하기
@@ -142,5 +148,4 @@ public class ItemService {
         }
         return stringList;
     }
-
 }

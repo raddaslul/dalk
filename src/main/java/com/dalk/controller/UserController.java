@@ -1,12 +1,9 @@
 package com.dalk.controller;
 
-
-
 import com.dalk.domain.ItemType;
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.SignupRequestDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
-import com.dalk.dto.responseDto.WarnResponse.WarnUserResponseDto;
 import com.dalk.exception.ErrorResponse;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.UserService;
@@ -19,9 +16,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.xml.ws.Response;
 import java.util.HashMap;
-
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,8 +31,8 @@ public class UserController {
     public String signup(@RequestBody @Valid SignupRequestDto requestDto) {
         userService.signup(requestDto);
 
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("result", "true");
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", true);
         return "redirect:/users/login";
     }
 
@@ -48,29 +44,21 @@ public class UserController {
 
     @GetMapping("/mypage/{item}")
     @ApiOperation(value = "아이템 구매")
-    public HashMap<String, Object> buyItem2(@PathVariable ItemType item, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public Map<String, Object> buyItem2(@PathVariable ItemType item, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
-        itemService.buyItem(item, user);
-
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("result", "true");
-        return result;
+        return itemService.buyItem(item, user);
     }
 
     @GetMapping("/chat/rooms/{item}")
     @ApiOperation(value = "아이템 사용")
-    public HashMap<String, Object> userItem(@PathVariable ItemType item, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public Map<String, Object> userItem(@PathVariable ItemType item, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
-        itemService.useItem(item, user);
-
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("result", "true");
-        return result;
+        return itemService.useItem(item, user);
     }
 
     @GetMapping("/warnings/{userId}")
     @ApiOperation(value = "유저 신고하기")
-    public HashMap<String, Object> WarnUser
+    public Map<String, Object> WarnUser
             (@PathVariable Long userId,
              @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.WarnUser(userId, userDetails);

@@ -18,8 +18,8 @@ import com.dalk.repository.wl.WarnBoardRepository;
 import com.dalk.repository.wl.WarnChatRoomRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +28,6 @@ import java.util.Map;
 @Service
 @AllArgsConstructor
 public class AdminService {
-
 
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
@@ -41,7 +40,7 @@ public class AdminService {
     private final PointRepository pointRepository;
 
     //블라인드 게시글 전체 조회 - 관리자
-
+    @Transactional(readOnly = true)
     public List<MainPageBoardResponseDto> getAdminMainPageBoard() {
 
             //board 전체를 가져옴
@@ -65,16 +64,22 @@ public class AdminService {
         return mainPageBoardResponseDtoList;
     }
 
-    //  블라인드 or 게시글  삭제 - 관리자
-    public void deleteAdminBoard(Long boardId) {
+    // 블라인드 or 게시글  삭제 - 관리자
+    @Transactional
+    public Map<String, Object> deleteAdminBoard(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new BoardNotFoundException("해당 게시글이 존재하지 않습니다. ")
         );
         String deleteFileUrl = "image/" + board.getConvertedFileName();
         s3Repository.deleteFile(deleteFileUrl);
         boardRepository.deleteById(board.getId());
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", true);
+        return result;
     }
-    //    토론방 목록 조회 - 관리자
+
+    // 토론방 목록 조회 - 관리자
+    @Transactional(readOnly = true)
     public List<MainPageAllResponseDto> getAdminMainPageAll() {
         //board 전체를 가져옴
         List<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc();
@@ -96,7 +101,8 @@ public class AdminService {
     }
 
     // 토론방 삭제
-    public void deleteAdminChatRoom(Long roomId) {
+    @Transactional
+    public Map<String, Object> deleteAdminChatRoom(Long roomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(()-> new ChatRoomNotFoundException("토론방이 없습니다."));
         Vote vote = voteRepository.findByChatRoom_Id(chatRoom.getId());
         vote.setChatRoom(null);
@@ -105,12 +111,13 @@ public class AdminService {
         String deleteFileUrl = "image/" + chatRoom.getConvertedFileName();
         s3Repository.deleteFile(deleteFileUrl);
         chatRoomRepository.delete(chatRoom);
-//        chatRoom.setStatus(false);
-//        chatRoomRepository.save(chatRoom);
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", true);
+        return result;
     }
 
     // 유저 신고 조회 - 관리자
-
+    @Transactional(readOnly = true)
     public List<UserInfoResponseDto> getUserList() {
 
         List<User> userList = userRepository.findAllByOrderByWarnUserCntDesc();
@@ -125,24 +132,25 @@ public class AdminService {
     }
 
     // 유저 삭제 - 관리자
-    public void deleteUser(Long userId) {
+    @Transactional
+    public Map<String, Object> deleteUser(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
         userRepository.deleteById(userId);
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", true);
+        return result;
     }
 
     @Transactional
     public Map<String,Object> givePoint(GivePointRequestDto givePointRequestDto) {
 
        User user = userRepository.findByUsername(givePointRequestDto.getUsername()).orElseThrow(()->new UserNotFoundException("해당 유저가 존재하지 않습니다."));
-
        user.totalPointAdd(givePointRequestDto.getPoint());
        userRepository.save(user);
         Point point = new Point(givePointRequestDto.getContent(),givePointRequestDto.getPoint(), user);
         pointRepository.save(point);
-
-
         Map<String,Object> result = new HashMap<>();
-        result.put("result",true);
+        result.put("result", true);
         return result;
     }
 }
