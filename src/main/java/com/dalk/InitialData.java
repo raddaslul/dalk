@@ -19,7 +19,6 @@ public class InitialData implements ApplicationRunner {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final PointRepository pointRepository;
-    private final LottoRepository lottoRepository;
     private final UserService userService;
     private final RankRepository rankRepository;
 
@@ -42,8 +41,7 @@ public class InitialData implements ApplicationRunner {
 
         Point point1 = new Point("회원가입", 0L, user1);
         pointRepository.save(point1);
-        Lotto lotto1 = new Lotto(0, user1);
-        lottoRepository.save(lotto1);
+
 
 
         User user2 = new User( //유저추가
@@ -61,8 +59,7 @@ public class InitialData implements ApplicationRunner {
 
         Point point2 = new Point("회원가입", 0L, user2);
         pointRepository.save(point2);
-        Lotto lotto2 = new Lotto(0, user2);
-        lottoRepository.save(lotto2);
+
 
 
         User user3 = new User( //유저추가
@@ -80,8 +77,7 @@ public class InitialData implements ApplicationRunner {
 
         Point point3 = new Point("회원가입", 0L, user3);
         pointRepository.save(point3);
-        Lotto lotto3 = new Lotto(0, user3);
-        lottoRepository.save(lotto3);
+
 
 
         User user4 = new User( //유저추가
@@ -99,8 +95,7 @@ public class InitialData implements ApplicationRunner {
 
         Point point4 = new Point("회원가입", 0L, user4);
         pointRepository.save(point4);
-        Lotto lotto4 = new Lotto(0, user4);
-        lottoRepository.save(lotto4);
+
 
 
         User user5 = new User( //유저추가
@@ -118,8 +113,7 @@ public class InitialData implements ApplicationRunner {
 
         Point point5 = new Point("회원가입", 0L,user5);
         pointRepository.save(point5);
-        Lotto lotto5 = new Lotto(0, user5);
-        lottoRepository.save(lotto5);
+
 
         Ranking ranking1 = new Ranking(1L, user1);
         rankRepository.save(ranking1);
