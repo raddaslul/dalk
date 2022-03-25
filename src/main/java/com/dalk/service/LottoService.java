@@ -44,6 +44,7 @@ public class LottoService {
     private final UserRepository userRepository;
 
     public LottoResponseDto getLotto(User user) throws NoSuchAlgorithmException {
+
         if (user.getLottoCnt() <= 0) {
             throw new LottoCountException("뽑기 횟수를 다 소진하셨습니다");
         }
@@ -83,7 +84,7 @@ public class LottoService {
         user.subtractCount();
         userRepository.save(user);
 
-        Point point = new Point(lottoType.getContent(), lottoType.getPoint(), user.getTotalPoint(), user);
+        Point point = new Point(lottoType.getContent(), lottoType.getPoint(), user);
         pointRepository.save(point);
 
         return new LottoResponseDto(lottoType.getRank(), user.getLottoCnt());

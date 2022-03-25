@@ -27,7 +27,7 @@ public class MyPageService {
     }
 
     public List<PointResponseDto> getPoint(User user) {
-        List<Point> pointList = pointRepository.findAllByUser(user);
+        List<Point> pointList = pointRepository.findAllByUserOrderByCreatedAtDesc(user);
         List<PointResponseDto> pointResponseDtoList =new ArrayList<>();
 
         for (Point point : pointList ){

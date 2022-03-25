@@ -44,7 +44,7 @@ public class VoteService {
 
         user.totalPointSubtract(requestDto.getPoint()); // 포인트 빼기
         userRepository.save(user);
-        Point point = new Point("투표 참여", -requestDto.getPoint(), user.getTotalPoint(), user); //포인트 내역 생성
+        Point point = new Point("투표 참여", -requestDto.getPoint(), user); //포인트 내역 생성
         pointRepository.save(point); //포인트 내역 저장
 
         if (requestDto.getTopic()) { // topicA를 골랐을 때
@@ -102,7 +102,8 @@ public class VoteService {
                 SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId); //유저와 채팅방 id로 savevote를 뽑아옴 (유저는 한개씩 가짐)
                 user.totalPointAdd(saveVote.getPoint());
                 userRepository.save(user);
-                Point point = new Point("투표 무승부", (saveVote.getPoint()), user.getTotalPoint(), user); //포인트 내역 생성
+
+                Point point = new Point("투표 무승부", (saveVote.getPoint()), user); //포인트 내역 생성
                 pointRepository.save(point);
             }
         }
@@ -116,7 +117,9 @@ public class VoteService {
             SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId); //유저와 채팅방 id로 savevote를 뽑아옴 (유저는 한개씩 가짐)
             user.totalPointAdd((long) (saveVote.getPoint()*winRate));
             userRepository.save(user);
-            Point point = new Point("투표 승리", (long) (saveVote.getPoint() * winRate), user.getTotalPoint(), user); //포인트 내역 생성
+
+            Point point = new Point("투표 승리", (long) (saveVote.getPoint() * winRate),  user); //포인트 내역 생성
+
             pointRepository.save(point);
         }
     }

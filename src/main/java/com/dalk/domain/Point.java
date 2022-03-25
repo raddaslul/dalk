@@ -1,6 +1,7 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
+import com.dalk.dto.requestDto.GivePointRequestDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,11 +37,17 @@ public class Point extends Timestamped {
     @JoinColumn(name = "userId")
     private User user;
 
-    public Point(String content, Long changePoint, Long totalPoint, User user) {
+    public Point(String content, Long changePoint, User user) {
         this.content = content;
         this.changePoint = changePoint;
-        this.totalPoint = totalPoint;
+        this.totalPoint = user.getTotalPoint();
         this.user = user;
     }
 
+//    public Point(GivePointRequestDto givePointRequestDto, Long totalPoint) {
+//        this.content = givePointRequestDto.getContent();
+//        this.changePoint = givePointRequestDto.getPoint();
+//        this.totalPoint = totalPoint;
+//        this.user = givePointRequestDto.getUsername();
+//    }
 }
