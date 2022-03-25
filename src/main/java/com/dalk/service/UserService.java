@@ -51,7 +51,7 @@ public class UserService {
         String password = passwordEncoder.encode(requestDto.getPassword());//비번 인코딩
 
 
-        User user = new User(username, password, nickname, 10000000L, 0,0, User.Role.USER);
+        User user = new User(username, password, nickname, 5000L, 0,0, User.Role.USER);
         userRepository.save(user);
 
         List<Item> items = getItemTests(user);
@@ -59,7 +59,7 @@ public class UserService {
         user.setItems(items);
         userRepository.save(user);
 
-        Point point = new Point("회원가입 지급", 10000000L, 10000000L, user);
+        Point point = new Point("회원가입 지급", 5000L, 5000L, user);
         pointRepository.save(point);
 
         Lotto lotto = new Lotto(0, user);
@@ -68,12 +68,12 @@ public class UserService {
 
     public List<Item> getItemTests(User user) {
         List<Item> items = new ArrayList<>();
-        Item item1 = new Item("bigFont", 0L, user);
-        Item item2 = new Item("onlyMe", 0L, user);
-        Item item3 = new Item("myName", 0L, user);
-        Item item4 = new Item("papago", 0L, user);
-        Item item5 = new Item("reverse", 0L, user);
-        Item item6 = new Item("exBuy", 0L, user);
+        Item item1 = new Item("bigFont", 1L, user);
+        Item item2 = new Item("onlyMe", 1L, user);
+        Item item3 = new Item("myName", 1L, user);
+        Item item4 = new Item("papago", 1L, user);
+        Item item5 = new Item("reverse", 1L, user);
+        Item item6 = new Item("exBuy", 1L, user);
         itemRepository.save(item1);
         itemRepository.save(item2);
         itemRepository.save(item3);
