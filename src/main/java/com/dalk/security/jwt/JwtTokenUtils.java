@@ -3,11 +3,15 @@ package com.dalk.security.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.dalk.security.UserDetailsImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public final class JwtTokenUtils {
 
     private static final int SEC = 1;
@@ -22,10 +26,14 @@ public final class JwtTokenUtils {
 
     public static final String CLAIM_EXPIRED_DATE = "EXPIRED_DATE";
     public static final String CLAIM_USER_NAME = "USER_NAME";
-    public static final String JWT_SECRET = "5mini";
     public static final String UID = "UID";
     public static final String NICKNAME = "NICKNAME";
+    public static String JWT_SECRET;
 
+    @Autowired
+    public JwtTokenUtils(@Value("${jwt.secret}") String secret) {
+        JWT_SECRET = secret;
+    }
 
     public static String generateJwtToken(UserDetailsImpl userDetails) {
         String token = null;
