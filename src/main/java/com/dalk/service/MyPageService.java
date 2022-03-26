@@ -33,6 +33,8 @@ public class MyPageService {
 
     @Transactional(readOnly = true)
     public List<PointResponseDto> getPoint(User user) {
+
+
         List<Point> pointList = pointRepository.findAllByUserOrderByCreatedAtDesc(user);
         List<PointResponseDto> pointResponseDtoList =new ArrayList<>();
 
