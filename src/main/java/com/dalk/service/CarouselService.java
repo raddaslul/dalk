@@ -1,6 +1,7 @@
 package com.dalk.service;
 
 import com.dalk.domain.Carousel;
+import com.dalk.dto.requestDto.CarouselRequestDto;
 import com.dalk.dto.responseDto.CarouselResponseDto;
 import com.dalk.exception.ex.CarouselNotFoundException;
 import com.dalk.repository.CarouselRepository;
@@ -22,11 +23,11 @@ public class CarouselService {
 
     // 메인 배너 등록
     @Transactional
-    public Long uploadFile(MultipartFile multipartFile) throws IOException {
+    public Long uploadFile(MultipartFile multipartFile, CarouselRequestDto carouselRequestDto) throws IOException {
         String originalFileName = multipartFile.getOriginalFilename();
         String convertedFileName = UUID.randomUUID() + originalFileName;
         String filePath = s3Repository.upload(multipartFile, convertedFileName);
-        Carousel carousel = new Carousel(convertedFileName, filePath);
+        Carousel carousel = new Carousel(convertedFileName, filePath, carouselRequestDto);
         carouselRepository.save(carousel);
         return carousel.getId();
     }
