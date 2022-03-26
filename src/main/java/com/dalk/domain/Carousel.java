@@ -36,6 +36,5 @@ public class Carousel extends Timestamped {
         } else {
             this.url = null;
         }
-
     }
 }
