@@ -70,6 +70,16 @@ public class UserController {
         return new ResponseEntity<>(new ErrorResponse("400", "로그인 정보가 없습니다."), HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("/error/username")
+    public ResponseEntity<ErrorResponse> usernameError() {
+        return new ResponseEntity<>(new ErrorResponse("400", "username이 존재하지 않습니다."), HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/error/password")
+    public ResponseEntity<ErrorResponse> passwordError() {
+        return new ResponseEntity<>(new ErrorResponse("400", "password가 틀렸습니다."), HttpStatus.BAD_REQUEST);
+    }
+
     @GetMapping("/health")
     public String checkHealth() {
         return "healthy";
