@@ -30,7 +30,6 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final CategoryRepository categoryRepository;
     private final ChatRoomRepository chatRoomRepository;
-    private final ChatRoomUserRepository chatRoomUserRepository;
     private final UserRepository userRepository;
     private final WarnBoardRepository warnBoardRepository;
     private final VoteRepository voteRepository;
@@ -63,7 +62,6 @@ public class BoardService {
             }
             boardRepository.save(board);
         chatRoomRepository.delete(chatRoom);
-        chatRoomUserRepository.deleteByChatRoom(chatRoom);
     }
 
     //게시글 전체 조회
