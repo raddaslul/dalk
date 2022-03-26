@@ -1,6 +1,7 @@
 package com.dalk.security;
 
 import com.dalk.domain.User;
+import com.dalk.exception.ex.UserNotFoundException;
 import com.dalk.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Can't find " + username));
+                .orElseThrow(() -> new UserNotFoundException("해당 아이디가 존재하지 않습니다."));
 
         return new UserDetailsImpl(user);
     }

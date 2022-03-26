@@ -1,5 +1,7 @@
 package com.dalk.security.provider;
 
+import com.dalk.exception.ex.LoginUserNotFoundException;
+import com.dalk.exception.ex.PasswordNotEqualException;
 import com.dalk.security.UserDetailsImpl;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,7 +33,7 @@ public class FormLoginAuthProvider implements AuthenticationProvider {
         // UserDetailsService 를 통해 DB에서 username 으로 사용자 조회
         UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(username);
         if (!passwordEncoder.matches(password, userDetails.getPassword())) {
-            throw new BadCredentialsException(userDetails.getUsername() + "Invalid password");
+            throw new PasswordNotEqualException("비밀번호가 일치하지 않습니다.");
         }
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
     }
