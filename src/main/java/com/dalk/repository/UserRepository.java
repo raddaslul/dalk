@@ -11,7 +11,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByNickname(String nickname);
 
-    List<User> findTop99ByOrderByExDesc();
+    List<User> findTop99ByOrderByExDescCreatedAtDesc();
 
     List<User> findAllByOrderByWarnUserCntDesc();
 
