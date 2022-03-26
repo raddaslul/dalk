@@ -1,5 +1,6 @@
 package com.dalk.security.filter;
 
+import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +31,7 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
             String password = requestBody.get("password").asText();
             authRequest = new UsernamePasswordAuthenticationToken(username, password);
         } catch (Exception e) {
-            throw new RuntimeException("username, password 입력이 필요합니다. (JSON)");
+            throw new LoginUserNotFoundException("username, password 입력이 필요합니다. (JSON)");
         }
 
         setDetails(request, authRequest);
