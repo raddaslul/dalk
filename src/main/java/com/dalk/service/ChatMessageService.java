@@ -127,19 +127,19 @@ public class ChatMessageService {
         switch (item) {
             case "onlyMe":
                 chatMessageRequestDto.setOnlyMe(nickname);
-                chatMessageRequestDto.setMessage(nickname + "님이" + item + "를 사용하셨습니다.");
+                chatMessageRequestDto.setMessage(nickname + "님이 나만 말하기를 사용하셨습니다.");
                 break;
             case "myName":
                 chatMessageRequestDto.setMyName(nickname);
-                chatMessageRequestDto.setMessage(nickname + "님이" + item + "을 사용하셨습니다.");
+                chatMessageRequestDto.setMessage(nickname + "님이 내이름으로를 사용하셨습니다.");
                 break;
             case "papago":
                 chatMessageRequestDto.setPapago(nickname);
-                chatMessageRequestDto.setMessage(nickname + "님이" + item + "을 사용하셨습니다.");
+                chatMessageRequestDto.setMessage(nickname + "님이 파파고를 사용하셨습니다.");
                 break;
             case "reverse":
                 chatMessageRequestDto.setReverse(nickname);
-                chatMessageRequestDto.setMessage(nickname + "님이" + item + "을 사용하셨습니다.");
+                chatMessageRequestDto.setMessage(nickname + "님이 로꾸꺼를 사용하셨습니다.");
                 break;
         }
         ChatMessageItem chatMessageItem = new ChatMessageItem(chatMessageRequestDto);
