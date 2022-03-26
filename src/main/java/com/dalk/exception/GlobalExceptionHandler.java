@@ -138,7 +138,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(WarnChatRoomDuplicateException.class)
     public ResponseEntity<ErrorResponse> handleWarnChatRoomDuplicateException(WarnChatRoomDuplicateException e) {
-        return new ResponseEntity<>(new ErrorResponse("C004", e.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ErrorResponse("CR003", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DuplicateVoteException.class)
