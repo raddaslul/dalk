@@ -1,9 +1,18 @@
 package com.dalk.config.socket;
 
 import com.dalk.domain.ChatMessage;
+import com.dalk.domain.ChatRoom;
+import com.dalk.domain.ChatRoomUser;
+import com.dalk.domain.User;
 import com.dalk.dto.requestDto.ChatMessageRequestDto;
+import com.dalk.exception.ex.ChatRoomNotFoundException;
+import com.dalk.exception.ex.DuplicateChatRoomUserException;
 import com.dalk.exception.ex.LoginUserNotFoundException;
+import com.dalk.exception.ex.UserNotFoundException;
+import com.dalk.repository.ChatRoomRepository;
+import com.dalk.repository.ChatRoomUserRepository;
 import com.dalk.repository.RedisRepository;
+import com.dalk.repository.UserRepository;
 import com.dalk.security.jwt.JwtDecoder;
 import com.dalk.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +35,9 @@ public class StompHandler implements ChannelInterceptor {
     private final JwtDecoder jwtDecoder;
     private final ChatMessageService chatMessageService;
     private final RedisRepository redisRepository;
+    private final ChatRoomUserRepository chatRoomUserRepository;
+    private final ChatRoomRepository chatRoomRepository;
+    private final UserRepository userRepository;
 
     // websocket 을 통해 들어온 요청이 처리 되기전 실행된다.
     @Override
@@ -42,9 +54,21 @@ public class StompHandler implements ChannelInterceptor {
         }
 
         else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
+            String token = accessor.getFirstNativeHeader("Authorization").substring(7);
+            Long userId = Long.parseLong(jwtDecoder.decodeUserId(token));
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
+            ChatRoomUser chatRoomOldUser = chatRoomUserRepository.findByUser_Id(userId);
+
             String roomId = chatMessageService.getRoomId(
                     Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId")
             );
+            ChatRoom chatRoom = chatRoomRepository.findById(Long.valueOf(roomId))
+                    .orElseThrow(() -> new ChatRoomNotFoundException("해당 토론방이 존재하지 않습니다."));
+            if (chatRoomOldUser == null) {
+                ChatRoomUser chatRoomUser = new ChatRoomUser(chatRoom, user);
+                chatRoomUserRepository.save(chatRoomUser);
+            } else throw new DuplicateChatRoomUserException("이미 다른 토론방에 있습니다.");
             // 채팅방에 들어온 클라이언트 sessionId를 roomId와 맵핑해 놓는다.(나중에 특정 세션이 어떤 채팅방에 들어가 있는지 알기 위함)
             redisRepository.setSessionRoomId(sessionId, roomId);
         }

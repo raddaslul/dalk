@@ -16,7 +16,7 @@ public class LottoScheduler {
 
     private final UserRepository userRepository;
 
-    @Scheduled(cron = "1 0 0 * * *") //매일 00시 00분 1초
+    @Scheduled(cron = "0 0 1 * * *") //매일 00시 00분 1초
     public void lottoTimer() {
         List<User> userList = userRepository.findAll();
         for (User user : userList) {
