@@ -7,9 +7,11 @@ import lombok.Data;
 public class CarouselResponseDto {
     private Long CarouselId;
     private String image;
+    private String url;
 
     public CarouselResponseDto(Carousel carousel){
         this.CarouselId = carousel.getId();
         this.image = carousel.getFilePath();
+        this.url = carousel.getUrl();
     }
 }
