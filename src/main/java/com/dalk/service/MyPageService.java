@@ -53,7 +53,7 @@ public class MyPageService {
         //나중에 지우기 책임자 현지훈
         StaticService.saveRank();
 
-        List<User> rankList = userRepository.findTop99ByOrderByExDesc();
+        List<User> rankList = userRepository.findTop99ByOrderByExDescCreatedAtDesc();
         List<RankResponseDto> rankResponseDtoList =new ArrayList<>();
         Long rankNum;
         for(User user :rankList ){

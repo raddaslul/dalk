@@ -51,7 +51,7 @@ public class ChatRoom extends Timestamped {
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
     private List<SaveVote> saveVoteList;
 
-    @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
     private List<WarnChatRoom> warnChatRooms = new ArrayList<>();
 
     public void setUserCnt(Integer userCnt) {
