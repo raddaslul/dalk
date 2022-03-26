@@ -68,7 +68,7 @@ public class ChatRoom extends Timestamped {
         this.userCnt = 0;
     }
 
-    public ChatRoom(String topicA, String topicB,List<Category> categorys,Boolean time,Long createUserId,Boolean status ) {
+    public ChatRoom(String topicA, String topicB,List<Category> categorys,Boolean time,Long createUserId) {
         this.topicA = topicA;
         this.topicB = topicB;
         this.time = time;

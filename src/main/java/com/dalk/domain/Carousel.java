@@ -31,6 +31,11 @@ public class Carousel extends Timestamped {
     public Carousel(String convertedName, String filePath, CarouselRequestDto carouselRequestDto) {
         this.filePath = filePath;
         this.convertedName = convertedName;
-        this.url = carouselRequestDto.getUrl();
+        if (carouselRequestDto != null) {
+            this.url = carouselRequestDto.getUrl();
+        } else {
+            this.url = null;
+        }
+
     }
 }
