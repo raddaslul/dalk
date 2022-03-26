@@ -144,7 +144,7 @@ public class BoardService {
     }
 
     // 게시글 신고하기
-    @Transactional(readOnly = true)
+    @Transactional
     public WarnBoardResponseDto warnBoard(Long boardId, UserDetailsImpl userDetails) {
 
         Board board = boardRepository.findById(boardId).orElseThrow(
