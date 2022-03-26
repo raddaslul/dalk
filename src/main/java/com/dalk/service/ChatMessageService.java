@@ -123,6 +123,7 @@ public class ChatMessageService {
                 .orElseThrow(IllegalAccessError::new);
         String nickname = user.getNickname();
         String item = chatMessageRequestDto.getItem();
+
         switch (item) {
             case "onlyMe":
                 chatMessageRequestDto.setOnlyMe(nickname);
@@ -154,7 +155,20 @@ public class ChatMessageService {
         chatMessageItemResponseDto.setRoomId(roomId);
         chatMessageItemResponseDto.setItem(null);
         chatMessageItemResponseDto.setType(ChatMessage.MessageType.ITEMTIMEOUT);
-        chatMessageItemResponseDto.setMessage(item + "사용시간이 완료되었습니다.");
+        switch (item) {
+            case "onlyMe":
+                chatMessageItemResponseDto.setMessage("나만 말하기 사용시간이 완료되었습니다.");
+                break;
+            case "myName":
+                chatMessageItemResponseDto.setMessage("내 이름으로 사용시간이 완료되었습니다.");
+                break;
+            case "papago":
+                chatMessageItemResponseDto.setMessage("파파고 사용시간이 완료되었습니다.");
+                break;
+            case "reverse":
+                chatMessageItemResponseDto.setMessage("로꾸꺼 사용시간이 완료되었습니다.");
+                break;
+        }
         chatMessageItemResponseDto.setOnlyMe(null);
         chatMessageItemResponseDto.setMyName(null);
         chatMessageItemResponseDto.setPapago(null);
