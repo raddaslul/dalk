@@ -2,6 +2,7 @@ package com.dalk.service;
 
 
 import com.dalk.domain.*;
+import com.dalk.domain.vote.SaveVote;
 import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnBoard;
 import com.dalk.domain.wl.WarnChatRoom;
@@ -38,6 +39,7 @@ public class AdminService {
     private final S3Repository s3Repository;
     private final VoteRepository voteRepository;
     private final PointRepository pointRepository;
+    private final SaveVoteRepository saveVoteRepository;
 
     //블라인드 게시글 전체 조회 - 관리자
     @Transactional(readOnly = true)
@@ -105,6 +107,19 @@ public class AdminService {
     public Map<String, Object> deleteAdminChatRoom(Long roomId) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(()-> new ChatRoomNotFoundException("토론방이 없습니다."));
         Vote vote = voteRepository.findByChatRoom_Id(chatRoom.getId());
+        List<SaveVote> saveVoteReturnList = saveVoteRepository.findAllByChatRoom_Id(roomId);
+        List<User> pointReturnList = new ArrayList<>();
+
+        for (SaveVote saveVote : saveVoteReturnList) {
+            pointReturnList.add(saveVote.getUser());
+        }
+        for (User user : pointReturnList) {
+            SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId); //유저와 채팅방 id로 savevote를 뽑아옴 (유저는 한개씩 가짐)
+            user.totalPointAdd(saveVote.getPoint());
+            userRepository.save(user);
+            Point point = new Point("채팅방 삭제", (saveVote.getPoint()), user); //포인트 내역 생성
+            pointRepository.save(point);
+        }
         vote.setChatRoom(null);
         voteRepository.save(vote);
         voteRepository.delete(vote);
