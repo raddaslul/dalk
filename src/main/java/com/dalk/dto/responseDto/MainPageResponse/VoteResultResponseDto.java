@@ -13,5 +13,4 @@ public class VoteResultResponseDto {
     private String totalPoint;
     private String cnt;
     private String topPoint;
-
 }

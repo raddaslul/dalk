@@ -3,12 +3,10 @@ package com.dalk.controller;
 
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.GivePointRequestDto;
-import com.dalk.dto.requestDto.NoticeRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.service.AdminService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
@@ -36,11 +34,8 @@ public class AdminController {
     @Secured(User.Role.Authority.ADMIN)
     @DeleteMapping("/boards/{boardId}")
     @ApiOperation(value = "블라인드 게시글 삭제")
-    public HashMap<String, Object> deleteAdminBoard(@PathVariable Long boardId){
-        adminService.deleteAdminBoard(boardId);
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("result", "true");
-        return result;
+    public Map<String, Object> deleteAdminBoard(@PathVariable Long boardId){
+        return adminService.deleteAdminBoard(boardId);
     }
 
     @Secured(User.Role.Authority.ADMIN)
@@ -53,11 +48,8 @@ public class AdminController {
     @Secured(User.Role.Authority.ADMIN)
     @DeleteMapping("/rooms/{roomId}")
     @ApiOperation(value = "토론방 삭제")
-    public HashMap<String, Object> deleteAdminChatRoom(@PathVariable Long roomId){
-        adminService.deleteAdminChatRoom(roomId);
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("result", "true");
-        return result;
+    public Map<String, Object> deleteAdminChatRoom(@PathVariable Long roomId){
+        return adminService.deleteAdminChatRoom(roomId);
     }
 
     @Secured(User.Role.Authority.ADMIN)
@@ -70,11 +62,8 @@ public class AdminController {
     @Secured(User.Role.Authority.ADMIN)
     @DeleteMapping("/users/{userId}")
     @ApiOperation(value = "유저 삭제")
-    public HashMap<String, Object> deleteUser(@PathVariable Long userId){
-        adminService.deleteUser(userId);
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("result", "true");
-        return result;
+    public Map<String, Object> deleteUser(@PathVariable Long userId){
+        return adminService.deleteUser(userId);
     }
 
     @Secured(User.Role.Authority.ADMIN)
@@ -83,5 +72,4 @@ public class AdminController {
     public Map<String, Object> givePoint(@RequestBody GivePointRequestDto givePointRequestDto){
         return adminService.givePoint(givePointRequestDto);
     }
-
 }

@@ -8,7 +8,6 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSocketMessageBroker   //웹 소켓 관련 설정 작동

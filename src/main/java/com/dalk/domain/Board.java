@@ -64,7 +64,6 @@ public class Board extends Timestamped {
     public Board(ChatRoom chatRoom) {
         this.topicA = chatRoom.getTopicA();
         this.topicB = chatRoom.getTopicB();
-//        this.winner = vote.getWinner();
         this.createUserId = chatRoom.getCreateUserId();
         this.categorys = chatRoom.getCategorys();
         this.filePath = chatRoom.getFilePath();

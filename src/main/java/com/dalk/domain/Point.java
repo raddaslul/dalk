@@ -1,13 +1,10 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
-import com.dalk.dto.requestDto.GivePointRequestDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.context.event.EventListener;
 
 import javax.persistence.*;
 
@@ -43,11 +40,4 @@ public class Point extends Timestamped {
         this.totalPoint = user.getTotalPoint();
         this.user = user;
     }
-
-//    public Point(GivePointRequestDto givePointRequestDto, Long totalPoint) {
-//        this.content = givePointRequestDto.getContent();
-//        this.changePoint = givePointRequestDto.getPoint();
-//        this.totalPoint = totalPoint;
-//        this.user = givePointRequestDto.getUsername();
-//    }
 }

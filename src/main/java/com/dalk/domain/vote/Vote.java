@@ -2,9 +2,7 @@ package com.dalk.domain.vote;
 
 import com.dalk.domain.Board;
 import com.dalk.domain.ChatRoom;
-import com.dalk.domain.User;
 import com.dalk.dto.requestDto.VoteRequestDto;
-import com.dalk.exception.ex.DuplicateVoteException;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,7 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Entity
 @Table(name = "vote")
 public class Vote {
@@ -50,6 +47,14 @@ public class Vote {
     @OneToMany(mappedBy = "vote", cascade = CascadeType.REMOVE)
     private List<SaveVote> saveVoteList;
 
+    public void setChatRoom(ChatRoom chatRoom) {
+        this.chatRoom = chatRoom;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
     public Vote(ChatRoom chatRoom) {
         this.topicACnt =0L;
         this.topPointA = 0L;
@@ -58,17 +63,6 @@ public class Vote {
         this.topPointB = 0L;
         this.totalPointB = 0F;
         this.chatRoom = chatRoom;
-    }
-
-    public Vote(Board board, Long topicACnt, Long topPointA, Float totalPointA,Long topicBCnt, Long topPointB, Float totalPointB) {
-
-        this.topicACnt =topicACnt;
-        this.topPointA = topPointA;
-        this.totalPointA = totalPointA;
-        this.topicBCnt =topicBCnt;
-        this.topPointB = topPointB;
-        this.totalPointB = totalPointB;
-        this.board = board;
     }
 
     public void winnerA(VoteRequestDto requestDto) {

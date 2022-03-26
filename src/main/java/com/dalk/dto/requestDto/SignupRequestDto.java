@@ -5,7 +5,6 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
-
 @Data
 public class SignupRequestDto {
     @NotBlank(message = "아이디를 입력해주세요.")

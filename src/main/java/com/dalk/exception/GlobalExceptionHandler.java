@@ -165,7 +165,4 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse(HttpStatus.BAD_REQUEST.toString(), Objects.requireNonNull(e.getFieldError()).getDefaultMessage())
                 , HttpStatus.BAD_REQUEST);
     }
-
-
-
 }

@@ -17,7 +17,6 @@ import java.util.Optional;
 
 import static com.dalk.security.jwt.JwtTokenUtils.*;
 
-
 @Component
 public class JwtDecoder {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
@@ -78,4 +77,3 @@ public class JwtDecoder {
         return Optional.ofNullable(jwt);
     }
 }
-

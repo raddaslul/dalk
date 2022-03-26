@@ -21,9 +21,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,6 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 @Slf4j
 public class ChatRoomService {
 
@@ -47,6 +46,7 @@ public class ChatRoomService {
     private final SaveVoteRepository saveVoteRepository;
 
     //토론방 만들기
+    @Transactional
     public Long createChatRoom(MultipartFile multipartFile, UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) throws IOException {
         String convertedFileName = null;
         String filePath = null;
@@ -75,13 +75,12 @@ public class ChatRoomService {
     }
 
     //토론방리스트 탑6 조회
+    @Transactional
     public List<MainPageAllResponseDto> getMainPageTop6() {
         //board 전체를 가져옴
         List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByOrderByCreatedAtDesc();
         //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
-
-
 
         for (ChatRoom chatRoom : chatRoomList) {
             List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
@@ -98,6 +97,7 @@ public class ChatRoomService {
     }
 
     //토론방리스트 전체조회
+    @Transactional
     public List<MainPageAllResponseDto> getMainPageAll(int page,int size) {
         Pageable pageable = PageRequest.of(page,size);
         //board 전체를 가져옴
@@ -120,6 +120,7 @@ public class ChatRoomService {
     }
 
     //채팅방 하나 입장
+    @Transactional
     public ChatRoomEnterResponseDto getMainPageOne(Long roomId, User user) {
         List<Category> categoryList = categoryRepository.findCategoryByChatRoom_Id(roomId);
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(
@@ -127,7 +128,6 @@ public class ChatRoomService {
         );
         chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
         chatRoomRepository.save(chatRoom);
-        log.info("api 채팅방 유저 수 = {}", chatRoom.getUserCnt());
         SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId);
         List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
         List<Long> warnUserList =new ArrayList<>();
@@ -141,6 +141,7 @@ public class ChatRoomService {
     }
 
     // 채팅방 입장 시 기존 메세지 조회
+    @Transactional(readOnly = true)
     public List<ChatMessageRoomResponseDto> getMessages(String roomId) {
         List<ChatMessageRoomResponseDto> chatMessageRoomResponseDtoList = new ArrayList<>();
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllByRoomId(roomId);
@@ -153,7 +154,7 @@ public class ChatRoomService {
         return chatMessageRoomResponseDtoList;
     }
 
-
+    @Transactional(readOnly = true)
     public List<UserInfoResponseDto> getUsers(Long roomId) {
         List<UserInfoResponseDto> userInfoResponseDtoList = new ArrayList<>();
         List<ChatRoomUser> chatRoomUserList = chatRoomUserRepository.findAllByChatRoom_Id(roomId);
@@ -167,6 +168,7 @@ public class ChatRoomService {
     }
 
     //카테고리 검색
+    @Transactional
     public List<MainPageAllResponseDto> getSearchCategory(String category,int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
         Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCaseOrderByCreatedAtDesc(category, category, category ,pageable);
@@ -184,7 +186,9 @@ public class ChatRoomService {
         }
         return mainPageAllResponseDtoList;
     }
+
     //카테고리에서 제일 사람 많은사람
+    @Transactional
     public MainPageAllResponseDto getCategoryTop1(String category) {
         ChatRoom chatRoom = chatRoomRepository.findTopByCategorys_CategoryOrderByUserCntDesc(category);
         List<Category> categoryList = chatRoom.getCategorys();
@@ -198,6 +202,7 @@ public class ChatRoomService {
     }
 
     //카테고리 검색 제목은 안하고 시간순 정렬 카테고리 검색시
+    @Transactional
     public List<MainPageAllResponseDto> getMainPageCreatedAt(String category, int page, int size) {
         Pageable pageable = PageRequest.of(page,size);
         Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrderByCreatedAtDesc(category, pageable);
@@ -216,7 +221,7 @@ public class ChatRoomService {
         return mainPageAllResponseDtoList;
     }
 
-//    토론방 신고기능
+    // 토론방 신고기능
     @Transactional
     public WarnRoomResponseDto WarnChatRoom(Long roomId, UserDetailsImpl userDetails) {
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(
@@ -226,10 +231,10 @@ public class ChatRoomService {
                 () -> new LoginUserNotFoundException("유저 정보가 없습니다")
         );
         WarnRoomResponseDto warnRoomResponseDto =new WarnRoomResponseDto();
-        WarnChatRoom warnChatRoomCheck = warnChatRoomRepository.findByUserIdAndChatRoomId(user.getId(),chatRoom.getId() ).orElse(null);
+        WarnChatRoom warnChatRoomCheck = warnChatRoomRepository.findByUserIdAndChatRoomId(user.getId(), chatRoom.getId() ).orElse(null);
 
         if (warnChatRoomCheck == null){
-            WarnChatRoom warnChatRoom = new WarnChatRoom(true,chatRoom,user);
+            WarnChatRoom warnChatRoom = new WarnChatRoom(true, chatRoom, user);
             warnChatRoomRepository.save(warnChatRoom);
             warnRoomResponseDto.setWarn(warnChatRoom.getIsWarn());
             warnRoomResponseDto.setRoomId(warnChatRoom.getChatRoom().getId());

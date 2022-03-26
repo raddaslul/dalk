@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -43,6 +44,7 @@ public class LottoService {
     private final PointRepository pointRepository;
     private final UserRepository userRepository;
 
+    @Transactional
     public LottoResponseDto getLotto(User user) throws NoSuchAlgorithmException {
 
         if (user.getLottoCnt() <= 0) {
@@ -76,9 +78,9 @@ public class LottoService {
         userRepository.save(user);
 
         return new LottoResponseDto(6, user.getLottoCnt());
-
     }
 
+    @Transactional
     public LottoResponseDto lotto(LottoType lottoType, User user) {
         user.totalPointAdd(lottoType.getPoint());
         user.subtractCount();
