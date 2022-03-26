@@ -26,7 +26,7 @@ public class CarouselController {
     @ApiOperation(value = "Admin에서 배너 등록")
     public Map<String, Object> createBanner(
             @RequestPart("image") MultipartFile multipartFile,
-            @RequestParam("url")CarouselRequestDto carouselRequestDto) throws IOException {
+            @RequestPart(value = "url", required = false) CarouselRequestDto carouselRequestDto) throws IOException {
         Long carouselId = carouselService.uploadFile(multipartFile, carouselRequestDto);
         Map<String, Object> result = new HashMap<>();
         result.put("carouselId", carouselId);
