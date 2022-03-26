@@ -13,7 +13,6 @@ import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.exception.ex.WarnBoardDuplicateException;
 import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnBoardRepository;
-import com.dalk.repository.wl.WarnChatRoomRepository;
 import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -63,16 +62,14 @@ public class BoardService {
             board.setWinner("무승부");
         }
         boardRepository.save(board);
-//        warnChatRoomRepository.findByChatRoom(chatRoom) != null
         if (!chatRoom.getWarnChatRooms().isEmpty()) {
             List<WarnChatRoom> warnChatRoomList = chatRoom.getWarnChatRooms();
             for (WarnChatRoom warnChatRoom : warnChatRoomList) {
                 WarnBoard warnBoard = new WarnBoard(warnChatRoom, board);
                 warnBoardRepository.save(warnBoard);
             }
+            chatRoomRepository.delete(chatRoom);
         }
-
-        chatRoomRepository.delete(chatRoom);
     }
 
     //게시글 전체 조회
