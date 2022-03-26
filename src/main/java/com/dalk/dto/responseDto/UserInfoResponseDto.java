@@ -20,19 +20,33 @@ public class UserInfoResponseDto {
     private ItemResponseDto item;
 
     public UserInfoResponseDto(User user) {
-        this.userId = user.getId();
-        this.username = user.getUsername();
-        this.nickname = user.getNickname();
-        this.point = user.getTotalPoint();
-        this.ex = user.getEx();
-        this.warnUserCnt =user.getWarnUserCnt();
-        if (user.getRanking() != null) {
-            this.rank = user.getRanking().getId();
+        if (user != null) {
+            this.userId = user.getId();
+            this.username = user.getUsername();
+            this.nickname = user.getNickname();
+            this.point = user.getTotalPoint();
+            this.ex = user.getEx();
+            this.warnUserCnt = user.getWarnUserCnt();
+            if (user.getRanking() != null) {
+                this.rank = user.getRanking().getId();
+            } else {
+                this.rank = null;
+            }
+            this.lottoCount = user.getLottoCnt();
+            this.role = user.getRole();
+            this.item = new ItemResponseDto(user);
+
         } else {
-            this.rank = null;
+            this.userId = null;
+            this.username = "탈퇴한유저";
+            this.nickname = "탈퇴한유저";
+            this.point = 0L;
+            this.ex = 0;
+            this.warnUserCnt =0;
+            this.rank =null;
+            this.lottoCount = 0;
+            this.role = null;
+            this.item = null;
         }
-        this.lottoCount = user.getLottoCnt();
-        this.role = user.getRole();
-        this.item = new ItemResponseDto(user);
     }
 }
