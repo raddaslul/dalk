@@ -1,7 +1,6 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
-import com.dalk.dto.requestDto.CarouselRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,14 +27,9 @@ public class Carousel extends Timestamped {
     @Column(name = "url")
     private String url;
 
-    public Carousel(String convertedName, String filePath, CarouselRequestDto carouselRequestDto) {
+    public Carousel(String convertedName, String filePath, String url) {
         this.filePath = filePath;
         this.convertedName = convertedName;
-        if (carouselRequestDto != null) {
-            this.url = carouselRequestDto.getUrl();
-        } else {
-            this.url = null;
-        }
-
+        this.url = url;
     }
 }

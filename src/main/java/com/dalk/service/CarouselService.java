@@ -23,11 +23,11 @@ public class CarouselService {
 
     // 메인 배너 등록
     @Transactional
-    public Long uploadFile(MultipartFile multipartFile, CarouselRequestDto carouselRequestDto) throws IOException {
+    public Long uploadFile(MultipartFile multipartFile, String url) throws IOException {
         String originalFileName = multipartFile.getOriginalFilename();
         String convertedFileName = UUID.randomUUID() + originalFileName;
         String filePath = s3Repository.upload(multipartFile, convertedFileName);
-        Carousel carousel = new Carousel(convertedFileName, filePath, carouselRequestDto);
+        Carousel carousel = new Carousel(convertedFileName, filePath, url);
         carouselRepository.save(carousel);
         return carousel.getId();
     }
