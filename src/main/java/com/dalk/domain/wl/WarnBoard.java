@@ -34,4 +34,10 @@ public class WarnBoard extends Timestamped {
         this.board = board;
         this.user = user;
     }
+    public WarnBoard (WarnChatRoom warnChatRoom, Board board){
+        this.isWarn = warnChatRoom.getIsWarn();
+        this.user = warnChatRoom.getUser();
+        this.board = board;
+    }
+
 }
