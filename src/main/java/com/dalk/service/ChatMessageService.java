@@ -100,7 +100,7 @@ public class ChatMessageService {
             redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageEnterResponseDto);
         } else if (ChatMessage.MessageType.EXIT.equals(chatMessageRequestDto.getType())) {
             chatMessageRequestDto.setMessage(user.getNickname() + "님이 방에서 나갔습니다.");
-            chatRoomUserRepository.deleteByUser_Id(user.getId());
+//            chatRoomUserRepository.deleteByUser_Id(user.getId());
             chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
             chatRoomRepository.save(chatRoom);
             ChatMessageExitResponseDto chatMessageExitResponseDto = new ChatMessageExitResponseDto(chatMessageRequestDto, user);
