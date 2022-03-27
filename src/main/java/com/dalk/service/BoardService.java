@@ -162,7 +162,7 @@ public class BoardService {
 //                userRepository.findById(userDetails.getUser().getId()).orElse(null);
 //                .orElseThrow(() -> new LoginUserNotFoundException("유저 정보가 없습니다."));
         WarnBoardResponseDto warnBoardResponseDto = new WarnBoardResponseDto();
-        WarnBoard warnBoardCheck = warnBoardRepository.findByUserIdAndBoard(userDetails.getUser().getId(), board).orElse(null);
+        WarnBoard warnBoardCheck = warnBoardRepository.findByUserIdAndBoard(user.getId(), board).orElse(null);
         if (warnBoardCheck == null) {
             WarnBoard warnBoard = new WarnBoard(true, board, user);
             warnBoardRepository.save(warnBoard);

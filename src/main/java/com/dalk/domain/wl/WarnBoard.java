@@ -25,11 +25,11 @@ public class WarnBoard extends Timestamped {
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    public WarnBoard(boolean isWarn, Board board, User user) {
+    public WarnBoard(Boolean isWarn, Board board, User user) {
         this.isWarn = isWarn;
         this.board = board;
         this.user = user;
