@@ -77,33 +77,34 @@ public class VoteService {
 
     //투표 누가 이겼는지 확인
     @Transactional
-    public void winVote(Long roomId) {
+    public Vote winVote(Long chatRoomId) {
         Float winRate;
-        Vote vote = voteRepository.findByChatRoom_Id(roomId); //투표 찾아서
-        List<SaveVote> saveVotesTrueList = saveVoteRepository.findAllByChatRoom_IdAndPickTrue(roomId); // topicA픽한사람들 모임
-        List<SaveVote> saveVotesFalseList = saveVoteRepository.findAllByChatRoom_IdAndPickFalse(roomId); // topicB픽한사람들 모임
-        List<SaveVote> saveVotesTieList = saveVoteRepository.findAllByChatRoom_Id(roomId);
+        Vote vote = voteRepository.findByChatRoom_Id(chatRoomId); //투표 찾아서
+        List<SaveVote> saveVotesTrueList = saveVoteRepository.findAllByChatRoom_IdAndPickTrue(chatRoomId); // topicA픽한사람들 모임
+        List<SaveVote> saveVotesFalseList = saveVoteRepository.findAllByChatRoom_IdAndPickFalse(chatRoomId); // topicB픽한사람들 모임
+        List<SaveVote> saveVotesTieList = saveVoteRepository.findAllByChatRoom_Id(chatRoomId);
         List<User> userWinnerList = new ArrayList<>(); //승리한 유저들
         Float totalPoint = vote.getTotalPointA() + vote.getTotalPointB();
 
         if (vote.getTopicACnt() > vote.getTopicBCnt()) { // topicA가 이겻을 경우
             winRate = (totalPoint / vote.getTotalPointA()); //배당률 계산
-            saveVoteList(roomId, winRate, saveVotesTrueList, userWinnerList);
+            saveVoteList(chatRoomId, winRate, saveVotesTrueList, userWinnerList);
         } else if (vote.getTopicACnt() < vote.getTopicBCnt()) { //topicB가 이겼을 경우
             winRate = (totalPoint / vote.getTotalPointB()); // 배당률 계산
-            saveVoteList(roomId, winRate, saveVotesFalseList, userWinnerList);
+            saveVoteList(chatRoomId, winRate, saveVotesFalseList, userWinnerList);
         } else {//투표가 동률일경우
             for (SaveVote saveVote : saveVotesTieList) {
                 userWinnerList.add(saveVote.getUser());
             }
             for (User user : userWinnerList) {
-                SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId); //유저와 채팅방 id로 savevote를 뽑아옴 (유저는 한개씩 가짐)
+                SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), chatRoomId); //유저와 채팅방 id로 savevote를 뽑아옴 (유저는 한개씩 가짐)
                 user.totalPointAdd(saveVote.getPoint());
                 userRepository.save(user);
                 Point point = new Point("투표 무승부", (saveVote.getPoint()), user); //포인트 내역 생성
                 pointRepository.save(point);
             }
         }
+        return vote;
     }
 
     private void saveVoteList(Long roomId, Float winRate, List<SaveVote> saveVotesTrueList, List<User> userWinnerList) {

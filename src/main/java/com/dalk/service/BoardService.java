@@ -39,18 +39,15 @@ public class BoardService {
     // 토론방 종료 후 게시글 생성
     @Transactional
     public void createBoard(ChatRoom chatRoom) {
-        voteService.winVote(chatRoom.getId());
-        Vote vote = voteRepository.findByChatRoom_Id(chatRoom.getId());
-        vote.setChatRoom(null);
-        voteRepository.save(vote);
+        Vote vote = voteService.winVote(chatRoom.getId());
         Board board = new Board(chatRoom);
-        List<Category> categoryList = categoryRepository.findAllByChatRoom(chatRoom);
+        boardRepository.save(board);
+        List<Category> categoryList = chatRoom.getCategorys();
         for (Category categorys : categoryList) {
-            String stringCategory = categorys.getCategory();
-            Category category = new Category(board, stringCategory);
+            Category category = new Category(board, categorys.getCategory());
             categoryRepository.save(category);
         }
-        boardRepository.save(board);
+        vote.setChatRoom(null);
         vote.setBoard(board);
         voteRepository.save(vote);
         board.setVote(vote);
@@ -68,8 +65,8 @@ public class BoardService {
                 WarnBoard warnBoard = new WarnBoard(warnChatRoom, board);
                 warnBoardRepository.save(warnBoard);
             }
-            chatRoomRepository.delete(chatRoom);
         }
+        chatRoomRepository.delete(chatRoom);
     }
 
     //게시글 전체 조회
