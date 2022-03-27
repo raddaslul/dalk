@@ -38,6 +38,7 @@ public class Vote {
     private Float totalPointB;
 
     @OneToOne
+    @JoinColumn(name = "chatRoom_id")
     private ChatRoom chatRoom;
 
     @OneToOne
@@ -64,7 +65,6 @@ public class Vote {
         this.totalPointB = 0F;
         this.chatRoom = chatRoom;
     }
-
     public void winnerA(VoteRequestDto requestDto) {
         this.totalPointA += requestDto.getPoint();
         this.topicACnt += 1;
