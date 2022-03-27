@@ -1,6 +1,7 @@
 package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
+import com.dalk.domain.wl.*;
 import com.dalk.exception.ex.ItemNotFoundException;
 import com.dalk.exception.ex.LackPointException;
 import com.dalk.service.StaticService;
@@ -81,6 +82,21 @@ public class User extends Timestamped {
 
     @OneToOne(mappedBy = "user",cascade =CascadeType.REMOVE)
     private Ranking ranking;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Agree> agreeList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<WarnBoard> warnBoardList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<WarnChatRoom> warnChatRoomList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<WarnComment> warnCommentList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<WarnUser> warnUserList;
 
     public void setEx(Integer ex) {
         this.ex = ex;

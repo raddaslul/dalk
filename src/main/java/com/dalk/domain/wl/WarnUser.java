@@ -21,7 +21,7 @@ public class WarnUser {
     @Column(name = "warn_user")
     private String warnUserName;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn
     private User user;
 
