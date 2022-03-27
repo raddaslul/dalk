@@ -79,9 +79,8 @@ public class BoardService {
 
         for (Board board : boardList) {
             List<Category> categoryList = categoryRepository.findCategoryByBoard_Id(board.getId());
-            User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
-                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
-            );
+            User user = userRepository.findById(board.getCreateUserId()).orElse(null);
+//                    .orElseThrow(() -> new LoginUserNotFoundException("유저 정보가 없습니다"));
             List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
             MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), null);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
@@ -96,9 +95,8 @@ public class BoardService {
                 () -> new BoardNotFoundException("게시글이 없습니다")
         );
         List<Category> categoryList = categoryRepository.findCategoryByBoard_Id(boards.getId());
-        User user = userRepository.findById(boards.getCreateUserId()).orElseThrow(
-                () -> new LoginUserNotFoundException("유저 정보가 없습니다")
-        );
+        User user = userRepository.findById(boards.getCreateUserId()).orElse(null);
+//                .orElseThrow(() -> new LoginUserNotFoundException("유저 정보가 없습니다"));
         Vote vote = boards.getVote();
         List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(boards.getId());
         List<Long> warnUserList = new ArrayList<>();
@@ -144,9 +142,8 @@ public class BoardService {
 
         for (Board boards : boardList) {
             List<Category> categoryList = categoryRepository.findCategoryByBoard_Id(boards.getId());
-            User user = userRepository.findById(boards.getCreateUserId()).orElseThrow(
-                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
-            );
+            User user = userRepository.findById(boards.getCreateUserId()).orElse(null);
+//                    .orElseThrow(() -> new LoginUserNotFoundException("유저 정보가 없습니다"));
             List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(boards.getId());
             MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), null);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
@@ -161,9 +158,9 @@ public class BoardService {
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new BoardNotFoundException("게시글이 없습니다")
         );
-        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
-                () -> new LoginUserNotFoundException("유저 정보가 없습니다.")
-        );
+        User user = userDetails.getUser();
+//                userRepository.findById(userDetails.getUser().getId()).orElse(null);
+//                .orElseThrow(() -> new LoginUserNotFoundException("유저 정보가 없습니다."));
         WarnBoardResponseDto warnBoardResponseDto = new WarnBoardResponseDto();
         WarnBoard warnBoardCheck = warnBoardRepository.findByUserIdAndBoard(userDetails.getUser().getId(), board).orElse(null);
         if (warnBoardCheck == null) {

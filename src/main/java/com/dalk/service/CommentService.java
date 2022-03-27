@@ -57,9 +57,8 @@ public class CommentService {
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
         for (Comment comment : comments) {
-            User user = userRepository.findById(comment.getCreateUserId()).orElseThrow(
-                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
-            );
+            User user = userRepository.findById(comment.getCreateUserId()).orElse(null);
+//                    .orElseThrow(() -> new LoginUserNotFoundException("유저 정보가 없습니다"));
 
             String rawCreatedAt = String.valueOf(comment.getCreatedAt());
             String createdAtDate = rawCreatedAt.split("T")[0];
@@ -142,9 +141,10 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
         );
-        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
-                () -> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
-        );
+        User user = userDetails.getUser();
+//                userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+//                () -> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
+//        );
 //      agree 자체가 null이 됨.
         Agree agreeCheck = agreeRepository.findByUserAndComment(userDetails.getUser(), comment).orElse(null);
 
@@ -190,9 +190,10 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
         );
-        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
-                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
-        );
+        User user = userDetails.getUser();
+//                userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+//                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
+//        );
 
         Agree agreeCheck = agreeRepository.findByUserAndComment(userDetails.getUser(),comment).orElse(null);
 
@@ -237,9 +238,10 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
         );
-        User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
-                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
-        );
+        User user = userDetails.getUser();
+//                userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+//                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
+//        );
         WarnCommentResponseDto warnCommentResponseDto = new WarnCommentResponseDto();
         WarnComment warnCommentCheck = warnCommentRepository.findByUserIdAndComment(userDetails.getUser().getId(),comment).orElse(null);
 
