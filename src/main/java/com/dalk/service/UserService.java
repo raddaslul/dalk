@@ -79,9 +79,10 @@ public class UserService {
 
     @Transactional
     public Map<String, Object> WarnUser(Long userId, UserDetailsImpl userDetails) {
-        User user1 = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
-                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
-        );
+        User user1 = userDetails.getUser();
+//                userRepository.findById(userDetails.getUser().getId()).orElseThrow(
+//                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
+//        );
         User user2 = userRepository.findById(userId).orElseThrow(
                 ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
         );

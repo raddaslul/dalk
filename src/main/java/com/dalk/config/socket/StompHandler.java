@@ -74,15 +74,16 @@ public class StompHandler implements ChannelInterceptor {
         }
 //
         else if (StompCommand.DISCONNECT == accessor.getCommand()) {
-            String rawToken = Optional.ofNullable(accessor.getFirstNativeHeader("Authorization"))
-                    .orElseThrow(() -> new LoginUserNotFoundException("로그인한 유저가 아닙니다."));
-            if(rawToken != null) {
+            String rawToken = Optional.ofNullable(accessor.getFirstNativeHeader("Authorization")).orElse("unknownUser");
+//                    .orElseThrow(() -> new LoginUserNotFoundException("로그인한 유저가 아닙니다."));
+            if(!rawToken.equals("unknownUser")) {
                 String token = rawToken.substring(7);
                 Long userId = Long.parseLong(jwtDecoder.decodeUserId(token));
+                chatRoomUserRepository.deleteByUser_Id(userId);
                 String roomId = redisRepository.getSessionRoomId(sessionId);
                 chatMessageService.accessChatMessage(ChatMessageRequestDto.builder().type(ChatMessage.MessageType.EXIT).roomId(roomId).userId(userId).build());
+                redisRepository.removeUserEnterInfo(sessionId);
             }
-            redisRepository.removeUserEnterInfo(sessionId);
         }
         return message;
     }
