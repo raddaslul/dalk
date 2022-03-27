@@ -106,7 +106,7 @@ public class ChatMessageService {
             } else {
                 chatRoom.setUserCnt(0);
             }
-
+          
             chatRoomRepository.save(chatRoom);
             ChatMessageExitResponseDto chatMessageExitResponseDto = new ChatMessageExitResponseDto(chatMessageRequestDto, user);
             redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageExitResponseDto);
