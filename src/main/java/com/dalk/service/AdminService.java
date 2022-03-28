@@ -45,21 +45,21 @@ public class AdminService {
     @Transactional(readOnly = true)
     public List<MainPageBoardResponseDto> getAdminMainPageBoard() {
 
-            //board 전체를 가져옴
-            List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
-            //리턴할 값의 리스트를 정의
-            List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
+        //board 전체를 가져옴
+        List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
+        //리턴할 값의 리스트를 정의
+        List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
-            for (Board board : boardList) {
+        for (Board board : boardList) {
 
-                List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
-                List<Category> categoryList = categoryRepository.findCategoryByBoard_Id(board.getId());
-                User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
-                        () -> new LoginUserNotFoundException("유저 정보가 없습니다")
-                );
-                MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), user, warnBoardList.size(),null);
+            List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
+            List<Category> categoryList = categoryRepository.findCategoryByBoard_Id(board.getId());
+            User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
+                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
+            );
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), null);
 
-            if(mainPageBoardResponseDto.getWarnCnt()>=5) {
+            if (mainPageBoardResponseDto.getWarnCnt() >= 1) {
                 mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
             }
         }
@@ -93,9 +93,9 @@ public class AdminService {
                     () -> new LoginUserNotFoundException("유저 정보가 없습니다")
             );
             List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(),null);
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(), null);
 
-            if(mainPageAllResponseDto.getWarnCnt()>=1) {
+            if (mainPageAllResponseDto.getWarnCnt() >= 1) {
                 mainPageAllResponseDtoList.add(mainPageAllResponseDto);
             }
         }
@@ -105,7 +105,7 @@ public class AdminService {
     // 토론방 삭제
     @Transactional
     public Map<String, Object> deleteAdminChatRoom(Long roomId) {
-        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(()-> new ChatRoomNotFoundException("토론방이 없습니다."));
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(() -> new ChatRoomNotFoundException("토론방이 없습니다."));
         Vote vote = voteRepository.findByChatRoom_Id(chatRoom.getId());
         List<SaveVote> saveVoteReturnList = saveVoteRepository.findAllByChatRoom_Id(roomId);
         List<User> pointReturnList = new ArrayList<>();
@@ -139,7 +139,7 @@ public class AdminService {
         List<UserInfoResponseDto> allUsers = new ArrayList<>();
         for (User user : userList) {
             UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
-            if(userInfoResponseDto.getWarnUserCnt()>=5) {
+            if (userInfoResponseDto.getWarnUserCnt() >= 1) {
                 allUsers.add(userInfoResponseDto);
             }
         }
@@ -157,14 +157,14 @@ public class AdminService {
     }
 
     @Transactional
-    public Map<String,Object> givePoint(GivePointRequestDto givePointRequestDto) {
+    public Map<String, Object> givePoint(GivePointRequestDto givePointRequestDto) {
 
-       User user = userRepository.findByUsername(givePointRequestDto.getUsername()).orElseThrow(()->new UserNotFoundException("해당 유저가 존재하지 않습니다."));
-       user.totalPointAdd(givePointRequestDto.getPoint());
-       userRepository.save(user);
-        Point point = new Point(givePointRequestDto.getContent(),givePointRequestDto.getPoint(), user);
+        User user = userRepository.findByUsername(givePointRequestDto.getUsername()).orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
+        user.totalPointAdd(givePointRequestDto.getPoint());
+        userRepository.save(user);
+        Point point = new Point(givePointRequestDto.getContent(), givePointRequestDto.getPoint(), user);
         pointRepository.save(point);
-        Map<String,Object> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
         result.put("result", true);
         return result;
     }
