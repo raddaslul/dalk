@@ -9,6 +9,7 @@ import com.dalk.dto.requestDto.VoteRequestDto;
 import com.dalk.dto.responseDto.VoteUserListResponseDto;
 import com.dalk.exception.ex.ChatRoomNotFoundException;
 import com.dalk.exception.ex.DuplicateVoteException;
+import com.dalk.exception.ex.DuplicateVoteZeroPointException;
 import com.dalk.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,9 @@ public class VoteService {
     //투표 버튼 누를때마다
     @Transactional
     public void saveVote(Long roomId, User user, VoteRequestDto requestDto) {
+        if (requestDto.getPoint() <= 0) {
+            throw new DuplicateVoteZeroPointException("0포인트보다 많게 배팅해주세요!");
+        }
         Vote vote = voteRepository.findByChatRoom_Id(roomId); //투표 찾아서
         SaveVote savevote = saveVoteRepository.findByUser_IdAndChatRoom_IdAndVote_Id(user.getId(), roomId, vote.getId());//같은 유저가 투표한적이 있으면 null이 아님
         if (savevote != null) {
@@ -92,6 +96,17 @@ public class VoteService {
         } else if (vote.getTopicACnt() < vote.getTopicBCnt()) { //topicB가 이겼을 경우
             winRate = (totalPoint / vote.getTotalPointB()); // 배당률 계산
             saveVoteList(chatRoomId, winRate, saveVotesFalseList, userWinnerList);
+        } else if (vote.getTopicACnt() == 0 || vote.getTopicBCnt() == 0) {
+            for (SaveVote saveVote : saveVotesTieList) {
+                userWinnerList.add(saveVote.getUser());
+            }
+            for (User user : userWinnerList) {
+                SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), chatRoomId); //유저와 채팅방 id로 savevote를 뽑아옴 (유저는 한개씩 가짐)
+                user.totalPointAdd(saveVote.getPoint());
+                userRepository.save(user);
+                Point point = new Point("투표 승리", (saveVote.getPoint()), user); //포인트 내역 생성
+                pointRepository.save(point);
+            }
         } else {//투표가 동률일경우
             for (SaveVote saveVote : saveVotesTieList) {
                 userWinnerList.add(saveVote.getUser());

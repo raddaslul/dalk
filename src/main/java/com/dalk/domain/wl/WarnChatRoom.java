@@ -27,7 +27,7 @@ public class WarnChatRoom extends Timestamped {
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 

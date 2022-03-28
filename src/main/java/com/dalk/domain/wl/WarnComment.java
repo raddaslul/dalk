@@ -25,7 +25,7 @@ public class WarnComment extends Timestamped {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 

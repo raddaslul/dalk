@@ -112,6 +112,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDuplicateVoteException(DuplicateVoteException e) {
         return new ResponseEntity<>(new ErrorResponse("V001", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(DuplicateVoteZeroPointException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateVoteZeroPointException(DuplicateVoteZeroPointException e) {
+        return new ResponseEntity<>(new ErrorResponse("V002", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(CarouselNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleCarouselNotFoundException(CarouselNotFoundException e) {
