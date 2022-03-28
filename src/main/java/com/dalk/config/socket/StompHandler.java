@@ -65,17 +65,19 @@ public class StompHandler implements ChannelInterceptor {
             );
             ChatRoom chatRoom = chatRoomRepository.findById(Long.valueOf(roomId))
                     .orElseThrow(() -> new ChatRoomNotFoundException("해당 토론방이 존재하지 않습니다."));
-            if (chatRoomOldUser == null) {
-                ChatRoomUser chatRoomUser = new ChatRoomUser(chatRoom, user);
-                chatRoomUserRepository.save(chatRoomUser);
-            } else throw new DuplicateChatRoomUserException("이미 다른 토론방에 있습니다.");
+            if (chatRoomOldUser != null) {
+                chatRoomUserRepository.deleteByUser_Id(userId);
+                redisRepository.removeUserEnterInfo(sessionId);
+            }
+//                throw new DuplicateChatRoomUserException("이미 다른 토론방에 있습니다.");
             // 채팅방에 들어온 클라이언트 sessionId를 roomId와 맵핑해 놓는다.(나중에 특정 세션이 어떤 채팅방에 들어가 있는지 알기 위함)
+            ChatRoomUser chatRoomUser = new ChatRoomUser(chatRoom, user);
+            chatRoomUserRepository.save(chatRoomUser);
             redisRepository.setSessionRoomId(sessionId, roomId);
         }
-//
+
         else if (StompCommand.DISCONNECT == accessor.getCommand()) {
             String rawToken = Optional.ofNullable(accessor.getFirstNativeHeader("Authorization")).orElse("unknownUser");
-//                    .orElseThrow(() -> new LoginUserNotFoundException("로그인한 유저가 아닙니다."));
             if(!rawToken.equals("unknownUser")) {
                 String token = rawToken.substring(7);
                 Long userId = Long.parseLong(jwtDecoder.decodeUserId(token));
