@@ -15,7 +15,6 @@ import com.dalk.dto.responseDto.WarnResponse.WarnCommentResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnUserResponseDto;
 import com.dalk.exception.ex.*;
 import com.dalk.repository.*;
-import com.dalk.repository.wl.WarnCommentRepository;
 import com.dalk.repository.wl.WarnUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
