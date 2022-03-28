@@ -32,9 +32,6 @@ public class UserController {
     @ApiOperation(value = "회원가입")
     public String signup(@RequestBody @Valid SignupRequestDto requestDto) {
         userService.signup(requestDto);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("result", true);
         return "redirect:/users/login";
     }
 

@@ -5,7 +5,6 @@ import com.dalk.dto.requestDto.ChatRoomRequestDto;
 import com.dalk.dto.responseDto.MainPageResponse.ChatRoomEnterResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
-import com.dalk.dto.responseDto.WarnResponse.WarnRoomResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageRoomResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.ChatRoomService;
@@ -19,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,9 +47,9 @@ public class ChatRoomController {
 
     @GetMapping("/api/rooms")
     @ApiOperation(value = "토론방 리스트 전체 조회")
-    public List<MainPageAllResponseDto> getMainPageAll(   @RequestParam("page") int page,
-                                                          @RequestParam("size") int size) {
-        return chatRoomService.getMainPageAll(page,size);
+    public List<MainPageAllResponseDto> getMainPageAll(@RequestParam("page") int page,
+                                                       @RequestParam("size") int size) {
+        return chatRoomService.getMainPageAll(page, size);
     }
 
     @GetMapping("/rooms/{roomId}")
@@ -83,24 +83,23 @@ public class ChatRoomController {
             @PathVariable String category,
             @RequestParam("page") int page,
             @RequestParam("size") int size
-            ) {
-        return chatRoomService.getSearchCategory(category,page,size);
+    ) {
+        return chatRoomService.getSearchCategory(category, page, size);
     }
 
     @GetMapping("/api/category/{category}")
     @ApiOperation(value = "카테고리 클릭시 그 카테고리 게시글만 나옴")
     public List<MainPageAllResponseDto> getMainPageCreatedAt(@PathVariable String category,
-                                                    @RequestParam("page") int page,
-                                                    @RequestParam("size") int size) {
+                                                             @RequestParam("page") int page,
+                                                             @RequestParam("size") int size) {
         return chatRoomService.getMainPageCreatedAt(category, page, size);
     }
 
     @GetMapping("/warnings/rooms/{roomId}")
     @ApiOperation(value = "토론방 신고하기")
-    public WarnRoomResponseDto WarnChatRoom
+    public Map<String, Object> WarnChatRoom
             (@PathVariable Long roomId,
-             @AuthenticationPrincipal UserDetailsImpl userDetails){
-
-        return chatRoomService.WarnChatRoom(roomId,userDetails);
+             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return chatRoomService.WarnChatRoom(roomId, userDetails);
     }
 }

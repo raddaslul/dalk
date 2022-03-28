@@ -39,6 +39,7 @@ public class User extends Timestamped {
             public static final String ADMIN = "ROLE_ADMIN";
         }
     }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -62,9 +63,6 @@ public class User extends Timestamped {
     @Column(name = "lottoCount")
     private Integer lottoCnt;
 
-    @Column(name = "warnUser")
-    private Integer warnUserCnt;
-
     @Column
     @Enumerated(value = EnumType.STRING) // 정보를 받을 때는 Enum 값으로 받지만
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
@@ -77,10 +75,10 @@ public class User extends Timestamped {
     private List<Item> items;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Point> points;
 
-    @OneToOne(mappedBy = "user",cascade =CascadeType.REMOVE)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private Ranking ranking;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
@@ -106,15 +104,12 @@ public class User extends Timestamped {
         this.items = items;
     }
 
-    public void setWarnUserCnt(Integer warnUserCnt){this.warnUserCnt =warnUserCnt;}
-
-    public User(String username, String password, String nickname, Long totalPoint, Integer ex,Integer warnUserCnt, Role role) {
+    public User(String username, String password, String nickname, Long totalPoint, Integer ex, Role role) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.totalPoint = totalPoint;
         this.ex = ex;
-        this.warnUserCnt=warnUserCnt;
         this.role = role;
         this.ranking = null;
         this.lottoCnt = 5;
@@ -144,7 +139,7 @@ public class User extends Timestamped {
     public void useItem(Item userItem) {
         if (userItem.getCnt() > 0) {
             userItem.itemSubtract();
-        }else {
+        } else {
             throw new ItemNotFoundException("아이템이 없습니다");
         }
     }
@@ -157,6 +152,6 @@ public class User extends Timestamped {
         if (this.totalPoint < point) {
             throw new LackPointException("보유한 포인트가 부족합니다");
         }
-        this.totalPoint = this.totalPoint-point;
+        this.totalPoint = this.totalPoint - point;
     }
 }

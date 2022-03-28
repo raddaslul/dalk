@@ -20,9 +20,6 @@ public class WarnChatRoom extends Timestamped {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "is_warn")
-    private Boolean isWarn ;
-
     @ManyToOne
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
@@ -31,8 +28,7 @@ public class WarnChatRoom extends Timestamped {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public WarnChatRoom(boolean isWarn, ChatRoom chatRoom, User user) {
-        this.isWarn = isWarn;
+    public WarnChatRoom(ChatRoom chatRoom, User user) {
         this.chatRoom = chatRoom;
         this.user = user;
     }
