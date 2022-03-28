@@ -196,9 +196,6 @@ public class ChatRoomService {
     public List<MainPageAllResponseDto> getMainPageCreatedAt(String category, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrderByCreatedAtDesc(category, pageable);
-        if (chatRoomList.isEmpty()) {
-            throw new ChatRoomNotFoundException("해당 채팅방이 존재하지 않습니다.");
-        }
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
         for (ChatRoom chatRoom : chatRoomList) {
             List<Category> categoryList = chatRoom.getCategorys();
