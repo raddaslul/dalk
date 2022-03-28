@@ -156,6 +156,22 @@ public class BoardService {
         return mainPageBoardResponseDtoList;
     }
 
+    //카테고리 검색 제목은 안하고 시간순 정렬 카테고리 검색 시
+    @Transactional
+    public List<MainPageBoardResponseDto> getCategory(String category, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Board> boardList = boardRepository.findDistinctByCategorys_CategoryOrderByCreatedAtDesc(category, pageable);
+        List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
+        for (Board board : boardList) {
+            List<Category> categoryList = board.getCategorys();
+            User user = userRepository.findById(board.getCreateUserId()).orElse(null);
+            List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), null);
+            mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
+        }
+        return mainPageBoardResponseDtoList;
+    }
+
     // 게시글 신고하기
     @Transactional
     public WarnBoardResponseDto warnBoard(Long boardId, UserDetailsImpl userDetails) {
