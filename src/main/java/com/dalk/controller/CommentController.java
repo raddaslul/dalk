@@ -21,7 +21,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/comments/{boardId}")
-    @ApiOperation(value = "게시글 작성")
+    @ApiOperation(value = "코멘트 작성")
     public Map<String, Object> createComment(
             @PathVariable Long boardId,
             @RequestBody CommentRequestDto requestDto,
@@ -71,7 +71,7 @@ public class CommentController {
 
     @GetMapping("/warnings/comments/{commentId}")
     @ApiOperation(value = "댓글 신고하기")
-    public WarnCommentResponseDto warnComment(
+    public Map<String, Object> warnComment(
             @PathVariable Long commentId,
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){

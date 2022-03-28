@@ -3,13 +3,17 @@ package com.dalk.controller;
 
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.GivePointRequestDto;
+import com.dalk.dto.responseDto.CommentResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnCommentResponseDto;
+import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.AdminService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -37,6 +41,17 @@ public class AdminController {
     public Map<String, Object> deleteAdminBoard(@PathVariable Long boardId){
         return adminService.deleteAdminBoard(boardId);
     }
+    @Secured(User.Role.Authority.ADMIN)
+    @GetMapping("/comments")
+    @ApiOperation(value = "신고 댓글 조회")
+    public List<WarnCommentResponseDto> getAdminComment() {return adminService.getAdminComment();}
+
+    @Secured(User.Role.Authority.ADMIN)
+    @DeleteMapping("/comments/{commentId}")
+    @ApiOperation(value = "신고 댓글 삭제")
+    public Map<String, Object> deleteAdminComment(@PathVariable Long commentId) {
+        return adminService.deleteAdminComment(commentId);
+    }
 
     @Secured(User.Role.Authority.ADMIN)
     @GetMapping("/rooms")
@@ -47,7 +62,7 @@ public class AdminController {
 
     @Secured(User.Role.Authority.ADMIN)
     @DeleteMapping("/rooms/{roomId}")
-    @ApiOperation(value = "토론방 삭제")
+    @ApiOperation(value = "신고 토론방 삭제")
     public Map<String, Object> deleteAdminChatRoom(@PathVariable Long roomId){
         return adminService.deleteAdminChatRoom(roomId);
     }
@@ -61,7 +76,7 @@ public class AdminController {
 
     @Secured(User.Role.Authority.ADMIN)
     @DeleteMapping("/users/{userId}")
-    @ApiOperation(value = "유저 삭제")
+    @ApiOperation(value = "신고 유저 삭제")
     public Map<String, Object> deleteUser(@PathVariable Long userId){
         return adminService.deleteUser(userId);
     }

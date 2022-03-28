@@ -233,25 +233,23 @@ public class CommentService {
 
 //    댓글 신고하기
     @Transactional
-    public WarnCommentResponseDto warnComment(Long commentId, UserDetailsImpl userDetails) {
+    public Map<String, Object> warnComment(Long commentId, UserDetailsImpl userDetails) {
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
         );
         User user = userDetails.getUser();
-//                userRepository.findById(userDetails.getUser().getId()).orElseThrow(
-//                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
-//        );
-        WarnCommentResponseDto warnCommentResponseDto = new WarnCommentResponseDto();
+
         WarnComment warnCommentCheck = warnCommentRepository.findByUserIdAndComment(userDetails.getUser().getId(),comment).orElse(null);
+        Map<String,Object> result = new HashMap<>();
 
         if (warnCommentCheck == null){
-            WarnComment warnComment = new WarnComment(true, comment, user);
+            WarnComment warnComment = new WarnComment( comment, user);
             warnCommentRepository.save(warnComment);
-            warnCommentResponseDto.setCommentId(warnComment.getComment().getId());
-            warnCommentResponseDto.setWarn(warnComment.getIsWarn());
-            return warnCommentResponseDto;
+            result.put("result",true);
+            return result;
         }
+
         else throw new WarnCommentDuplicateException("이미 신고한 댓글입니다.");
     }
 }
