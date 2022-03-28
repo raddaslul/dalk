@@ -2,7 +2,9 @@ package com.dalk.service;
 
 import com.dalk.domain.*;
 import com.dalk.domain.wl.WarnUser;
+import com.dalk.dto.requestDto.NicknameCheckRequestDto;
 import com.dalk.dto.requestDto.SignupRequestDto;
+import com.dalk.dto.requestDto.UsernameCheckRequestDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.exception.ex.*;
 import com.dalk.repository.*;
@@ -100,6 +102,26 @@ public class UserService {
     }
     public static UserInfoResponseDto userInfo(User user) {
         return new UserInfoResponseDto(user);
+    }
+
+    @Transactional
+    public Map<String, Object> usernameCheck(UsernameCheckRequestDto requestDto) {
+        User user = userRepository.findByUsername(requestDto.getUsername()).orElse(null);
+        if (user == null) {
+            Map<String, Object> result = new HashMap<>();
+            result.put("result", true);
+            return result;
+        } else throw new DuplicateUsernameException("이미 존재하는 아이디 입니다");
+    }
+
+    @Transactional
+    public Map<String, Object> nicknameCheck(NicknameCheckRequestDto requestDto) {
+        User user = userRepository.findByNickname(requestDto.getNickname()).orElse(null);
+        if (user == null) {
+            Map<String, Object> result = new HashMap<>();
+            result.put("result", true);
+            return result;
+        } else throw new DuplicationNicknameException("이미 존재하는 닉네임 입니다");
     }
 }
 

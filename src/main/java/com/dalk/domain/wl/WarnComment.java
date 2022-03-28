@@ -17,9 +17,9 @@ public class WarnComment extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
-    @Column(name = "is_warn")
-    private Boolean isWarn;
+//
+//    @Column(name = "is_warn")
+//    private Boolean isWarn;
 
     @ManyToOne
     @JoinColumn(name = "comment_id")
@@ -29,8 +29,7 @@ public class WarnComment extends Timestamped {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public WarnComment(boolean isWarn, Comment comment, User user) {
-        this.isWarn = isWarn;
+    public WarnComment( Comment comment, User user) {
         this.comment = comment;
         this.user = user;
     }
