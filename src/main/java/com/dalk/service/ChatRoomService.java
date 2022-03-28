@@ -144,8 +144,8 @@ public class ChatRoomService {
         List<ChatMessageRoomResponseDto> chatMessageRoomResponseDtoList = new ArrayList<>();
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllByRoomId(roomId);
         for (ChatMessage chatMessage : chatMessageList) {
-            User user = userRepository.findById(chatMessage.getUser().getId())
-                    .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
+            User user = userRepository.findById(chatMessage.getUser().getId()).orElse(null);
+//                    .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
             ChatMessageRoomResponseDto chatMessageRoomResponseDto = new ChatMessageRoomResponseDto(user, chatMessage);
             chatMessageRoomResponseDtoList.add(chatMessageRoomResponseDto);
         }
