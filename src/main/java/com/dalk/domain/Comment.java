@@ -2,6 +2,7 @@ package com.dalk.domain;
 
 import com.dalk.domain.time.Timestamped;
 import com.dalk.domain.wl.Agree;
+import com.dalk.domain.wl.WarnComment;
 import com.dalk.dto.requestDto.CommentRequestDto;
 import lombok.*;
 
@@ -38,6 +39,9 @@ public class Comment extends Timestamped {
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<Agree> agreeList;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<WarnComment> warnCommentList;
 
     public void setAgreeCnt(Integer agreeCnt) {
         this.agreeCnt = agreeCnt;
