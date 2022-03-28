@@ -9,7 +9,6 @@ import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.VoteResultResponseDto;
 import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
 import com.dalk.exception.ex.BoardNotFoundException;
-import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.exception.ex.WarnBoardDuplicateException;
 import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnBoardRepository;
@@ -31,6 +30,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final CategoryRepository categoryRepository;
     private final ChatRoomRepository chatRoomRepository;
+    private final ChatMessageRepository chatMessageRepository;
     private final UserRepository userRepository;
     private final WarnBoardRepository warnBoardRepository;
     private final VoteRepository voteRepository;
@@ -65,6 +65,11 @@ public class BoardService {
                 WarnBoard warnBoard = new WarnBoard(warnChatRoom, board);
                 warnBoardRepository.save(warnBoard);
             }
+        }
+        List<ChatMessage> chatMessageList = chatRoom.getChatMessageList();
+        for (ChatMessage chatMessage : chatMessageList) {
+            chatMessage.setUser(null);
+            chatMessageRepository.save(chatMessage);
         }
         chatRoomRepository.delete(chatRoom);
     }

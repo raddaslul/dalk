@@ -28,7 +28,6 @@ public class ChatMessageService {
     private final ChannelTopic channelTopic;
     private final RedisTemplate redisTemplate;
     private final UserRepository userRepository;
-    private final ChatRoomUserRepository chatRoomUserRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final ChatMessageItemRepository chatMessageItemRepository;
     private final ChatRoomRepository chatRoomRepository;
@@ -59,7 +58,10 @@ public class ChatMessageService {
         User user = userRepository.findById(chatMessageRequestDto.getUserId())
                 .orElseThrow(IllegalAccessError::new);
 
-        ChatMessage chatMessage = new ChatMessage(chatMessageRequestDto, user);
+        ChatRoom chatRoom = chatRoomRepository.findById(Long.valueOf(chatMessageRequestDto.getRoomId()))
+                .orElseThrow(() -> new ChatRoomNotFoundException("채팅방이 존재하지 않습니다."));
+
+        ChatMessage chatMessage = new ChatMessage(chatMessageRequestDto, user, chatRoom);
         return chatMessageRepository.save(chatMessage);
     }
 
