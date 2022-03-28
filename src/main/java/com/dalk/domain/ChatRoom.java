@@ -49,6 +49,9 @@ public class ChatRoom extends Timestamped {
     private List<ChatRoomUser> chatRoomUser;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
+    private List<ChatMessage> chatMessageList;
+
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
     private List<SaveVote> saveVoteList;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)

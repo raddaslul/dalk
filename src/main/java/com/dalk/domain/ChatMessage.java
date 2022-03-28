@@ -37,6 +37,10 @@ public class ChatMessage {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "chatRom_id")
+    private ChatRoom chatRoom;
+
     public ChatMessage(ChatMessageRequestDto chatMessageRequestDto, User user) {
         this.type = chatMessageRequestDto.getType();
         this.roomId = chatMessageRequestDto.getRoomId();
