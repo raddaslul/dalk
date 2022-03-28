@@ -8,8 +8,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface WarnBoardRepository extends JpaRepository<WarnBoard, Long> {
+
     Optional<WarnBoard> findByUserIdAndBoard(Long user_id, Board board);
 
-    List<WarnBoard> findByBoardId(Long id);
+    List<WarnBoard> findByBoardId(Long boardId);
 
+    Integer countByBoard_Id(Long boardId);
 }

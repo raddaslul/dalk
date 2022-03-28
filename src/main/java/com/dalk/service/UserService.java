@@ -42,7 +42,7 @@ public class UserService {
         }
         String password = passwordEncoder.encode(requestDto.getPassword());//비번 인코딩
 
-        User user = new User(username, password, nickname, 5000L, 0,0, User.Role.USER);
+        User user = new User(username, password, nickname, 5000L, 0, User.Role.USER);
         userRepository.save(user);
 
         List<Item> items = getItemTests(user);
@@ -80,24 +80,20 @@ public class UserService {
     @Transactional
     public Map<String, Object> WarnUser(Long userId, UserDetailsImpl userDetails) {
         User user1 = userDetails.getUser();
-//                userRepository.findById(userDetails.getUser().getId()).orElseThrow(
-//                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
-//        );
         User user2 = userRepository.findById(userId).orElseThrow(
-                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
+                () -> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
         );
-        WarnUser warnUserCheck = warnUserRepository.findByUserIdAndWarnUserName(user1.getId(),user2.getUsername()).orElse(null);
+        WarnUser warnUserCheck = warnUserRepository.findByUserIdAndWarnUserName(user1.getId(), user2.getUsername()).orElse(null);
 
-      Map<String, Object> result = new HashMap<>();
-            if(warnUserCheck == null){
-                WarnUser warnUser = new WarnUser(user1,user2.getUsername());
-                warnUserRepository.save(warnUser);
-                user2.setWarnUserCnt(user2.getWarnUserCnt()+1);
-                result.put("result", true);
-                return result;
-            }
-            else throw new WarnDuplicateException("이미 신고한 유저입니다.");
+        Map<String, Object> result = new HashMap<>();
+        if (warnUserCheck == null) {
+            WarnUser warnUser = new WarnUser(user1, user2.getUsername());
+            warnUserRepository.save(warnUser);
+            result.put("result", true);
+            return result;
+        } else throw new WarnDuplicateException("이미 신고한 유저입니다.");
     }
+
     public static UserInfoResponseDto userInfo(User user) {
         return new UserInfoResponseDto(user);
     }

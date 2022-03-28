@@ -3,16 +3,15 @@ package com.dalk.controller;
 
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.GivePointRequestDto;
-import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
-import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
-import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnChatRoomResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnUserResponseDto;
 import com.dalk.service.AdminService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +26,7 @@ public class AdminController {
     @Secured(User.Role.Authority.ADMIN)
     @GetMapping("/boards")
     @ApiOperation(value = "블라인드 게시글 조회")
-    public List<MainPageBoardResponseDto> getAdminBoard(){
+    public List<WarnBoardResponseDto> getAdminBoard(){
         return adminService.getAdminMainPageBoard();
     }
 
@@ -41,7 +40,7 @@ public class AdminController {
     @Secured(User.Role.Authority.ADMIN)
     @GetMapping("/rooms")
     @ApiOperation(value = "신고 토론방 목록 조회")
-    public List<MainPageAllResponseDto> getAdminMainPageAll() {
+    public List<WarnChatRoomResponseDto> getAdminMainPageAll() {
         return adminService.getAdminMainPageAll();
     }
 
@@ -55,7 +54,7 @@ public class AdminController {
     @Secured(User.Role.Authority.ADMIN)
     @GetMapping("/users")
     @ApiOperation(value = "신고 유저 목록 조회")
-    public List<UserInfoResponseDto> getUserList(){
+    public List<WarnUserResponseDto> getUserList(){
         return adminService.getUserList();
     }
 

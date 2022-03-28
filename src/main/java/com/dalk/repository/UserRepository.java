@@ -7,13 +7,14 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+
     Optional<User> findByUsername(String username);
 
     Optional<User> findByNickname(String nickname);
 
     List<User> findTop99ByOrderByExDescCreatedAtDesc();
 
-    List<User> findAllByOrderByWarnUserCntDesc();
-
     List<User> findTop3ByOrderByExDescCreatedAtDesc();
+
+    List<User> findAllByOrderByCreatedAtDesc();
 }

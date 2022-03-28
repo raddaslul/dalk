@@ -6,25 +6,21 @@ import com.dalk.domain.vote.SaveVote;
 import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnBoard;
 import com.dalk.domain.wl.WarnChatRoom;
+import com.dalk.domain.wl.WarnUser;
 import com.dalk.dto.requestDto.GivePointRequestDto;
-import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
-import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
-import com.dalk.dto.responseDto.UserInfoResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnChatRoomResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnUserResponseDto;
 import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.exception.ex.ChatRoomNotFoundException;
-import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.exception.ex.UserNotFoundException;
 import com.dalk.repository.*;
-import com.dalk.repository.wl.WarnBoardRepository;
-import com.dalk.repository.wl.WarnChatRoomRepository;
+import com.dalk.repository.wl.WarnUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -33,37 +29,29 @@ public class AdminService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
-    private final CategoryRepository categoryRepository;
-    private final WarnBoardRepository warnBoardRepository;
-    private final WarnChatRoomRepository warnChatRoomRepository;
     private final S3Repository s3Repository;
     private final VoteRepository voteRepository;
     private final PointRepository pointRepository;
     private final SaveVoteRepository saveVoteRepository;
+    private final WarnUserRepository warnUserRepository;
 
     //블라인드 게시글 전체 조회 - 관리자
     @Transactional(readOnly = true)
-    public List<MainPageBoardResponseDto> getAdminMainPageBoard() {
+    public List<WarnBoardResponseDto> getAdminMainPageBoard() {
 
         //board 전체를 가져옴
         List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
         //리턴할 값의 리스트를 정의
-        List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
+        List<WarnBoardResponseDto> warnBoardResponseDtoList = new ArrayList<>();
 
         for (Board board : boardList) {
-
-            List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
-            List<Category> categoryList = categoryRepository.findCategoryByBoard_Id(board.getId());
-            User user = userRepository.findById(board.getCreateUserId()).orElseThrow(
-                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
-            );
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), null);
-
-            if (mainPageBoardResponseDto.getWarnCnt() >= 1) {
-                mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
+            List<WarnBoard> warnBoardList = board.getWarnBoards();
+            WarnBoardResponseDto warnBoardResponseDto = new WarnBoardResponseDto(board, warnBoardList.size());
+            if (warnBoardList.size() >= 1) {
+                warnBoardResponseDtoList.add(warnBoardResponseDto);
             }
         }
-        return mainPageBoardResponseDtoList;
+        return warnBoardResponseDtoList;
     }
 
     // 블라인드 or 게시글  삭제 - 관리자
@@ -82,24 +70,19 @@ public class AdminService {
 
     // 토론방 목록 조회 - 관리자
     @Transactional(readOnly = true)
-    public List<MainPageAllResponseDto> getAdminMainPageAll() {
+    public List<WarnChatRoomResponseDto> getAdminMainPageAll() {
         //board 전체를 가져옴
         List<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc();
         //리턴할 값의 리스트를 정의
-        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
+        List<WarnChatRoomResponseDto> warnChatRoomResponseDtoList = new ArrayList<>();
         for (ChatRoom chatRoom : chatRoomList) {
-            List<Category> categoryList = categoryRepository.findCategoryByChatRoom(chatRoom);
-            User user = userRepository.findById(chatRoom.getCreateUserId()).orElseThrow(
-                    () -> new LoginUserNotFoundException("유저 정보가 없습니다")
-            );
-            List<WarnChatRoom> warnChatRoomList = warnChatRoomRepository.findByChatRoomId(chatRoom.getId());
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(), null);
-
-            if (mainPageAllResponseDto.getWarnCnt() >= 1) {
-                mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+            List<WarnChatRoom> warnChatRoomList = chatRoom.getWarnChatRooms();
+            WarnChatRoomResponseDto warnChatRoomResponseDto = new WarnChatRoomResponseDto(chatRoom, warnChatRoomList.size());
+            if (warnChatRoomList.size() >= 1) {
+                warnChatRoomResponseDtoList.add(warnChatRoomResponseDto);
             }
         }
-        return mainPageAllResponseDtoList;
+        return warnChatRoomResponseDtoList;
     }
 
     // 토론방 삭제
@@ -133,17 +116,18 @@ public class AdminService {
 
     // 유저 신고 조회 - 관리자
     @Transactional(readOnly = true)
-    public List<UserInfoResponseDto> getUserList() {
+    public List<WarnUserResponseDto> getUserList() {
+        List<User> userList = userRepository.findAllByOrderByCreatedAtDesc();
 
-        List<User> userList = userRepository.findAllByOrderByWarnUserCntDesc();
-        List<UserInfoResponseDto> allUsers = new ArrayList<>();
+        List<WarnUserResponseDto> warnUserResponseDtoList = new ArrayList<>();
         for (User user : userList) {
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
-            if (userInfoResponseDto.getWarnUserCnt() >= 1) {
-                allUsers.add(userInfoResponseDto);
+            List<WarnUser> warnUserList = warnUserRepository.findAllByWarnUserName(user.getUsername());
+            WarnUserResponseDto warnUserResponseDto = new WarnUserResponseDto(user, warnUserList.size());
+            if(warnUserList.size() >= 1) {
+                warnUserResponseDtoList.add(warnUserResponseDto);
             }
         }
-        return allUsers;
+        return warnUserResponseDtoList;
     }
 
     // 유저 삭제 - 관리자

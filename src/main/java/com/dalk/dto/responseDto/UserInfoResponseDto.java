@@ -13,7 +13,6 @@ public class UserInfoResponseDto {
     private String nickname;
     private Long point;
     private Integer ex;
-    private Integer warnUserCnt;
     private Long rank;
     private Integer lottoCount;
     private User.Role role;
@@ -26,7 +25,6 @@ public class UserInfoResponseDto {
             this.nickname = user.getNickname();
             this.point = user.getTotalPoint();
             this.ex = user.getEx();
-            this.warnUserCnt = user.getWarnUserCnt();
             if (user.getRanking() != null) {
                 this.rank = user.getRanking().getId();
             } else {
@@ -42,7 +40,6 @@ public class UserInfoResponseDto {
             this.nickname = "탈퇴한유저";
             this.point = 0L;
             this.ex = 0;
-            this.warnUserCnt =0;
             this.rank =null;
             this.lottoCount = 0;
             this.role = null;
