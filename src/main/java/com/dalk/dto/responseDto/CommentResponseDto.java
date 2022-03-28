@@ -23,7 +23,7 @@ public class CommentResponseDto {
     private List<Long> agreeUserList;
     private List<Long> disagreeUserList;
 
-    public CommentResponseDto(User user,Comment comment, String createdAt, List<Long> warnUserList, List<Long> agreeUserList, List<Long> disagreeUserList) {
+    public CommentResponseDto(User user, Comment comment, String createdAt, List<Long> warnUserList, List<Long> agreeUserList, List<Long> disagreeUserList) {
         this.userInfo = new UserInfoResponseDto(user);
         this.commentId = comment.getId();
         this.comment = comment.getComment();
@@ -31,8 +31,8 @@ public class CommentResponseDto {
         this.disAgreeCnt = comment.getDisAgreeCnt();
         this.WarnCnt = warnUserList.size();
         this.createdAt = createdAt;
-        this.warnUserList= warnUserList;
-        this.agreeUserList= agreeUserList;
+        this.warnUserList = warnUserList;
+        this.agreeUserList = agreeUserList;
         this.disagreeUserList = disagreeUserList;
     }
 }

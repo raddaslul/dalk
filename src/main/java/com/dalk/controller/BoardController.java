@@ -3,7 +3,6 @@ package com.dalk.controller;
 import com.dalk.dto.responseDto.MainPageResponse.DetailResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
-import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.BoardService;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,7 +56,7 @@ public class BoardController {
 
     @GetMapping("/warnings/boards/{boardId}")
     @ApiOperation(value = "게시글 신고하기")
-    public WarnBoardResponseDto WarnBoard
+    public Map<String, Object> WarnBoard
             (@PathVariable Long boardId,
             @AuthenticationPrincipal UserDetailsImpl userDetails){
         return boardService.warnBoard(boardId,userDetails);

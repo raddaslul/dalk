@@ -18,9 +18,6 @@ public class WarnBoard extends Timestamped {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "is_warn")
-    private Boolean isWarn;
-
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
@@ -29,13 +26,11 @@ public class WarnBoard extends Timestamped {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public WarnBoard(Boolean isWarn, Board board, User user) {
-        this.isWarn = isWarn;
+    public WarnBoard(Board board, User user) {
         this.board = board;
         this.user = user;
     }
     public WarnBoard (WarnChatRoom warnChatRoom, Board board){
-        this.isWarn = warnChatRoom.getIsWarn();
         this.user = warnChatRoom.getUser();
         this.board = board;
     }

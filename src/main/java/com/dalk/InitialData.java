@@ -31,7 +31,6 @@
 //                "user1",
 //                0L,
 //                3,
-//                0,
 //                User.Role.ADMIN);
 //        userRepository.save(user1);
 //        List<Item> itemTests1 = userService.getItemTests(user1);
@@ -47,7 +46,6 @@
 //                "user2",
 //                0L,
 //                2,
-//                0,
 //                User.Role.ADMIN);
 //        userRepository.save(user2);
 //        List<Item> itemTests2 = userService.getItemTests(user2);
@@ -63,7 +61,6 @@
 //                "user3",
 //                0L,
 //                1,
-//                0,
 //                User.Role.ADMIN);
 //        userRepository.save(user3);
 //        List<Item> itemTests3 = userService.getItemTests(user3);
@@ -80,7 +77,6 @@
 //                "user4",
 //                0L,
 //                0,
-//                0,
 //                User.Role.ADMIN);
 //        userRepository.save(user4);
 //        List<Item> itemTests4 = userService.getItemTests(user4);
@@ -95,7 +91,6 @@
 //                encPassword,
 //                "goodgoddog",
 //                0L,
-//                0,
 //                0,
 //                User.Role.ADMIN);
 //        userRepository.save(user5);
