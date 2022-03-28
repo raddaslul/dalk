@@ -9,6 +9,7 @@ import com.dalk.dto.requestDto.VoteRequestDto;
 import com.dalk.dto.responseDto.VoteUserListResponseDto;
 import com.dalk.exception.ex.ChatRoomNotFoundException;
 import com.dalk.exception.ex.DuplicateVoteException;
+import com.dalk.exception.ex.DuplicateVoteZeroPointException;
 import com.dalk.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,9 @@ public class VoteService {
     //투표 버튼 누를때마다
     @Transactional
     public void saveVote(Long roomId, User user, VoteRequestDto requestDto) {
+        if (requestDto.getPoint() <= 0) {
+            throw new DuplicateVoteZeroPointException("0포인트보다 많게 배팅해주세요!");
+        }
         Vote vote = voteRepository.findByChatRoom_Id(roomId); //투표 찾아서
         SaveVote savevote = saveVoteRepository.findByUser_IdAndChatRoom_IdAndVote_Id(user.getId(), roomId, vote.getId());//같은 유저가 투표한적이 있으면 null이 아님
         if (savevote != null) {
