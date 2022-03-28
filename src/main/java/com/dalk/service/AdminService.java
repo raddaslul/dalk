@@ -6,18 +6,17 @@ import com.dalk.domain.vote.SaveVote;
 import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnBoard;
 import com.dalk.domain.wl.WarnChatRoom;
+import com.dalk.domain.wl.WarnComment;
+import com.dalk.domain.wl.WarnUser;
 import com.dalk.dto.requestDto.GivePointRequestDto;
-import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
-import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
-import com.dalk.dto.responseDto.UserInfoResponseDto;
-import com.dalk.exception.ex.BoardNotFoundException;
-import com.dalk.exception.ex.ChatRoomNotFoundException;
-import com.dalk.exception.ex.LoginUserNotFoundException;
-import com.dalk.exception.ex.UserNotFoundException;
+import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnChatRoomResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnCommentResponseDto;
+import com.dalk.dto.responseDto.WarnResponse.WarnUserResponseDto;
+import com.dalk.exception.ex.*;
 import com.dalk.repository.*;
-import com.dalk.repository.wl.WarnBoardRepository;
-import com.dalk.repository.wl.WarnChatRoomRepository;
 import com.dalk.repository.wl.WarnCommentRepository;
+import com.dalk.repository.wl.WarnUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +35,6 @@ public class AdminService {
     private final PointRepository pointRepository;
     private final SaveVoteRepository saveVoteRepository;
     private final WarnUserRepository warnUserRepository;
-    private final WarnCommentRepository warnCommentRepository;
     private final CommentRepository commentRepository;
 
     //블라인드 게시글 전체 조회 - 관리자
