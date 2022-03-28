@@ -96,6 +96,17 @@ public class VoteService {
         } else if (vote.getTopicACnt() < vote.getTopicBCnt()) { //topicB가 이겼을 경우
             winRate = (totalPoint / vote.getTotalPointB()); // 배당률 계산
             saveVoteList(chatRoomId, winRate, saveVotesFalseList, userWinnerList);
+        } else if (vote.getTopicACnt() == 0 || vote.getTopicBCnt() == 0) {
+            for (SaveVote saveVote : saveVotesTieList) {
+                userWinnerList.add(saveVote.getUser());
+            }
+            for (User user : userWinnerList) {
+                SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), chatRoomId); //유저와 채팅방 id로 savevote를 뽑아옴 (유저는 한개씩 가짐)
+                user.totalPointAdd(saveVote.getPoint());
+                userRepository.save(user);
+                Point point = new Point("투표 승리", (saveVote.getPoint()), user); //포인트 내역 생성
+                pointRepository.save(point);
+            }
         } else {//투표가 동률일경우
             for (SaveVote saveVote : saveVotesTieList) {
                 userWinnerList.add(saveVote.getUser());
