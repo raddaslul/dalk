@@ -1,6 +1,7 @@
 package com.dalk.controller;
 
 import com.dalk.dto.responseDto.MainPageResponse.DetailResponseDto;
+import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.BoardService;
@@ -43,6 +44,14 @@ public class BoardController {
             @RequestParam("page") int page,
             @RequestParam("size") int size) {
         return boardService.getSearchWord(keyword,page,size);
+    }
+
+    @GetMapping("/api/boards/category/{category}")
+    @ApiOperation(value = "카테고리탭 클릭시 그 카테고리 게시글만 나옴")
+    public List<MainPageBoardResponseDto> getMainPageCreatedAt(@PathVariable String category,
+                                                             @RequestParam("page") int page,
+                                                             @RequestParam("size") int size) {
+        return boardService.getCategory(category, page, size);
     }
 
     @GetMapping("/warnings/boards/{boardId}")

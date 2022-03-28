@@ -6,16 +6,18 @@ import com.dalk.domain.vote.SaveVote;
 import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnBoard;
 import com.dalk.domain.wl.WarnChatRoom;
-import com.dalk.domain.wl.WarnUser;
 import com.dalk.dto.requestDto.GivePointRequestDto;
-import com.dalk.dto.responseDto.WarnResponse.WarnBoardResponseDto;
-import com.dalk.dto.responseDto.WarnResponse.WarnChatRoomResponseDto;
-import com.dalk.dto.responseDto.WarnResponse.WarnUserResponseDto;
+import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
+import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
+import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.exception.ex.BoardNotFoundException;
 import com.dalk.exception.ex.ChatRoomNotFoundException;
+import com.dalk.exception.ex.LoginUserNotFoundException;
 import com.dalk.exception.ex.UserNotFoundException;
 import com.dalk.repository.*;
-import com.dalk.repository.wl.WarnUserRepository;
+import com.dalk.repository.wl.WarnBoardRepository;
+import com.dalk.repository.wl.WarnChatRoomRepository;
+import com.dalk.repository.wl.WarnCommentRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +36,8 @@ public class AdminService {
     private final PointRepository pointRepository;
     private final SaveVoteRepository saveVoteRepository;
     private final WarnUserRepository warnUserRepository;
+    private final WarnCommentRepository warnCommentRepository;
+    private final CommentRepository commentRepository;
 
     //블라인드 게시글 전체 조회 - 관리자
     @Transactional(readOnly = true)
@@ -65,6 +69,34 @@ public class AdminService {
         boardRepository.deleteById(board.getId());
         Map<String, Object> result = new HashMap<>();
         result.put("result", true);
+        return result;
+    }
+
+    // 신고 댓글 목록 조회
+    public List<WarnCommentResponseDto> getAdminComment() {
+        List<Comment> commentList = commentRepository.findAll();
+        List<WarnCommentResponseDto> warnCommentResponseDtoList = new ArrayList<>();
+
+        for (Comment comment : commentList) {
+
+            List<WarnComment> warnComments = comment.getWarnCommentList();
+            WarnCommentResponseDto warnCommentResponseDto = new WarnCommentResponseDto(comment,warnComments.size());
+            if(warnComments.size()>=1){
+                warnCommentResponseDtoList.add(warnCommentResponseDto);
+            }
+        }
+
+        return warnCommentResponseDtoList;
+    }
+
+    // 신고 댓글 삭제
+    public Map<String, Object> deleteAdminComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+                ()-> new CommentNotFoundException("해당 댓글이 존재하지 않습니다.")
+        );
+        commentRepository.deleteById(comment.getId());
+        Map<String,Object> result = new HashMap<>();
+        result.put("result",true);
         return result;
     }
 
@@ -130,7 +162,7 @@ public class AdminService {
         return warnUserResponseDtoList;
     }
 
-    // 유저 삭제 - 관리자
+    // 신고 유저 삭제 - 관리자
     @Transactional
     public Map<String, Object> deleteUser(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
@@ -140,6 +172,7 @@ public class AdminService {
         return result;
     }
 
+    //포인트 지급
     @Transactional
     public Map<String, Object> givePoint(GivePointRequestDto givePointRequestDto) {
 
