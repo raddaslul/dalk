@@ -37,11 +37,20 @@ public class ChatMessage {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public ChatMessage(ChatMessageRequestDto chatMessageRequestDto, User user) {
+    @ManyToOne
+    @JoinColumn(name = "chatRoom_id")
+    private ChatRoom chatRoom;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public ChatMessage(ChatMessageRequestDto chatMessageRequestDto, User user, ChatRoom chatRoom) {
         this.type = chatMessageRequestDto.getType();
         this.roomId = chatMessageRequestDto.getRoomId();
         this.message = chatMessageRequestDto.getMessage();
         this.createdAt = chatMessageRequestDto.getCreatedAt();
         this.user = user;
+        this.chatRoom = chatRoom;
     }
 }
