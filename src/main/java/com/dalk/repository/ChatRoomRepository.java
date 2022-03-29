@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
+
     Page<ChatRoom> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
     List<ChatRoom> findAllByOrderByCreatedAtDesc();

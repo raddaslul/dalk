@@ -2,7 +2,9 @@ package com.dalk.controller;
 
 import com.dalk.domain.ItemType;
 import com.dalk.domain.User;
+import com.dalk.dto.requestDto.NicknameCheckRequestDto;
 import com.dalk.dto.requestDto.SignupRequestDto;
+import com.dalk.dto.requestDto.UsernameCheckRequestDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.exception.ErrorResponse;
 import com.dalk.security.UserDetailsImpl;
@@ -30,10 +32,19 @@ public class UserController {
     @ApiOperation(value = "회원가입")
     public String signup(@RequestBody @Valid SignupRequestDto requestDto) {
         userService.signup(requestDto);
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("result", true);
         return "redirect:/users/login";
+    }
+
+    @PostMapping("/users/signup/usernamecheck")
+    @ApiOperation(value = "아이디 중복체크")
+    public Map<String, Object> usernameCheck(@RequestBody UsernameCheckRequestDto requestDto) {
+        return userService.usernameCheck(requestDto);
+    }
+
+    @PostMapping("/users/signup/nicknamecheck")
+    @ApiOperation(value = "닉네임 중복체크")
+    public Map<String, Object> nicknameCheck(@RequestBody NicknameCheckRequestDto requestDto) {
+        return userService.nicknameCheck(requestDto);
     }
 
     @GetMapping("/loginCheck")
