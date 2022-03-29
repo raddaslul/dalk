@@ -28,13 +28,18 @@ public class Carousel extends Timestamped {
     @Column(name = "url")
     private String url;
 
+    @Column(name = "status")
+    private Boolean status;
+
     public Carousel(String convertedName, String filePath, CarouselRequestDto carouselRequestDto) {
         this.filePath = filePath;
         this.convertedName = convertedName;
-        if (carouselRequestDto != null) {
+        if (carouselRequestDto.getUrl() != null) {
             this.url = carouselRequestDto.getUrl();
+            this.status = carouselRequestDto.getStatus();
         } else {
             this.url = null;
+            this.status = false;
         }
     }
 }
