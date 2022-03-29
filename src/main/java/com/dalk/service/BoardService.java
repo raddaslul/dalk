@@ -84,9 +84,9 @@ public class BoardService {
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
         for (Board board : boardList) {
-            List<Category> categoryList = categoryRepository.findCategoryByBoard_Id(board.getId());
+            List<Category> categoryList = board.getCategorys();
             User user = userRepository.findById(board.getCreateUserId()).orElse(null);
-            List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
+            List<WarnBoard> warnBoardList = board.getWarnBoards();
             MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), null);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
@@ -99,10 +99,10 @@ public class BoardService {
         Board boards = boardRepository.findById(boardId).orElseThrow(
                 () -> new BoardNotFoundException("게시글이 없습니다")
         );
-        List<Category> categoryList = categoryRepository.findCategoryByBoard_Id(boards.getId());
+        List<Category> categoryList = boards.getCategorys();
         User user = userRepository.findById(boards.getCreateUserId()).orElse(null);
         Vote vote = boards.getVote();
-        List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(boards.getId());
+        List<WarnBoard> warnBoardList = boards.getWarnBoards();
         List<Long> warnUserList = new ArrayList<>();
         for (WarnBoard warnBoard : warnBoardList) {
             warnUserList.add(warnBoard.getUser().getId());
@@ -145,9 +145,9 @@ public class BoardService {
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
         for (Board boards : boardList) {
-            List<Category> categoryList = categoryRepository.findCategoryByBoard_Id(boards.getId());
+            List<Category> categoryList = boards.getCategorys();
             User user = userRepository.findById(boards.getCreateUserId()).orElse(null);
-            List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(boards.getId());
+            List<WarnBoard> warnBoardList = boards.getWarnBoards();
             MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), null);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
@@ -163,7 +163,7 @@ public class BoardService {
         for (Board board : boardList) {
             List<Category> categoryList = board.getCategorys();
             User user = userRepository.findById(board.getCreateUserId()).orElse(null);
-            List<WarnBoard> warnBoardList = warnBoardRepository.findByBoardId(board.getId());
+            List<WarnBoard> warnBoardList = board.getWarnBoards();
             MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), null);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
