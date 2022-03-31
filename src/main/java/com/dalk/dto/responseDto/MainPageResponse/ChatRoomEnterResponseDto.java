@@ -23,7 +23,7 @@ public class ChatRoomEnterResponseDto {
     private String content;
     private List<String> category;
     private String filePath;
-    private Long restTime;
+//    private Long restTime;
     private String createdAt;
     private String endAt;
     private Boolean time;
@@ -39,7 +39,7 @@ public class ChatRoomEnterResponseDto {
         this.topicB = chatRoom.getTopicB();
         this.category = categoryList;
         this.filePath = chatRoom.getFilePath();
-        this.restTime = TimeConversion.restTime(chatRoom.getCreatedAt(),chatRoom.getTime());
+//        this.restTime = TimeConversion.restTime(chatRoom.getCreatedAt(),chatRoom.getTime());
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
         this.endAt = TimeConversion.timeEndConversion(chatRoom);
         this.time = chatRoom.getTime();
@@ -56,7 +56,7 @@ public class ChatRoomEnterResponseDto {
         this.topicB = chatRoom.getTopicB();
         this.category = categoryList;
         this.filePath = chatRoom.getFilePath();
-        this.restTime = TimeConversion.restTime(chatRoom.getCreatedAt(),chatRoom.getTime());
+//        this.restTime = TimeConversion.restTime(chatRoom.getCreatedAt(),chatRoom.getTime());
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
         this.endAt = TimeConversion.timeEndConversion(chatRoom);
         this.time = chatRoom.getTime();
