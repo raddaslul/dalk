@@ -163,6 +163,16 @@ public class AdminService {
     @Transactional
     public Map<String, Object> deleteUser(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
+        ChatRoom chatRoom = chatRoomRepository.findByUser_Id(userId);
+        if (chatRoom != null) {
+            chatRoom.setUser(null);
+            chatRoomRepository.save(chatRoom);
+        }
+        Board board = boardRepository.findByUser_Id(userId);
+        if (board != null) {
+            board.setUser(null);
+            boardRepository.save(board);
+        }
         userRepository.deleteById(userId);
         Map<String, Object> result = new HashMap<>();
         result.put("result", true);

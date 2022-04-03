@@ -68,6 +68,12 @@ public class User extends Timestamped {
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
     private Role role;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Board> boardList;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<ChatRoom> chatRoomList;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private ChatRoomUser chatRoomUser;
 

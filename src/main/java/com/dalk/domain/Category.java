@@ -20,11 +20,11 @@ public class Category {
     private String category;
 
     @JoinColumn(name = "chatRoomId")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private ChatRoom chatRoom;
 
     @JoinColumn(name = "boardId")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Board board;
 
     public Category(ChatRoom chatRoom, String category) {

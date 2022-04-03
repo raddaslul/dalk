@@ -1,6 +1,7 @@
 //package com.dalk;
 //
 //import com.dalk.domain.*;
+//import com.dalk.domain.vote.Vote;
 //import com.dalk.repository.*;
 //import com.dalk.service.UserService;
 //import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.stereotype.Component;
 //
+//import java.util.ArrayList;
 //import java.util.List;
 //
 //@Component
@@ -20,6 +22,9 @@
 //    private final PointRepository pointRepository;
 //    private final UserService userService;
 //    private final RankRepository rankRepository;
+//    private final CategoryRepository categoryRepository;
+//    private final BoardRepository boardRepository;
+//    private final VoteRepository voteRepository;
 //
 //    @Override
 //    public void run(ApplicationArguments args) {
@@ -107,5 +112,24 @@
 //        rankRepository.save(ranking2);
 //        Ranking ranking3 = new Ranking(3L, "user3", user3);
 //        rankRepository.save(ranking3);
+//
+//        for (int i = 0; i < 100; i++) {
+//            Board board1 = new Board("짜장", "짬뽕", "짜장", user1);
+//            boardRepository.save(board1);
+//
+//            Category category1 = new Category(board1, "연애");
+//            Category category2 = new Category(board1, "망상");
+//            categoryRepository.save(category1);
+//            categoryRepository.save(category2);
+//
+//            Vote vote = new Vote(board1);
+//            voteRepository.save(vote);
+//
+////            board1.setVote(vote);
+//
+////            boardRepository.save(board1);
+//
+//        }
+//
 //    }
 //}

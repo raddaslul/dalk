@@ -3,6 +3,7 @@ package com.dalk.dto.responseDto.MainPageResponse;
 import com.dalk.domain.Board;
 import com.dalk.domain.User;
 import com.dalk.domain.time.TimeConversion;
+import com.dalk.dto.responseDto.CreatorInfoResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class DetailResponseDto {
-    private UserInfoResponseDto userInfo;
+    private CreatorInfoResponseDto userInfo;
     private Long boardId;
     private String topicA;
     private String topicB;
@@ -27,8 +28,12 @@ public class DetailResponseDto {
     private VoteResultResponseDto winnerResponse;
     private VoteResultResponseDto loserResponse;
 
-    public DetailResponseDto(Board board, List<String> categoryList, User user, Integer warnBoard, List<Long> warnUserList, VoteResultResponseDto winner, VoteResultResponseDto loser) {
-        this.userInfo = new UserInfoResponseDto(user);
+    public DetailResponseDto(Board board, List<String> categoryList, Integer warnBoard, List<Long> warnUserList, VoteResultResponseDto winner, VoteResultResponseDto loser) {
+        if (board.getUser() == null) {
+            this.userInfo = new CreatorInfoResponseDto(null);
+        } else {
+            this.userInfo = new CreatorInfoResponseDto(board.getUser());
+        }
         this.boardId = board.getId();
         this.topicA = board.getTopicA();
         this.topicB = board.getTopicB();
