@@ -21,6 +21,6 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
     ChatRoom findTopByCategorys_CategoryOrderByUserCntDesc(String category1);
 
-    ChatRoom findByUser_Id(Long userId);
+    List<ChatRoom> findAllByUser_Id(Long userId);
 }
 
