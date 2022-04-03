@@ -32,7 +32,6 @@ public class BoardService {
     private final CategoryRepository categoryRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
-    private final UserRepository userRepository;
     private final WarnBoardRepository warnBoardRepository;
     private final VoteRepository voteRepository;
     private final VoteService voteService;
@@ -85,9 +84,8 @@ public class BoardService {
 
         for (Board board : boardList) {
             List<Category> categoryList = board.getCategorys();
-            User user = userRepository.findById(board.getCreateUserId()).orElse(null);
             List<WarnBoard> warnBoardList = board.getWarnBoards();
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), null);
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), warnBoardList.size(), null);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;
@@ -100,7 +98,6 @@ public class BoardService {
                 () -> new BoardNotFoundException("게시글이 없습니다")
         );
         List<Category> categoryList = boards.getCategorys();
-        User user = userRepository.findById(boards.getCreateUserId()).orElse(null);
         Vote vote = boards.getVote();
         List<WarnBoard> warnBoardList = boards.getWarnBoards();
         List<Long> warnUserList = new ArrayList<>();
@@ -108,11 +105,11 @@ public class BoardService {
             warnUserList.add(warnBoard.getUser().getId());
         }
         if (vote.getTopicACnt() > vote.getTopicBCnt()) { //A가 이겼을 때
-            return new DetailResponseDto(boards, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), warnUserList, whoWin(vote, true, true), whoWin(vote, false, false));
+            return new DetailResponseDto(boards, ItemService.categoryStringList(categoryList), warnBoardList.size(), warnUserList, whoWin(vote, true, true), whoWin(vote, false, false));
         } else if (vote.getTopicACnt() < vote.getTopicBCnt()) {
-            return new DetailResponseDto(boards, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), warnUserList, whoWin(vote, true, false), whoWin(vote, false, true));
+            return new DetailResponseDto(boards, ItemService.categoryStringList(categoryList), warnBoardList.size(), warnUserList, whoWin(vote, true, false), whoWin(vote, false, true));
         } else {
-            return new DetailResponseDto(boards, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), warnUserList, whoWin(vote, false, true), whoWin(vote, false, false));
+            return new DetailResponseDto(boards, ItemService.categoryStringList(categoryList), warnBoardList.size(), warnUserList, whoWin(vote, false, true), whoWin(vote, false, false));
         }
     }
 
@@ -146,9 +143,8 @@ public class BoardService {
 
         for (Board boards : boardList) {
             List<Category> categoryList = boards.getCategorys();
-            User user = userRepository.findById(boards.getCreateUserId()).orElse(null);
             List<WarnBoard> warnBoardList = boards.getWarnBoards();
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), null);
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards, ItemService.categoryStringList(categoryList), warnBoardList.size(), null);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;
@@ -162,9 +158,8 @@ public class BoardService {
         List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
         for (Board board : boardList) {
             List<Category> categoryList = board.getCategorys();
-            User user = userRepository.findById(board.getCreateUserId()).orElse(null);
             List<WarnBoard> warnBoardList = board.getWarnBoards();
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), user, warnBoardList.size(), null);
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), warnBoardList.size(), null);
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;

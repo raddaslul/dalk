@@ -30,9 +30,6 @@ public class ChatRoom extends Timestamped {
     @Column(name = "time", nullable = false)
     private Boolean time;
 
-    @Column(nullable = false)
-    private Long createUserId;
-
     @Column
     private String convertedFileName;
 
@@ -41,6 +38,10 @@ public class ChatRoom extends Timestamped {
 
     @Column
     private Integer userCnt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
     private List<Category> categorys;
@@ -61,11 +62,15 @@ public class ChatRoom extends Timestamped {
         this.userCnt = userCnt;
     }
 
-    public ChatRoom(ChatRoomRequestDto requestDto, Long userId, String convertedFileName, String filePath) {
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public ChatRoom(ChatRoomRequestDto requestDto, User user, String convertedFileName, String filePath) {
         this.topicA = requestDto.getTopicA();
         this.topicB = requestDto.getTopicB();
         this.time = requestDto.getTime();
-        this.createUserId = userId;
+        this.user = user;
         this.convertedFileName = convertedFileName;
         this.filePath = filePath;
         this.userCnt = 0;
@@ -76,7 +81,6 @@ public class ChatRoom extends Timestamped {
         this.topicB = topicB;
         this.time = time;
         this.categorys= categorys;
-        this.createUserId = createUserId;
         this.userCnt = 0;
     }
 }

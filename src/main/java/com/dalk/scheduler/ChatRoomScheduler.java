@@ -18,8 +18,8 @@ import java.util.List;
 @Transactional
 public class ChatRoomScheduler {
 
-    private final ChatRoomRepository chatRoomRepository;
     private final BoardService boardService;
+    private final ChatRoomRepository chatRoomRepository;
 
     @Scheduled(cron = "0/1 * * * * *")
     public void autoRoomDelete() {

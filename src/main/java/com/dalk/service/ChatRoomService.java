@@ -53,8 +53,7 @@ public class ChatRoomService {
             filePath = s3Repository.upload(multipartFile, convertedFileName);
         }
         User user = userDetails.getUser();
-        Long userId = user.getId();
-        ChatRoom chatRoom = new ChatRoom(requestDto, userId, convertedFileName, filePath);
+        ChatRoom chatRoom = new ChatRoom(requestDto, user, convertedFileName, filePath);
         chatRoomRepository.save(chatRoom);
         Vote vote = new Vote(chatRoom);
         voteRepository.save(vote);
@@ -81,10 +80,10 @@ public class ChatRoomService {
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
 
         for (ChatRoom chatRoom : chatRoomList) {
+            getCnt(chatRoom);
             List<Category> categoryList = chatRoom.getCategorys();
-            User user = getUser(chatRoom);
             List<WarnChatRoom> warnChatRoomList = chatRoom.getWarnChatRooms();
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(), null);
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), warnChatRoomList.size(), null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
@@ -100,10 +99,10 @@ public class ChatRoomService {
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
 
         for (ChatRoom chatRoom : chatRoomList) {
+            getCnt(chatRoom);
             List<Category> categoryList = chatRoom.getCategorys();
-            User user = getUser(chatRoom);
             List<WarnChatRoom> warnChatRoomList = chatRoom.getWarnChatRooms();
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(), null);
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), warnChatRoomList.size(), null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
@@ -116,8 +115,7 @@ public class ChatRoomService {
                 () -> new ChatRoomNotFoundException("채팅방이 없습니다.")
         );
         List<Category> categoryList = chatRoom.getCategorys();
-        chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
-        chatRoomRepository.save(chatRoom);
+        getCnt(chatRoom);
         SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId);
         List<WarnChatRoom> warnChatRoomList = chatRoom.getWarnChatRooms();
         List<Long> warnUserList = new ArrayList<>();
@@ -163,10 +161,10 @@ public class ChatRoomService {
         Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCaseOrderByCreatedAtDesc(category, category, category, pageable);
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
         for (ChatRoom chatRoom : chatRoomList) {
+            getCnt(chatRoom);
             List<Category> categoryList = chatRoom.getCategorys();
-            User user = getUser(chatRoom);
             List<WarnChatRoom> warnChatRoomList = chatRoom.getWarnChatRooms();
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(), null);
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), warnChatRoomList.size(), null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
@@ -179,10 +177,10 @@ public class ChatRoomService {
         if (chatRoom == null) {
             return null;
         }
+        getCnt(chatRoom);
         List<Category> categoryList = chatRoom.getCategorys();
-        User user = getUser(chatRoom);
         List<WarnChatRoom> warnChatRoomList = chatRoom.getWarnChatRooms();
-        return new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(), null);
+        return new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), warnChatRoomList.size(), null);
     }
 
     //카테고리 검색 제목은 안하고 시간순 정렬 카테고리 검색시
@@ -192,10 +190,10 @@ public class ChatRoomService {
         Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrderByCreatedAtDesc(category, pageable);
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
         for (ChatRoom chatRoom : chatRoomList) {
+            getCnt(chatRoom);
             List<Category> categoryList = chatRoom.getCategorys();
-            User user = getUser(chatRoom);
             List<WarnChatRoom> warnChatRoomList = chatRoom.getWarnChatRooms();
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), user, warnChatRoomList.size(), null);
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), warnChatRoomList.size(), null);
             mainPageAllResponseDtoList.add(mainPageAllResponseDto);
         }
         return mainPageAllResponseDtoList;
@@ -222,10 +220,8 @@ public class ChatRoomService {
         else throw new WarnChatRoomDuplicateException("이미 신고한 채팅방입니다.");
     }
 
-    private User getUser(ChatRoom chatRoom) {
-        User user = userRepository.findById(chatRoom.getCreateUserId()).orElse(null);
+    private void getCnt(ChatRoom chatRoom) {
         chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
         chatRoomRepository.save(chatRoom);
-        return user;
     }
 }
