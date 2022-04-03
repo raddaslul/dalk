@@ -3,6 +3,7 @@ package com.dalk.dto.responseDto.MainPageResponse;
 import com.dalk.domain.ChatRoom;
 import com.dalk.domain.User;
 import com.dalk.domain.time.TimeConversion;
+import com.dalk.dto.responseDto.CreatorInfoResponseDto;
 import com.dalk.dto.responseDto.UserInfoResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class MainPageAllResponseDto {
-    private UserInfoResponseDto userInfo;
+    private CreatorInfoResponseDto userInfo;
     private Long roomId;
     private String filePath;
     private String topicA;
@@ -29,8 +30,12 @@ public class MainPageAllResponseDto {
     private Integer userCnt;
     private List<Long> warnUserList;
 
-    public MainPageAllResponseDto(ChatRoom chatRoom, List<String> categoryList, User user,Integer warnChatRoom,List<Long> warnUserList) {
-        this.userInfo = new UserInfoResponseDto(user);
+    public MainPageAllResponseDto(ChatRoom chatRoom, List<String> categoryList,Integer warnChatRoom,List<Long> warnUserList) {
+        if (chatRoom.getUser() == null) {
+            this.userInfo = new CreatorInfoResponseDto(null);
+        } else {
+            this.userInfo = new CreatorInfoResponseDto(chatRoom.getUser());
+        }
         this.roomId = chatRoom.getId();
         this.topicA = chatRoom.getTopicA();
         this.topicB = chatRoom.getTopicB();
@@ -40,7 +45,7 @@ public class MainPageAllResponseDto {
         this.createdAt = TimeConversion.timeCreatedConversion(chatRoom.getCreatedAt());
         this.endAt = TimeConversion.timeEndConversion(chatRoom);
         this.time = chatRoom.getTime();
-        this.userCnt = chatRoom.getUserCnt();
+        this.userCnt = chatRoom.getChatRoomUser().size();
         this.warnCnt = warnChatRoom;
         this.warnUserList = warnUserList;
     }
