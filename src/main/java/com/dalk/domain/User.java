@@ -69,6 +69,9 @@ public class User extends Timestamped {
     private Role role;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Comment> commentList;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Board> boardList;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
@@ -76,6 +79,9 @@ public class User extends Timestamped {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
     private ChatRoomUser chatRoomUser;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<ChatMessage> chatMessageList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Item> items;

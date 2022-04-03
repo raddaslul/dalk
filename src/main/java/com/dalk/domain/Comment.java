@@ -24,14 +24,15 @@ public class Comment extends Timestamped {
     @Column(name = "comment", nullable = false)
     private String comment;
 
-    @Column(nullable = false)
-    private Long createUserId;
-
     @Column
     private Integer agreeCnt = 0;
 
     @Column
     private Integer disAgreeCnt = 0;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "board_id")
@@ -51,13 +52,18 @@ public class Comment extends Timestamped {
         this.disAgreeCnt = disAgreeCnt;
     }
 
-    public Comment(CommentRequestDto commentRequestDto, Board board, Long userId) {
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Comment(CommentRequestDto commentRequestDto, Board board, User user) {
         this.comment = commentRequestDto.getComment();
         this.board = board;
-        this.createUserId = userId;
+        this.user = user;
     }
 
     public void update(String comment) {
         this.comment = comment;
     }
+
 }

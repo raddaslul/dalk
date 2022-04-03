@@ -38,8 +38,7 @@ public class CommentService {
     public Map<String, Object> createComment(Long boardId, CommentRequestDto requestDto, User user) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new BoardNotFoundException("해당 게시물이 존재하지 않습니다."));
-        Long userId = user.getId();
-        Comment comment = new Comment(requestDto, board, userId);
+        Comment comment = new Comment(requestDto, board, user);
         commentRepository.save(comment);
         Map<String, Object> result = new HashMap<>();
         result.put("result", true);
@@ -57,8 +56,6 @@ public class CommentService {
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
         for (Comment comment : comments) {
-            User user = userRepository.findById(comment.getCreateUserId()).orElse(null);
-//                    .orElseThrow(() -> new LoginUserNotFoundException("유저 정보가 없습니다"));
 
             String rawCreatedAt = String.valueOf(comment.getCreatedAt());
             String createdAtDate = rawCreatedAt.split("T")[0];
@@ -89,7 +86,7 @@ public class CommentService {
                 warnUserList.add(warnComment.getUser().getId());
             }
 
-            CommentResponseDto commentResponseDto = new CommentResponseDto(user, comment, createdAt, warnUserList, agreeUserList, disagreeUserList);
+            CommentResponseDto commentResponseDto = new CommentResponseDto(comment, createdAt, warnUserList, agreeUserList, disagreeUserList);
             commentResponseDtoList.add(commentResponseDto);
         }
         return commentResponseDtoList;
@@ -101,7 +98,7 @@ public class CommentService {
         Comment comments = commentRepository.findById(commentId).orElseThrow(
                 () -> new CommentNotFoundException("해당 댓글이 없습니다")
         );
-        if (comments.getCreateUserId().equals(userDetails.getUser().getId())) {
+        if (comments.getUser().getId().equals(userDetails.getUser().getId())) {
             comments.update(requestDto.getComment());
             Map<String, Object> result = new HashMap<>();
             result.put("result", true);
@@ -119,7 +116,7 @@ public class CommentService {
         Comment comments = commentRepository.findById(commentId).orElseThrow(
                 () -> new CommentNotFoundException("해당 댓글이 없습니다")
         );
-        if (comments.getCreateUserId().equals(userDetails.getUser().getId())) {
+        if (comments.getUser().getId().equals(userDetails.getUser().getId())) {
             commentRepository.deleteById(comments.getId());
             Map<String, Object> result = new HashMap<>();
             result.put("result", true);
@@ -142,9 +139,7 @@ public class CommentService {
                 () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
         );
         User user = userDetails.getUser();
-//                userRepository.findById(userDetails.getUser().getId()).orElseThrow(
-//                () -> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
-//        );
+
 //      agree 자체가 null이 됨.
         Agree agreeCheck = agreeRepository.findByUserAndComment(userDetails.getUser(), comment).orElse(null);
 
@@ -191,9 +186,6 @@ public class CommentService {
                 () -> new CommentNotFoundException("댓글이 존재하지 않습니다.")
         );
         User user = userDetails.getUser();
-//                userRepository.findById(userDetails.getUser().getId()).orElseThrow(
-//                ()-> new LoginUserNotFoundException("유저가 존재하지 않습니다. ")
-//        );
 
         Agree agreeCheck = agreeRepository.findByUserAndComment(userDetails.getUser(), comment).orElse(null);
 

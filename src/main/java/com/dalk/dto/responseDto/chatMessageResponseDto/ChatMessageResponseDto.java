@@ -26,6 +26,6 @@ public class ChatMessageResponseDto {
         this.message = chatMessage.getMessage();
         this.bigFont = bigFont;
         this.createdAt = chatMessage.getCreatedAt();
-        this.userInfo = UserService.userInfo(chatMessage.getUser());
+        this.userInfo = new UserInfoResponseDto(chatMessage.getUser());
     }
 }

@@ -50,7 +50,7 @@ public class UserController {
     @GetMapping("/loginCheck")
     @ApiOperation(value = "로그인확인")
     public UserInfoResponseDto userInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return UserService.userInfo(userDetails.getUser());
+        return new UserInfoResponseDto(userDetails.getUser());
     }
 
     @GetMapping("/mypage/{item}")

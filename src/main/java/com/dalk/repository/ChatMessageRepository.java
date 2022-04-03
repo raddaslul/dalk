@@ -8,4 +8,6 @@ import java.util.List;
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
 
     List<ChatMessage> findAllByRoomId(String roomId);
+
+    List<ChatMessage> findAllByUser_Id(Long userId);
 }

@@ -26,7 +26,7 @@ public class MyPageController {
     @GetMapping("/mypage")
     @ApiOperation(value = "유저 조회")
     public UserInfoResponseDto getMypage(@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return UserService.userInfo(userDetails.getUser());
+        return new UserInfoResponseDto(userDetails.getUser());
     }
 
     @DeleteMapping("/signout")

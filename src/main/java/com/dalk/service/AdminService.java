@@ -35,7 +35,6 @@ public class AdminService {
     private final SaveVoteRepository saveVoteRepository;
     private final WarnUserRepository warnUserRepository;
     private final CommentRepository commentRepository;
-
     //블라인드 게시글 전체 조회 - 관리자
     @Transactional(readOnly = true)
     public List<WarnBoardResponseDto> getAdminMainPageBoard() {
@@ -163,20 +162,7 @@ public class AdminService {
     @Transactional
     public Map<String, Object> deleteUser(Long userId) {
         userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
-        ChatRoom chatRoom = chatRoomRepository.findByUser_Id(userId);
-        if (chatRoom != null) {
-            chatRoom.setUser(null);
-            chatRoomRepository.save(chatRoom);
-        }
-        Board board = boardRepository.findByUser_Id(userId);
-        if (board != null) {
-            board.setUser(null);
-            boardRepository.save(board);
-        }
-        userRepository.deleteById(userId);
-        Map<String, Object> result = new HashMap<>();
-        result.put("result", true);
-        return result;
+        return StaticService.deleteUserAllNull(userId);
     }
 
     //포인트 지급
