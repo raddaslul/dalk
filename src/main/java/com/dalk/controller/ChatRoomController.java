@@ -2,9 +2,9 @@ package com.dalk.controller;
 
 import com.dalk.domain.User;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
+import com.dalk.dto.responseDto.CreatorInfoResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.ChatRoomEnterResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
-import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageRoomResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.ChatRoomService;
@@ -67,7 +67,7 @@ public class ChatRoomController {
 
     @GetMapping("rooms/users/{roomId}")
     @ApiOperation(value = "채팅방 입장시 채팅방에 참여한 유저 목록 조회")
-    public List<UserInfoResponseDto> getUsers(@PathVariable Long roomId) {
+    public List<CreatorInfoResponseDto> getUsers(@PathVariable Long roomId) {
         return chatRoomService.getUsers(roomId);
     }
 

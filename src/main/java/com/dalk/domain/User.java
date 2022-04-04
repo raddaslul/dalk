@@ -128,7 +128,8 @@ public class User extends Timestamped {
 
     public void buyItem(ItemType item, Item userItem) {
         if (this.totalPoint < item.getPrice()) {
-            throw new LackPointException("보유한 포인트가 부족합니다");
+            throw new LackPointException
+                    ("보유한 포인트가 부족합니다");
         }
         this.totalPoint -= item.getPrice();
         if (item.getItemCode().equals("exBuy")) {
@@ -139,20 +140,21 @@ public class User extends Timestamped {
         }
     }
 
+    public void useItem(Item userItem) {
+        if (userItem.getCnt() > 0) {
+            userItem.itemSubtract();
+        } else {
+            throw new ItemNotFoundException
+                    ("아이템이 없습니다");
+        }
+    }
+
     public void refreshCount() {
         this.lottoCnt = 5;
     }
 
     public void subtractCount() {
         this.lottoCnt -= 1;
-    }
-
-    public void useItem(Item userItem) {
-        if (userItem.getCnt() > 0) {
-            userItem.itemSubtract();
-        } else {
-            throw new ItemNotFoundException("아이템이 없습니다");
-        }
     }
 
     public void totalPointAdd(Long totalPoint) {
