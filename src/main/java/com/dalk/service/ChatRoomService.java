@@ -5,9 +5,9 @@ import com.dalk.domain.vote.SaveVote;
 import com.dalk.domain.vote.Vote;
 import com.dalk.domain.wl.WarnChatRoom;
 import com.dalk.dto.requestDto.ChatRoomRequestDto;
+import com.dalk.dto.responseDto.CreatorInfoResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.ChatRoomEnterResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
-import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageRoomResponseDto;
 import com.dalk.exception.ex.*;
 import com.dalk.repository.*;
@@ -36,7 +36,6 @@ public class ChatRoomService {
     private final ChatMessageRepository chatMessageRepository;
     private final CategoryRepository categoryRepository;
     private final ChatRoomScheduler chatRoomScheduler;
-    private final UserRepository userRepository;
     private final WarnChatRoomRepository warnChatRoomRepository;
     private final VoteRepository voteRepository;
     private final S3Repository s3Repository;
@@ -142,15 +141,15 @@ public class ChatRoomService {
 
     // 채팅방 입장시 채팅방에 참여한 유저 목록 조회
     @Transactional(readOnly = true)
-    public List<UserInfoResponseDto> getUsers(Long roomId) {
-        List<UserInfoResponseDto> userInfoResponseDtoList = new ArrayList<>();
+    public List<CreatorInfoResponseDto> getUsers(Long roomId) {
+        List<CreatorInfoResponseDto> creatorInfoResponseDtoList = new ArrayList<>();
         List<ChatRoomUser> chatRoomUserList = chatRoomUserRepository.findAllByChatRoom_Id(roomId);
         for (ChatRoomUser chatRoomUser : chatRoomUserList) {
             User user = chatRoomUser.getUser();
-            UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(user);
-            userInfoResponseDtoList.add(userInfoResponseDto);
+            CreatorInfoResponseDto creatorInfoResponseDto = new CreatorInfoResponseDto(user);
+            creatorInfoResponseDtoList.add(creatorInfoResponseDto);
         }
-        return userInfoResponseDtoList;
+        return creatorInfoResponseDtoList;
     }
 
     //카테고리 검색

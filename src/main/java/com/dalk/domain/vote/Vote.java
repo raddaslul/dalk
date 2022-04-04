@@ -1,6 +1,5 @@
 package com.dalk.domain.vote;
 
-import com.dalk.domain.Board;
 import com.dalk.domain.ChatRoom;
 import com.dalk.dto.requestDto.VoteRequestDto;
 import lombok.*;
@@ -42,20 +41,12 @@ public class Vote {
     @JoinColumn(name = "chatRoom_id")
     private ChatRoom chatRoom;
 
-//    @OneToOne(mappedBy = "vote", fetch = FetchType.LAZY)
-////    @JoinColumn(name = "board_id")
-//    private Board board;
-
     @OneToMany(mappedBy = "vote", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<SaveVote> saveVoteList;
 
     public void setChatRoom(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
     }
-
-//    public void setBoard(Board board) {
-//        this.board = board;
-//    }
 
     public Vote(ChatRoom chatRoom) {
         this.topicACnt =0L;

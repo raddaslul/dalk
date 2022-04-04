@@ -5,8 +5,7 @@ import lombok.*;
 
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Data
-@Builder
+@Getter
 public class UserInfoResponseDto {
     private Long userId;
     private String username;
