@@ -96,10 +96,6 @@ public class UserService {
         } else throw new WarnDuplicateException("이미 신고한 유저입니다.");
     }
 
-    public static UserInfoResponseDto userInfo(User user) {
-        return new UserInfoResponseDto(user);
-    }
-
     @Transactional
     public Map<String, Object> usernameCheck(UsernameCheckRequestDto requestDto) {
         User user = userRepository.findByUsername(requestDto.getUsername()).orElse(null);

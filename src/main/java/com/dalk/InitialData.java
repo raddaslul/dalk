@@ -114,7 +114,16 @@
 //        rankRepository.save(ranking3);
 //
 //        for (int i = 0; i < 100; i++) {
-//            Board board1 = new Board("짜장", "짬뽕", "짜장", user1);
+//            Vote vote = Vote.builder()
+//                    .topicACnt(0L)
+//                    .topPointA(0L)
+//                    .totalPointA(0F)
+//                    .topicBCnt(0L)
+//                    .topPointB(0L)
+//                    .totalPointB(0F)
+//                    .build();
+//            voteRepository.save(vote);
+//            Board board1 = new Board("짜장", "짬뽕", "짜장", user1, vote);
 //            boardRepository.save(board1);
 //
 //            Category category1 = new Category(board1, "연애");
@@ -122,8 +131,7 @@
 //            categoryRepository.save(category1);
 //            categoryRepository.save(category2);
 //
-//            Vote vote = new Vote(board1);
-//            voteRepository.save(vote);
+//
 //
 ////            board1.setVote(vote);
 //

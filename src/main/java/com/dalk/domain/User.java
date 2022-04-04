@@ -69,18 +69,23 @@ public class User extends Timestamped {
     private Role role;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Comment> commentList;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Board> boardList;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<ChatRoom> chatRoomList;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private ChatRoomUser chatRoomUser;
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+//    private ChatRoomUser chatRoomUser;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<ChatMessage> chatMessageList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Item> items;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Point> points;
 

@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 @Entity
 @Table(name = "vote")
 public class Vote {
@@ -37,24 +38,24 @@ public class Vote {
     @Column
     private Float totalPointB;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chatRoom_id")
     private ChatRoom chatRoom;
 
-    @OneToOne
-    @JoinColumn(name = "board_id")
-    private Board board;
+//    @OneToOne(mappedBy = "vote", fetch = FetchType.LAZY)
+////    @JoinColumn(name = "board_id")
+//    private Board board;
 
-    @OneToMany(mappedBy = "vote", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "vote", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<SaveVote> saveVoteList;
 
     public void setChatRoom(ChatRoom chatRoom) {
         this.chatRoom = chatRoom;
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
-    }
+//    public void setBoard(Board board) {
+//        this.board = board;
+//    }
 
     public Vote(ChatRoom chatRoom) {
         this.topicACnt =0L;

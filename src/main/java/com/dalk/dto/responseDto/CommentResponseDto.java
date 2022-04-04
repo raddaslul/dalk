@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class CommentResponseDto {
-    private UserInfoResponseDto userInfo;
+    private CreatorInfoResponseDto userInfo;
     private Long commentId;
     private String comment;
     private Integer agreeCnt;
@@ -23,8 +23,11 @@ public class CommentResponseDto {
     private List<Long> agreeUserList;
     private List<Long> disagreeUserList;
 
-    public CommentResponseDto(User user, Comment comment, String createdAt, List<Long> warnUserList, List<Long> agreeUserList, List<Long> disagreeUserList) {
-        this.userInfo = new UserInfoResponseDto(user);
+    public CommentResponseDto(Comment comment, String createdAt, List<Long> warnUserList, List<Long> agreeUserList, List<Long> disagreeUserList) {
+        if (comment.getUser() == null) {
+            this.userInfo = new CreatorInfoResponseDto(null);
+        }
+        this.userInfo = new CreatorInfoResponseDto(comment.getUser());
         this.commentId = comment.getId();
         this.comment = comment.getComment();
         this.agreeCnt = comment.getAgreeCnt();

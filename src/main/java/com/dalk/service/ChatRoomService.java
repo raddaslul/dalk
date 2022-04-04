@@ -134,8 +134,7 @@ public class ChatRoomService {
         List<ChatMessageRoomResponseDto> chatMessageRoomResponseDtoList = new ArrayList<>();
         List<ChatMessage> chatMessageList = chatMessageRepository.findAllByRoomId(roomId);
         for (ChatMessage chatMessage : chatMessageList) {
-            User user = userRepository.findById(chatMessage.getUser().getId()).orElse(null);
-            ChatMessageRoomResponseDto chatMessageRoomResponseDto = new ChatMessageRoomResponseDto(user, chatMessage);
+            ChatMessageRoomResponseDto chatMessageRoomResponseDto = new ChatMessageRoomResponseDto(chatMessage);
             chatMessageRoomResponseDtoList.add(chatMessageRoomResponseDto);
         }
         return chatMessageRoomResponseDtoList;
