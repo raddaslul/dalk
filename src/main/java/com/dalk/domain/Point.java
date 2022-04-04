@@ -29,8 +29,7 @@ public class Point extends Timestamped {
     @Column
     private Long totalPoint;
 
-    @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
 

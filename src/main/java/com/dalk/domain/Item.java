@@ -23,7 +23,7 @@ public class Item {
     @Column
     private Long cnt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
     private User user;
 

@@ -48,10 +48,11 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Category> categorys;
 
-    @OneToMany(mappedBy = "board", orphanRemoval = true)
+    @OneToMany(mappedBy = "board", cascade =  CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToOne(mappedBy = "board",cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JoinColumn(name = "vote")
     private Vote vote;
 
     public void setVote(Vote vote) {
@@ -79,10 +80,12 @@ public class Board extends Timestamped {
             String topicA,
             String topicB,
             String winner,
-            User user){
+            User user,
+            Vote vote){
         this.topicA = topicA;
         this.topicB = topicB;
         this.winner = winner;
         this.user = user;
+        this.vote = vote;
     }
 }
