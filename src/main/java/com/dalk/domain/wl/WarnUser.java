@@ -21,7 +21,7 @@ public class WarnUser {
     @Column(name = "warn_user")
     private String warnUserName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private User user;
 
