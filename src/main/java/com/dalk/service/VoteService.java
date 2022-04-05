@@ -101,6 +101,9 @@ public class VoteService {
                 userWinnerList.add(saveVote.getUser());
             }
             for (User user : userWinnerList) {
+                if (user == null) {
+                    continue;
+                }
                 SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), chatRoomId); //유저와 채팅방 id로 savevote를 뽑아옴 (유저는 한개씩 가짐)
                 user.totalPointAdd(saveVote.getPoint());
                 userRepository.save(user);
@@ -112,6 +115,9 @@ public class VoteService {
                 userWinnerList.add(saveVote.getUser());
             }
             for (User user : userWinnerList) {
+                if (user == null) {
+                    continue;
+                }
                 SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), chatRoomId); //유저와 채팅방 id로 savevote를 뽑아옴 (유저는 한개씩 가짐)
                 user.totalPointAdd(saveVote.getPoint());
                 userRepository.save(user);
@@ -127,6 +133,9 @@ public class VoteService {
             userWinnerList.add(saveVote.getUser());
         }
         for (User user : userWinnerList) {
+            if (user == null) {
+                continue;
+            }
             SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId); //유저와 채팅방 id로 savevote를 뽑아옴 (유저는 한개씩 가짐)
             user.totalPointAdd((long) (saveVote.getPoint()*winRate));
             userRepository.save(user);
