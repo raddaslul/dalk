@@ -33,9 +33,14 @@ public class SaveVote {
     @JoinColumn(name = "vote")
     private Vote vote;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user")
     private User user;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public SaveVote(Boolean pick, ChatRoom chatRoom, Long point, Vote vote, User user) {
         this.pick = pick;

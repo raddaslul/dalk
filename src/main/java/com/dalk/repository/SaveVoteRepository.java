@@ -16,4 +16,6 @@ public interface SaveVoteRepository extends JpaRepository<SaveVote, Long> {
     List<SaveVote> findAllByChatRoom_IdAndPickFalse(Long ChatRoomId);
 
     SaveVote findByUser_IdAndChatRoom_Id(Long userId, Long ChatRoomId);
+
+    List<SaveVote> findAllByUser_Id(Long userId);
 }
