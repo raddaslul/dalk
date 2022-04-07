@@ -68,13 +68,24 @@ public class User extends Timestamped {
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
     private Role role;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
-    private ChatRoomUser chatRoomUser;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Comment> commentList;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Board> boardList;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<ChatRoom> chatRoomList;
+
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
+//    private ChatRoomUser chatRoomUser;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<ChatMessage> chatMessageList;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Item> items;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Point> points;
 
@@ -117,7 +128,8 @@ public class User extends Timestamped {
 
     public void buyItem(ItemType item, Item userItem) {
         if (this.totalPoint < item.getPrice()) {
-            throw new LackPointException("보유한 포인트가 부족합니다");
+            throw new LackPointException
+                    ("보유한 포인트가 부족합니다");
         }
         this.totalPoint -= item.getPrice();
         if (item.getItemCode().equals("exBuy")) {
@@ -128,20 +140,21 @@ public class User extends Timestamped {
         }
     }
 
+    public void useItem(Item userItem) {
+        if (userItem.getCnt() > 0) {
+            userItem.itemSubtract();
+        } else {
+            throw new ItemNotFoundException
+                    ("아이템이 없습니다");
+        }
+    }
+
     public void refreshCount() {
         this.lottoCnt = 5;
     }
 
     public void subtractCount() {
         this.lottoCnt -= 1;
-    }
-
-    public void useItem(Item userItem) {
-        if (userItem.getCnt() > 0) {
-            userItem.itemSubtract();
-        } else {
-            throw new ItemNotFoundException("아이템이 없습니다");
-        }
     }
 
     public void totalPointAdd(Long totalPoint) {

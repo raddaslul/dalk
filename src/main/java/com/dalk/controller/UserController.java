@@ -28,7 +28,7 @@ public class UserController {
     private final UserService userService;
     private final ItemService itemService;
 
-    @PostMapping("/users/signup")
+    @PostMapping("/users/signup")  //체크 완료
     @ApiOperation(value = "회원가입")
     public String signup(@RequestBody @Valid SignupRequestDto requestDto) {
         userService.signup(requestDto);
@@ -50,7 +50,7 @@ public class UserController {
     @GetMapping("/loginCheck")
     @ApiOperation(value = "로그인확인")
     public UserInfoResponseDto userInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return UserService.userInfo(userDetails.getUser());
+        return new UserInfoResponseDto(userDetails.getUser());
     }
 
     @GetMapping("/mypage/{item}")
@@ -68,7 +68,7 @@ public class UserController {
     }
 
     @GetMapping("/warnings/{userId}")
-    @ApiOperation(value = "유저 신고하기")
+    @ApiOperation(value = "유저 신고하기")  //유저신고하기
     public Map<String, Object> WarnUser
             (@PathVariable Long userId,
              @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -79,16 +79,6 @@ public class UserController {
     @GetMapping("/error")
     public ResponseEntity<ErrorResponse> error() {
         return new ResponseEntity<>(new ErrorResponse("400", "로그인 정보가 없습니다."), HttpStatus.BAD_REQUEST);
-    }
-
-    @GetMapping("/error/username")
-    public ResponseEntity<ErrorResponse> usernameError() {
-        return new ResponseEntity<>(new ErrorResponse("400", "username이 존재하지 않습니다."), HttpStatus.BAD_REQUEST);
-    }
-
-    @GetMapping("/error/password")
-    public ResponseEntity<ErrorResponse> passwordError() {
-        return new ResponseEntity<>(new ErrorResponse("400", "password가 틀렸습니다."), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/health")

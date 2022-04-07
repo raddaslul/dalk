@@ -25,16 +25,22 @@ public class SaveVote {
     @Column
     private Long point;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ChatRoomId")
     private ChatRoom chatRoom;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vote")
     private Vote vote;
 
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user")
     private User user;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public SaveVote(Boolean pick, ChatRoom chatRoom, Long point, Vote vote, User user) {
         this.pick = pick;

@@ -24,23 +24,24 @@ public class Comment extends Timestamped {
     @Column(name = "comment", nullable = false)
     private String comment;
 
-    @Column(nullable = false)
-    private Long createUserId;
-
     @Column
     private Integer agreeCnt = 0;
 
     @Column
     private Integer disAgreeCnt = 0;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Agree> agreeList;
 
-    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<WarnComment> warnCommentList;
 
     public void setAgreeCnt(Integer agreeCnt) {
@@ -51,13 +52,18 @@ public class Comment extends Timestamped {
         this.disAgreeCnt = disAgreeCnt;
     }
 
-    public Comment(CommentRequestDto commentRequestDto, Board board, Long userId) {
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Comment(CommentRequestDto commentRequestDto, Board board, User user) {
         this.comment = commentRequestDto.getComment();
         this.board = board;
-        this.createUserId = userId;
+        this.user = user;
     }
 
     public void update(String comment) {
         this.comment = comment;
     }
+
 }

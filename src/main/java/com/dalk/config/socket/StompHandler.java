@@ -36,8 +36,8 @@ public class StompHandler implements ChannelInterceptor {
     private final ChatMessageService chatMessageService;
     private final RedisRepository redisRepository;
     private final ChatRoomUserRepository chatRoomUserRepository;
-    private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
     // websocket 을 통해 들어온 요청이 처리 되기전 실행된다.
     @Override

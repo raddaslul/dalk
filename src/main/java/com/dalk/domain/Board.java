@@ -32,14 +32,15 @@ public class Board extends Timestamped {
     @Column(name = "winner")
     private String winner;
 
-    @Column(nullable = false)
-    private Long createUserId;
-
     @Column
     private String convertedFileName;
 
     @Column
     private String filePath;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<WarnBoard> warnBoards;
@@ -47,10 +48,11 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Category> categorys;
 
-    @OneToMany(mappedBy = "board", orphanRemoval = true)
+    @OneToMany(mappedBy = "board", cascade =  CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToOne(mappedBy = "board",cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JoinColumn(name = "vote")
     private Vote vote;
 
     public void setVote(Vote vote) {
@@ -61,10 +63,14 @@ public class Board extends Timestamped {
         this.winner = winner;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Board(ChatRoom chatRoom) {
         this.topicA = chatRoom.getTopicA();
         this.topicB = chatRoom.getTopicB();
-        this.createUserId = chatRoom.getCreateUserId();
+        this.user = chatRoom.getUser();
         this.categorys = chatRoom.getCategorys();
         this.filePath = chatRoom.getFilePath();
         this.convertedFileName = chatRoom.getConvertedFileName();
@@ -74,10 +80,12 @@ public class Board extends Timestamped {
             String topicA,
             String topicB,
             String winner,
-            Long userId){
+            User user,
+            Vote vote){
         this.topicA = topicA;
         this.topicB = topicB;
         this.winner = winner;
-        this.createUserId = userId;
+        this.user = user;
+        this.vote = vote;
     }
 }

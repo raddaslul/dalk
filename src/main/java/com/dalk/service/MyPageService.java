@@ -1,11 +1,9 @@
 package com.dalk.service;
 
-import com.dalk.domain.Point;
-import com.dalk.domain.User;
+import com.dalk.domain.*;
 import com.dalk.dto.responseDto.PointResponseDto;
 import com.dalk.dto.responseDto.RankResponseDto;
-import com.dalk.repository.PointRepository;
-import com.dalk.repository.UserRepository;
+import com.dalk.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,18 +20,16 @@ public class MyPageService {
     private final UserRepository userRepository;
     private final PointRepository pointRepository;
 
+
     @Transactional
     public Map<String, Object> deleteUser(User user) {
         Long userId = user.getId();
-        userRepository.deleteById(userId);
-        Map<String, Object> result = new HashMap<>();
-        result.put("result", true);
-        return result;
+
+        return StaticService.deleteUserAllNull(userId);
     }
 
     @Transactional(readOnly = true)
     public List<PointResponseDto> getPoint(User user) {
-
 
         List<Point> pointList = pointRepository.findAllByUserOrderByCreatedAtDesc(user);
         List<PointResponseDto> pointResponseDtoList =new ArrayList<>();
