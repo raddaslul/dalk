@@ -12,7 +12,7 @@ import com.dalk.dto.responseDto.chatMessageResponseDto.ChatMessageRoomResponseDt
 import com.dalk.exception.ex.*;
 import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnChatRoomRepository;
-import com.dalk.scheduler.ChatRoomScheduler;
+//import com.dalk.scheduler.ChatRoomScheduler;
 import com.dalk.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class ChatRoomService {
     private final ChatRoomUserRepository chatRoomUserRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final CategoryRepository categoryRepository;
-    private final ChatRoomScheduler chatRoomScheduler;
+//    private final ChatRoomScheduler chatRoomScheduler;
     private final UserRepository userRepository;
     private final WarnChatRoomRepository warnChatRoomRepository;
     private final VoteRepository voteRepository;
@@ -63,12 +63,12 @@ public class ChatRoomService {
             Category category = new Category(chatRoom, stringCategory);
             categoryRepository.save(category);
         }
-        try {
-            return chatRoom.getId();
-        } catch (IllegalArgumentException ignored) {
-        } finally {
-            chatRoomScheduler.autoRoomDelete();
-        }
+//        try {
+//            return chatRoom.getId();
+//        } catch (IllegalArgumentException ignored) {
+//        } finally {
+//            chatRoomScheduler.autoRoomDelete();
+//        }
         return null;
     }
 

@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
+@Builder
 @Table(name = "vote")
 public class Vote {
     @Id
