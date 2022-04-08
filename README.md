@@ -132,175 +132,85 @@ BackEnd GITHUB : https://github.com/raddaslul/dalk.git <br />
 ## 1. N+1 문제
 <details>
   <summary>펼치기</summary>
-
-  <div align="center">
-  <img width="50%" src=></div>
-  <br/>
-  페이징처리를 하여 한번로딩에 게시글을 5개씩 불러오는데 이 과정에서 Query가 한번에 여러개가 나가는 문제가 발생했다.
-
+ 
   <br/>
 
   > ### 1. 에러 현상
-  * 게시글 한개당 쿼리가 5개씩 총 25개가 나가는 문제
+  <div align="center">
+   <img src="https://raddaslul.s3.ap-northeast-2.amazonaws.com/image/n%2B1+%EB%AC%B8%EC%A0%9C.PNG"/>
+  </div> <br/>
+  
+  * 페이징처리를 하여 한번로딩에 게시글을 5개씩 불러오는데 이 과정에서 Query가 
+  한번에 여러개가 나가는 문제가 발생했다.
 
-  * 로딩속도가 약 480ms로 어느정도 느린게 체감이 됨
+  * 로딩속도가 약 480ms로 어느정도 느린게 체감이 됨 
 
   <br/>
   
   > ### 2. 에러 해결 과정
 
-  * 해당 에러는 JPA의 메서드커리를 사용하면서 발생했다. 
-
-    <img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/42042483-6cdb-407e-9245-501b03b31db0/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220405%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220405T091323Z&X-Amz-Expires=86400&X-Amz-Signature=8b7c7be716bd2433e329074e7d9e22e0d2530db4194d4be5a97b96e58d7b3641&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject"/>
-    Thread.sleep으로 딜레이를 준 백엔드 코드<br/><br/>
-    이렇게 3초 딜레이를 주니 정상적으로 잘 메세지를 수신할 수 있었습니다.<br/><br/>
-
-  > ### 3.해결 코드
-
-  *  연관관계에 Lazy타입으로 쿼리를 한번에 불러오도록 하였고 추가적으로 배치패치사이즈를 적용하여 쿼리를 한번에 불러오도록 하였습니다. <br/><br/>
-    <b></b> 
-      <label>
-      ```java
-      @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @JoinColumn(name = "vote")
-    private Vote vote;
-      ```
-      </label>
-      생각한 방법은 이러했습니다.
-.<br/><br/>
+  해당 에러는 JPA의 메서드커리를 사용하면서 발생했다. 
+<div align="center">
+    <img src="https://raddaslul.s3.ap-northeast-2.amazonaws.com/image/n%2B1+%ED%95%B4%EA%B2%B0.PNG"/>
+  </div><br/>
+  
+   * 이를 해결하기 위해 로직 상 getter를 사용할 수 밖에 없는 entity에 외래키를 부여한 후,<br/>
+ 
+   * 단방향으로 연관관계를 맺어 게시글 5개를 조회해도 쿼리가 한 번만 나갈 수 있게 개선하였습니다.<br/>
+  
 </details>
-
 <br/>
 
 ## 2. subscribe시 비동기 문제
 <details>
   <summary>펼치기</summary>
     
-서비스를 배포하고 실제 유저들이 사용중에 발견한 에러입니다😰<br/>
-기존에는 컴포넌트가 언마운트 될 때, beforeunload 이벤트를 이용해 브라우저가 새로고침 될 때, 닫힐 때
-disconnect신호를 서버에 전달하였으나, 모바일 환경에서 다시 문제가 발생하였습니다.
 
 <br/>
 
 > ### 1. 에러 현상
+<div align="center">
+    <img src="https://raddaslul.s3.ap-northeast-2.amazonaws.com/image/%EB%B9%84%EB%8F%99%EA%B8%B0+%EB%AC%B8%EC%A0%9C.png"/>
+  </div><br/>
+  
+* client가 채팅방에 입장했는데 입장 메세지를 확인하지 못하는 버그가 있었습니다. <br/>
+* 이 문제의 원인은 client에서 서버로 구독 요청을 보낼 때는 구독을 완료하고 요청을 보내는 것이 아니라 
+단순히 구독을 하겠다고 요청을 한 것이기에 client의 컴퓨터가 서버보다 느릴 시 구독을 완료하기도 전에 
+  백엔드에서 먼저 입장 메세지를 보내는 문제였습니다.
 
-* 모바일 환경에서 탭 이동, 홈버튼, 화면 전환 버튼 클릭 시, 해당 채팅방이 종료될 때까지 유저가 다시 채팅방에 입장할 수 없는 심각한 오류를 발견하였습니다.
+> ### 3. 에러 해결 과정
 
-  ```javascript
-  React.useEffect(() => {
-    window.addEventListener("beforeunload", (e) => {
-      client.disconnect(() => client.unsubscribe("sub-0"), headers);
-    }); // 브라우저를 새로고침 하거나 종료하면 disconnect신호 보냄
-
-    return () => {
-      client.disconnect(() => client.unsubscribe("sub-0"), headers);
-    };
-  }, []);
-  ```
-
-  기존에 사용하던 disconnect코드<br/><br/>
-
-> ### 2. 원인
-
-* 서버에서 동일한 유저의 채팅방 다중 입장을 차단하고 있기 때문에, 탭 이동, 홈버튼, 화면 전환 버튼 클릭 시 서버
-disconnect 미작동으로 인해 해당 유저가 채팅방에 남아있는걸로 인식되었습니다.<br/><br/>
-
-> ### 3. 해결코드
-* visibilitychange 이벤트를 연결해 현재 화면이 보이고 있는지 visibleHendler함수를 만들어 판단 후 disconnect신호를 서버에 보내줌
-
-  ```javascript
-  React.useEffect(() => {
-    window.addEventListener("beforeunload", (e) => {
-      client.disconnect(() => client.unsubscribe("sub-0"), headers);
-    }); // 브라우저를 새로고침 하거나 종료하면 disconnect신호 보냄
-
-    window.addEventListener("visibilitychange", visibleHendler);
-    // 모바일 환경에서 탭 전환이나 화면 전환시 disconnect신호를 보내지 못해 발생하는 오류 해결을 위해 사용
-
-    return () => {
-      client.disconnect(() => client.unsubscribe("sub-0"), headers);
-      window.removeEventListener("visibilitychange", visibleHendler);
-    };
-  }, [messageLoaded]);
-
-  const visibleHendler = (e) => {
-    const state = document.visibilityState === "hidden"; // 화면에 안보이면
-    const mobile = mobileCheck(); // 모바일인지 체크
-
-    // 모바일에서 화면전환이 이루어질 경우 실행
-    if (state && mobile) {
-      client.disconnect(() => client.unsubscribe("sub-0"), headers);
-      history.replace("/");
-      dispatch(
-        alertAction.open({
-          type: "confirm",
-          message: "채팅방에 다시 입장하시겠습니까?",
-          action: () => history.push("/chatroom/" + roomId),
-        })
-      );
-    }
-  };
-  ```
-  <br/>
-</details>
-
+<div align="center">
+    <img src="https://raddaslul.s3.ap-northeast-2.amazonaws.com/image/%EB%B9%84%EB%8F%99%EA%B8%B0+%ED%95%B4%EA%B2%B0.PNG"/>
+  </div><br/>
 <br/>
 
-## 3. 코드 
+  * 이를 해결하기 위해 따로 api를 만들어서 해당 api로 client가 구독을 완료했을 시 요청을 보내게끔 수정하였습니다.
+
+  </details>
+  <br/>
+  
+## 3. 코드 리팩터링
 <details>
   <summary>펼치기</summary>
-최초 채팅방 타이머는 서버로 부터 남은 시간을 받아 setInterval을 사용해 1초씩 빼주었습니다.
-하지만 이런 방식은 여러가지 문제가 발생하였습니다.
-
+<div align="center">
+    <img src="https://raddaslul.s3.ap-northeast-2.amazonaws.com/image/%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81+%EB%AC%B8%EC%A0%9C.PNG"/>
+  </div><br/>
 <br/>
-
-  > ### 원인
-  * setInterval이 1초마다 실행된다는 보장성이 없다.
-  * alert, confirm등 브라우저가 멈추면 타이머도 멈춰 시간이 어긋난다
-
-  <br/>
+  
+  * 서비스 단에서 모든 로직을 처리하였으며, 무분별한 switch문 사용으로 가독성이 떨어졌습니다.
 
   > ### 해결
-  * 일단 alert이나 confirm이 브라우저를 멈춘다면 사용하지 않으면 된다고 생각하여,<br/>직접 redux와 portal을 이용해 만들어 사용하였습니다.<br/><br/>
-  그리고 서버로부터 채팅방의 종료예정시간을 받아 현재 시간과 비교하며 얼마나 남았는지 계산, useInterval커스텀 훅을 사용하여 1초마다 정보를 갱신해주었습니다.
+  <div align="center">
+    <img src="https://raddaslul.s3.ap-northeast-2.amazonaws.com/image/%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81+%ED%95%B4%EA%B2%B0.PNG"/>
+  </div><br/>
+<br/>
+  
+  * Domain Driven Design을 도입하여 무분별한 setter 사용을 지양하였으며, 유지보수적인 측면에서도
+해당 코드에 어디에 위치하는지 손쉽게 찾을 수 있게 하였습니다. 그리고 아이템을 위해 사용했던 switch 
+  문은 해당 아이템이 한 번 정해지면 변하지 않는 다는 특성을 이용하여  enum 타입으로 대체하였습니다
 
-    ```javascript
-    const CountDownTimer = (props) => {
-      const dispatch = useDispatch();
-
-      const end = new Date(props.endAt.replaceAll("-", "/")); // 해당 채팅방 종료 시간
-      const now = new Date(); // 현재 시간
-
-      const [time, setTime] = useState((end - now) / 1000 + 1);
-
-      useInterval(() => setTime((end - now) / 1000), time);
-
-      useEffect(() => {
-        if (time <= 0) {
-          history.push("/");
-          dispatch(
-            alertAction.open({
-              message: "토론이 종료되었습니다.",
-            })
-          );
-          return;
-        }
-      }, [time]);
-
-      // 분이랑 초로 변경
-      const minutes = Math.floor(time / 60);
-      const seconds = Math.floor(time % 60);
-
-      return (
-        <Timer restTime={time < 60 && true}>
-          <Minutes>{minutes.toString().padStart(2, "0")}</Minutes> :
-          <Seconds>{seconds.toString().padStart(2, "0")}</Seconds>
-        </Timer>
-      );
-    };
-    ```
-    https://haekang.notion.site/setInterval-useInterval-d62a416e2db147c48ef5304de44a23f3
-
+<br />
 <br />
 </details>
 
@@ -388,7 +298,9 @@ disconnect 미작동으로 인해 해당 유저가 채팅방에 남아있는걸�
 아무나 협업 요청주세요! 님만 오면 프로젝트 고!
 
 <code>현지훈</code> <br />
-배우면 배울수록 스프링이 쉽지 않다는 것을 느꼈지만 이번 프로젝트동안 팀원들의 도움으로 정말  많은 것들을 배워갑니다.  <br />
-특히 팀원들의 세심한 코드 리뷰 덕분에 7주전과 비교해서 많은 성장을 이룰수 있었던 것 같습니다.
+좋은 팀원들 덕분에 개발실력이 굉장히 성장했다고 생각합니다.. <br />
+프로젝트 시작할 때는 어려움이 많았지만, 7주간의 프로젝트가 끝나고 혼자서 웹사이트 하나쯤은 만들수 있는 주니어 개발자가 된 것 같습니다. <br />
+실전 프로젝트를 통해 프론트엔드, 백엔드, 디자이너와의 협업을 통해 프로젝트가 완성되는 경험을 할 수 있었고, <br />
+실제 서비스를 런칭 하면서 사용자 피드백 및 오류를 해결하는 방법을 배울 수 있었습니다.
 
 ---
