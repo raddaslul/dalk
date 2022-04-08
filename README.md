@@ -134,7 +134,7 @@ BackEnd GITHUB : https://github.com/raddaslul/dalk.git <br />
   <summary>펼치기</summary>
 
   <div align="center">
-  <img width="50%" src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/cc49ae3f-6c58-484d-9f4f-35f50ced3db7/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA_2022-03-28_%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE_7.34.20.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220405%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220405T090713Z&X-Amz-Expires=86400&X-Amz-Signature=46fa62b81c40c85b0dcf70da2b421dd9c01bd7e0703d09f6e886ae4ce9474468&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22%25E1%2584%2589%25E1%2585%25B3%25E1%2584%258F%25E1%2585%25B3%25E1%2584%2585%25E1%2585%25B5%25E1%2586%25AB%25E1%2584%2589%25E1%2585%25A3%25E1%2586%25BA%25202022-03-28%2520%25E1%2584%258B%25E1%2585%25A9%25E1%2584%2592%25E1%2585%25AE%25207.34.20.png%22&x-id=GetObject"></div>
+  <img width="50%" src=></div>
   <br/>
   페이징처리를 하여 한번로딩에 게시글을 5개씩 불러오는데 이 과정에서 Query가 한번에 여러개가 나가는 문제가 발생했다.
 
