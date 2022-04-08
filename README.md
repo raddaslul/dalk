@@ -107,34 +107,25 @@ BackEnd GITHUB : https://github.com/raddaslul/dalk.git <br />
 # 🔨 기술 스택
 
  <div align="center">
- <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=HTML5&logoColor=white"/>
- <img src="https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=CSS3&logoColor=white"/>
- <img src="https://img.shields.io/badge/Sass-CC6699?style=flat-square&logo=Sass&logoColor=white"/>
- <img src="https://img.shields.io/badge/styled-components-DB7093?style=flat-square&logo=styled-components&logoColor=white"/> <br/>
- <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=JavaScript&logoColor=white"/>
- <img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white"/>
- <img src="https://img.shields.io/badge/React-764ABC?style=flat-square&logo=Redux&logoColor=white"/>
- <img src="https://img.shields.io/badge/React-FF9900?style=flat-square&logo=AWSAmplify&logoColor=white"/>
- <img src="https://img.shields.io/badge/SOCKJS-blueviolet?style=flat-square&logoColor=white"/>
- <img src="https://img.shields.io/badge/STOMP-black?style=flat-square&logoColor=white"/>
+ <br/>
 
-<br/>
-
-|라이브러리|내용|버전|
-|:---:|:---:|:---:|
-|Redux|전역 상태관리|4.1.2|
-|Redux-thunk|리덕스 미들웨어|2.4.1|
-|Redux-action|액션 관리|2.6.5|
-|React-router-dom|페이지 전환|5.2.1|
-|Axios|서버 통신|0.26.0|
-|Sockjs-client|웹소켓 라이브러리|1.5.1|
-|Stompjs|웹소켓 라이브러리|2.3.3|
-|React-share|SNS 공유하기|4.4.0|
-|React-copy-to-clipboard|URL 복사|5.0.4|
-|moment|날짜 포맷 설정|4.1.2|
-|immer|불변성 관리|4.1.2|
-</div>
+|분류|기술|
+| :-: |:- |
+|IDE|<img src="https://img.shields.io/badge/IntelliJ IDEA-000000?style=for-the-badge&logo=IntelliJ IDEA&logoColor=white">|
+|Language|<img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white">|
+|Framework|<img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white"> <img src="https://img.shields.io/badge/Springboot-6DB33F?style=for-the-badge&logo=Springboot&logoColor=white">|
+|Build Tool|<img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">|
+|Security|<img src="https://img.shields.io/badge/JSON%20Web%20Tokens-000000.svg?style=for-the-badge&logo=JSON%20Web%20Tokens&logoColor=white"/>|
+|DB|<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">|
+|Message Broker|<img src="https://img.shields.io/badge/redis-DC382D?style=for-the-badge&logo=redis&logoColor=white">|
+|Image Storage|<img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon S3&logoColor=white">|
+|Server|<img src="https://img.shields.io/badge/aws-232F3E?style=for-the-badge&logo=AmazonAWS&logoColor=white"> <img src="https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=NGINX&logoColor=white">|
+|CI/CD|<img src="https://img.shields.io/badge/GitHub%20Actions-2088FF.svg?style=for-the-badge&logo=GitHub%20Actions&logoColor=white"/> <img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon S3&logoColor=white"> <img src="https://img.shields.io/badge/Code%20Deploy-green?style=flat-square&logoColor=white"/>|
+|VCS|<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> |
+|Socket| <img src="https://img.shields.io/badge/SOCKJS-blueviolet?style=flat-square&logoColor=white"/> <img src="https://img.shields.io/badge/STOMP-black?style=flat-square&logoColor=white"/>|
+|Collaboration Tool| <img src="https://img.shields.io/badge/Notion-000000.svg?style=for-the-badge&logo=Notion&logoColor=white"/> |
 <br />
+  </div>
 
 # ⛔️ 트러블 슈팅
 
@@ -388,17 +379,16 @@ disconnect 미작동으로 인해 해당 유저가 채팅방에 남아있는걸�
 # 🤝 후기 및 회고
 
 <code>김영민</code> <br />
-끝나지 않을 것 같았던 항해 마지막 프로젝트를 좋은 팀원분들 만나 함께 할 수 있어서 재밌었습니다..! <br />
-여러분들 앞으로 하시는 일 다 잘되시고 꽃길만 걸으시길 바랍니다🌸
+처음 시작할 때는 막연했지만 팀원들과 함께 프로젝트를 하나하나 구현해 나가면서 신기하기도 하고 <br />
+무엇보다 재미있게 개발을 할 수 있었습니다.
 
 <code>신동석</code> <br />
-프로젝트에서 좋은 팀원들과 협업하며. 행복한 시간을 보냈습니다!<br />
-또한 협업자가 내 코드를 봤을때 클린하게 작성해야 알아보기 쉽다는것도 체감하며 클린코드의 중요성을 깨달았습니다. <br />
-열심히 해준 모든 팀원들 덕분에 좋은 결과물이 나온 것 같고, 같이 공부하며 정말 행복한 시간이었습니다.
+팀원들의 꼼꼼한 코드리뷰덕에 실전프로젝트 기간동안 많이 배웠습니다. <br />
+이 기간동안 코드를 작성하는것과 협업을하는것에 대해 재미를 느껴서 그런지 빨리 다음 프로젝트를 진행하고 싶습니다!! <br />
+아무나 협업 요청주세요! 님만 오면 프로젝트 고!
 
 <code>현지훈</code> <br />
-실전 프로젝트를 진행하고 클린 코드의 중요성과 자바스크립트의 이해도를 높여야겠다는 생각을 했습니다. <br />
-이제부터 나의 목표는 JS엔진 심장에 박기.. <br />
-열심히 해준 모든 팀원들 덕분에 좋은 결과물이 나온 것 같고, 특히 저에게 도움을 많이 주셨던 해강님에게 무한의 감사를🙏
+배우면 배울수록 스프링이 쉽지 않다는 것을 느꼈지만 이번 프로젝트동안 팀원들의 도움으로 정말  많은 것들을 배워갑니다.  <br />
+특히 팀원들의 세심한 코드 리뷰 덕분에 7주전과 비교해서 많은 성장을 이룰수 있었던 것 같습니다.
 
 ---
