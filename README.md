@@ -178,7 +178,9 @@ BackEnd GITHUB : https://github.com/raddaslul/dalk.git <br />
 단순히 구독을 하겠다고 요청을 한 것이기에 client의 컴퓨터가 서버보다 느릴 시 구독을 완료하기도 전에 
   백엔드에서 먼저 입장 메세지를 보내는 문제였습니다.
 
-> ### 3. 에러 해결 과정
+  <br/>
+  
+> ### 2. 에러 해결 과정
 
 <div align="center">
     <img src="https://raddaslul.s3.ap-northeast-2.amazonaws.com/image/%EB%B9%84%EB%8F%99%EA%B8%B0+%ED%95%B4%EA%B2%B0.PNG"/>
@@ -193,14 +195,19 @@ BackEnd GITHUB : https://github.com/raddaslul/dalk.git <br />
 ## 3. 코드 리팩터링
 <details>
   <summary>펼치기</summary>
+  
+  <br/>
+  
+  > ### 1. 개선 전
 <div align="center">
     <img src="https://raddaslul.s3.ap-northeast-2.amazonaws.com/image/%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81+%EB%AC%B8%EC%A0%9C.PNG"/>
   </div><br/>
 <br/>
   
   * 서비스 단에서 모든 로직을 처리하였으며, 무분별한 switch문 사용으로 가독성이 떨어졌습니다.
-
-  > ### 해결
+<br/>
+  
+  > ### 2. 개선 후
   <div align="center">
     <img src="https://raddaslul.s3.ap-northeast-2.amazonaws.com/image/%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81+%ED%95%B4%EA%B2%B0.PNG"/>
   </div><br/>
