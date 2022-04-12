@@ -80,15 +80,7 @@ public class BoardService {
         Pageable pageable = PageRequest.of(page, size);
 
         Page<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc(pageable);
-        List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
-
-        for (Board board : boardList) {
-            List<Category> categoryList = board.getCategorys();
-            List<WarnBoard> warnBoardList = board.getWarnBoards();
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), warnBoardList.size(), null);
-            mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
-        }
-        return mainPageBoardResponseDtoList;
+        return getMainPageBoardResponseDtoList(boardList);
     }
 
     //게시글 상세 조회
@@ -139,15 +131,7 @@ public class BoardService {
         Pageable pageable = PageRequest.of(page, size);
         Page<Board> boardList = boardRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCaseOrderByCreatedAtDesc(keyword, keyword, keyword, pageable);
 
-        List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
-
-        for (Board boards : boardList) {
-            List<Category> categoryList = boards.getCategorys();
-            List<WarnBoard> warnBoardList = boards.getWarnBoards();
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(boards, ItemService.categoryStringList(categoryList), warnBoardList.size(), null);
-            mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
-        }
-        return mainPageBoardResponseDtoList;
+        return getMainPageBoardResponseDtoList(boardList);
     }
 
     //카테고리 검색 제목은 안하고 시간순 정렬 카테고리 검색 시
@@ -155,14 +139,7 @@ public class BoardService {
     public List<MainPageBoardResponseDto> getCategory(String category, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<Board> boardList = boardRepository.findDistinctByCategorys_CategoryOrderByCreatedAtDesc(category, pageable);
-        List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
-        for (Board board : boardList) {
-            List<Category> categoryList = board.getCategorys();
-            List<WarnBoard> warnBoardList = board.getWarnBoards();
-            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), warnBoardList.size(), null);
-            mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
-        }
-        return mainPageBoardResponseDtoList;
+        return getMainPageBoardResponseDtoList(boardList);
     }
 
     // 게시글 신고하기
@@ -180,5 +157,17 @@ public class BoardService {
             result.put("result", true);
             return result;
         } else throw new WarnBoardDuplicateException("이미 신고한 게시글입니다.");
+    }
+
+    private List<MainPageBoardResponseDto> getMainPageBoardResponseDtoList(Page<Board> boardList) { //리팩터링 메서드드
+       List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
+
+        for (Board board : boardList) {
+            List<Category> categoryList = board.getCategorys();
+            List<WarnBoard> warnBoardList = board.getWarnBoards();
+            MainPageBoardResponseDto mainPageBoardResponseDto = new MainPageBoardResponseDto(board, ItemService.categoryStringList(categoryList), warnBoardList.size(), null);
+            mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
+        }
+        return mainPageBoardResponseDtoList;
     }
 }
