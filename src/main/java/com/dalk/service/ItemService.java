@@ -116,8 +116,10 @@ public class ItemService {
         Item userItem = itemRepository.findByUser_IdAndItemCode(user.getId(), item.getItemCode());
         user.buyItem(item, userItem);
         userRepository.save(user);
+
         Point point = new Point(item.getItemName() + "구매", -item.getPrice(), user);
         pointRepository.save(point);
+
         Map<String, Object> result = new HashMap<>();
         result.put("result", true);
         return result;

@@ -54,7 +54,7 @@ public class LottoService {
         Random random = SecureRandom.getInstanceStrong();
         int num;
         if (user.getLottoCnt() <= 1) {
-            num = random.nextInt(3630);
+            num = random.nextInt(3450);
         } else {
             num = random.nextInt(10000);
         }
