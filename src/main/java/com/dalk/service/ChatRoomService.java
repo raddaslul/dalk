@@ -78,7 +78,6 @@ public class ChatRoomService {
         List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByOrderByCreatedAtDesc();
         //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
-
         for (ChatRoom chatRoom : chatRoomList) {
             getCnt(chatRoom);
             List<Category> categoryList = chatRoom.getCategorys();
@@ -96,16 +95,7 @@ public class ChatRoomService {
         //board 전체를 가져옴
         Page<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc(pageable);
         //리턴할 값의 리스트를 정의
-        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
-
-        for (ChatRoom chatRoom : chatRoomList) {
-            getCnt(chatRoom);
-            List<Category> categoryList = chatRoom.getCategorys();
-            List<WarnChatRoom> warnChatRoomList = chatRoom.getWarnChatRooms();
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), warnChatRoomList.size(), null);
-            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
-        }
-        return mainPageAllResponseDtoList;
+        return getMainPageAllResponseDtos(chatRoomList);
     }
 
     //채팅방 하나 입장
@@ -158,15 +148,7 @@ public class ChatRoomService {
     public List<MainPageAllResponseDto> getSearchCategory(String category, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrTopicAContainingIgnoreCaseOrTopicBContainingIgnoreCaseOrderByCreatedAtDesc(category, category, category, pageable);
-        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
-        for (ChatRoom chatRoom : chatRoomList) {
-            getCnt(chatRoom);
-            List<Category> categoryList = chatRoom.getCategorys();
-            List<WarnChatRoom> warnChatRoomList = chatRoom.getWarnChatRooms();
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), warnChatRoomList.size(), null);
-            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
-        }
-        return mainPageAllResponseDtoList;
+        return getMainPageAllResponseDtos(chatRoomList);
     }
 
     //카테고리에서 제일 사람 많은사람
@@ -187,15 +169,7 @@ public class ChatRoomService {
     public List<MainPageAllResponseDto> getMainPageCreatedAt(String category, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<ChatRoom> chatRoomList = chatRoomRepository.findDistinctByCategorys_CategoryOrderByCreatedAtDesc(category, pageable);
-        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
-        for (ChatRoom chatRoom : chatRoomList) {
-            getCnt(chatRoom);
-            List<Category> categoryList = chatRoom.getCategorys();
-            List<WarnChatRoom> warnChatRoomList = chatRoom.getWarnChatRooms();
-            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), warnChatRoomList.size(), null);
-            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
-        }
-        return mainPageAllResponseDtoList;
+        return getMainPageAllResponseDtos(chatRoomList);
     }
 
     // 토론방 신고기능
@@ -222,5 +196,17 @@ public class ChatRoomService {
     private void getCnt(ChatRoom chatRoom) {
         chatRoom.setUserCnt(chatRoom.getChatRoomUser().size());
         chatRoomRepository.save(chatRoom);
+    }
+
+    private List<MainPageAllResponseDto> getMainPageAllResponseDtos(Page<ChatRoom> chatRoomList) { //page처리
+        List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
+        for (ChatRoom chatRoom : chatRoomList) {
+            getCnt(chatRoom);
+            List<Category> categoryList = chatRoom.getCategorys();
+            List<WarnChatRoom> warnChatRoomList = chatRoom.getWarnChatRooms();
+            MainPageAllResponseDto mainPageAllResponseDto = new MainPageAllResponseDto(chatRoom, ItemService.categoryStringList(categoryList), warnChatRoomList.size(), null);
+            mainPageAllResponseDtoList.add(mainPageAllResponseDto);
+        }
+        return mainPageAllResponseDtoList;
     }
 }
