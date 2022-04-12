@@ -16,18 +16,18 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     private final StompHandler stompHandler;
 
     @Override
-    public void configureMessageBroker(MessageBrokerRegistry config) {
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
         // 메모리 기반 메시지 브로커가 해당 api 구독하는 클라에게 메시지 전달
-        config.enableSimpleBroker("/sub");
+        registry.enableSimpleBroker("/sub");
 
         // 서버에서 클라이언트로부터의 메시지를 받을 api 의 prefix
-        config.setApplicationDestinationPrefixes("/pub");
+        registry.setApplicationDestinationPrefixes("/pub");
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         // 여러가지 Endpoint 설정
-        registry.addEndpoint("/ws-stomp", "/ws-alarm")
+        registry.addEndpoint("/ws-stomp")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
     }
