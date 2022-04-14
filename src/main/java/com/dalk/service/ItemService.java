@@ -47,7 +47,7 @@ public class ItemService {
         Random random = SecureRandom.getInstanceStrong();
         int num = random.nextInt(11);
         String postParams;
-        List<String> list = Arrays.asList("en","ja","zh-CN","vi","id","th","de","ru","es","it","fr");
+        List<String> list = Arrays.asList("en", "ja", "zh-CN", "vi", "id", "th", "de", "ru", "es", "it", "fr");
 
         postParams = "source=ko&target=" + list.get(num) + "&text=" + text;
 //        postParams = "source=ko&target=en&text=" + text; //원본언어: 한국어 (ko) -> 목적언어: 영어 (en)

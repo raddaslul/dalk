@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +29,6 @@ public class MyPageService {
 
     @Transactional(readOnly = true)
     public List<PointResponseDto> getPoint(User user) {
-
         List<Point> pointList = pointRepository.findAllByUserOrderByCreatedAtDesc(user);
         List<PointResponseDto> pointResponseDtoList =new ArrayList<>();
 
@@ -48,7 +46,6 @@ public class MyPageService {
     // 랭킹조회
     @Transactional(readOnly = true)
     public List<RankResponseDto> getRank() {
-        //나중에 지우기 책임자 현지훈
         StaticService.saveRank();
 
         List<User> rankList = userRepository.findTop99ByOrderByExDescCreatedAtDesc();

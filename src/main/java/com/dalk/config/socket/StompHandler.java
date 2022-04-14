@@ -46,44 +46,56 @@ public class StompHandler implements ChannelInterceptor {
         String sessionId = (String) message.getHeaders().get("simpSessionId");
 
         if (StompCommand.CONNECT == accessor.getCommand()) {
-            // websocket 연결시 헤더의 jwt token 검증
             String token = accessor.getFirstNativeHeader("Authorization").substring(7);
-            if(jwtDecoder.decodeUserId(token) == null) {
+            if (jwtDecoder.decodeUserId(token) == null) {
                 throw new LoginUserNotFoundException("로그인을 해주시기 바랍니다.");
             }
-        }
 
-        else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
+        } else if (StompCommand.SUBSCRIBE == accessor.getCommand()) {
             String token = accessor.getFirstNativeHeader("Authorization").substring(7);
             Long userId = Long.parseLong(jwtDecoder.decodeUserId(token));
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
-            ChatRoomUser chatRoomOldUser = chatRoomUserRepository.findByUser_Id(userId);
 
-            String roomId = chatMessageService.getRoomId(
-                    Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId")
-            );
+            String roomId = getRoomId(
+                    Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
+
             ChatRoom chatRoom = chatRoomRepository.findById(Long.valueOf(roomId))
                     .orElseThrow(() -> new ChatRoomNotFoundException("해당 토론방이 존재하지 않습니다."));
-            if (chatRoomOldUser == null) {
-                ChatRoomUser chatRoomUser = new ChatRoomUser(chatRoom, user);
-                chatRoomUserRepository.save(chatRoomUser);
-            } else throw new DuplicateChatRoomUserException("이미 다른 토론방에 있습니다.");
-            // 채팅방에 들어온 클라이언트 sessionId를 roomId와 맵핑해 놓는다.(나중에 특정 세션이 어떤 채팅방에 들어가 있는지 알기 위함)
-            redisRepository.setSessionRoomId(sessionId, roomId);
-        }
 
-        else if (StompCommand.DISCONNECT == accessor.getCommand()) {
+            saveChatRoomUser(user, chatRoom);
+
+            redisRepository.setSessionRoomId(sessionId, roomId);
+
+        } else if (StompCommand.DISCONNECT == accessor.getCommand()) {
             String rawToken = Optional.ofNullable(accessor.getFirstNativeHeader("Authorization")).orElse("unknownUser");
-            if(!rawToken.equals("unknownUser")) {
+            if (!rawToken.equals("unknownUser")) {
                 String token = rawToken.substring(7);
                 Long userId = Long.parseLong(jwtDecoder.decodeUserId(token));
                 chatRoomUserRepository.deleteByUser_Id(userId);
                 String roomId = redisRepository.getSessionRoomId(sessionId);
                 chatMessageService.accessChatMessage(ChatMessageRequestDto.builder().type(ChatMessage.MessageType.EXIT).roomId(roomId).userId(userId).build());
-                redisRepository.removeUserEnterInfo(sessionId);
+                redisRepository.removeSessionRoomId(sessionId);
             }
         }
         return message;
+    }
+
+    // destination 정보에서 roomId 추출
+    private String getRoomId(String destination) {
+        int lastIndex = destination.lastIndexOf('/');
+        if (lastIndex != -1) {
+            return destination.substring(lastIndex + 1);
+        } else {
+            return null;
+        }
+    }
+
+    private void saveChatRoomUser(User user, ChatRoom chatRoom) {
+        ChatRoomUser chatRoomOldUser = chatRoomUserRepository.findByUser_Id(user.getId());
+        if (chatRoomOldUser == null) {
+            ChatRoomUser chatRoomUser = new ChatRoomUser(chatRoom, user);
+            chatRoomUserRepository.save(chatRoomUser);
+        } else throw new DuplicateChatRoomUserException("이미 다른 토론방에 있습니다.");
     }
 }

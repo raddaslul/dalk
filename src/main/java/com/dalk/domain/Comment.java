@@ -13,11 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "comment")
 public class Comment extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     @Lob
@@ -65,5 +64,4 @@ public class Comment extends Timestamped {
     public void update(String comment) {
         this.comment = comment;
     }
-
 }

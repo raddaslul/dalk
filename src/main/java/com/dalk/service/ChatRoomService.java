@@ -46,6 +46,7 @@ public class ChatRoomService {
     public Long createChatRoom(MultipartFile multipartFile, UserDetailsImpl userDetails, ChatRoomRequestDto requestDto) throws IOException {
         String convertedFileName = null;
         String filePath = null;
+
         if (multipartFile != null) {
             String originalFileName = multipartFile.getOriginalFilename();
             convertedFileName = UUID.randomUUID() + originalFileName;
@@ -56,6 +57,7 @@ public class ChatRoomService {
         chatRoomRepository.save(chatRoom);
         Vote vote = new Vote(chatRoom);
         voteRepository.save(vote);
+
         List<String> categoryList = requestDto.getCategory();
         for (String stringCategory : categoryList) {
             Category category = new Category(chatRoom, stringCategory);
@@ -73,10 +75,8 @@ public class ChatRoomService {
     //토론방리스트 탑6 조회
     @Transactional
     public List<MainPageAllResponseDto> getMainPageTop6() {
-        //board 전체를 가져옴
-        List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByOrderByCreatedAtDesc();
-        //리턴할 값의 리스트를 정의
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
+        List<ChatRoom> chatRoomList = chatRoomRepository.findTop6ByOrderByCreatedAtDesc();
         for (ChatRoom chatRoom : chatRoomList) {
             getCnt(chatRoom);
             List<Category> categoryList = chatRoom.getCategorys();
@@ -91,9 +91,7 @@ public class ChatRoomService {
     @Transactional
     public List<MainPageAllResponseDto> getMainPageAll(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        //board 전체를 가져옴
         Page<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc(pageable);
-        //리턴할 값의 리스트를 정의
         return getMainPageAllResponseDtos(chatRoomList);
     }
 
@@ -187,8 +185,6 @@ public class ChatRoomService {
             result.put("result", true);
             return result;
         }
-        //예외 처리안하면 신고두번되니까  500에러가뜸 그런데그런데 예측할 수 있는 에러를 400에러로 바꿈
-//        500에러 서버, 400에러 프론트에러 , 500에러 예측할수 없는에러 , 400에러 예측할 수있는 에러
         else throw new WarnChatRoomDuplicateException("이미 신고한 채팅방입니다.");
     }
 
@@ -197,7 +193,7 @@ public class ChatRoomService {
         chatRoomRepository.save(chatRoom);
     }
 
-    private List<MainPageAllResponseDto> getMainPageAllResponseDtos(Page<ChatRoom> chatRoomList) { //page처리
+    private List<MainPageAllResponseDto> getMainPageAllResponseDtos(Page<ChatRoom> chatRoomList) {
         List<MainPageAllResponseDto> mainPageAllResponseDtoList = new ArrayList<>();
         for (ChatRoom chatRoom : chatRoomList) {
             getCnt(chatRoom);

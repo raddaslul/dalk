@@ -2,7 +2,7 @@ package com.dalk.scheduler;
 
 import com.dalk.domain.ChatMessageItem;
 import com.dalk.repository.ChatMessageItemRepository;
-import com.dalk.service.ChatMessageService;
+import com.dalk.service.ChatItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,7 +17,7 @@ import java.util.List;
 public class ItemScheduler {
 
     private final ChatMessageItemRepository chatMessageItemRepository;
-    private final ChatMessageService chatMessageService;
+    private final ChatItemService chatItemService;
 
     @Scheduled(cron = "0/1 * * * * *")
     public void autoItemDelete() {
@@ -67,7 +67,7 @@ public class ItemScheduler {
             Long resultCreatedAt = createdAtYear + createdAtMonth + createdAtDay + createdHour + createdAtMinute + createdAtSecond;
             if(resultNow - resultCreatedAt >= 20) {
                 chatMessageItemRepository.delete(chatMessageItem);
-                chatMessageService.itemDeleteMessage(roomId, item);
+                chatItemService.itemDeleteMessage(roomId, item);
             }
         }
     }

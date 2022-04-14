@@ -43,8 +43,7 @@ public class VoteService {
             throw new DuplicateVoteException("이미 투표에 참여하셨습니다");
         }
         ChatRoom chatRoom = chatRoomRepository.findById(roomId).orElseThrow(
-                () -> new ChatRoomNotFoundException("해당 채팅방이 없습니다")
-        );
+                () -> new ChatRoomNotFoundException("해당 채팅방이 없습니다"));
 
         user.totalPointSubtract(requestDto.getPoint()); // 포인트 빼기
         userRepository.save(user);

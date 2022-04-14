@@ -12,8 +12,8 @@ import javax.persistence.*;
 @Entity
 public class Agree {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
     @Column
@@ -38,7 +38,7 @@ public class Agree {
     @JoinColumn(name = "userId")
     private User user;
 
-    public Agree(Comment comment, User user, boolean isAgree,boolean isDisAgree) {
+    public Agree(Comment comment, User user, boolean isAgree, boolean isDisAgree) {
         this.comment = comment;
         this.user = user;
         this.isAgree = isAgree;

@@ -1,14 +1,13 @@
 package com.dalk.service;
+
 import com.dalk.domain.*;
 import com.dalk.domain.vote.SaveVote;
-import com.dalk.domain.vote.Vote;
 import com.dalk.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +30,7 @@ public class StaticService {
     @Autowired
     public StaticService(ItemRepository itemRepository, RankRepository rankRepository, UserRepository userRepository,
                          ChatMessageRepository chatMessageRepository, ChatRoomRepository chatRoomRepository, BoardRepository boardRepository,
-                         CommentRepository commentRepository, SaveVoteRepository saveVoteRepository, VoteRepository voteRepository ) {
+                         CommentRepository commentRepository, SaveVoteRepository saveVoteRepository, VoteRepository voteRepository) {
         StaticService.itemRepository = itemRepository;
         StaticService.rankRepository = rankRepository;
         StaticService.userRepository = userRepository;
@@ -102,8 +101,8 @@ public class StaticService {
         for (SaveVote saveVote : saveVoteList) {
             if (saveVote != null) {
                 saveVote.setUser(null);
-                }
             }
+        }
 
         userRepository.deleteById(userId);
         Map<String, Object> result = new HashMap<>();

@@ -15,12 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "board")
 //@Table(indexes= @Index(name = "board", columnList = "id"))
 public class Board extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "topic_a", nullable = false)
@@ -29,7 +28,7 @@ public class Board extends Timestamped {
     @Column(name = "topic_b", nullable = false)
     private String topicB;
 
-    @Column(name = "winner")
+    @Column(name = "winner", nullable = false)
     private String winner;
 
     @Column
@@ -48,7 +47,7 @@ public class Board extends Timestamped {
     @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Category> categorys;
 
-    @OneToMany(mappedBy = "board", cascade =  CascadeType.REMOVE)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
@@ -81,7 +80,7 @@ public class Board extends Timestamped {
             String topicB,
             String winner,
             User user,
-            Vote vote){
+            Vote vote) {
         this.topicA = topicA;
         this.topicB = topicB;
         this.winner = winner;

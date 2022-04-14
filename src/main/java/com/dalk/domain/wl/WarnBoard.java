@@ -11,11 +11,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "warn_board")
 public class WarnBoard extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,7 +29,8 @@ public class WarnBoard extends Timestamped {
         this.board = board;
         this.user = user;
     }
-    public WarnBoard (WarnChatRoom warnChatRoom, Board board){
+
+    public WarnBoard(WarnChatRoom warnChatRoom, Board board) {
         this.user = warnChatRoom.getUser();
         this.board = board;
     }
