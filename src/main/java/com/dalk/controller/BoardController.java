@@ -1,7 +1,6 @@
 package com.dalk.controller;
 
 import com.dalk.dto.responseDto.MainPageResponse.DetailResponseDto;
-import com.dalk.dto.responseDto.MainPageResponse.MainPageAllResponseDto;
 import com.dalk.dto.responseDto.MainPageResponse.MainPageBoardResponseDto;
 import com.dalk.security.UserDetailsImpl;
 import com.dalk.service.BoardService;
@@ -24,11 +23,9 @@ public class BoardController {
 
     @GetMapping("/api/boards")
     @ApiOperation(value = "게시글 전체 조회")
-    public List<MainPageBoardResponseDto> getMainPageBoard(
-            @RequestParam("page") int page,
-            @RequestParam("size") int size
-        ){
-        return boardService.getMainPageBoard(page,size);
+    public List<MainPageBoardResponseDto> getMainPageBoard(@RequestParam("page") int page,
+                                                           @RequestParam("size") int size) {
+        return boardService.getMainPageBoard(page, size);
     }
 
     @GetMapping("/api/boards/{boardId}")
@@ -43,22 +40,21 @@ public class BoardController {
             @PathVariable String keyword,
             @RequestParam("page") int page,
             @RequestParam("size") int size) {
-        return boardService.getSearchWord(keyword,page,size);
+        return boardService.getSearchWord(keyword, page, size);
     }
 
     @GetMapping("/api/boards/category/{category}")
     @ApiOperation(value = "카테고리탭 클릭시 그 카테고리 게시글만 나옴")
     public List<MainPageBoardResponseDto> getMainPageCreatedAt(@PathVariable String category,
-                                                             @RequestParam("page") int page,
-                                                             @RequestParam("size") int size) {
+                                                               @RequestParam("page") int page,
+                                                               @RequestParam("size") int size) {
         return boardService.getCategory(category, page, size);
     }
 
     @GetMapping("/warnings/boards/{boardId}")
     @ApiOperation(value = "게시글 신고하기")
-    public Map<String, Object> WarnBoard
-            (@PathVariable Long boardId,
-            @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return boardService.warnBoard(boardId,userDetails);
+    public Map<String, Object> WarnBoard(@PathVariable Long boardId,
+                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return boardService.warnBoard(boardId, userDetails);
     }
 }

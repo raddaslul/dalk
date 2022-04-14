@@ -5,7 +5,6 @@ import com.dalk.domain.wl.WarnUser;
 import com.dalk.dto.requestDto.NicknameCheckRequestDto;
 import com.dalk.dto.requestDto.SignupRequestDto;
 import com.dalk.dto.requestDto.UsernameCheckRequestDto;
-import com.dalk.dto.responseDto.UserInfoResponseDto;
 import com.dalk.exception.ex.*;
 import com.dalk.repository.*;
 import com.dalk.repository.wl.WarnUserRepository;
@@ -44,7 +43,7 @@ public class UserService {
         }
         String password = passwordEncoder.encode(requestDto.getPassword());//비번 인코딩
 
-        User user = new User(username, password, nickname, 5000L, 0, User.Role.USER);
+        User user = new User(username, password, nickname, 5000L, 0, UserRole.USER);
         userRepository.save(user);
 
         List<Item> items = getItemTests(user);

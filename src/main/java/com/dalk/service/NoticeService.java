@@ -46,8 +46,7 @@ public class NoticeService {
     @Transactional(readOnly = true)
     public NoticeResponseDto getNoticesDetail(Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId).orElseThrow(
-                ()->new NoticeNotFoundException("해당 공지글이 없습니다.")
-        );
+                ()->new NoticeNotFoundException("해당 공지글이 없습니다."));
         return new NoticeResponseDto(notice);
     }
 
@@ -55,8 +54,7 @@ public class NoticeService {
     @Transactional
     public Map<String, Object> updateNotices(Long noticeId, NoticeRequestDto noticeRequestDto) {
         Notice notice = noticeRepository.findById(noticeId).orElseThrow(
-                ()-> new NoticeNotFoundException("해당 공지글이 없습니다.")
-        );
+                ()-> new NoticeNotFoundException("해당 공지글이 없습니다."));
         notice.update(noticeRequestDto);
 
         Map<String, Object> result = new HashMap<>();
@@ -68,8 +66,7 @@ public class NoticeService {
     @Transactional
     public Map<String, Object> deleteNotice(Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId).orElseThrow(
-                ()-> new NoticeNotFoundException("해당 공지글이 없습니다.")
-        );
+                ()-> new NoticeNotFoundException("해당 공지글이 없습니다."));
         noticeRepository.delete(notice);
         Map<String, Object> result = new HashMap<>();
         result.put("result", true);

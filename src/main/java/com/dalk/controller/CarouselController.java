@@ -1,6 +1,7 @@
 package com.dalk.controller;
 
 import com.dalk.domain.User;
+import com.dalk.domain.UserRole;
 import com.dalk.dto.requestDto.CarouselRequestDto;
 import com.dalk.dto.responseDto.CarouselResponseDto;
 import com.dalk.service.CarouselService;
@@ -21,7 +22,7 @@ public class CarouselController {
 
     private final CarouselService carouselService;
 
-    @Secured(User.Role.Authority.ADMIN)
+    @Secured(UserRole.Authority.ADMIN)
     @PostMapping("/admin/carousels")
     @ApiOperation(value = "Admin에서 배너 등록")
     public Map<String, Object> createBanner(
@@ -33,14 +34,14 @@ public class CarouselController {
         return result;
     }
 
-    @Secured(User.Role.Authority.ADMIN)
+    @Secured(UserRole.Authority.ADMIN)
     @GetMapping("/admin/carousels")
     @ApiOperation(value = "Admin에서 배너 목록 조회")
     public List<CarouselResponseDto> getAdminBanners() {
-      return carouselService.getBanners();
+        return carouselService.getBanners();
     }
 
-    @Secured(User.Role.Authority.ADMIN)
+    @Secured(UserRole.Authority.ADMIN)
     @DeleteMapping("/admin/carousels/{carouselId}")
     @ApiOperation(value = "Admin에서 배너 삭제")
     public Map<String, Object> deleteBanner(@PathVariable Long carouselId) {

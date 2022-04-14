@@ -12,8 +12,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Category {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
     @Column(nullable = false)

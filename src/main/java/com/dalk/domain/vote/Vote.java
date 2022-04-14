@@ -12,11 +12,10 @@ import java.util.List;
 @Getter
 @Builder
 @Entity
-@Table(name = "vote")
 public class Vote {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column
@@ -49,14 +48,15 @@ public class Vote {
     }
 
     public Vote(ChatRoom chatRoom) {
-        this.topicACnt =0L;
+        this.topicACnt = 0L;
         this.topPointA = 0L;
         this.totalPointA = 0F;
-        this.topicBCnt =0L;
+        this.topicBCnt = 0L;
         this.topPointB = 0L;
         this.totalPointB = 0F;
         this.chatRoom = chatRoom;
     }
+
     public void winnerA(VoteRequestDto requestDto) {
         this.totalPointA += requestDto.getPoint();
         this.topicACnt += 1;

@@ -16,9 +16,9 @@ import java.util.List;
 @Entity
 @Table(name = "chat_room")
 public class ChatRoom extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "topic_a", nullable = false, length = 14)
@@ -76,11 +76,11 @@ public class ChatRoom extends Timestamped {
         this.userCnt = 0;
     }
 
-    public ChatRoom(String topicA, String topicB,List<Category> categorys,Boolean time,Long createUserId) {
+    public ChatRoom(String topicA, String topicB, List<Category> categorys, Boolean time) {
         this.topicA = topicA;
         this.topicB = topicB;
         this.time = time;
-        this.categorys= categorys;
+        this.categorys = categorys;
         this.userCnt = 0;
     }
 }

@@ -13,9 +13,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 public class ChatMessageItem extends Timestamped {
+
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column

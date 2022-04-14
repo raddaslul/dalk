@@ -1,6 +1,7 @@
 package com.dalk.dto.responseDto;
 
 import com.dalk.domain.User;
+import com.dalk.domain.UserRole;
 import lombok.*;
 
 @AllArgsConstructor
@@ -14,7 +15,7 @@ public class UserInfoResponseDto {
     private Integer ex;
     private Long rank;
     private Integer lottoCount;
-    private User.Role role;
+    private UserRole role;
     private ItemResponseDto item;
 
     public UserInfoResponseDto(User user) {

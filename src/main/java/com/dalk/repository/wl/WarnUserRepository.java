@@ -10,7 +10,5 @@ public interface WarnUserRepository extends JpaRepository<WarnUser,Long> {
 
     Optional<WarnUser> findByUserIdAndWarnUserName(Long user_id, String warnUserName);
 
-    List<WarnUser> findByUserId(Long userId);
-
     List<WarnUser> findAllByWarnUserName(String username);
 }
