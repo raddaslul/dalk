@@ -29,6 +29,22 @@ public class Comment extends Timestamped {
     @Column
     private Integer disAgreeCnt = 0;
 
+    public void addAgreeCnt() {
+        this.agreeCnt += 1;
+    }
+
+    public void addDisAgreeCnt() {
+        this.disAgreeCnt += 1;
+    }
+
+    public void subtractAgreeCnt() {
+        this.agreeCnt -= 1;
+    }
+
+    public void subtractDisAgreeCnt() {
+        this.disAgreeCnt -= 1;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -42,14 +58,6 @@ public class Comment extends Timestamped {
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<WarnComment> warnCommentList;
-
-    public void setAgreeCnt(Integer agreeCnt) {
-        this.agreeCnt = agreeCnt;
-    }
-
-    public void setDisAgreeCnt(Integer disAgreeCnt) {
-        this.disAgreeCnt = disAgreeCnt;
-    }
 
     public void setUser(User user) {
         this.user = user;

@@ -124,30 +124,27 @@ public class CommentService {
         if (agreeCheck == null) {
             agreeCheck = new Agree(comment, user, true, false);
             agreeResponseDto.setIsAgree(true);
-            comment.setAgreeCnt(comment.getAgreeCnt() + 1);
-            commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
+            comment.addAgreeCnt();
         } else {
             if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()) {
-                comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
-                agreeCheck.setIsAgree(true);
-                agreeCheck.setIsDisAgree(false);
+                comment.subtractDisAgreeCnt();
+                agreeCheck.isAgreeTure();
+                agreeCheck.isDisAgreeFalse();
                 agreeResponseDto.setIsAgree(true);
-                comment.setAgreeCnt(comment.getAgreeCnt() + 1);
-                commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
+                comment.addAgreeCnt();
                 // F T 일 경우
             } else if (!agreeCheck.getIsDisAgree() && agreeCheck.getIsAgree()) {
-                agreeCheck.setIsAgree(false);
+                agreeCheck.isAgreeFalse();
                 agreeResponseDto.setIsAgree(false);
-                comment.setAgreeCnt(comment.getAgreeCnt() - 1);
-                commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
+                comment.subtractAgreeCnt();
                 // F F 일 경우
             } else if (!agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()) {
-                agreeCheck.setIsAgree(true);
+                agreeCheck.isAgreeTure();
                 agreeResponseDto.setIsAgree(true);
-                comment.setAgreeCnt(comment.getAgreeCnt() + 1);
-                commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
+                comment.addAgreeCnt();
             }
         }
+        commentResponseDto.setAgreeCnt(comment.getAgreeCnt());
         agreeRepository.save(agreeCheck);
         commentRepository.save(comment);
         return agreeResponseDto;
@@ -169,32 +166,29 @@ public class CommentService {
 
         if (agreeCheck == null) {
             agreeCheck = new Agree(comment, user, false, true);
-            agreeCheck.setIsAgree(false);
+            agreeCheck.isAgreeFalse();
             disAgreeResponseDto.setIsDisAgree(true);
-            comment.setDisAgreeCnt(comment.getDisAgreeCnt() + 1);
-            commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
+            comment.addDisAgreeCnt();
         } else {
             if (agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()) {
-                agreeCheck.setIsDisAgree(false);
+                agreeCheck.isDisAgreeFalse();
                 disAgreeResponseDto.setIsDisAgree(false);
-                comment.setDisAgreeCnt(comment.getDisAgreeCnt() - 1);
-                commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
+                comment.subtractDisAgreeCnt();
                 // F T 일 경우
             } else if (!agreeCheck.getIsDisAgree() && agreeCheck.getIsAgree()) {
-                comment.setAgreeCnt(comment.getAgreeCnt() - 1);
-                agreeCheck.setIsAgree(false);
-                agreeCheck.setIsDisAgree(true);
+                comment.subtractAgreeCnt();
+                agreeCheck.isAgreeFalse();
+                agreeCheck.isDisAgreeTure();
                 disAgreeResponseDto.setIsDisAgree(true);
-                comment.setDisAgreeCnt(comment.getDisAgreeCnt() + 1);
-                commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
+                comment.addDisAgreeCnt();
                 // F F 일 경우
             } else if (!agreeCheck.getIsDisAgree() && !agreeCheck.getIsAgree()) {
-                agreeCheck.setIsDisAgree(true);
+                agreeCheck.isDisAgreeTure();
                 disAgreeResponseDto.setIsDisAgree(true);
-                comment.setDisAgreeCnt(comment.getDisAgreeCnt() + 1);
-                commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
+                comment.addDisAgreeCnt();
             }
         }
+        commentResponseDto.setDisAgreeCnt(comment.getDisAgreeCnt());
         agreeRepository.save(agreeCheck);
         commentRepository.save(comment);
         return disAgreeResponseDto;
