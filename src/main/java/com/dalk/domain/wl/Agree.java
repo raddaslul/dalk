@@ -22,19 +22,12 @@ public class Agree {
     @Column
     private Boolean isDisAgree;
 
-    public void isAgreeTure() {
-        this.isAgree = true;
-    }
-    public void isDisAgreeTure() {
-        this.isDisAgree = true;
+    public void setIsAgree(Boolean isAgree) {
+        this.isAgree = isAgree;
     }
 
-    public void isAgreeFalse() {
-        this.isAgree = false;
-    }
-
-    public void isDisAgreeFalse() {
-        this.isDisAgree = false;
+    public void setIsDisAgree(Boolean isDisAgree) {
+        this.isDisAgree = isDisAgree;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
