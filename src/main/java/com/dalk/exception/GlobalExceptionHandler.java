@@ -1,7 +1,6 @@
 package com.dalk.exception;
 
 import com.dalk.exception.ex.*;
-import com.dalk.exception.ex.RuntimeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -81,11 +80,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ItemNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleItemNotFoundException(ItemNotFoundException e) {
         return new ResponseEntity<>(new ErrorResponse("I001", e.getMessage()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException e) {
-        return new ResponseEntity<>(new ErrorResponse("I002", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(LackPointException.class)

@@ -12,8 +12,8 @@ import javax.persistence.*;
 @Entity
 public class Agree {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
     @Column
@@ -22,12 +22,19 @@ public class Agree {
     @Column
     private Boolean isDisAgree;
 
-    public void setIsAgree(Boolean isAgree) {
-        this.isAgree = isAgree;
+    public void isAgreeTure() {
+        this.isAgree = true;
+    }
+    public void isDisAgreeTure() {
+        this.isDisAgree = true;
     }
 
-    public void setIsDisAgree(Boolean isDisAgree) {
-        this.isDisAgree = isDisAgree;
+    public void isAgreeFalse() {
+        this.isAgree = false;
+    }
+
+    public void isDisAgreeFalse() {
+        this.isDisAgree = false;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,7 +45,7 @@ public class Agree {
     @JoinColumn(name = "userId")
     private User user;
 
-    public Agree(Comment comment, User user, boolean isAgree,boolean isDisAgree) {
+    public Agree(Comment comment, User user, boolean isAgree, boolean isDisAgree) {
         this.comment = comment;
         this.user = user;
         this.isAgree = isAgree;

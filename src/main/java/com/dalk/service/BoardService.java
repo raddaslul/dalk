@@ -47,30 +47,14 @@ public class BoardService {
             Category category = new Category(board, categorys.getCategory());
             categoryRepository.save(category);
         }
+
         vote.setChatRoom(null);
-//        vote.setBoard(board);
         voteRepository.save(vote);
         board.setVote(vote);
-        if (board.getVote().getTopicACnt() > board.getVote().getTopicBCnt()) {
-            board.setWinner(board.getTopicA());
-        } else if (board.getVote().getTopicACnt() < board.getVote().getTopicBCnt()) {
-            board.setWinner(board.getTopicB());
-        } else {
-            board.setWinner("무승부");
-        }
+        defineWinner(board);
         boardRepository.save(board);
-        if (!chatRoom.getWarnChatRooms().isEmpty()) {
-            List<WarnChatRoom> warnChatRoomList = chatRoom.getWarnChatRooms();
-            for (WarnChatRoom warnChatRoom : warnChatRoomList) {
-                WarnBoard warnBoard = new WarnBoard(warnChatRoom, board);
-                warnBoardRepository.save(warnBoard);
-            }
-        }
-        List<ChatMessage> chatMessageList = chatRoom.getChatMessageList();
-        for (ChatMessage chatMessage : chatMessageList) {
-            chatMessage.setUser(null);
-            chatMessageRepository.save(chatMessage);
-        }
+        isWarn(chatRoom, board);
+        setChatMessageUserNull(chatRoom);
         chatRoomRepository.delete(chatRoom);
     }
 
@@ -105,26 +89,7 @@ public class BoardService {
         }
     }
 
-    public VoteResultResponseDto whoWin(Board board, Vote vote, Boolean winner, Boolean AorB) {
-        String rate;
-        if (AorB) {
-            if (winner) {
-                rate = String.format("%.2f", ((vote.getTotalPointA() + vote.getTotalPointB()) / vote.getTotalPointA()));
-            } else {
-                rate = "0";
-            }
-            return new VoteResultResponseDto(board.getTopicA(), rate, String.format("%.0f", vote.getTotalPointA()), String.valueOf(vote.getTopicACnt()), String.valueOf(vote.getTopPointA()));
-        } else {
-            if (winner) {
-                rate = String.format("%.2f", ((vote.getTotalPointA() + vote.getTotalPointB()) / vote.getTotalPointB()));
-            } else {
-                rate = "0";
-            }
-            return new VoteResultResponseDto(board.getTopicB(), rate, String.format("%.0f", vote.getTotalPointB()), String.valueOf(vote.getTopicBCnt()), String.valueOf(vote.getTopPointB()));
-        }
-    }
-
-    //게시글 검색
+    // 게시글 검색(카테고리, 제목)
     @Transactional(readOnly = true)
     public List<MainPageBoardResponseDto> getSearchWord(String keyword, int page, int size) {
 
@@ -134,7 +99,7 @@ public class BoardService {
         return getMainPageBoardResponseDtoList(boardList);
     }
 
-    //카테고리 검색 제목은 안하고 시간순 정렬 카테고리 검색 시
+    // 카테고리로만 검색
     @Transactional
     public List<MainPageBoardResponseDto> getCategory(String category, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -159,8 +124,8 @@ public class BoardService {
         } else throw new WarnBoardDuplicateException("이미 신고한 게시글입니다.");
     }
 
-    private List<MainPageBoardResponseDto> getMainPageBoardResponseDtoList(Page<Board> boardList) { //리팩터링 메서드드
-       List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
+    private List<MainPageBoardResponseDto> getMainPageBoardResponseDtoList(Page<Board> boardList) {
+        List<MainPageBoardResponseDto> mainPageBoardResponseDtoList = new ArrayList<>();
 
         for (Board board : boardList) {
             List<Category> categoryList = board.getCategorys();
@@ -169,5 +134,52 @@ public class BoardService {
             mainPageBoardResponseDtoList.add(mainPageBoardResponseDto);
         }
         return mainPageBoardResponseDtoList;
+    }
+
+    private void defineWinner(Board board) {
+        if (board.getVote().getTopicACnt() > board.getVote().getTopicBCnt()) {
+            board.setWinner(board.getTopicA());
+        } else if (board.getVote().getTopicACnt() < board.getVote().getTopicBCnt()) {
+            board.setWinner(board.getTopicB());
+        } else {
+            board.setWinner("무승부");
+        }
+    }
+
+    private void isWarn(ChatRoom chatRoom, Board board) {
+        if (!chatRoom.getWarnChatRooms().isEmpty()) {
+            List<WarnChatRoom> warnChatRoomList = chatRoom.getWarnChatRooms();
+            for (WarnChatRoom warnChatRoom : warnChatRoomList) {
+                WarnBoard warnBoard = new WarnBoard(warnChatRoom, board);
+                warnBoardRepository.save(warnBoard);
+            }
+        }
+    }
+
+    private void setChatMessageUserNull(ChatRoom chatRoom) {
+        List<ChatMessage> chatMessageList = chatRoom.getChatMessageList();
+        for (ChatMessage chatMessage : chatMessageList) {
+            chatMessage.setUser(null);
+            chatMessageRepository.save(chatMessage);
+        }
+    }
+
+    private VoteResultResponseDto whoWin(Board board, Vote vote, Boolean winner, Boolean AorB) {
+        String rate;
+        if (AorB) {
+            if (winner) {
+                rate = String.format("%.2f", ((vote.getTotalPointA() + vote.getTotalPointB()) / vote.getTotalPointA()));
+            } else {
+                rate = "0";
+            }
+            return new VoteResultResponseDto(board.getTopicA(), rate, String.format("%.0f", vote.getTotalPointA()), String.valueOf(vote.getTopicACnt()), String.valueOf(vote.getTopPointA()));
+        } else {
+            if (winner) {
+                rate = String.format("%.2f", ((vote.getTotalPointA() + vote.getTotalPointB()) / vote.getTotalPointB()));
+            } else {
+                rate = "0";
+            }
+            return new VoteResultResponseDto(board.getTopicB(), rate, String.format("%.0f", vote.getTotalPointB()), String.valueOf(vote.getTopicBCnt()), String.valueOf(vote.getTopPointB()));
+        }
     }
 }

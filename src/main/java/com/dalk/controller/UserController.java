@@ -18,7 +18,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -69,9 +68,8 @@ public class UserController {
 
     @GetMapping("/warnings/{userId}")
     @ApiOperation(value = "유저 신고하기")  //유저신고하기
-    public Map<String, Object> WarnUser
-            (@PathVariable Long userId,
-             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public Map<String, Object> WarnUser(@PathVariable Long userId,
+                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return userService.WarnUser(userId, userDetails);
     }
 

@@ -29,10 +29,9 @@ public class ChatRoomController {
 
     @PostMapping("/rooms")
     @ApiOperation(value = "토론방 생성")
-    public HashMap<String, Object> createChatRoom(
-            @RequestPart(value = "image", required = false) MultipartFile multipartFile,
-            @RequestPart("debate") ChatRoomRequestDto requestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+    public HashMap<String, Object> createChatRoom(@RequestPart(value = "image", required = false) MultipartFile multipartFile,
+                                                  @RequestPart("debate") ChatRoomRequestDto requestDto,
+                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         Long roomId = chatRoomService.createChatRoom(multipartFile, userDetails, requestDto);
         HashMap<String, Object> result = new HashMap<>();
         result.put("roomId", roomId);
@@ -54,7 +53,8 @@ public class ChatRoomController {
 
     @GetMapping("/rooms/{roomId}")
     @ApiOperation(value = "채팅방 클릭시 방 넘어가는 기능")
-    public ChatRoomEnterResponseDto getMainPageOne(@PathVariable Long roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ChatRoomEnterResponseDto getMainPageOne(@PathVariable Long roomId,
+                                                   @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         return chatRoomService.getMainPageOne(roomId, user);
     }
@@ -79,11 +79,9 @@ public class ChatRoomController {
 
     @GetMapping("/api/main/{category}")
     @ApiOperation(value = "카테고리 태그 검색")
-    public List<MainPageAllResponseDto> getSearchCategory(
-            @PathVariable String category,
-            @RequestParam("page") int page,
-            @RequestParam("size") int size
-    ) {
+    public List<MainPageAllResponseDto> getSearchCategory(@PathVariable String category,
+                                                          @RequestParam("page") int page,
+                                                          @RequestParam("size") int size) {
         return chatRoomService.getSearchCategory(category, page, size);
     }
 
@@ -97,9 +95,8 @@ public class ChatRoomController {
 
     @GetMapping("/warnings/rooms/{roomId}")
     @ApiOperation(value = "토론방 신고하기")
-    public Map<String, Object> WarnChatRoom
-            (@PathVariable Long roomId,
-             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public Map<String, Object> WarnChatRoom(@PathVariable Long roomId,
+                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return chatRoomService.WarnChatRoom(roomId, userDetails);
     }
 }

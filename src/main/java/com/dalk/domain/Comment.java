@@ -13,11 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "comment")
 public class Comment extends Timestamped {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     @Lob
@@ -29,6 +28,22 @@ public class Comment extends Timestamped {
 
     @Column
     private Integer disAgreeCnt = 0;
+
+    public void addAgreeCnt() {
+        this.agreeCnt += 1;
+    }
+
+    public void addDisAgreeCnt() {
+        this.disAgreeCnt += 1;
+    }
+
+    public void subtractAgreeCnt() {
+        this.agreeCnt -= 1;
+    }
+
+    public void subtractDisAgreeCnt() {
+        this.disAgreeCnt -= 1;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -44,14 +59,6 @@ public class Comment extends Timestamped {
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<WarnComment> warnCommentList;
 
-    public void setAgreeCnt(Integer agreeCnt) {
-        this.agreeCnt = agreeCnt;
-    }
-
-    public void setDisAgreeCnt(Integer disAgreeCnt) {
-        this.disAgreeCnt = disAgreeCnt;
-    }
-
     public void setUser(User user) {
         this.user = user;
     }
@@ -65,5 +72,4 @@ public class Comment extends Timestamped {
     public void update(String comment) {
         this.comment = comment;
     }
-
 }

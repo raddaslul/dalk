@@ -1,6 +1,5 @@
 package com.dalk.service;
 
-
 import com.dalk.domain.*;
 import com.dalk.domain.vote.SaveVote;
 import com.dalk.domain.vote.Vote;
@@ -35,13 +34,11 @@ public class AdminService {
     private final SaveVoteRepository saveVoteRepository;
     private final WarnUserRepository warnUserRepository;
     private final CommentRepository commentRepository;
+
     //블라인드 게시글 전체 조회 - 관리자
     @Transactional(readOnly = true)
     public List<WarnBoardResponseDto> getAdminMainPageBoard() {
-
-        //board 전체를 가져옴
         List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
-        //리턴할 값의 리스트를 정의
         List<WarnBoardResponseDto> warnBoardResponseDtoList = new ArrayList<>();
 
         for (Board board : boardList) {
@@ -58,8 +55,7 @@ public class AdminService {
     @Transactional
     public Map<String, Object> deleteAdminBoard(Long boardId) {
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new BoardNotFoundException("해당 게시글이 존재하지 않습니다. ")
-        );
+                () -> new BoardNotFoundException("해당 게시글이 존재하지 않습니다. "));
         String deleteFileUrl = "image/" + board.getConvertedFileName();
         s3Repository.deleteFile(deleteFileUrl);
         boardRepository.deleteById(board.getId());
@@ -74,35 +70,31 @@ public class AdminService {
         List<WarnCommentResponseDto> warnCommentResponseDtoList = new ArrayList<>();
 
         for (Comment comment : commentList) {
-
             List<WarnComment> warnComments = comment.getWarnCommentList();
-            WarnCommentResponseDto warnCommentResponseDto = new WarnCommentResponseDto(comment,warnComments.size());
-            if(warnComments.size()>=1){
+            WarnCommentResponseDto warnCommentResponseDto = new WarnCommentResponseDto(comment, warnComments.size());
+            if (warnComments.size() >= 1) {
                 warnCommentResponseDtoList.add(warnCommentResponseDto);
             }
         }
-
         return warnCommentResponseDtoList;
     }
 
     // 신고 댓글 삭제
     public Map<String, Object> deleteAdminComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
-                ()-> new CommentNotFoundException("해당 댓글이 존재하지 않습니다.")
-        );
+                () -> new CommentNotFoundException("해당 댓글이 존재하지 않습니다."));
         commentRepository.deleteById(comment.getId());
-        Map<String,Object> result = new HashMap<>();
-        result.put("result",true);
+        Map<String, Object> result = new HashMap<>();
+        result.put("result", true);
         return result;
     }
 
     // 토론방 목록 조회 - 관리자
     @Transactional(readOnly = true)
     public List<WarnChatRoomResponseDto> getAdminMainPageAll() {
-        //board 전체를 가져옴
         List<ChatRoom> chatRoomList = chatRoomRepository.findAllByOrderByCreatedAtDesc();
-        //리턴할 값의 리스트를 정의
         List<WarnChatRoomResponseDto> warnChatRoomResponseDtoList = new ArrayList<>();
+
         for (ChatRoom chatRoom : chatRoomList) {
             List<WarnChatRoom> warnChatRoomList = chatRoom.getWarnChatRooms();
             WarnChatRoomResponseDto warnChatRoomResponseDto = new WarnChatRoomResponseDto(chatRoom, warnChatRoomList.size());
@@ -125,10 +117,10 @@ public class AdminService {
             pointReturnList.add(saveVote.getUser());
         }
         for (User user : pointReturnList) {
-            SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId); //유저와 채팅방 id로 savevote를 뽑아옴 (유저는 한개씩 가짐)
+            SaveVote saveVote = saveVoteRepository.findByUser_IdAndChatRoom_Id(user.getId(), roomId);
             user.totalPointAdd(saveVote.getPoint());
             userRepository.save(user);
-            Point point = new Point("채팅방 삭제", (saveVote.getPoint()), user); //포인트 내역 생성
+            Point point = new Point("채팅방 삭제", (saveVote.getPoint()), user);
             pointRepository.save(point);
         }
         vote.setChatRoom(null);
@@ -146,12 +138,12 @@ public class AdminService {
     @Transactional(readOnly = true)
     public List<WarnUserResponseDto> getUserList() {
         List<User> userList = userRepository.findAllByOrderByCreatedAtDesc();
-
         List<WarnUserResponseDto> warnUserResponseDtoList = new ArrayList<>();
+
         for (User user : userList) {
             List<WarnUser> warnUserList = warnUserRepository.findAllByWarnUserName(user.getUsername());
             WarnUserResponseDto warnUserResponseDto = new WarnUserResponseDto(user, warnUserList.size());
-            if(warnUserList.size() >= 1) {
+            if (warnUserList.size() >= 1) {
                 warnUserResponseDtoList.add(warnUserResponseDto);
             }
         }
@@ -168,7 +160,6 @@ public class AdminService {
     //포인트 지급
     @Transactional
     public Map<String, Object> givePoint(GivePointRequestDto givePointRequestDto) {
-
         User user = userRepository.findByUsername(givePointRequestDto.getUsername()).orElseThrow(() -> new UserNotFoundException("해당 유저가 존재하지 않습니다."));
         user.totalPointAdd(givePointRequestDto.getPoint());
         userRepository.save(user);

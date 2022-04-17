@@ -26,7 +26,7 @@ public class RedisRepository {
     }
 
     // sessionId 삭제
-    public void removeUserEnterInfo(String sessionId) {
+    public void removeSessionRoomId(String sessionId) {
         stringHashOpsEnterInfo.delete(ENTER_INFO, sessionId);
     }
 }

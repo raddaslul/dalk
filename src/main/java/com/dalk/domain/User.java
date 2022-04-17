@@ -15,34 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "user")
 //@Table(indexes = @Index(name = "user", columnList = "id"))
 public class User extends Timestamped {
 
-    public enum Role {
-        USER(Authority.USER),  // 사용자 권한
-        ADMIN(Authority.ADMIN);  // 관리자 권한
-
-        private final String authority;
-
-        Role(String authority) {
-            this.authority = authority;
-        }
-
-        public String getAuthority() {
-            return this.authority;
-        }
-
-        public static class Authority {
-
-            public static final String USER = "ROLE_USER";
-            public static final String ADMIN = "ROLE_ADMIN";
-        }
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true)
@@ -66,7 +43,7 @@ public class User extends Timestamped {
     @Column
     @Enumerated(value = EnumType.STRING) // 정보를 받을 때는 Enum 값으로 받지만
     // db에 갈때는 Spring Jpa에 의해 자동으로 String으로 변환됨
-    private Role role;
+    private UserRole role;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Comment> commentList;
@@ -76,9 +53,6 @@ public class User extends Timestamped {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<ChatRoom> chatRoomList;
-
-//    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE)
-//    private ChatRoomUser chatRoomUser;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<ChatMessage> chatMessageList;
@@ -115,7 +89,7 @@ public class User extends Timestamped {
         this.items = items;
     }
 
-    public User(String username, String password, String nickname, Long totalPoint, Integer ex, Role role) {
+    public User(String username, String password, String nickname, Long totalPoint, Integer ex, UserRole role) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
