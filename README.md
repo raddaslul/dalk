@@ -209,11 +209,11 @@ BackEnd GITHUB : https://github.com/raddaslul/dalk.git <br />
   
   > ### 2. 개선 후
   <div align="center">
-    <img src="https://raddaslul.s3.ap-northeast-2.amazonaws.com/image/%EB%A6%AC%ED%8C%A9%ED%86%A0%EB%A7%81+%ED%95%B4%EA%B2%B0.PNG"/>
+    <img src="https://user-images.githubusercontent.com/96603945/165559696-b62c7142-2a3e-4d1b-abd3-e59f89da149f.PNG"/>
   </div><br/>
 <br/>
-  
-  * Domain Driven Design을 도입하여 무분별한 setter 사용을 지양하였으며, 유지보수적인 측면에서도
+
+  * 객체 지향적인 코드를 도입하여 무분별한 setter 사용을 지양하였으며, 유지보수적인 측면에서도
 해당 코드에 어디에 위치하는지 손쉽게 찾을 수 있게 하였습니다. 그리고 아이템을 위해 사용했던 switch 
   문은 해당 아이템이 한 번 정해지면 변하지 않는 다는 특성을 이용하여  enum 타입으로 대체하였습니다
 
